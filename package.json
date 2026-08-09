@@ -1,6 +1,6 @@
 {
   "name": "@wenyousite/foundation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "exports": {
@@ -8,7 +8,7 @@
     "./manifest": "./foundation-manifest.json",
     "./editor": {
       "types": "./dist/editor.d.ts",
-      "import": "./dist/editor.js"
+      "default": "./dist/editor.js"
     },
     "./web/tokens.css": "./web/tokens.css",
     "./web/fonts.css": "./web/fonts.css"
