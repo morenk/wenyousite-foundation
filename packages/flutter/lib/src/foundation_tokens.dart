@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '1.0.1';
+  static const String value = '1.0.2';
   static const int schema = 1;
 }
 
@@ -54,6 +54,13 @@ abstract final class WenyouFoundationMotion {
 abstract final class WenyouFoundationMobile {
   static const double minimumTouchTarget = 48.0;
   static const List<double> spacing = <double>[4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0];
+  static const double space4 = 4.0;
+  static const double space8 = 8.0;
+  static const double space12 = 12.0;
+  static const double space16 = 16.0;
+  static const double space20 = 20.0;
+  static const double space24 = 24.0;
+  static const double space32 = 32.0;
   static const double radiusCompact = 12.0;
   static const double radiusControl = 16.0;
   static const double radiusPanel = 20.0;

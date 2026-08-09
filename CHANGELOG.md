@@ -1,5 +1,10 @@
 # Foundation Changelog
 
+## 1.0.2
+
+- Web 包与 Flutter package 随自托管字体分发对应 OFL 文本。
+- Flutter Token 生成具名间距常量，消费者不再依赖数组位置。
+
 ## 1.0.1
 
 - 为编辑器契约补充通用默认导出条件，兼容 `tsx` 等运行时解析器。

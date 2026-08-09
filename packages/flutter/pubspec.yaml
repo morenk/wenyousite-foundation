@@ -1,7 +1,8 @@
 name: wenyousite_foundation
 description: 温油站共享设计 Token、体验契约和自托管字体
-version: 1.0.1
+version: 1.0.2
 publish_to: none
+repository: https://github.com/morenk/wenyousite-foundation
 
 environment:
   sdk: ^3.12.0

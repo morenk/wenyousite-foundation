@@ -12,6 +12,8 @@ const contractSha256 = crypto
   .update(fs.readFileSync(path.join(root, "contracts/foundation.v1.json")))
   .digest("hex");
 const checkOnly = process.argv.includes("--check");
+const readFile = (relativePath) =>
+  fs.readFileSync(path.join(root, relativePath), "utf8").trimEnd();
 
 function write(relativePath, content) {
   const target = path.join(root, relativePath);
@@ -170,6 +172,7 @@ abstract final class WenyouFoundationMotion {
 abstract final class WenyouFoundationMobile {
   static const double minimumTouchTarget = ${mobile.minimumControlTarget}.0;
   static const List<double> spacing = <double>${dartList(mobile.spacing, (value) => `${value}.0`)};
+${mobile.spacing.map((value) => `  static const double space${value} = ${value}.0;`).join("\n")}
   static const double radiusCompact = ${mobile.radii.compact}.0;
   static const double radiusControl = ${mobile.radii.control}.0;
   static const double radiusPanel = ${mobile.radii.panel}.0;
@@ -203,5 +206,16 @@ const manifest = JSON.stringify({
 }, null, 2);
 write("foundation-manifest.json", manifest);
 write("packages/flutter/foundation-manifest.json", manifest);
+
+const flutterLicense = contract.fonts
+  .map((font) => [
+    `${font.family} (${font.role})`,
+    "=".repeat(font.family.length + font.role.length + 3),
+    "以下许可仅适用于该字体文件；基础仓库其余内容不因此自动获得相同许可。",
+    "",
+    readFile(font.license),
+  ].join("\n"))
+  .join("\n\n---\n\n");
+write("packages/flutter/LICENSE", flutterLicense);
 
 if (!checkOnly) console.log(`Generated foundation ${contract.version} artifacts`);

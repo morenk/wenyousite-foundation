@@ -20,6 +20,11 @@ if (manifest.contractSha256 !== contractSha256) failures.push("契约清单哈�
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
+for (const font of contract.fonts) {
+  if (!read("packages/flutter/LICENSE").includes(font.family)) {
+    failures.push(`Flutter package LICENSE 缺少 ${font.family}`);
+  }
+}
 if (!read("packages/flutter/pubspec.yaml").includes(`version: ${contract.version}`)) {
   failures.push("Flutter package 版本与契约不一致");
 }
