@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "1.0.2",
+  "version": "1.1.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -105,6 +105,37 @@
       },
       "syntaxOnly": ["task-list", "code-block", "table"],
       "creatableHeadingLevels": [2, 3]
+    },
+    "images": {
+      "roles": {
+        "avatar": { "fit": "cover", "crop": "allowed", "shape": "circle", "viewer": "none" },
+        "cover": { "fit": "cover", "crop": "allowed", "shape": "rounded", "viewer": "full-source" },
+        "content": { "fit": "contain", "crop": "forbidden", "shape": "rounded", "viewer": "full-source" },
+        "galleryThumbnail": { "fit": "cover", "crop": "allowed", "shape": "rounded", "viewer": "full-source" },
+        "sticker": { "fit": "contain", "crop": "forbidden", "shape": "content", "viewer": "optional" }
+      },
+      "invariants": {
+        "reserveSpaceWhenDimensionsKnown": true,
+        "neverDeriveVariantUrls": true,
+        "failureKeepsContext": true,
+        "statusNeverColorOnly": true,
+        "altText": "contextual-never-filename",
+        "decorativeAlt": "empty",
+        "contentCropping": "forbidden"
+      },
+      "states": ["loading", "processing", "failed", "restricted", "sensitive"],
+      "web": {
+        "viewer": "modal-lightbox",
+        "dismiss": ["close-button", "escape", "backdrop"],
+        "zoom": ["fit", "actual-size", "wheel", "controls"],
+        "stickerDisplayMaxRem": 8
+      },
+      "mobile": {
+        "viewer": "fullscreen-route",
+        "dismiss": ["back-button", "system-back", "swipe-down-when-unzoomed"],
+        "zoom": ["fit", "double-tap", "pinch", "pan"],
+        "stickerDisplayMaxDp": 128
+      }
     }
   },
   "fonts": [

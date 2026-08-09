@@ -1,6 +1,6 @@
 {
   "name": "@wenyousite/foundation",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -10,12 +10,17 @@
       "types": "./dist/editor.d.ts",
       "default": "./dist/editor.js"
     },
+    "./images": {
+      "types": "./dist/images.d.ts",
+      "default": "./dist/images.js"
+    },
     "./web/tokens.css": "./web/tokens.css",
     "./web/fonts.css": "./web/fonts.css"
   },
   "files": [
     "contracts",
     "dist",
+    "docs",
     "foundation-manifest.json",
     "licenses",
     "skills",

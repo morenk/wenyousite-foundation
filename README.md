@@ -5,6 +5,7 @@
 - [共享设计基础](docs/foundation.md)
 - [Web profile](docs/platforms/web.md)
 - [Flutter profile](docs/platforms/mobile.md)
+- [图片呈现契约](docs/images.md)
 - [机器契约](contracts/foundation.v1.json)
 - [Codex 审美指导 Skill](skills/wenyou-design/SKILL.md)
 

@@ -84,6 +84,22 @@ if (editor.web.widePrimary.includes("more")) failures.push("Web 宽栏不得显�
 if (!editor.web.collapsedPrimary.includes("more")) failures.push("Web 收纳栏必须保留更多");
 if (!editor.mobile.primary.includes("more")) failures.push("Flutter 一级栏必须保留更多");
 
+const images = contract.experiences.images;
+const requiredImageRoles = ["avatar", "cover", "content", "galleryThumbnail", "sticker"];
+for (const role of requiredImageRoles) {
+  if (!images.roles[role]) failures.push(`图片契约缺少 ${role} 角色`);
+}
+if (images.roles.content?.fit !== "contain" || images.roles.content?.crop !== "forbidden") {
+  failures.push("正文图片必须完整呈现且禁止裁切");
+}
+if (images.roles.avatar?.fit !== "cover" || images.roles.cover?.fit !== "cover") {
+  failures.push("头像与封面预览必须使用 cover 语义");
+}
+if (!images.invariants.reserveSpaceWhenDimensionsKnown) failures.push("图片契约必须避免已知尺寸时布局跳动");
+if (!images.invariants.neverDeriveVariantUrls) failures.push("客户端不得自行推导媒体派生 URL");
+if (images.web.viewer !== "modal-lightbox") failures.push("Web 图片查看必须使用模态 lightbox");
+if (images.mobile.viewer !== "fullscreen-route") failures.push("Flutter 图片查看必须使用全屏路由");
+
 for (const font of contract.fonts) {
   for (const property of ["flutterAsset", "license"]) {
     if (!fs.existsSync(path.join(root, font[property]))) failures.push(`${font.family} 缺少 ${property}`);
@@ -103,7 +119,7 @@ for (const font of contract.fonts) {
 }
 
 const skill = read("skills/wenyou-design/SKILL.md");
-if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json")) {
+if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md")) {
   failures.push("wenyou-design Skill 未正确引用中央事实源");
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");

@@ -1,5 +1,11 @@
 # Foundation Changelog
 
+## 1.1.0
+
+- `shared`：新增头像、封面、正文、画廊缩略图和收藏表情的跨端图片呈现契约。
+- `web/mobile`：分别固定 lightbox 与全屏手势查看的等价体验边界。
+- `skill`：图片任务强制读取图片契约并检查裁切、占位、状态、替代文本和退出路径。
+
 ## 1.0.2
 
 - Web 包与 Flutter package 随自托管字体分发对应 OFL 文本。

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '1.0.2';
+  static const String value = '1.1.0';
   static const int schema = 1;
 }
 
@@ -94,4 +94,17 @@ abstract final class WenyouEditorContract {
   static const List<String> moreSheet = <String>['link', 'inline-code', 'quote', 'bullet-list', 'ordered-list', 'hr', 'dice', 'draft', 'strikethrough'];
   static const List<String> syntaxOnly = <String>['task-list', 'code-block', 'table'];
   static const List<int> creatableHeadingLevels = <int>[2, 3];
+}
+
+abstract final class WenyouImageContract {
+  static const Map<String, String> roleFits = <String, String>{
+    'avatar': 'cover',
+    'cover': 'cover',
+    'content': 'contain',
+    'galleryThumbnail': 'cover',
+    'sticker': 'contain',
+  };
+  static const Set<String> cropAllowed = <String>{'avatar', 'cover', 'galleryThumbnail'};
+  static const List<String> states = <String>['loading', 'processing', 'failed', 'restricted', 'sensitive'];
+  static const double stickerDisplayMax = 128.0;
 }

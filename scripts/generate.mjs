@@ -37,6 +37,7 @@ const dartList = (values, mapper = dartString) =>
   `[${values.map(mapper).join(", ")}]`;
 
 const editor = contract.experiences.editor;
+const images = contract.experiences.images;
 write("dist/editor.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const FOUNDATION_VERSION = ${JSON.stringify(contract.version)};
 export const EDITOR_CAPABILITY_LABELS = Object.freeze(${js(editor.labels)});
@@ -64,6 +65,30 @@ export declare const EDITOR_MORE_PROGRESSIVE: readonly EditorCapabilityId[];
 export declare const EDITOR_SYNTAX_ONLY: readonly EditorCapabilityId[];
 export declare const EDITOR_CREATABLE_HEADING_LEVELS: readonly (2 | 3)[];
 export declare function editorCapabilityLabels(ids: readonly EditorCapabilityId[]): string[];`);
+
+write("dist/images.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const IMAGE_ROLES = Object.freeze(${js(images.roles)});
+export const IMAGE_INVARIANTS = Object.freeze(${js(images.invariants)});
+export const IMAGE_STATES = Object.freeze(${js(images.states)});
+export const IMAGE_WEB_PROFILE = Object.freeze(${js(images.web)});
+export const IMAGE_MOBILE_PROFILE = Object.freeze(${js(images.mobile)});`);
+
+const imageRoleUnion = Object.keys(images.roles)
+  .map((id) => JSON.stringify(id))
+  .join(" | ");
+write("dist/images.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export type ImageRoleId = ${imageRoleUnion};
+export interface ImageRoleContract {
+  readonly fit: "cover" | "contain";
+  readonly crop: "allowed" | "forbidden";
+  readonly shape: "circle" | "rounded" | "content";
+  readonly viewer: "none" | "full-source" | "optional";
+}
+export declare const IMAGE_ROLES: Readonly<Record<ImageRoleId, ImageRoleContract>>;
+export declare const IMAGE_INVARIANTS: Readonly<Record<string, string | boolean>>;
+export declare const IMAGE_STATES: readonly string[];
+export declare const IMAGE_WEB_PROFILE: Readonly<Record<string, string | number | readonly string[]>>;
+export declare const IMAGE_MOBILE_PROFILE: Readonly<Record<string, string | number | readonly string[]>>;`);
 
 const p = contract.palette;
 const web = contract.profiles.web;
@@ -190,6 +215,15 @@ ${labelEntries}
   static const List<String> moreSheet = <String>${dartList(editor.mobile.moreSheet)};
   static const List<String> syntaxOnly = <String>${dartList(editor.syntaxOnly)};
   static const List<int> creatableHeadingLevels = <int>${dartList(editor.creatableHeadingLevels, String)};
+}
+
+abstract final class WenyouImageContract {
+  static const Map<String, String> roleFits = <String, String>{
+${Object.entries(images.roles).map(([role, value]) => `    ${dartString(role)}: ${dartString(value.fit)},`).join("\n")}
+  };
+  static const Set<String> cropAllowed = <String>{${Object.entries(images.roles).filter(([, value]) => value.crop === "allowed").map(([role]) => dartString(role)).join(", ")}};
+  static const List<String> states = <String>${dartList(images.states)};
+  static const double stickerDisplayMax = ${images.mobile.stickerDisplayMaxDp}.0;
 }`);
 
 const manifest = JSON.stringify({

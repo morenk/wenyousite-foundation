@@ -12,9 +12,8 @@
     "typography": { "type": "object" },
     "motion": { "type": "object" },
     "profiles": { "type": "object", "required": ["web", "mobile"] },
-    "experiences": { "type": "object", "required": ["editor"] },
+    "experiences": { "type": "object", "required": ["editor", "images"] },
     "fonts": { "type": "array", "minItems": 3 }
   },
   "additionalProperties": false
 }
-
