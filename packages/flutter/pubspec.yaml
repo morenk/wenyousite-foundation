@@ -1,0 +1,12 @@
+name: wenyousite_foundation
+description: 温油站共享设计 Token、体验契约和自托管字体
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+

@@ -1,0 +1,142 @@
+{
+  "$schema": "./foundation.schema.json",
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "identity": {
+    "subject": "多人文字共同创作社区",
+    "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
+    "canvas": "pure-white",
+    "signature": "仅在有真实分类语义时使用线路标记"
+  },
+  "palette": {
+    "background": "#FFFFFF",
+    "foreground": "#342F3E",
+    "surface": "#FFFFFF",
+    "primary": "#F3C6DD",
+    "onPrimary": "#704C65",
+    "brandStrong": "#704C65",
+    "secondary": "#C7CCFF",
+    "onSecondary": "#4B527C",
+    "muted": "#F7F5F8",
+    "mutedForeground": "#6D6775",
+    "accent": "#F7DBEA",
+    "onAccent": "#68455D",
+    "border": "#E8E3EB",
+    "input": "#DCD5E0",
+    "destructive": "#8A3F50",
+    "onDestructive": "#FFFFFF",
+    "destructiveSoft": "#F8D2D8",
+    "success": "#3D6650",
+    "successSoft": "#C8E8D6",
+    "warning": "#6B5A19",
+    "warningSoft": "#F7E7A9",
+    "info": "#4B527C",
+    "infoSoft": "#C7CCFF",
+    "categoryDeduction": "#7B5D22",
+    "categoryDeductionSoft": "#FAEDBB",
+    "categoryNation": "#4B527C",
+    "categoryNationSoft": "#DDE0FF",
+    "categoryRpg": "#704C65",
+    "categoryRpgSoft": "#F7DBEA"
+  },
+  "typography": {
+    "body": { "family": "Noto Sans SC Variable", "weights": [400, 500, 600, 700], "fallback": ["Noto Sans SC", "system-ui", "sans-serif"] },
+    "display": { "family": "LXGW WenKai", "weights": [500], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] },
+    "utility": { "family": "Nunito Variable", "weights": [400, 600, 700], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] }
+  },
+  "motion": {
+    "fastMs": 120,
+    "standardMs": 180,
+    "slowMs": 240,
+    "standardEase": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+    "exitEase": "cubic-bezier(0.4, 0, 1, 1)"
+  },
+  "profiles": {
+    "web": {
+      "unit": "px",
+      "minimumViewport": 1024,
+      "minimumControlTarget": 40,
+      "minimumCompactTarget": 32,
+      "radii": { "compact": 10, "control": 12, "panel": 16 },
+      "layoutRem": { "narrow": 30, "moment": 36, "feed": 42, "content": 48, "workspace": 72, "chromeWorkspace": 78, "wide": 80 },
+      "reading": { "bodyPx": 17, "lineHeightPx": 32, "maxFullWidthCharacters": 40 }
+    },
+    "mobile": {
+      "unit": "dp",
+      "minimumViewport": 360,
+      "minimumControlTarget": 48,
+      "spacing": [4, 8, 12, 16, 20, 24, 32],
+      "radii": { "compact": 12, "control": 16, "panel": 20, "pill": 999 },
+      "horizontalPadding": { "compact": 12, "regular": 24, "regularFrom": 401 },
+      "reading": { "bodySp": 16, "lineHeight": 1.6 }
+    }
+  },
+  "experiences": {
+    "editor": {
+      "labels": {
+        "heading": "正文样式",
+        "bold": "粗体",
+        "italic": "斜体",
+        "strikethrough": "删除线",
+        "image": "图片",
+        "draft": "正文草稿",
+        "more": "更多",
+        "link": "链接",
+        "inline-code": "行内代码",
+        "quote": "引用",
+        "bullet-list": "无序列表",
+        "ordered-list": "有序列表",
+        "hr": "分隔线",
+        "dice": "骰子",
+        "task-list": "任务列表",
+        "code-block": "代码块",
+        "table": "表格"
+      },
+      "web": {
+        "widePrimary": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "link", "image", "quote", "hr", "dice", "draft"],
+        "collapsedPrimary": ["heading", "bold", "italic", "image", "more"],
+        "moreFallback": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice"],
+        "progressiveCollapse": ["draft", "strikethrough"]
+      },
+      "mobile": {
+        "primary": ["heading", "bold", "italic", "image", "more"],
+        "wideAdditions": ["strikethrough", "draft"],
+        "moreSheet": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "draft", "strikethrough"]
+      },
+      "syntaxOnly": ["task-list", "code-block", "table"],
+      "creatableHeadingLevels": [2, 3]
+    }
+  },
+  "fonts": [
+    {
+      "role": "body",
+      "family": "Noto Sans SC Variable",
+      "source": "https://github.com/google/fonts/tree/2894aab31764f10f29c421bdfd2340d3b382d384/ofl/notosanssc",
+      "revision": "2894aab31764f10f29c421bdfd2340d3b382d384",
+      "flutterAsset": "packages/flutter/lib/fonts/NotoSansSC-Variable.ttf",
+      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "license": "licenses/NotoSansSC-OFL.txt"
+    },
+    {
+      "role": "display",
+      "family": "LXGW WenKai",
+      "source": "https://github.com/lxgw/LxgwWenKai-Lite/tree/067a6d508532cc0f8bc79e899ec3b06ff4dee38a",
+      "revision": "067a6d508532cc0f8bc79e899ec3b06ff4dee38a",
+      "flutterAsset": "packages/flutter/lib/fonts/LXGWWenKaiLite-Medium.ttf",
+      "webAsset": "web/fonts/LXGWWenKaiLite-Medium.woff2",
+      "sha256": "02eb0f8deed11b00481393f5720630ae1a44424f37f4157ea160a69a1c72a0b6",
+      "webSha256": "9caf8fb2c04e248d54400393d4204faaefa09bbb6c9ec8c0730caab43db8b198",
+      "license": "licenses/LXGWWenKaiLite-OFL.txt"
+    },
+    {
+      "role": "utility",
+      "family": "Nunito Variable",
+      "source": "https://github.com/google/fonts/tree/604936664fd62c14271209b51f98e7f495dd1a3e/ofl/nunito",
+      "revision": "604936664fd62c14271209b51f98e7f495dd1a3e",
+      "flutterAsset": "packages/flutter/lib/fonts/Nunito-Variable.ttf",
+      "sha256": "bb55a5ca5c2042335b3991af27c4d0705d0ef41cac6164ac737fd8f2a1e85207",
+      "license": "licenses/Nunito-OFL.txt"
+    }
+  ]
+}
+

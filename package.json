@@ -1,0 +1,32 @@
+{
+  "name": "@wenyousite/foundation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./contract": "./contracts/foundation.v1.json",
+    "./manifest": "./foundation-manifest.json",
+    "./editor": {
+      "types": "./dist/editor.d.ts",
+      "import": "./dist/editor.js"
+    },
+    "./web/tokens.css": "./web/tokens.css",
+    "./web/fonts.css": "./web/fonts.css"
+  },
+  "files": [
+    "contracts",
+    "dist",
+    "foundation-manifest.json",
+    "skills",
+    "web"
+  ],
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "check": "node scripts/check.mjs && node scripts/generate.mjs --check && python3 scripts/check-fonts.py"
+  },
+  "dependencies": {
+    "@fontsource-variable/noto-sans-sc": "5.3.0",
+    "@fontsource-variable/nunito": "5.3.0"
+  },
+  "packageManager": "pnpm@11.17.0"
+}

@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "schemaVersion": 1,
+  "contract": "contracts/foundation.v1.json",
+  "contractSha256": "186b8add60339dca64a79359b121bde5bd56b49fd32048f71d5b7d1bc3d08579",
+  "fonts": [
+    {
+      "role": "body",
+      "family": "Noto Sans SC Variable",
+      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
+    },
+    {
+      "role": "display",
+      "family": "LXGW WenKai",
+      "sha256": "02eb0f8deed11b00481393f5720630ae1a44424f37f4157ea160a69a1c72a0b6",
+      "webSha256": "9caf8fb2c04e248d54400393d4204faaefa09bbb6c9ec8c0730caab43db8b198"
+    },
+    {
+      "role": "utility",
+      "family": "Nunito Variable",
+      "sha256": "bb55a5ca5c2042335b3991af27c4d0705d0ef41cac6164ac737fd8f2a1e85207"
+    }
+  ]
+}

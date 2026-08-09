@@ -1,0 +1,4 @@
+interface:
+  display_name: "温油站审美指导"
+  short_description: "统一 Web 与 Flutter 的品牌审美、平台取舍和视觉验收"
+  default_prompt: "使用 $wenyou-design 审查并改进这个温油站界面的视觉与跨端一致性。"
