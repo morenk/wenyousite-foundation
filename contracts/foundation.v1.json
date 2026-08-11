@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -72,6 +72,23 @@
     }
   },
   "experiences": {
+    "collections": {
+      "invariants": {
+        "containerWidth": "available",
+        "itemWidth": "available",
+        "narrowContentDoesNotChangeItemWidth": true,
+        "horizontalOverflow": "explicit-only",
+        "contentSizedExceptions": ["message-bubble", "chip", "badge", "compact-action"]
+      },
+      "web": {
+        "tabPanelWidth": "available",
+        "multiColumn": "explicit-grid-only"
+      },
+      "mobile": {
+        "layout": "single-column",
+        "itemWidth": "available"
+      }
+    },
     "editor": {
       "labels": {
         "heading": "正文样式",

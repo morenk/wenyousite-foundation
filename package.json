@@ -1,6 +1,6 @@
 {
   "name": "@wenyousite/foundation",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -13,6 +13,10 @@
     "./images": {
       "types": "./dist/images.d.ts",
       "default": "./dist/images.js"
+    },
+    "./collections": {
+      "types": "./dist/collections.d.ts",
+      "default": "./dist/collections.js"
     },
     "./web/tokens.css": "./web/tokens.css",
     "./web/fonts.css": "./web/fonts.css"

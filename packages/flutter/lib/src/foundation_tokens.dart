@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '1.1.0';
+  static const String value = '1.2.0';
   static const int schema = 1;
 }
 
@@ -67,6 +67,12 @@ abstract final class WenyouFoundationMobile {
   static const double radiusPill = 999.0;
   static const double compactHorizontalPadding = 12.0;
   static const double regularHorizontalPadding = 24.0;
+}
+
+abstract final class WenyouCollectionContract {
+  static const bool fillAvailableWidth = true;
+  static const bool narrowContentKeepsItemWidth = true;
+  static const Set<String> contentSizedExceptions = <String>{'message-bubble', 'chip', 'badge', 'compact-action'};
 }
 
 abstract final class WenyouEditorContract {

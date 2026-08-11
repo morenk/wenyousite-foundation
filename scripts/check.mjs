@@ -100,6 +100,24 @@ if (!images.invariants.neverDeriveVariantUrls) failures.push("客户端不得自
 if (images.web.viewer !== "modal-lightbox") failures.push("Web 图片查看必须使用模态 lightbox");
 if (images.mobile.viewer !== "fullscreen-route") failures.push("Flutter 图片查看必须使用全屏路由");
 
+const collections = contract.experiences.collections;
+if (collections.invariants.containerWidth !== "available") {
+  failures.push("集合容器必须占满分配列");
+}
+if (collections.invariants.itemWidth !== "available") {
+  failures.push("列表项必须占满分配列");
+}
+if (!collections.invariants.narrowContentDoesNotChangeItemWidth) {
+  failures.push("短内容不得改变列表项宽度");
+}
+for (const exception of ["message-bubble", "chip", "badge", "compact-action"]) {
+  if (!collections.invariants.contentSizedExceptions.includes(exception)) {
+    failures.push(`集合布局缺少按内容收缩例外 ${exception}`);
+  }
+}
+if (collections.web.tabPanelWidth !== "available") failures.push("Web Tabs 面板必须占满可用宽度");
+if (collections.mobile.itemWidth !== "available") failures.push("Flutter 列表项必须占满单列宽度");
+
 for (const font of contract.fonts) {
   for (const property of ["flutterAsset", "license"]) {
     if (!fs.existsSync(path.join(root, font[property]))) failures.push(`${font.family} 缺少 ${property}`);
@@ -119,7 +137,7 @@ for (const font of contract.fonts) {
 }
 
 const skill = read("skills/wenyou-design/SKILL.md");
-if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md")) {
+if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("experiences.collections")) {
   failures.push("wenyou-design Skill 未正确引用中央事实源");
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");

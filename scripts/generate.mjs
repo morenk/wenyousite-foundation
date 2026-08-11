@@ -38,6 +38,7 @@ const dartList = (values, mapper = dartString) =>
 
 const editor = contract.experiences.editor;
 const images = contract.experiences.images;
+const collections = contract.experiences.collections;
 write("dist/editor.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const FOUNDATION_VERSION = ${JSON.stringify(contract.version)};
 export const EDITOR_CAPABILITY_LABELS = Object.freeze(${js(editor.labels)});
@@ -89,6 +90,28 @@ export declare const IMAGE_INVARIANTS: Readonly<Record<string, string | boolean>
 export declare const IMAGE_STATES: readonly string[];
 export declare const IMAGE_WEB_PROFILE: Readonly<Record<string, string | number | readonly string[]>>;
 export declare const IMAGE_MOBILE_PROFILE: Readonly<Record<string, string | number | readonly string[]>>;`);
+
+write("dist/collections.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const COLLECTION_INVARIANTS = Object.freeze(${js(collections.invariants)});
+export const COLLECTION_WEB_PROFILE = Object.freeze(${js(collections.web)});
+export const COLLECTION_MOBILE_PROFILE = Object.freeze(${js(collections.mobile)});`);
+
+write("dist/collections.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export declare const COLLECTION_INVARIANTS: Readonly<{
+  containerWidth: "available";
+  itemWidth: "available";
+  narrowContentDoesNotChangeItemWidth: true;
+  horizontalOverflow: "explicit-only";
+  contentSizedExceptions: readonly ("message-bubble" | "chip" | "badge" | "compact-action")[];
+}>;
+export declare const COLLECTION_WEB_PROFILE: Readonly<{
+  tabPanelWidth: "available";
+  multiColumn: "explicit-grid-only";
+}>;
+export declare const COLLECTION_MOBILE_PROFILE: Readonly<{
+  layout: "single-column";
+  itemWidth: "available";
+}>;`);
 
 const p = contract.palette;
 const web = contract.profiles.web;
@@ -204,6 +227,12 @@ ${mobile.spacing.map((value) => `  static const double space${value} = ${value}.
   static const double radiusPill = ${mobile.radii.pill}.0;
   static const double compactHorizontalPadding = ${mobile.horizontalPadding.compact}.0;
   static const double regularHorizontalPadding = ${mobile.horizontalPadding.regular}.0;
+}
+
+abstract final class WenyouCollectionContract {
+  static const bool fillAvailableWidth = ${collections.invariants.itemWidth === "available"};
+  static const bool narrowContentKeepsItemWidth = ${collections.invariants.narrowContentDoesNotChangeItemWidth};
+  static const Set<String> contentSizedExceptions = <String>{${collections.invariants.contentSizedExceptions.map(dartString).join(", ")}};
 }
 
 abstract final class WenyouEditorContract {
