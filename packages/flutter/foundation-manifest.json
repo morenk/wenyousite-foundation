@@ -1,8 +1,8 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "schemaVersion": 1,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "fd7595bb87ff53f336fee1ae6aa921d460b71b32bc2051d1e9d7aff63a5c9235",
+  "contractSha256": "9c477a6c0e42de74d999aaa7b81eb0d82e7f745abfcfbff00e5db0ac07e42c70",
   "fonts": [
     {
       "role": "body",

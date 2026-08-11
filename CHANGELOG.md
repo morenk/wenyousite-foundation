@@ -1,5 +1,9 @@
 # Foundation Changelog
 
+## 1.2.1
+
+- `flutter`：将包描述改为 ASCII，避免 Windows 上 Dart Pub 通过 `git show` 读取含中文的 `pubspec.yaml` 时错误吞并换行，确保 Git tag 依赖可以稳定解析。
+
 ## 1.2.0
 
 - `shared`：新增集合布局契约，固定列表容器与列表项占满分配列，短内容不得改变卡片宽度。
