@@ -73,7 +73,11 @@ for (const [name, ids] of Object.entries({
   mobilePrimary: editor.mobile.primary,
   mobileWideAdditions: editor.mobile.wideAdditions,
   mobileMoreSheet: editor.mobile.moreSheet,
+  webContextual: editor.web.contextual,
+  mobileContextual: editor.mobile.contextual,
   syntaxOnly: editor.syntaxOnly,
+  ...Object.fromEntries(Object.entries(editor.web.primaryByDensity).map(([density, ids]) => [`webPrimary:${density}`, ids])),
+  ...Object.fromEntries(Object.entries(editor.web.moreByDensity).map(([density, ids]) => [`webMore:${density}`, ids])),
 })) {
   if (new Set(ids).size !== ids.length) failures.push(`${name} 存在重复能力`);
   for (const id of ids) {
@@ -83,6 +87,46 @@ for (const [name, ids] of Object.entries({
 if (editor.web.widePrimary.includes("more")) failures.push("Web 宽栏不得显示更多");
 if (!editor.web.collapsedPrimary.includes("more")) failures.push("Web 收纳栏必须保留更多");
 if (!editor.mobile.primary.includes("more")) failures.push("Flutter 一级栏必须保留更多");
+if (editor.web.densityOrder.join(",") !== "expanded,with-more,without-draft,compact") {
+  failures.push("Web 编辑器必须按四档密度逐级收纳");
+}
+for (const density of editor.web.densityOrder) {
+  const primary = editor.web.primaryByDensity[density];
+  const more = editor.web.moreByDensity[density];
+  if (!Array.isArray(primary) || !Array.isArray(more)) {
+    failures.push(`Web 编辑器密度 ${density} 缺少一级栏或更多菜单`);
+    continue;
+  }
+  for (const capability of primary) {
+    if (more.includes(capability)) failures.push(`${density} 同时在一级栏和更多菜单显示 ${capability}`);
+  }
+}
+if (editor.web.layout.textMeasurePx !== contract.profiles.web.reading.bodyPx * contract.profiles.web.reading.maxFullWidthCharacters) {
+  failures.push("Web 编辑器正文测量宽度必须等于阅读字号乘以全角字数");
+}
+if (editor.web.layout.toolbarInlinePaddingPx + editor.web.layout.firstControlInternalInsetPx !== editor.web.layout.contentInlinePaddingPx) {
+  failures.push("Web 工具栏首项与正文首列基线未对齐");
+}
+if (
+  editor.mobile.layout.bodySp !== contract.profiles.mobile.reading.bodySp ||
+  editor.mobile.layout.lineHeight !== contract.profiles.mobile.reading.lineHeight
+) {
+  failures.push("Flutter 编辑态与阅读态正文排版必须一致");
+}
+for (const platform of ["web", "mobile"]) {
+  const capabilities = editor.capabilities[platform];
+  for (const id of knownCapabilities) {
+    if (!capabilities[id]) failures.push(`${platform} 缺少 ${id} 能力生命周期`);
+  }
+  for (const id of Object.keys(capabilities)) {
+    if (!knownCapabilities.has(id)) failures.push(`${platform} 能力生命周期引用未知能力 ${id}`);
+  }
+}
+for (const id of editor.syntaxOnly) {
+  if (editor.capabilities.mobile[id]?.roundTrip !== "source-preserve") {
+    failures.push(`Flutter 语法能力 ${id} 必须显式保留源码`);
+  }
+}
 
 const images = contract.experiences.images;
 const requiredImageRoles = ["avatar", "cover", "content", "galleryThumbnail", "sticker"];

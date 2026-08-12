@@ -46,6 +46,16 @@ export const EDITOR_PRIMARY_NARROW = Object.freeze(${js(editor.web.collapsedPrim
 export const EDITOR_PRIMARY_WIDE = Object.freeze(${js(editor.web.widePrimary)});
 export const EDITOR_MORE_FALLBACK = Object.freeze(${js(editor.web.moreFallback)});
 export const EDITOR_MORE_PROGRESSIVE = Object.freeze(${js(editor.web.progressiveCollapse)});
+export const EDITOR_DENSITY_ORDER = Object.freeze(${js(editor.web.densityOrder)});
+export const EDITOR_PRIMARY_BY_DENSITY = Object.freeze(${js(editor.web.primaryByDensity)});
+export const EDITOR_MORE_BY_DENSITY = Object.freeze(${js(editor.web.moreByDensity)});
+export const EDITOR_CONTEXTUAL_WEB = Object.freeze(${js(editor.web.contextual)});
+export const EDITOR_CONTEXTUAL_MOBILE = Object.freeze(${js(editor.mobile.contextual)});
+export const EDITOR_INVARIANTS = Object.freeze(${js(editor.invariants)});
+export const EDITOR_WEB_LAYOUT = Object.freeze(${js(editor.web.layout)});
+export const EDITOR_MOBILE_LAYOUT = Object.freeze(${js(editor.mobile.layout)});
+export const EDITOR_WEB_CAPABILITIES = Object.freeze(${js(editor.capabilities.web)});
+export const EDITOR_MOBILE_CAPABILITIES = Object.freeze(${js(editor.capabilities.mobile)});
 export const EDITOR_SYNTAX_ONLY = Object.freeze(${js(editor.syntaxOnly)});
 export const EDITOR_CREATABLE_HEADING_LEVELS = Object.freeze(${js(editor.creatableHeadingLevels)});
 export function editorCapabilityLabels(ids) {
@@ -63,6 +73,42 @@ export declare const EDITOR_PRIMARY_NARROW: readonly EditorCapabilityId[];
 export declare const EDITOR_PRIMARY_WIDE: readonly EditorCapabilityId[];
 export declare const EDITOR_MORE_FALLBACK: readonly EditorCapabilityId[];
 export declare const EDITOR_MORE_PROGRESSIVE: readonly EditorCapabilityId[];
+export type EditorToolbarDensity = ${editor.web.densityOrder.map((density) => JSON.stringify(density)).join(" | ")};
+export type EditorCreationMode = "primary" | "secondary" | "contextual" | "source";
+export type EditorEditingMode = "structured" | "atomic" | "source-preserve" | "ui-only";
+export type EditorRenderingMode = "native" | "not-applicable";
+export type EditorRoundTripMode = "structured" | "identity-preserving" | "source-preserve" | "not-applicable";
+export interface EditorCapabilityContract {
+  readonly creation: EditorCreationMode;
+  readonly editing: EditorEditingMode;
+  readonly rendering: EditorRenderingMode;
+  readonly roundTrip: EditorRoundTripMode;
+}
+export declare const EDITOR_DENSITY_ORDER: readonly EditorToolbarDensity[];
+export declare const EDITOR_PRIMARY_BY_DENSITY: Readonly<Record<EditorToolbarDensity, readonly EditorCapabilityId[]>>;
+export declare const EDITOR_MORE_BY_DENSITY: Readonly<Record<EditorToolbarDensity, readonly EditorCapabilityId[]>>;
+export declare const EDITOR_CONTEXTUAL_WEB: readonly EditorCapabilityId[];
+export declare const EDITOR_CONTEXTUAL_MOBILE: readonly EditorCapabilityId[];
+export declare const EDITOR_INVARIANTS: Readonly<Record<string, string>>;
+export declare const EDITOR_WEB_LAYOUT: Readonly<{
+  frameMaxRem: number;
+  textMeasurePx: number;
+  contentInlinePaddingPx: number;
+  toolbarInlinePaddingPx: number;
+  firstControlInternalInsetPx: number;
+  bodyPx: number;
+  lineHeight: number;
+}>;
+export declare const EDITOR_MOBILE_LAYOUT: Readonly<{
+  compactContentInlinePaddingDp: number;
+  regularContentInlinePaddingDp: number;
+  toolbarHorizontalPaddingDp: number;
+  bodySp: number;
+  lineHeight: number;
+  respectsSystemTextScale: boolean;
+}>;
+export declare const EDITOR_WEB_CAPABILITIES: Readonly<Record<EditorCapabilityId, EditorCapabilityContract>>;
+export declare const EDITOR_MOBILE_CAPABILITIES: Readonly<Record<EditorCapabilityId, EditorCapabilityContract>>;
 export declare const EDITOR_SYNTAX_ONLY: readonly EditorCapabilityId[];
 export declare const EDITOR_CREATABLE_HEADING_LEVELS: readonly (2 | 3)[];
 export declare function editorCapabilityLabels(ids: readonly EditorCapabilityId[]): string[];`);
@@ -162,6 +208,12 @@ write("web/tokens.css", `/* 由 contracts/foundation.v1.json 生成，禁止手�
   --layout-workspace: ${web.layoutRem.workspace}rem;
   --layout-chrome-workspace: ${web.layoutRem.chromeWorkspace}rem;
   --layout-wide: ${web.layoutRem.wide}rem;
+  --editor-frame-max: ${editor.web.layout.frameMaxRem}rem;
+  --editor-text-measure: ${editor.web.layout.textMeasurePx}px;
+  --editor-content-inline-padding: ${editor.web.layout.contentInlinePaddingPx}px;
+  --editor-toolbar-inline-padding: ${editor.web.layout.toolbarInlinePaddingPx}px;
+  --editor-body-size: ${editor.web.layout.bodyPx}px;
+  --editor-body-line-height: ${editor.web.layout.lineHeight};
   --sticker-display-max: 8rem;
   --wenyou-shadow-popover: 0 12px 32px rgb(52 47 62 / 12%);
   --wenyou-shadow-dialog: 0 24px 64px rgb(52 47 62 / 16%);
@@ -191,6 +243,9 @@ const paletteLines = Object.entries(p)
   .join("\n");
 const labelEntries = Object.entries(editor.labels)
   .map(([id, label]) => `    ${dartString(id)}: ${dartString(label)},`)
+  .join("\n");
+const mobileCapabilityEntries = Object.entries(editor.capabilities.mobile)
+  .map(([id, capability]) => `    ${dartString(id)}: <String, String>{${Object.entries(capability).map(([key, value]) => `${dartString(key)}: ${dartString(value)}`).join(", ")}},`)
   .join("\n");
 write("packages/flutter/lib/src/foundation_tokens.dart", `// 由 contracts/foundation.v1.json 生成，禁止手改。
 import 'package:flutter/material.dart';
@@ -242,8 +297,18 @@ ${labelEntries}
   static const List<String> primary = <String>${dartList(editor.mobile.primary)};
   static const List<String> wideAdditions = <String>${dartList(editor.mobile.wideAdditions)};
   static const List<String> moreSheet = <String>${dartList(editor.mobile.moreSheet)};
+  static const List<String> contextual = <String>${dartList(editor.mobile.contextual)};
   static const List<String> syntaxOnly = <String>${dartList(editor.syntaxOnly)};
   static const List<int> creatableHeadingLevels = <int>${dartList(editor.creatableHeadingLevels, String)};
+  static const double compactContentInlinePadding = ${editor.mobile.layout.compactContentInlinePaddingDp}.0;
+  static const double regularContentInlinePadding = ${editor.mobile.layout.regularContentInlinePaddingDp}.0;
+  static const double toolbarHorizontalPadding = ${editor.mobile.layout.toolbarHorizontalPaddingDp}.0;
+  static const double bodyFontSize = ${editor.mobile.layout.bodySp}.0;
+  static const double bodyLineHeight = ${editor.mobile.layout.lineHeight};
+  static const bool respectsSystemTextScale = ${editor.mobile.layout.respectsSystemTextScale};
+  static const Map<String, Map<String, String>> capabilities = <String, Map<String, String>>{
+${mobileCapabilityEntries}
+  };
 }
 
 abstract final class WenyouImageContract {

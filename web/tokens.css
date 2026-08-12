@@ -44,6 +44,12 @@
   --layout-workspace: 72rem;
   --layout-chrome-workspace: 78rem;
   --layout-wide: 80rem;
+  --editor-frame-max: 50rem;
+  --editor-text-measure: 680px;
+  --editor-content-inline-padding: 24px;
+  --editor-toolbar-inline-padding: 12px;
+  --editor-body-size: 17px;
+  --editor-body-line-height: 1.9;
   --sticker-display-max: 8rem;
   --wenyou-shadow-popover: 0 12px 32px rgb(52 47 62 / 12%);
   --wenyou-shadow-dialog: 0 24px 64px rgb(52 47 62 / 16%);

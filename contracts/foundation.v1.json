@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "1.2.1",
+  "version": "1.3.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -68,7 +68,7 @@
       "spacing": [4, 8, 12, 16, 20, 24, 32],
       "radii": { "compact": 12, "control": 16, "panel": 20, "pill": 999 },
       "horizontalPadding": { "compact": 12, "regular": 24, "regularFrom": 401 },
-      "reading": { "bodySp": 16, "lineHeight": 1.6 }
+      "reading": { "bodySp": 17, "lineHeight": 1.8 }
     }
   },
   "experiences": {
@@ -107,21 +107,106 @@
         "dice": "骰子",
         "task-list": "任务列表",
         "code-block": "代码块",
-        "table": "表格"
+        "table": "表格",
+        "mention": "提及",
+        "sticker": "表情包"
+      },
+      "invariants": {
+        "storageContractOwner": "backend-markdown-contract",
+        "unsupportedMarkdown": "preserve-source",
+        "unknownProtocol": "read-only-preserve",
+        "editRenderTypography": "equivalent",
+        "clipboardIdentityOwner": "backend-node-contract"
       },
       "web": {
         "widePrimary": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "link", "image", "quote", "hr", "dice", "draft"],
         "collapsedPrimary": ["heading", "bold", "italic", "image", "more"],
         "moreFallback": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice"],
-        "progressiveCollapse": ["draft", "strikethrough"]
+        "progressiveCollapse": ["draft", "strikethrough"],
+        "densityOrder": ["expanded", "with-more", "without-draft", "compact"],
+        "primaryByDensity": {
+          "expanded": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "link", "image", "quote", "hr", "dice", "draft"],
+          "with-more": ["heading", "bold", "italic", "strikethrough", "link", "image", "quote", "hr", "dice", "draft", "more"],
+          "without-draft": ["heading", "bold", "italic", "strikethrough", "link", "image", "quote", "hr", "dice", "more"],
+          "compact": ["heading", "bold", "italic", "image", "more"]
+        },
+        "moreByDensity": {
+          "expanded": [],
+          "with-more": ["inline-code", "bullet-list", "ordered-list"],
+          "without-draft": ["inline-code", "bullet-list", "ordered-list", "draft"],
+          "compact": ["strikethrough", "link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "draft"]
+        },
+        "contextual": ["mention", "sticker"],
+        "layout": {
+          "frameMaxRem": 50,
+          "textMeasurePx": 680,
+          "contentInlinePaddingPx": 24,
+          "toolbarInlinePaddingPx": 12,
+          "firstControlInternalInsetPx": 12,
+          "bodyPx": 17,
+          "lineHeight": 1.9
+        }
       },
       "mobile": {
         "primary": ["heading", "bold", "italic", "image", "more"],
         "wideAdditions": ["strikethrough", "draft"],
-        "moreSheet": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "draft", "strikethrough"]
+        "moreSheet": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "sticker", "draft", "strikethrough"],
+        "contextual": ["mention", "sticker"],
+        "layout": {
+          "compactContentInlinePaddingDp": 4,
+          "regularContentInlinePaddingDp": 16,
+          "toolbarHorizontalPaddingDp": 4,
+          "bodySp": 17,
+          "lineHeight": 1.8,
+          "respectsSystemTextScale": true
+        }
       },
       "syntaxOnly": ["task-list", "code-block", "table"],
-      "creatableHeadingLevels": [2, 3]
+      "creatableHeadingLevels": [2, 3],
+      "capabilities": {
+        "web": {
+          "heading": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "bold": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "italic": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "strikethrough": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "image": { "creation": "primary", "editing": "atomic", "rendering": "native", "roundTrip": "structured" },
+          "draft": { "creation": "secondary", "editing": "ui-only", "rendering": "not-applicable", "roundTrip": "not-applicable" },
+          "more": { "creation": "primary", "editing": "ui-only", "rendering": "not-applicable", "roundTrip": "not-applicable" },
+          "link": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "inline-code": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "quote": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "bullet-list": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "ordered-list": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "hr": { "creation": "primary", "editing": "atomic", "rendering": "native", "roundTrip": "structured" },
+          "dice": { "creation": "primary", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
+          "task-list": { "creation": "source", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "code-block": { "creation": "source", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "table": { "creation": "source", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "mention": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
+          "sticker": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" }
+        },
+        "mobile": {
+          "heading": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "bold": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "italic": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "strikethrough": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "image": { "creation": "primary", "editing": "atomic", "rendering": "native", "roundTrip": "structured" },
+          "draft": { "creation": "secondary", "editing": "ui-only", "rendering": "not-applicable", "roundTrip": "not-applicable" },
+          "more": { "creation": "primary", "editing": "ui-only", "rendering": "not-applicable", "roundTrip": "not-applicable" },
+          "link": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "inline-code": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "quote": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "bullet-list": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "ordered-list": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "hr": { "creation": "secondary", "editing": "atomic", "rendering": "native", "roundTrip": "structured" },
+          "dice": { "creation": "secondary", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
+          "task-list": { "creation": "source", "editing": "source-preserve", "rendering": "native", "roundTrip": "source-preserve" },
+          "code-block": { "creation": "source", "editing": "source-preserve", "rendering": "native", "roundTrip": "source-preserve" },
+          "table": { "creation": "source", "editing": "source-preserve", "rendering": "native", "roundTrip": "source-preserve" },
+          "mention": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
+          "sticker": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" }
+        }
+      }
     },
     "images": {
       "roles": {

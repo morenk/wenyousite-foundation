@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '1.2.1';
+  static const String value = '1.3.0';
   static const int schema = 1;
 }
 
@@ -94,12 +94,42 @@ abstract final class WenyouEditorContract {
     'task-list': '任务列表',
     'code-block': '代码块',
     'table': '表格',
+    'mention': '提及',
+    'sticker': '表情包',
   };
   static const List<String> primary = <String>['heading', 'bold', 'italic', 'image', 'more'];
   static const List<String> wideAdditions = <String>['strikethrough', 'draft'];
-  static const List<String> moreSheet = <String>['link', 'inline-code', 'quote', 'bullet-list', 'ordered-list', 'hr', 'dice', 'draft', 'strikethrough'];
+  static const List<String> moreSheet = <String>['link', 'inline-code', 'quote', 'bullet-list', 'ordered-list', 'hr', 'dice', 'sticker', 'draft', 'strikethrough'];
+  static const List<String> contextual = <String>['mention', 'sticker'];
   static const List<String> syntaxOnly = <String>['task-list', 'code-block', 'table'];
   static const List<int> creatableHeadingLevels = <int>[2, 3];
+  static const double compactContentInlinePadding = 4.0;
+  static const double regularContentInlinePadding = 16.0;
+  static const double toolbarHorizontalPadding = 4.0;
+  static const double bodyFontSize = 17.0;
+  static const double bodyLineHeight = 1.8;
+  static const bool respectsSystemTextScale = true;
+  static const Map<String, Map<String, String>> capabilities = <String, Map<String, String>>{
+    'heading': <String, String>{'creation': 'primary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'bold': <String, String>{'creation': 'primary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'italic': <String, String>{'creation': 'primary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'strikethrough': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'image': <String, String>{'creation': 'primary', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'structured'},
+    'draft': <String, String>{'creation': 'secondary', 'editing': 'ui-only', 'rendering': 'not-applicable', 'roundTrip': 'not-applicable'},
+    'more': <String, String>{'creation': 'primary', 'editing': 'ui-only', 'rendering': 'not-applicable', 'roundTrip': 'not-applicable'},
+    'link': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'inline-code': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'quote': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'bullet-list': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'ordered-list': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'hr': <String, String>{'creation': 'secondary', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'structured'},
+    'dice': <String, String>{'creation': 'secondary', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'identity-preserving'},
+    'task-list': <String, String>{'creation': 'source', 'editing': 'source-preserve', 'rendering': 'native', 'roundTrip': 'source-preserve'},
+    'code-block': <String, String>{'creation': 'source', 'editing': 'source-preserve', 'rendering': 'native', 'roundTrip': 'source-preserve'},
+    'table': <String, String>{'creation': 'source', 'editing': 'source-preserve', 'rendering': 'native', 'roundTrip': 'source-preserve'},
+    'mention': <String, String>{'creation': 'contextual', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'identity-preserving'},
+    'sticker': <String, String>{'creation': 'contextual', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'identity-preserving'},
+  };
 }
 
 abstract final class WenyouImageContract {
