@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '1.3.0';
+  static const String value = '1.3.1';
   static const int schema = 1;
 }
 
@@ -99,7 +99,12 @@ abstract final class WenyouEditorContract {
   };
   static const List<String> primary = <String>['heading', 'bold', 'italic', 'image', 'more'];
   static const List<String> wideAdditions = <String>['strikethrough', 'draft'];
-  static const List<String> moreSheet = <String>['link', 'inline-code', 'quote', 'bullet-list', 'ordered-list', 'hr', 'dice', 'sticker', 'draft', 'strikethrough'];
+  static const List<String> surfaces = <String>['page', 'expandableSheet', 'inline'];
+  static const String keyboardToolbarPlacement = 'above-keyboard-dock';
+  static const String primaryLayout = 'responsive-single-row';
+  static const String horizontalOverflow = 'forbidden';
+  static const String morePresentation = 'inline';
+  static const List<String> moreInline = <String>['link', 'inline-code', 'quote', 'bullet-list', 'ordered-list', 'hr', 'dice', 'sticker', 'draft', 'strikethrough'];
   static const List<String> contextual = <String>['mention', 'sticker'];
   static const List<String> syntaxOnly = <String>['task-list', 'code-block', 'table'];
   static const List<int> creatableHeadingLevels = <int>[2, 3];

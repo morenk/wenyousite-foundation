@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "1.3.0",
+  "version": "1.3.1",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -148,9 +148,16 @@
         }
       },
       "mobile": {
+        "surfaces": ["page", "expandableSheet", "inline"],
+        "toolbar": {
+          "placementWhenKeyboardVisible": "above-keyboard-dock",
+          "primaryLayout": "responsive-single-row",
+          "horizontalOverflow": "forbidden",
+          "morePresentation": "inline"
+        },
         "primary": ["heading", "bold", "italic", "image", "more"],
         "wideAdditions": ["strikethrough", "draft"],
-        "moreSheet": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "sticker", "draft", "strikethrough"],
+        "moreInline": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "sticker", "draft", "strikethrough"],
         "contextual": ["mention", "sticker"],
         "layout": {
           "compactContentInlinePaddingDp": 4,

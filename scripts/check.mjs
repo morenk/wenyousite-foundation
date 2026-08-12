@@ -72,7 +72,7 @@ for (const [name, ids] of Object.entries({
   progressiveCollapse: editor.web.progressiveCollapse,
   mobilePrimary: editor.mobile.primary,
   mobileWideAdditions: editor.mobile.wideAdditions,
-  mobileMoreSheet: editor.mobile.moreSheet,
+  mobileMoreInline: editor.mobile.moreInline,
   webContextual: editor.web.contextual,
   mobileContextual: editor.mobile.contextual,
   syntaxOnly: editor.syntaxOnly,
@@ -87,6 +87,17 @@ for (const [name, ids] of Object.entries({
 if (editor.web.widePrimary.includes("more")) failures.push("Web 宽栏不得显示更多");
 if (!editor.web.collapsedPrimary.includes("more")) failures.push("Web 收纳栏必须保留更多");
 if (!editor.mobile.primary.includes("more")) failures.push("Flutter 一级栏必须保留更多");
+if (editor.mobile.surfaces.join(",") !== "page,expandableSheet,inline") {
+  failures.push("Flutter 编辑器必须固定 page、expandableSheet 与 inline 三种承载面");
+}
+if (
+  editor.mobile.toolbar.placementWhenKeyboardVisible !== "above-keyboard-dock" ||
+  editor.mobile.toolbar.primaryLayout !== "responsive-single-row" ||
+  editor.mobile.toolbar.horizontalOverflow !== "forbidden" ||
+  editor.mobile.toolbar.morePresentation !== "inline"
+) {
+  failures.push("Flutter 编辑工具栏必须在键盘上方单行响应式布局，并以内联更多渐进披露");
+}
 if (editor.web.densityOrder.join(",") !== "expanded,with-more,without-draft,compact") {
   failures.push("Web 编辑器必须按四档密度逐级收纳");
 }

@@ -54,6 +54,9 @@ export const EDITOR_CONTEXTUAL_MOBILE = Object.freeze(${js(editor.mobile.context
 export const EDITOR_INVARIANTS = Object.freeze(${js(editor.invariants)});
 export const EDITOR_WEB_LAYOUT = Object.freeze(${js(editor.web.layout)});
 export const EDITOR_MOBILE_LAYOUT = Object.freeze(${js(editor.mobile.layout)});
+export const EDITOR_MOBILE_SURFACES = Object.freeze(${js(editor.mobile.surfaces)});
+export const EDITOR_MOBILE_TOOLBAR = Object.freeze(${js(editor.mobile.toolbar)});
+export const EDITOR_MOBILE_MORE_INLINE = Object.freeze(${js(editor.mobile.moreInline)});
 export const EDITOR_WEB_CAPABILITIES = Object.freeze(${js(editor.capabilities.web)});
 export const EDITOR_MOBILE_CAPABILITIES = Object.freeze(${js(editor.capabilities.mobile)});
 export const EDITOR_SYNTAX_ONLY = Object.freeze(${js(editor.syntaxOnly)});
@@ -107,6 +110,15 @@ export declare const EDITOR_MOBILE_LAYOUT: Readonly<{
   lineHeight: number;
   respectsSystemTextScale: boolean;
 }>;
+export type EditorMobileSurface = ${editor.mobile.surfaces.map((surface) => JSON.stringify(surface)).join(" | ")};
+export declare const EDITOR_MOBILE_SURFACES: readonly EditorMobileSurface[];
+export declare const EDITOR_MOBILE_TOOLBAR: Readonly<{
+  placementWhenKeyboardVisible: "above-keyboard-dock";
+  primaryLayout: "responsive-single-row";
+  horizontalOverflow: "forbidden";
+  morePresentation: "inline";
+}>;
+export declare const EDITOR_MOBILE_MORE_INLINE: readonly EditorCapabilityId[];
 export declare const EDITOR_WEB_CAPABILITIES: Readonly<Record<EditorCapabilityId, EditorCapabilityContract>>;
 export declare const EDITOR_MOBILE_CAPABILITIES: Readonly<Record<EditorCapabilityId, EditorCapabilityContract>>;
 export declare const EDITOR_SYNTAX_ONLY: readonly EditorCapabilityId[];
@@ -296,7 +308,12 @@ ${labelEntries}
   };
   static const List<String> primary = <String>${dartList(editor.mobile.primary)};
   static const List<String> wideAdditions = <String>${dartList(editor.mobile.wideAdditions)};
-  static const List<String> moreSheet = <String>${dartList(editor.mobile.moreSheet)};
+  static const List<String> surfaces = <String>${dartList(editor.mobile.surfaces)};
+  static const String keyboardToolbarPlacement = ${dartString(editor.mobile.toolbar.placementWhenKeyboardVisible)};
+  static const String primaryLayout = ${dartString(editor.mobile.toolbar.primaryLayout)};
+  static const String horizontalOverflow = ${dartString(editor.mobile.toolbar.horizontalOverflow)};
+  static const String morePresentation = ${dartString(editor.mobile.toolbar.morePresentation)};
+  static const List<String> moreInline = <String>${dartList(editor.mobile.moreInline)};
   static const List<String> contextual = <String>${dartList(editor.mobile.contextual)};
   static const List<String> syntaxOnly = <String>${dartList(editor.syntaxOnly)};
   static const List<int> creatableHeadingLevels = <int>${dartList(editor.creatableHeadingLevels, String)};
