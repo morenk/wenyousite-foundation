@@ -12,7 +12,7 @@
     "typography": { "type": "object" },
     "motion": { "type": "object" },
     "profiles": { "type": "object", "required": ["web", "mobile"] },
-    "experiences": { "type": "object", "required": ["collections", "editor", "images"] },
+    "experiences": { "type": "object", "required": ["collections", "editor", "icons", "images"] },
     "fonts": { "type": "array", "minItems": 3 }
   },
   "additionalProperties": false

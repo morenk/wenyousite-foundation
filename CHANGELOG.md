@@ -1,5 +1,12 @@
 # Foundation Changelog
 
+## 2.0.0
+
+- `shared`：新增 Lucide 1.28.0 双层图标契约，以产品语义映射到固定 SVG 母版，并统一尺寸、状态与无障碍策略。
+- `web`：生成类型化图标节点和编辑器 SVG 字符串，普通组件与第三方编辑器可以消费同一图形来源。
+- `mobile`：由 Material Icons Rounded 迁移到 Foundation 打包的同源 SVG，并提供语义化 `WenyouIcon` 组件。
+- `governance`：图标来源、版本、许可证与每个 SVG 校验和进入发布清单，避免跨端封装或手写路径漂移。
+
 ## 1.3.1
 
 - `mobile`：内容编辑器固定 `page`、`expandableSheet`、`inline` 三种承载面，软键盘可见时将核心工具栏 dock 在键盘上方。

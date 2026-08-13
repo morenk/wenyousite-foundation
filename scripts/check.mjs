@@ -29,6 +29,43 @@ if (!read("packages/flutter/pubspec.yaml").includes(`version: ${contract.version
   failures.push("Flutter package 版本与契约不一致");
 }
 
+const icons = contract.experiences.icons;
+if (icons.source.package !== "lucide-static" || icons.source.version !== packageJson.dependencies[icons.source.package]) {
+  failures.push("Lucide 图标来源版本与根依赖不一致");
+}
+if (!read("pnpm-lock.yaml").includes(icons.source.integrity)) failures.push("Lucide 来源完整性未锁定");
+if (!fs.existsSync(path.join(root, icons.source.license))) failures.push("Lucide 图标许可证不存在");
+const semanticIds = Object.keys(icons.semantics);
+const glyphIds = [...new Set(Object.values(icons.semantics))];
+if (semanticIds.length !== new Set(semanticIds).size) failures.push("图标语义 ID 重复");
+for (const glyphId of glyphIds) {
+  const upstream = path.join(root, "node_modules", icons.source.package, "icons", `${glyphId}.svg`);
+  const flutterAsset = path.join(root, "packages", "flutter", "icons", `${glyphId}.svg`);
+  if (!fs.existsSync(upstream)) failures.push(`Lucide 来源缺少 ${glyphId}`);
+  if (!fs.existsSync(flutterAsset)) failures.push(`Flutter package 缺少图标资产 ${glyphId}`);
+  if (!manifest.icons?.glyphSha256?.[glyphId]) failures.push(`发布清单缺少图标校验和 ${glyphId}`);
+  if (fs.existsSync(flutterAsset)) {
+    const hash = crypto.createHash("sha256").update(read(path.relative(root, flutterAsset)).trimEnd()).digest("hex");
+    if (hash !== manifest.icons?.glyphSha256?.[glyphId]) failures.push(`Flutter 图标资产校验和不一致 ${glyphId}`);
+  }
+}
+const packagedGlyphs = fs.readdirSync(path.join(root, "packages", "flutter", "icons"))
+  .filter((fileName) => fileName.endsWith(".svg"))
+  .map((fileName) => fileName.slice(0, -4));
+for (const glyphId of packagedGlyphs) {
+  if (!glyphIds.includes(glyphId)) failures.push(`Flutter package 存在未纳入契约的图标 ${glyphId}`);
+}
+for (const capability of Object.keys(contract.experiences.editor.labels)) {
+  const semanticId = capability === "hr"
+    ? "editor.horizontal-rule"
+    : capability === "draft"
+      ? "editor.content-drafts"
+      : `editor.${capability}`;
+  if (!["task-list", "code-block", "table", "mention"].includes(capability) && !icons.semantics[semanticId]) {
+    failures.push(`编辑器能力 ${capability} 缺少图标语义`);
+  }
+}
+
 const requiredPalette = [
   "background", "foreground", "surface", "primary", "onPrimary", "brandStrong",
   "secondary", "muted", "mutedForeground", "accent", "border", "input",
@@ -192,7 +229,7 @@ for (const font of contract.fonts) {
 }
 
 const skill = read("skills/wenyou-design/SKILL.md");
-if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("experiences.collections")) {
+if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("docs/icons.md") || !skill.includes("experiences.collections") || !skill.includes("experiences.icons")) {
   failures.push("wenyou-design Skill 未正确引用中央事实源");
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");

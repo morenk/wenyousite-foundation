@@ -15,7 +15,7 @@ description: Apply and review 温油站's shared visual identity and platform-sp
 
 任务涉及头像、封面、正文图片、画廊、表情或大图查看时，还要完整读取 `docs/images.md` 与 `experiences.images`。
 
-不得从本 Skill 记忆或重写色值、字体版本、能力清单。目标仓库的锁定 foundation 版本与当前仓库不一致时，以目标仓库锁定版本为准；需要新语义时先更新中央契约并发布版本。
+不得从本 Skill 记忆或重写色值、字体版本、能力清单或图标映射。目标仓库的锁定 foundation 版本与当前仓库不一致时，以目标仓库锁定版本为准；需要新语义时先更新中央契约并发布版本。图标任务还必须读取 `docs/icons.md` 与 `experiences.icons`。
 
 ## 设计工作流
 

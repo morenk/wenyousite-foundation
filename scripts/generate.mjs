@@ -35,10 +35,133 @@ const dartColor = (value) => `Color(0xFF${value.slice(1)})`;
 const dartString = (value) => `'${value.replaceAll("'", "\\'")}'`;
 const dartList = (values, mapper = dartString) =>
   `[${values.map(mapper).join(", ")}]`;
+const dartIdentifier = (value) => value
+  .split(/[.-]/u)
+  .map((part, index) => index === 0 ? part : `${part[0].toUpperCase()}${part.slice(1)}`)
+  .join("");
 
 const editor = contract.experiences.editor;
+const icons = contract.experiences.icons;
 const images = contract.experiences.images;
 const collections = contract.experiences.collections;
+
+const iconSourceRoot = path.join(root, "node_modules", icons.source.package, "icons");
+const iconLicenseHeader = /^<!-- @license[^>]+-->\s*/;
+const normalizeSvg = (source) => source
+  .replace(iconLicenseHeader, "")
+  .replace(/\s+/g, " ")
+  .replace(/> </g, "><")
+  .trim();
+const svgToNode = (source) => {
+  const nodes = [];
+  const childPattern = /<(path|circle|ellipse|line|polygon|polyline|rect)\s+([^>]*?)\s*\/?\s*>/g;
+  for (const match of source.matchAll(childPattern)) {
+    const attributes = {};
+    for (const attribute of match[2].matchAll(/([\w:-]+)="([^"]*)"/g)) {
+      if (attribute[1] !== "class") attributes[attribute[1]] = attribute[2];
+    }
+    nodes.push([match[1], attributes]);
+  }
+  return nodes;
+};
+const glyphIds = [...new Set(Object.values(icons.semantics))].sort();
+const glyphSvgs = Object.fromEntries(glyphIds.map((glyphId) => {
+  const sourcePath = path.join(iconSourceRoot, `${glyphId}.svg`);
+  if (!fs.existsSync(sourcePath)) throw new Error(`Lucide ${icons.source.version} 缺少图形 ${glyphId}`);
+  return [glyphId, normalizeSvg(fs.readFileSync(sourcePath, "utf8"))];
+}));
+const glyphNodes = Object.fromEntries(glyphIds.map((glyphId) => [glyphId, svgToNode(glyphSvgs[glyphId])]));
+const glyphSha256 = Object.fromEntries(glyphIds.map((glyphId) => [
+  glyphId,
+  crypto.createHash("sha256").update(glyphSvgs[glyphId]).digest("hex"),
+]));
+const flutterIconDirectory = path.join(root, "packages", "flutter", "icons");
+if (!checkOnly && fs.existsSync(flutterIconDirectory)) {
+  for (const fileName of fs.readdirSync(flutterIconDirectory)) {
+    if (fileName.endsWith(".svg") && !glyphIds.includes(fileName.slice(0, -4))) {
+      fs.unlinkSync(path.join(flutterIconDirectory, fileName));
+    }
+  }
+}
+
+write("dist/icons.js", `/** 由 contracts/foundation.v1.json 与 Lucide ${icons.source.version} 生成，禁止手改。 */
+export const ICON_FAMILY = ${JSON.stringify(icons.source.family)};
+export const ICON_VERSION = ${JSON.stringify(icons.source.version)};
+export const ICON_STYLE = Object.freeze(${js(icons.style)});
+export const ICON_SEMANTICS = Object.freeze(${js(icons.semantics)});
+export const ICON_GLYPH_NODES = Object.freeze(${js(glyphNodes)});
+export const ICON_GLYPH_SVGS = Object.freeze(${js(glyphSvgs)});
+export const ICON_GLYPH_SHA256 = Object.freeze(${js(glyphSha256)});
+export const ICON_PLATFORM_EXCEPTIONS = Object.freeze(${js(icons.platformExceptions)});
+export function iconGlyphId(semanticId) {
+  return ICON_SEMANTICS[semanticId];
+}
+export function iconNode(semanticId) {
+  const glyphId = iconGlyphId(semanticId);
+  return glyphId ? ICON_GLYPH_NODES[glyphId] : undefined;
+}
+export function iconSvg(semanticId) {
+  const glyphId = iconGlyphId(semanticId);
+  return glyphId ? ICON_GLYPH_SVGS[glyphId] : undefined;
+}`);
+
+const semanticUnion = Object.keys(icons.semantics).map((id) => JSON.stringify(id)).join(" | ");
+const glyphUnion = glyphIds.map((id) => JSON.stringify(id)).join(" | ");
+write("dist/icons.d.ts", `/** 由 contracts/foundation.v1.json 与 Lucide ${icons.source.version} 生成，禁止手改。 */
+export type IconSemanticId = ${semanticUnion};
+export type IconGlyphId = ${glyphUnion};
+export type IconNode = readonly [elementName: "circle" | "ellipse" | "line" | "path" | "polygon" | "polyline" | "rect", attributes: Readonly<Record<string, string>>];
+export declare const ICON_FAMILY: ${JSON.stringify(icons.source.family)};
+export declare const ICON_VERSION: ${JSON.stringify(icons.source.version)};
+export declare const ICON_STYLE: Readonly<{
+  strokeWidth: number;
+  lineCap: "round";
+  lineJoin: "round";
+  compactSize: number;
+  defaultSize: number;
+  navigationSize: number;
+  selectedState: "same-glyph-on-accent-container";
+  decorativeSemantics: "hidden";
+  interactiveLabelOwner: "control";
+}>;
+export declare const ICON_SEMANTICS: Readonly<Record<IconSemanticId, IconGlyphId>>;
+export declare const ICON_GLYPH_NODES: Readonly<Record<IconGlyphId, readonly IconNode[]>>;
+export declare const ICON_GLYPH_SVGS: Readonly<Record<IconGlyphId, string>>;
+export declare const ICON_GLYPH_SHA256: Readonly<Record<IconGlyphId, string>>;
+export declare const ICON_PLATFORM_EXCEPTIONS: readonly string[];
+export declare function iconGlyphId(semanticId: IconSemanticId): IconGlyphId;
+export declare function iconNode(semanticId: IconSemanticId): readonly IconNode[];
+export declare function iconSvg(semanticId: IconSemanticId): string;`);
+
+const iconCatalogRows = Object.entries(icons.semantics)
+  .map(([semanticId, glyphId]) => `| \`${semanticId}\` | \`${glyphId}\` | \`${glyphSha256[glyphId]}\` |`)
+  .join("\n");
+write("docs/icons.md", `# 图标目录与治理
+
+本目录由 \`contracts/foundation.v1.json\` 与 \`${icons.source.package}@${icons.source.version}\` 生成。产品代码使用语义 ID，不直接把 Lucide 图形名当作业务含义。
+
+## 使用规则
+
+- Web 与 Flutter 必须消费 Foundation 生成产物；第三方编辑器使用同源 SVG 字符串，不手写近似路径。
+- 交互状态由控件容器表达；选中态保持同一图形，使用柔粉背景和前景色。
+- 有文字的控件由控件承担可访问名称，内部图标隐藏；独立图标按钮必须提供明确名称。
+- 新增语义前先搜索本目录。同一图形可以承载多个经过审查的近义语义，但同一语义只能映射一个图形。
+- 品牌标识、分类标记、插画和操作系统专属动作属于显式例外，不进入核心 UI 图标映射。
+
+## 版本与视觉规格
+
+- 图标家族：${icons.source.family}
+- 固定版本：${icons.source.version}
+- 画板：${icons.source.viewBox}
+- 默认线宽：${icons.style.strokeWidth}
+- 尺寸角色：紧凑 ${icons.style.compactSize}、默认 ${icons.style.defaultSize}、导航 ${icons.style.navigationSize}
+
+## 语义目录
+
+| 语义 ID | SVG 图形 | SHA-256 |
+| --- | --- | --- |
+${iconCatalogRows}
+`);
 write("dist/editor.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const FOUNDATION_VERSION = ${JSON.stringify(contract.version)};
 export const EDITOR_CAPABILITY_LABELS = Object.freeze(${js(editor.labels)});
@@ -337,11 +460,82 @@ ${Object.entries(images.roles).map(([role, value]) => `    ${dartString(role)}: 
   static const double stickerDisplayMax = ${images.mobile.stickerDisplayMaxDp}.0;
 }`);
 
+for (const glyphId of glyphIds) {
+  write(`packages/flutter/icons/${glyphId}.svg`, glyphSvgs[glyphId]);
+}
+const dartSemanticFields = Object.entries(icons.semantics)
+  .map(([semanticId, glyphId]) => `  static const String ${dartIdentifier(semanticId)} = ${dartString(semanticId)}; // ${glyphId}`)
+  .join("\n");
+const dartSemanticEntries = Object.entries(icons.semantics)
+  .map(([semanticId, glyphId]) => `    ${dartString(semanticId)}: ${dartString(glyphId)},`)
+  .join("\n");
+write("packages/flutter/lib/src/wenyou_icons.dart", `// 由 contracts/foundation.v1.json 与 Lucide ${icons.source.version} 生成，禁止手改。
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+abstract final class WenyouIconIds {
+${dartSemanticFields}
+}
+
+abstract final class WenyouIconContract {
+  static const String family = ${dartString(icons.source.family)};
+  static const String version = ${dartString(icons.source.version)};
+  static const double compactSize = ${icons.style.compactSize}.0;
+  static const double defaultSize = ${icons.style.defaultSize}.0;
+  static const double navigationSize = ${icons.style.navigationSize}.0;
+  static const Map<String, String> glyphs = <String, String>{
+${dartSemanticEntries}
+  };
+
+  static String assetName(String semanticId) {
+    final glyph = glyphs[semanticId];
+    if (glyph == null) throw ArgumentError.value(semanticId, 'semanticId', 'Unknown Wenyou icon semantic');
+    return 'icons/\$glyph.svg';
+  }
+}
+
+class WenyouIcon extends StatelessWidget {
+  const WenyouIcon(
+    this.semanticId, {
+    this.size = WenyouIconContract.defaultSize,
+    this.color,
+    this.semanticLabel,
+    super.key,
+  });
+
+  final String semanticId;
+  final double size;
+  final Color? color;
+  final String? semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final resolvedColor = color ?? IconTheme.of(context).color ?? DefaultTextStyle.of(context).style.color;
+    final picture = SvgPicture.asset(
+      WenyouIconContract.assetName(semanticId),
+      package: 'wenyousite_foundation',
+      width: size,
+      height: size,
+      fit: BoxFit.contain,
+      colorFilter: resolvedColor == null ? null : ColorFilter.mode(resolvedColor, BlendMode.srcIn),
+      excludeFromSemantics: semanticLabel == null,
+      semanticsLabel: semanticLabel,
+    );
+    return SizedBox.square(dimension: size, child: picture);
+  }
+}`);
+
 const manifest = JSON.stringify({
   version: contract.version,
   schemaVersion: contract.schemaVersion,
   contract: "contracts/foundation.v1.json",
   contractSha256,
+  icons: {
+    family: icons.source.family,
+    version: icons.source.version,
+    license: icons.source.license,
+    glyphSha256,
+  },
   fonts: contract.fonts.map(({ role, family, sha256, webSha256 }) => ({
     role,
     family,
@@ -361,6 +555,6 @@ const flutterLicense = contract.fonts
     readFile(font.license),
   ].join("\n"))
   .join("\n\n---\n\n");
-write("packages/flutter/LICENSE", flutterLicense);
+write("packages/flutter/LICENSE", `${flutterLicense}\n\n---\n\nLucide icons\n============\n${readFile(icons.source.license)}`);
 
 if (!checkOnly) console.log(`Generated foundation ${contract.version} artifacts`);

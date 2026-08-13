@@ -12,7 +12,7 @@
 
 ## 颜色、字体与动效
 
-共享色板以 `contracts/foundation.v1.json` 为准：纯白背景、深紫灰正文、柔粉主色、淡紫次色、低饱和状态色。普通文字满足 WCAG AA。
+共享色板以 `contracts/foundation.v1.json` 为准：纯白背景、深紫灰正文、柔粉主色、淡紫次色、低饱和状态色。普通文字满足 WCAG AA。核心导航、操作、编辑器能力和常见状态使用同一份语义图标契约，具体映射与贡献规则见 `docs/icons.md`。
 
 字体采用三个稳定角色：Noto Sans SC Variable 用于正文、控件与长时间阅读；LXGW WenKai Lite Medium 用于品牌和标题；Nunito Variable 用于数字、时间、计数与短标签。字体全部随客户端打包，缺字按 Noto Sans SC、平台中文字体顺序安全回退。
 
