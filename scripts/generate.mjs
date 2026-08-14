@@ -44,6 +44,7 @@ const editor = contract.experiences.editor;
 const icons = contract.experiences.icons;
 const images = contract.experiences.images;
 const collections = contract.experiences.collections;
+const notifications = contract.experiences.notifications;
 
 const iconSourceRoot = path.join(root, "node_modules", icons.source.package, "icons");
 const iconLicenseHeader = /^<!-- @license[^>]+-->\s*/;
@@ -294,6 +295,35 @@ export declare const COLLECTION_MOBILE_PROFILE: Readonly<{
   itemWidth: "available";
 }>;`);
 
+write("dist/notifications.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const NOTIFICATION_ALL_LABEL = ${JSON.stringify(notifications.allLabel)};
+export const NOTIFICATION_GROUPS = Object.freeze(${js(notifications.groups)});
+export const NOTIFICATION_INVARIANTS = Object.freeze(${js({
+  eventTypeOwner: notifications.eventTypeOwner,
+  unknownTypeVisibility: notifications.unknownTypeVisibility,
+})});`);
+
+const notificationGroupIdUnion = notifications.groups
+  .map(({ id }) => JSON.stringify(id))
+  .join(" | ");
+const notificationTypeUnion = [...new Set(notifications.groups.flatMap(({ types }) => types))]
+  .map((type) => JSON.stringify(type))
+  .join(" | ");
+write("dist/notifications.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export type NotificationGroupId = ${notificationGroupIdUnion};
+export type NotificationEventType = ${notificationTypeUnion};
+export interface NotificationGroupContract {
+  readonly id: NotificationGroupId;
+  readonly label: string;
+  readonly types: readonly NotificationEventType[];
+}
+export declare const NOTIFICATION_ALL_LABEL: ${JSON.stringify(notifications.allLabel)};
+export declare const NOTIFICATION_GROUPS: readonly NotificationGroupContract[];
+export declare const NOTIFICATION_INVARIANTS: Readonly<{
+  eventTypeOwner: "backend-notification-contract";
+  unknownTypeVisibility: "all";
+}>;`);
+
 const p = contract.palette;
 const web = contract.profiles.web;
 const motion = contract.motion;
@@ -382,6 +412,12 @@ const labelEntries = Object.entries(editor.labels)
 const mobileCapabilityEntries = Object.entries(editor.capabilities.mobile)
   .map(([id, capability]) => `    ${dartString(id)}: <String, String>{${Object.entries(capability).map(([key, value]) => `${dartString(key)}: ${dartString(value)}`).join(", ")}},`)
   .join("\n");
+const notificationLabelEntries = notifications.groups
+  .map(({ id, label }) => `    ${dartString(id)}: ${dartString(label)},`)
+  .join("\n");
+const notificationTypeEntries = notifications.groups
+  .map(({ id, types }) => `    ${dartString(id)}: <String>${dartList(types)},`)
+  .join("\n");
 write("packages/flutter/lib/src/foundation_tokens.dart", `// 由 contracts/foundation.v1.json 生成，禁止手改。
 import 'package:flutter/material.dart';
 
@@ -423,6 +459,19 @@ abstract final class WenyouCollectionContract {
   static const bool fillAvailableWidth = ${collections.invariants.itemWidth === "available"};
   static const bool narrowContentKeepsItemWidth = ${collections.invariants.narrowContentDoesNotChangeItemWidth};
   static const Set<String> contentSizedExceptions = <String>{${collections.invariants.contentSizedExceptions.map(dartString).join(", ")}};
+}
+
+abstract final class WenyouNotificationContract {
+  static const String allLabel = ${dartString(notifications.allLabel)};
+  static const String eventTypeOwner = ${dartString(notifications.eventTypeOwner)};
+  static const String unknownTypeVisibility = ${dartString(notifications.unknownTypeVisibility)};
+  static const List<String> groupOrder = <String>${dartList(notifications.groups.map(({ id }) => id))};
+  static const Map<String, String> labels = <String, String>{
+${notificationLabelEntries}
+  };
+  static const Map<String, List<String>> eventTypes = <String, List<String>>{
+${notificationTypeEntries}
+  };
 }
 
 abstract final class WenyouEditorContract {

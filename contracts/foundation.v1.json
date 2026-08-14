@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -206,6 +206,28 @@
         "layout": "single-column",
         "itemWidth": "available"
       }
+    },
+    "notifications": {
+      "allLabel": "全部",
+      "eventTypeOwner": "backend-notification-contract",
+      "unknownTypeVisibility": "all",
+      "groups": [
+        {
+          "id": "interaction",
+          "label": "互动",
+          "types": ["reply", "mention", "follow", "like"]
+        },
+        {
+          "id": "subscription",
+          "label": "订阅",
+          "types": ["new_post", "thread_created"]
+        },
+        {
+          "id": "system",
+          "label": "系统",
+          "types": ["tip", "level_up", "system"]
+        }
+      ]
     },
     "editor": {
       "labels": {

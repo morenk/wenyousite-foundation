@@ -7,6 +7,7 @@
 - [Flutter profile](docs/platforms/mobile.md)
 - [图片呈现契约](docs/images.md)
 - [图标目录与治理](docs/icons.md)
+- [通知分组契约](docs/notifications.md)
 - [机器契约](contracts/foundation.v1.json)
 - [Codex 审美指导 Skill](skills/wenyou-design/SKILL.md)
 

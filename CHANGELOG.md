@@ -1,5 +1,11 @@
 # Foundation Changelog
 
+## 2.1.0
+
+- `shared`：通知中心固定为“互动、订阅、系统”三组筛选，并明确“全部”默认入口与未知事件降级语义。
+- `generated`：新增 Web 通知契约导出和 Flutter `WenyouNotificationContract`，客户端不再复制分组名称与事件成员。
+- `governance`：通知事件协议继续由后端拥有，Foundation 只负责跨端展示分组。
+
 ## 2.0.0
 
 - `shared`：新增 Lucide 1.28.0 双层图标契约，以产品语义映射到固定 SVG 母版，并统一尺寸、状态与无障碍策略。

@@ -12,7 +12,42 @@
     "typography": { "type": "object" },
     "motion": { "type": "object" },
     "profiles": { "type": "object", "required": ["web", "mobile"] },
-    "experiences": { "type": "object", "required": ["collections", "editor", "icons", "images"] },
+    "experiences": {
+      "type": "object",
+      "required": ["collections", "editor", "icons", "images", "notifications"],
+      "properties": {
+        "notifications": {
+          "type": "object",
+          "required": ["allLabel", "eventTypeOwner", "unknownTypeVisibility", "groups"],
+          "properties": {
+            "allLabel": { "type": "string", "minLength": 1 },
+            "eventTypeOwner": { "const": "backend-notification-contract" },
+            "unknownTypeVisibility": { "const": "all" },
+            "groups": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "required": ["id", "label", "types"],
+                "properties": {
+                  "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+                  "label": { "type": "string", "minLength": 1 },
+                  "types": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
     "fonts": { "type": "array", "minItems": 3 }
   },
   "additionalProperties": false

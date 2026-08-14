@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '2.0.0';
+  static const String value = '2.1.0';
   static const int schema = 1;
 }
 
@@ -73,6 +73,23 @@ abstract final class WenyouCollectionContract {
   static const bool fillAvailableWidth = true;
   static const bool narrowContentKeepsItemWidth = true;
   static const Set<String> contentSizedExceptions = <String>{'message-bubble', 'chip', 'badge', 'compact-action'};
+}
+
+abstract final class WenyouNotificationContract {
+  static const String allLabel = '全部';
+  static const String eventTypeOwner = 'backend-notification-contract';
+  static const String unknownTypeVisibility = 'all';
+  static const List<String> groupOrder = <String>['interaction', 'subscription', 'system'];
+  static const Map<String, String> labels = <String, String>{
+    'interaction': '互动',
+    'subscription': '订阅',
+    'system': '系统',
+  };
+  static const Map<String, List<String>> eventTypes = <String, List<String>>{
+    'interaction': <String>['reply', 'mention', 'follow', 'like'],
+    'subscription': <String>['new_post', 'thread_created'],
+    'system': <String>['tip', 'level_up', 'system'],
+  };
 }
 
 abstract final class WenyouEditorContract {

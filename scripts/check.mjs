@@ -210,6 +210,29 @@ for (const exception of ["message-bubble", "chip", "badge", "compact-action"]) {
 if (collections.web.tabPanelWidth !== "available") failures.push("Web Tabs 面板必须占满可用宽度");
 if (collections.mobile.itemWidth !== "available") failures.push("Flutter 列表项必须占满单列宽度");
 
+const notifications = contract.experiences.notifications;
+const expectedNotificationGroups = [
+  ["interaction", "互动", ["reply", "mention", "follow", "like"]],
+  ["subscription", "订阅", ["new_post", "thread_created"]],
+  ["system", "系统", ["tip", "level_up", "system"]],
+];
+if (notifications.allLabel !== "全部") failures.push("通知总览入口必须命名为全部");
+if (notifications.eventTypeOwner !== "backend-notification-contract") {
+  failures.push("通知事件协议必须继续由后端契约拥有");
+}
+if (notifications.unknownTypeVisibility !== "all") {
+  failures.push("未知通知类型必须至少在全部通知中可见");
+}
+if (JSON.stringify(notifications.groups) !== JSON.stringify(
+  expectedNotificationGroups.map(([id, label, types]) => ({ id, label, types })),
+)) {
+  failures.push("通知分组必须固定为互动、订阅、系统及其当前事件成员");
+}
+const groupedNotificationTypes = notifications.groups.flatMap(({ types }) => types);
+if (new Set(groupedNotificationTypes).size !== groupedNotificationTypes.length) {
+  failures.push("同一通知事件不得属于多个筛选分组");
+}
+
 for (const font of contract.fonts) {
   for (const property of ["flutterAsset", "license"]) {
     if (!fs.existsSync(path.join(root, font[property]))) failures.push(`${font.family} 缺少 ${property}`);
@@ -237,4 +260,4 @@ if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色�
 if (failures.length > 0) {
   throw new Error(`Foundation 检查失败：\n- ${failures.join("\n- ")}`);
 }
-console.log(`Foundation ${contract.version} contract, contrast, fonts, editor matrix, and skill are valid`);
+console.log(`Foundation ${contract.version} contract, contrast, fonts, notifications, editor matrix, and skill are valid`);

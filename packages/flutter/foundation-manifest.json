@@ -1,8 +1,8 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "schemaVersion": 1,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "5765e453c8db87ff259ab34db42acee8ef2de3a1f988a5fe7521540f5515c11f",
+  "contractSha256": "33c322065e66fd444390d65e95f35dbab94d8403a3f92ea66deb7baab6aa29f7",
   "icons": {
     "family": "Lucide",
     "version": "1.28.0",
