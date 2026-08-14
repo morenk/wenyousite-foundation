@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "2.4.0",
+  "version": "2.4.1",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -157,6 +157,7 @@
         "action.add-comment": "message-square-plus",
         "action.add-reaction": "smile-plus",
         "action.add-tag": "tag-plus",
+        "action.confirm": "check",
         "action.edit": "pencil",
         "action.disable-edit": "pencil-off",
         "action.delete": "trash-2",
@@ -182,6 +183,7 @@
         "action.fullscreen": "maximize",
         "action.exit-fullscreen": "minimize",
         "action.move": "folder-input",
+        "action.reorder": "grip-horizontal",
         "action.archive": "archive",
         "action.unarchive": "archive-restore",
         "action.restore": "archive-restore",
@@ -192,6 +194,7 @@
         "action.unfollow": "user-minus",
         "action.bookmark": "bookmark",
         "action.remove-bookmark": "bookmark-x",
+        "action.remove-tag": "tag-x",
         "action.like": "heart",
         "action.tip": "fuel",
         "action.redeem": "gift",

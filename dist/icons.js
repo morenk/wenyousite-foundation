@@ -31,6 +31,7 @@ export const ICON_SEMANTICS = Object.freeze({
   "action.add-comment": "message-square-plus",
   "action.add-reaction": "smile-plus",
   "action.add-tag": "tag-plus",
+  "action.confirm": "check",
   "action.edit": "pencil",
   "action.disable-edit": "pencil-off",
   "action.delete": "trash-2",
@@ -56,6 +57,7 @@ export const ICON_SEMANTICS = Object.freeze({
   "action.fullscreen": "maximize",
   "action.exit-fullscreen": "minimize",
   "action.move": "folder-input",
+  "action.reorder": "grip-horizontal",
   "action.archive": "archive",
   "action.unarchive": "archive-restore",
   "action.restore": "archive-restore",
@@ -66,6 +68,7 @@ export const ICON_SEMANTICS = Object.freeze({
   "action.unfollow": "user-minus",
   "action.bookmark": "bookmark",
   "action.remove-bookmark": "bookmark-x",
+  "action.remove-tag": "tag-x",
   "action.like": "heart",
   "action.tip": "fuel",
   "action.redeem": "gift",
@@ -571,6 +574,14 @@ export const ICON_GLYPH_NODES = Object.freeze({
       "path",
       {
         "d": "M16 17h.01"
+      }
+    ]
+  ],
+  "check": [
+    [
+      "path",
+      {
+        "d": "M20 6 9 17l-5-5"
       }
     ]
   ],
@@ -1292,6 +1303,56 @@ export const ICON_GLYPH_NODES = Object.freeze({
         "width": "18",
         "height": "4",
         "rx": "1"
+      }
+    ]
+  ],
+  "grip-horizontal": [
+    [
+      "circle",
+      {
+        "cx": "12",
+        "cy": "9",
+        "r": "1"
+      }
+    ],
+    [
+      "circle",
+      {
+        "cx": "19",
+        "cy": "9",
+        "r": "1"
+      }
+    ],
+    [
+      "circle",
+      {
+        "cx": "5",
+        "cy": "9",
+        "r": "1"
+      }
+    ],
+    [
+      "circle",
+      {
+        "cx": "12",
+        "cy": "15",
+        "r": "1"
+      }
+    ],
+    [
+      "circle",
+      {
+        "cx": "19",
+        "cy": "15",
+        "r": "1"
+      }
+    ],
+    [
+      "circle",
+      {
+        "cx": "5",
+        "cy": "15",
+        "r": "1"
       }
     ]
   ],
@@ -2859,6 +2920,35 @@ export const ICON_GLYPH_NODES = Object.freeze({
       }
     ]
   ],
+  "tag-x": [
+    [
+      "path",
+      {
+        "d": "m16.5 6.5-3.914-3.914A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.43 2.43 0 0 0 3.42 0l1.79-1.79"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "m16.5 10.5 5 5"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "m21.5 10.5-5 5"
+      }
+    ],
+    [
+      "circle",
+      {
+        "cx": "7.5",
+        "cy": "7.5",
+        "r": ".5",
+        "fill": "currentColor"
+      }
+    ]
+  ],
   "trash-2": [
     [
       "path",
@@ -3313,6 +3403,7 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "bookmark": "<svg class=\"lucide lucide-bookmark\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z\" /></svg>",
   "bookmark-x": "<svg class=\"lucide lucide-bookmark-x\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m14.5 7.5-5 5\" /><path d=\"M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z\" /><path d=\"m9.5 7.5 5 5\" /></svg>",
   "calendar-days": "<svg class=\"lucide lucide-calendar-days\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M8 2v3\" /><path d=\"M16 2v3\" /><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\" /><path d=\"M3 9h18\" /><path d=\"M8 13h.01\" /><path d=\"M12 13h.01\" /><path d=\"M16 13h.01\" /><path d=\"M8 17h.01\" /><path d=\"M12 17h.01\" /><path d=\"M16 17h.01\" /></svg>",
+  "check": "<svg class=\"lucide lucide-check\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M20 6 9 17l-5-5\" /></svg>",
   "chevron-down": "<svg class=\"lucide lucide-chevron-down\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m6 9 6 6 6-6\" /></svg>",
   "chevron-left": "<svg class=\"lucide lucide-chevron-left\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m15 18-6-6 6-6\" /></svg>",
   "chevron-right": "<svg class=\"lucide lucide-chevron-right\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m9 18 6-6-6-6\" /></svg>",
@@ -3348,6 +3439,7 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "fuel": "<svg class=\"lucide lucide-fuel\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5\" /><path d=\"M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16\" /><path d=\"M2 21h13\" /><path d=\"M3 9h11\" /></svg>",
   "gavel": "<svg class=\"lucide lucide-gavel\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m14 13-8.381 8.38a1 1 0 0 1-3.001-3l8.384-8.381\" /><path d=\"m16 16 6-6\" /><path d=\"m21.5 10.5-8-8\" /><path d=\"m8 8 6-6\" /><path d=\"m8.5 7.5 8 8\" /></svg>",
   "gift": "<svg class=\"lucide lucide-gift\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M12 7v14\" /><path d=\"M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8\" /><path d=\"M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5\" /><rect x=\"3\" y=\"7\" width=\"18\" height=\"4\" rx=\"1\" /></svg>",
+  "grip-horizontal": "<svg class=\"lucide lucide-grip-horizontal\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><circle cx=\"12\" cy=\"9\" r=\"1\" /><circle cx=\"19\" cy=\"9\" r=\"1\" /><circle cx=\"5\" cy=\"9\" r=\"1\" /><circle cx=\"12\" cy=\"15\" r=\"1\" /><circle cx=\"19\" cy=\"15\" r=\"1\" /><circle cx=\"5\" cy=\"15\" r=\"1\" /></svg>",
   "hand": "<svg class=\"lucide lucide-hand\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2\" /><path d=\"M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2\" /><path d=\"M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8\" /><path d=\"M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15\" /></svg>",
   "heading-2": "<svg class=\"lucide lucide-heading-2\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M4 12h8\" /><path d=\"M4 18V6\" /><path d=\"M12 18V6\" /><path d=\"M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1\" /></svg>",
   "heading-3": "<svg class=\"lucide lucide-heading-3\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M4 12h8\" /><path d=\"M4 18V6\" /><path d=\"M12 18V6\" /><path d=\"M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2\" /><path d=\"M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2\" /></svg>",
@@ -3415,6 +3507,7 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "strikethrough": "<svg class=\"lucide lucide-strikethrough\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M16 4H9a3 3 0 0 0-2.83 4\" /><path d=\"M14 12a4 4 0 0 1 0 8H6\" /><line x1=\"4\" x2=\"20\" y1=\"12\" y2=\"12\" /></svg>",
   "tag": "<svg class=\"lucide lucide-tag\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z\" /><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /></svg>",
   "tag-plus": "<svg class=\"lucide lucide-tag-plus\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M16 13h6\" /><path d=\"m16.5 6.5-3.914-3.914A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l1.79-1.79\" /><path d=\"M19 10v6\" /><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /></svg>",
+  "tag-x": "<svg class=\"lucide lucide-tag-x\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m16.5 6.5-3.914-3.914A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.43 2.43 0 0 0 3.42 0l1.79-1.79\" /><path d=\"m16.5 10.5 5 5\" /><path d=\"m21.5 10.5-5 5\" /><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /></svg>",
   "trash-2": "<svg class=\"lucide lucide-trash-2\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M10 11v6\" /><path d=\"M14 11v6\" /><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6\" /><path d=\"M3 6h18\" /><path d=\"M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\" /></svg>",
   "trending-up": "<svg class=\"lucide lucide-trending-up\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M16 7h6v6\" /><path d=\"m22 7-8.5 8.5-5-5L2 17\" /></svg>",
   "triangle-alert": "<svg class=\"lucide lucide-triangle-alert\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\" /><path d=\"M12 9v4\" /><path d=\"M12 17h.01\" /></svg>",
@@ -3452,6 +3545,7 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "bookmark": "0cb65566a3db0a7166a3519d944d24d7961343ef0ac63abd63713c1d51ad8e9e",
   "bookmark-x": "05b66b7cb71f72d6d36fda5c4a6a56621a8c319a701febe7f34387c5b698f922",
   "calendar-days": "55e6560cce5590b4cd30212d9336224aad86902fc3f9d4ff4dfd1bf9f8c7bd40",
+  "check": "48193329bff31b22c614630b20bd6a426bc60d6a65343a74c84c16fd86f086b4",
   "chevron-down": "cc59159680b8cb6b62968db60c31c24bf4070c9da54ef3fe8d5a6ca8725dc9e9",
   "chevron-left": "f533d8319aa5a9daf021dafe70aa4ca3870240f04519019027a6eea6b248255e",
   "chevron-right": "be2bf697096337117d159a318b6cb472ea56b0a0b86005c33b51d58d0764e374",
@@ -3487,6 +3581,7 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "fuel": "9f2840595e35b3893eaddd4995716e732cbda6c65bef9c1536004f9f2b28751e",
   "gavel": "c597115c29707a5fd50914ce88d7a7660ed8e13d02183a898626930120f888eb",
   "gift": "0652ace11ff3cbddf9f9c3bb9086029a2dc56b6feaf08fe7fe8aef8753a7c8f1",
+  "grip-horizontal": "f35c83929b69d874e16dd1253fc3ee973e7ee1e9ce0e20213e68300870eeaff3",
   "hand": "8849440c7c72ce16e715f1833220020d3675302e1fff311774d926a95f30b36b",
   "heading-2": "a99abf77b3c53f48f02c8003d71678714e7b229c220ee60b7169b28c98447c42",
   "heading-3": "61f552bf9e770f6bb4c751240ac05ebb09601a9ecf886767f3537a34719ed1b3",
@@ -3554,6 +3649,7 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "strikethrough": "912253c524af5503f619c06abe5125038c58c7e776454d6c7690efcc8f7e2327",
   "tag": "6a53dac24e6728449f34b57bfce6315b8c1af8fcc6c2f96af3eb77768693f175",
   "tag-plus": "1c56314c29c63d959dd0bbb73ef6f9242d8f7b8df2144f31fd4140536ae91864",
+  "tag-x": "eea9f5920fd64baa602c1eb02b8f754b512723471030773492526926df6f5739",
   "trash-2": "787a4966a7ea9e2c84ef3ffadf3358565f50731f4205197566abba3a79e74214",
   "trending-up": "04cc883abcacdf4194c97b1afc98894ffb1d8b4fece1b896cfc505f422f85626",
   "triangle-alert": "744b90b12f5a29930a4340f030ec9f5b7d41da9f02398f480b8182c3fe8513e5",

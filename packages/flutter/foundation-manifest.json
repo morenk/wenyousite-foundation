@@ -1,8 +1,8 @@
 {
-  "version": "2.4.0",
+  "version": "2.4.1",
   "schemaVersion": 1,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "b267be74d7a95028303348d1aaaff91a183586cfa191a915a75e76ce3acd1ad0",
+  "contractSha256": "5211053a03190fae741e75942c3563cdaaddf5185981727468d3afa219600c57",
   "features": {
     "typography": true,
     "interaction": true,
@@ -10,10 +10,10 @@
     "language": true
   },
   "artifactSha256": {
-    "dist/icons.js": "b5e4c412fca9a1a04cc4c5d06500fd7c9a27ecaeec810c9b0c2018a10aa8fbe8",
-    "dist/icons.d.ts": "81e663f2784aac15657b557513ce8de3cc6643ae141eba4e4671acbd8060ccfc",
-    "dist/editor.js": "2749ccc184a6f0aef554fc534cded234f9c685771c0d9215e1fe7e149d638bbb",
-    "dist/editor.d.ts": "4810debd7648fb9472fc1c0728835e53fa544ae3d481859ab0c26080d1b34801",
+    "dist/icons.js": "8f4d2842725805400d5c1e0bc366f30eb6b2c96cd2b85d40eb995b2cf27056c7",
+    "dist/icons.d.ts": "a1fe6401a5839866d8a2f013fea9aefacb20970c23cf7e90068b3147eb3349d4",
+    "dist/editor.js": "4ec9a8dffca1b0c6ede8e962060b1692e9c78c0519d92e7dd9b7bf9d153cbf5b",
+    "dist/editor.d.ts": "d8cd653f3121c0088afef6fda9898ad61823b717d2b2ab9c9c83e6c0a1b4dcd1",
     "dist/images.js": "48bda60db403d754b5c601d5f092beb0b4ea942bd4596b77aba1399d8aa5c3a4",
     "dist/images.d.ts": "de0d1b52f15967ab723c7b0de317db670e863c3381eb93c9c84cc9446b97da26",
     "dist/collections.js": "665b720eb2a0bcc148ce1f67894aa9068154eef9d49b41a62b7d2bc281342793",
@@ -30,8 +30,8 @@
     "dist/language.d.ts": "7f178e8bb8b62b56e9732c482d2d580d69af70a4e265bb2e9949542345818d6f",
     "web/tokens.css": "8006477fcb5c3b96dd450729a0677c5c846aef1d2d9c0c06a6f605db29f10de1",
     "web/fonts.css": "2064b6f73a60f670ce27ddeaa7dbc9590776fb3c31b5644c5ee0dd35c4f31ed7",
-    "packages/flutter/lib/src/foundation_tokens.dart": "999059c5d2a6ff6db0156bf2484f627ad7abe0143b06698e8bbef982ce1aa2f5",
-    "packages/flutter/lib/src/wenyou_icons.dart": "8ff222e9a97c5e072c1338eecb3774c87ef2a51abeee28768a3efb682a55e442"
+    "packages/flutter/lib/src/foundation_tokens.dart": "198be6e9c0bb271dded7dd9ca80ad18c8770430a135d236f84365909697c2f05",
+    "packages/flutter/lib/src/wenyou_icons.dart": "94a2c61b1875c85c85079afab6d4d3fa9dadfe6e4565196a4a72d9fbbc6c244c"
   },
   "icons": {
     "family": "Lucide",
@@ -57,6 +57,7 @@
       "bookmark": "0cb65566a3db0a7166a3519d944d24d7961343ef0ac63abd63713c1d51ad8e9e",
       "bookmark-x": "05b66b7cb71f72d6d36fda5c4a6a56621a8c319a701febe7f34387c5b698f922",
       "calendar-days": "55e6560cce5590b4cd30212d9336224aad86902fc3f9d4ff4dfd1bf9f8c7bd40",
+      "check": "48193329bff31b22c614630b20bd6a426bc60d6a65343a74c84c16fd86f086b4",
       "chevron-down": "cc59159680b8cb6b62968db60c31c24bf4070c9da54ef3fe8d5a6ca8725dc9e9",
       "chevron-left": "f533d8319aa5a9daf021dafe70aa4ca3870240f04519019027a6eea6b248255e",
       "chevron-right": "be2bf697096337117d159a318b6cb472ea56b0a0b86005c33b51d58d0764e374",
@@ -92,6 +93,7 @@
       "fuel": "9f2840595e35b3893eaddd4995716e732cbda6c65bef9c1536004f9f2b28751e",
       "gavel": "c597115c29707a5fd50914ce88d7a7660ed8e13d02183a898626930120f888eb",
       "gift": "0652ace11ff3cbddf9f9c3bb9086029a2dc56b6feaf08fe7fe8aef8753a7c8f1",
+      "grip-horizontal": "f35c83929b69d874e16dd1253fc3ee973e7ee1e9ce0e20213e68300870eeaff3",
       "hand": "8849440c7c72ce16e715f1833220020d3675302e1fff311774d926a95f30b36b",
       "heading-2": "a99abf77b3c53f48f02c8003d71678714e7b229c220ee60b7169b28c98447c42",
       "heading-3": "61f552bf9e770f6bb4c751240ac05ebb09601a9ecf886767f3537a34719ed1b3",
@@ -159,6 +161,7 @@
       "strikethrough": "912253c524af5503f619c06abe5125038c58c7e776454d6c7690efcc8f7e2327",
       "tag": "6a53dac24e6728449f34b57bfce6315b8c1af8fcc6c2f96af3eb77768693f175",
       "tag-plus": "1c56314c29c63d959dd0bbb73ef6f9242d8f7b8df2144f31fd4140536ae91864",
+      "tag-x": "eea9f5920fd64baa602c1eb02b8f754b512723471030773492526926df6f5739",
       "trash-2": "787a4966a7ea9e2c84ef3ffadf3358565f50731f4205197566abba3a79e74214",
       "trending-up": "04cc883abcacdf4194c97b1afc98894ffb1d8b4fece1b896cfc505f422f85626",
       "triangle-alert": "744b90b12f5a29930a4340f030ec9f5b7d41da9f02398f480b8182c3fe8513e5",

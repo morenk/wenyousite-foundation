@@ -40,6 +40,7 @@
 | `action.add-comment` | `message-square-plus` | `f8058ae58b496d80beae5bd6fb3db3f7353bf215fe09b753ee93f2fc0acc96b2` |
 | `action.add-reaction` | `smile-plus` | `8e41610de1f2c686c000cc771f7a52893f5e4faecbfe0b1c503a555d41b6fba1` |
 | `action.add-tag` | `tag-plus` | `1c56314c29c63d959dd0bbb73ef6f9242d8f7b8df2144f31fd4140536ae91864` |
+| `action.confirm` | `check` | `48193329bff31b22c614630b20bd6a426bc60d6a65343a74c84c16fd86f086b4` |
 | `action.edit` | `pencil` | `8db295372b8afe5eb9dcf3b74ca8bb99233bc9fbe2a98062e75f7da588c87efb` |
 | `action.disable-edit` | `pencil-off` | `193194362ba22b6bcacd5263257c399fbcaae8b831a643490974dd8d5fe3087b` |
 | `action.delete` | `trash-2` | `787a4966a7ea9e2c84ef3ffadf3358565f50731f4205197566abba3a79e74214` |
@@ -65,6 +66,7 @@
 | `action.fullscreen` | `maximize` | `b252950824d47777a29b1af89452378527a1b3adc680bdb13050bf61a3bdca33` |
 | `action.exit-fullscreen` | `minimize` | `1b3959aa83afdcd26e19f1c180df1ea9c8d9aeeee9922fc570bb1fd6535864af` |
 | `action.move` | `folder-input` | `7fa1e6d11d45e8435365a2aa7eac870cbe101d3b718538cc58234f390df17a75` |
+| `action.reorder` | `grip-horizontal` | `f35c83929b69d874e16dd1253fc3ee973e7ee1e9ce0e20213e68300870eeaff3` |
 | `action.archive` | `archive` | `d7e333c7bf7ef2fcc99bad1f0fbe60a38064c02d2f08a3d19f0a27c2f3123939` |
 | `action.unarchive` | `archive-restore` | `9ee4cdc5033a7b50a7e5bb5709ce13510a7d1f8c3a9a32973b4d5a89f1bcd759` |
 | `action.restore` | `archive-restore` | `9ee4cdc5033a7b50a7e5bb5709ce13510a7d1f8c3a9a32973b4d5a89f1bcd759` |
@@ -75,6 +77,7 @@
 | `action.unfollow` | `user-minus` | `48acf1487228dca6a86b33af506aa552813b4aae4bf8752db2d756a5b73b6326` |
 | `action.bookmark` | `bookmark` | `0cb65566a3db0a7166a3519d944d24d7961343ef0ac63abd63713c1d51ad8e9e` |
 | `action.remove-bookmark` | `bookmark-x` | `05b66b7cb71f72d6d36fda5c4a6a56621a8c319a701febe7f34387c5b698f922` |
+| `action.remove-tag` | `tag-x` | `eea9f5920fd64baa602c1eb02b8f754b512723471030773492526926df6f5739` |
 | `action.like` | `heart` | `0ab65b58eba253f9e7f2eb6dafcd78ffa91277b45b69ba92f78cce209b473f07` |
 | `action.tip` | `fuel` | `9f2840595e35b3893eaddd4995716e732cbda6c65bef9c1536004f9f2b28751e` |
 | `action.redeem` | `gift` | `0652ace11ff3cbddf9f9c3bb9086029a2dc56b6feaf08fe7fe8aef8753a7c8f1` |

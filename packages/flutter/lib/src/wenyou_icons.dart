@@ -21,6 +21,7 @@ abstract final class WenyouIconIds {
   static const String actionAddComment = 'action.add-comment'; // message-square-plus
   static const String actionAddReaction = 'action.add-reaction'; // smile-plus
   static const String actionAddTag = 'action.add-tag'; // tag-plus
+  static const String actionConfirm = 'action.confirm'; // check
   static const String actionEdit = 'action.edit'; // pencil
   static const String actionDisableEdit = 'action.disable-edit'; // pencil-off
   static const String actionDelete = 'action.delete'; // trash-2
@@ -46,6 +47,7 @@ abstract final class WenyouIconIds {
   static const String actionFullscreen = 'action.fullscreen'; // maximize
   static const String actionExitFullscreen = 'action.exit-fullscreen'; // minimize
   static const String actionMove = 'action.move'; // folder-input
+  static const String actionReorder = 'action.reorder'; // grip-horizontal
   static const String actionArchive = 'action.archive'; // archive
   static const String actionUnarchive = 'action.unarchive'; // archive-restore
   static const String actionRestore = 'action.restore'; // archive-restore
@@ -56,6 +58,7 @@ abstract final class WenyouIconIds {
   static const String actionUnfollow = 'action.unfollow'; // user-minus
   static const String actionBookmark = 'action.bookmark'; // bookmark
   static const String actionRemoveBookmark = 'action.remove-bookmark'; // bookmark-x
+  static const String actionRemoveTag = 'action.remove-tag'; // tag-x
   static const String actionLike = 'action.like'; // heart
   static const String actionTip = 'action.tip'; // fuel
   static const String actionRedeem = 'action.redeem'; // gift
@@ -199,6 +202,7 @@ abstract final class WenyouIconContract {
     'action.add-comment': 'message-square-plus',
     'action.add-reaction': 'smile-plus',
     'action.add-tag': 'tag-plus',
+    'action.confirm': 'check',
     'action.edit': 'pencil',
     'action.disable-edit': 'pencil-off',
     'action.delete': 'trash-2',
@@ -224,6 +228,7 @@ abstract final class WenyouIconContract {
     'action.fullscreen': 'maximize',
     'action.exit-fullscreen': 'minimize',
     'action.move': 'folder-input',
+    'action.reorder': 'grip-horizontal',
     'action.archive': 'archive',
     'action.unarchive': 'archive-restore',
     'action.restore': 'archive-restore',
@@ -234,6 +239,7 @@ abstract final class WenyouIconContract {
     'action.unfollow': 'user-minus',
     'action.bookmark': 'bookmark',
     'action.remove-bookmark': 'bookmark-x',
+    'action.remove-tag': 'tag-x',
     'action.like': 'heart',
     'action.tip': 'fuel',
     'action.redeem': 'gift',
