@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '2.4.1';
+  static const String value = '3.0.0';
   static const int schema = 1;
 }
 
@@ -245,9 +245,6 @@ abstract final class WenyouEditorContract {
     'ordered-list': '有序列表',
     'hr': '分隔线',
     'dice': '骰子',
-    'task-list': '任务列表',
-    'code-block': '代码块',
-    'table': '表格',
     'mention': '提及',
     'sticker': '表情包',
   };
@@ -262,7 +259,11 @@ abstract final class WenyouEditorContract {
   static const String morePresentation = 'inline';
   static const List<String> moreInline = <String>['link', 'inline-code', 'quote', 'bullet-list', 'ordered-list', 'hr', 'dice', 'sticker', 'draft', 'strikethrough'];
   static const List<String> contextual = <String>['mention', 'sticker'];
-  static const List<String> syntaxOnly = <String>['task-list', 'code-block', 'table'];
+  static const int markdownContractVersion = 3;
+  static const String structuredCapabilitySource = 'toolbar';
+  static const String unsupportedClientBehavior = 'literal-text-silent';
+  static const String unsupportedApiBehavior = 'reject';
+  static const int maximumListDepth = 3;
   static const List<int> creatableHeadingLevels = <int>[2, 3];
   static const double compactContentInlinePadding = 4.0;
   static const double regularContentInlinePadding = 16.0;
@@ -286,9 +287,6 @@ abstract final class WenyouEditorContract {
     'ordered-list': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
     'hr': <String, String>{'creation': 'secondary', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'structured'},
     'dice': <String, String>{'creation': 'secondary', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'identity-preserving'},
-    'task-list': <String, String>{'creation': 'source', 'editing': 'source-preserve', 'rendering': 'native', 'roundTrip': 'source-preserve'},
-    'code-block': <String, String>{'creation': 'source', 'editing': 'source-preserve', 'rendering': 'native', 'roundTrip': 'source-preserve'},
-    'table': <String, String>{'creation': 'source', 'editing': 'source-preserve', 'rendering': 'native', 'roundTrip': 'source-preserve'},
     'mention': <String, String>{'creation': 'contextual', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'identity-preserving'},
     'sticker': <String, String>{'creation': 'contextual', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'identity-preserving'},
   };

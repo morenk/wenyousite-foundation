@@ -94,7 +94,7 @@ for (const capability of Object.keys(contract.experiences.editor.labels)) {
     : capability === "draft"
       ? "editor.content-drafts"
       : `editor.${capability}`;
-  if (!["task-list", "code-block", "table", "mention"].includes(capability) && !icons.semantics[semanticId]) {
+  if (capability !== "mention" && !icons.semantics[semanticId]) {
     failures.push(`编辑器能力 ${capability} 缺少图标语义`);
   }
 }
@@ -227,7 +227,6 @@ for (const [name, ids] of Object.entries({
   mobileMoreInline: editor.mobile.moreInline,
   webContextual: editor.web.contextual,
   mobileContextual: editor.mobile.contextual,
-  syntaxOnly: editor.syntaxOnly,
   ...Object.fromEntries(Object.entries(editor.web.primaryByDensity).map(([density, ids]) => [`webPrimary:${density}`, ids])),
   ...Object.fromEntries(Object.entries(editor.web.moreByDensity).map(([density, ids]) => [`webMore:${density}`, ids])),
 })) {
@@ -294,9 +293,18 @@ for (const platform of ["web", "mobile"]) {
     if (!knownCapabilities.has(id)) failures.push(`${platform} 能力生命周期引用未知能力 ${id}`);
   }
 }
-for (const id of editor.syntaxOnly) {
-  if (editor.capabilities.mobile[id]?.roundTrip !== "source-preserve") {
-    failures.push(`Flutter 语法能力 ${id} 必须显式保留源码`);
+if (
+  editor.contentPolicy.markdownContractVersion !== 3 ||
+  editor.contentPolicy.structuredCapabilitySource !== "toolbar" ||
+  editor.contentPolicy.unsupportedClientBehavior !== "literal-text-silent" ||
+  editor.contentPolicy.unsupportedApiBehavior !== "reject" ||
+  editor.contentPolicy.maximumListDepth !== 3
+) {
+  failures.push("编辑器必须绑定 Markdown v3 工具栏白名单策略");
+}
+for (const id of ["task-list", "code-block", "table"]) {
+  if (knownCapabilities.has(id) || editor.capabilities.web[id] || editor.capabilities.mobile[id]) {
+    failures.push(`工具栏外格式 ${id} 不得继续声明为产品能力`);
   }
 }
 

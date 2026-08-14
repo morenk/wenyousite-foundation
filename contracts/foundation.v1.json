@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "2.4.1",
+  "version": "3.0.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -493,18 +493,22 @@
         "ordered-list": "有序列表",
         "hr": "分隔线",
         "dice": "骰子",
-        "task-list": "任务列表",
-        "code-block": "代码块",
-        "table": "表格",
         "mention": "提及",
         "sticker": "表情包"
       },
       "invariants": {
         "storageContractOwner": "backend-markdown-contract",
-        "unsupportedMarkdown": "preserve-source",
-        "unknownProtocol": "read-only-preserve",
+        "unsupportedMarkdown": "literal-text-client-reject-api",
+        "unknownProtocol": "literal-text-client-reject-api",
         "editRenderTypography": "equivalent",
         "clipboardIdentityOwner": "backend-node-contract"
+      },
+      "contentPolicy": {
+        "markdownContractVersion": 3,
+        "structuredCapabilitySource": "toolbar",
+        "unsupportedClientBehavior": "literal-text-silent",
+        "unsupportedApiBehavior": "reject",
+        "maximumListDepth": 3
       },
       "web": {
         "widePrimary": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "link", "image", "quote", "hr", "dice", "draft"],
@@ -559,7 +563,6 @@
           "respectsSystemTextScale": true
         }
       },
-      "syntaxOnly": ["task-list", "code-block", "table"],
       "creatableHeadingLevels": [2, 3],
       "capabilities": {
         "web": {
@@ -577,9 +580,6 @@
           "ordered-list": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "hr": { "creation": "primary", "editing": "atomic", "rendering": "native", "roundTrip": "structured" },
           "dice": { "creation": "primary", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
-          "task-list": { "creation": "source", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
-          "code-block": { "creation": "source", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
-          "table": { "creation": "source", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "mention": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
           "sticker": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" }
         },
@@ -598,9 +598,6 @@
           "ordered-list": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "hr": { "creation": "secondary", "editing": "atomic", "rendering": "native", "roundTrip": "structured" },
           "dice": { "creation": "secondary", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
-          "task-list": { "creation": "source", "editing": "source-preserve", "rendering": "native", "roundTrip": "source-preserve" },
-          "code-block": { "creation": "source", "editing": "source-preserve", "rendering": "native", "roundTrip": "source-preserve" },
-          "table": { "creation": "source", "editing": "source-preserve", "rendering": "native", "roundTrip": "source-preserve" },
           "mention": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
           "sticker": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" }
         }

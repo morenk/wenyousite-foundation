@@ -183,6 +183,7 @@ export const EDITOR_MORE_BY_DENSITY = Object.freeze(${js(editor.web.moreByDensit
 export const EDITOR_CONTEXTUAL_WEB = Object.freeze(${js(editor.web.contextual)});
 export const EDITOR_CONTEXTUAL_MOBILE = Object.freeze(${js(editor.mobile.contextual)});
 export const EDITOR_INVARIANTS = Object.freeze(${js(editor.invariants)});
+export const EDITOR_CONTENT_POLICY = Object.freeze(${js(editor.contentPolicy)});
 export const EDITOR_WEB_LAYOUT = Object.freeze(${js(editor.web.layout)});
 export const EDITOR_MOBILE_LAYOUT = Object.freeze(${js(editor.mobile.layout)});
 export const EDITOR_MOBILE_SURFACES = Object.freeze(${js(editor.mobile.surfaces)});
@@ -190,7 +191,6 @@ export const EDITOR_MOBILE_TOOLBAR = Object.freeze(${js(editor.mobile.toolbar)})
 export const EDITOR_MOBILE_MORE_INLINE = Object.freeze(${js(editor.mobile.moreInline)});
 export const EDITOR_WEB_CAPABILITIES = Object.freeze(${js(editor.capabilities.web)});
 export const EDITOR_MOBILE_CAPABILITIES = Object.freeze(${js(editor.capabilities.mobile)});
-export const EDITOR_SYNTAX_ONLY = Object.freeze(${js(editor.syntaxOnly)});
 export const EDITOR_CREATABLE_HEADING_LEVELS = Object.freeze(${js(editor.creatableHeadingLevels)});
 export function editorCapabilityLabels(ids) {
   return ids.map((id) => EDITOR_CAPABILITY_LABELS[id]);
@@ -208,10 +208,10 @@ export declare const EDITOR_PRIMARY_WIDE: readonly EditorCapabilityId[];
 export declare const EDITOR_MORE_FALLBACK: readonly EditorCapabilityId[];
 export declare const EDITOR_MORE_PROGRESSIVE: readonly EditorCapabilityId[];
 export type EditorToolbarDensity = ${editor.web.densityOrder.map((density) => JSON.stringify(density)).join(" | ")};
-export type EditorCreationMode = "primary" | "secondary" | "contextual" | "source";
-export type EditorEditingMode = "structured" | "atomic" | "source-preserve" | "ui-only";
+export type EditorCreationMode = "primary" | "secondary" | "contextual";
+export type EditorEditingMode = "structured" | "atomic" | "ui-only";
 export type EditorRenderingMode = "native" | "not-applicable";
-export type EditorRoundTripMode = "structured" | "identity-preserving" | "source-preserve" | "not-applicable";
+export type EditorRoundTripMode = "structured" | "identity-preserving" | "not-applicable";
 export interface EditorCapabilityContract {
   readonly creation: EditorCreationMode;
   readonly editing: EditorEditingMode;
@@ -224,6 +224,13 @@ export declare const EDITOR_MORE_BY_DENSITY: Readonly<Record<EditorToolbarDensit
 export declare const EDITOR_CONTEXTUAL_WEB: readonly EditorCapabilityId[];
 export declare const EDITOR_CONTEXTUAL_MOBILE: readonly EditorCapabilityId[];
 export declare const EDITOR_INVARIANTS: Readonly<Record<string, string>>;
+export declare const EDITOR_CONTENT_POLICY: Readonly<{
+  markdownContractVersion: 3;
+  structuredCapabilitySource: "toolbar";
+  unsupportedClientBehavior: "literal-text-silent";
+  unsupportedApiBehavior: "reject";
+  maximumListDepth: 3;
+}>;
 export declare const EDITOR_WEB_LAYOUT: Readonly<{
   frameMaxRem: number;
   textMeasurePx: number;
@@ -252,7 +259,6 @@ export declare const EDITOR_MOBILE_TOOLBAR: Readonly<{
 export declare const EDITOR_MOBILE_MORE_INLINE: readonly EditorCapabilityId[];
 export declare const EDITOR_WEB_CAPABILITIES: Readonly<Record<EditorCapabilityId, EditorCapabilityContract>>;
 export declare const EDITOR_MOBILE_CAPABILITIES: Readonly<Record<EditorCapabilityId, EditorCapabilityContract>>;
-export declare const EDITOR_SYNTAX_ONLY: readonly EditorCapabilityId[];
 export declare const EDITOR_CREATABLE_HEADING_LEVELS: readonly (2 | 3)[];
 export declare function editorCapabilityLabels(ids: readonly EditorCapabilityId[]): string[];`);
 
@@ -689,7 +695,11 @@ ${labelEntries}
   static const String morePresentation = ${dartString(editor.mobile.toolbar.morePresentation)};
   static const List<String> moreInline = <String>${dartList(editor.mobile.moreInline)};
   static const List<String> contextual = <String>${dartList(editor.mobile.contextual)};
-  static const List<String> syntaxOnly = <String>${dartList(editor.syntaxOnly)};
+  static const int markdownContractVersion = ${editor.contentPolicy.markdownContractVersion};
+  static const String structuredCapabilitySource = ${dartString(editor.contentPolicy.structuredCapabilitySource)};
+  static const String unsupportedClientBehavior = ${dartString(editor.contentPolicy.unsupportedClientBehavior)};
+  static const String unsupportedApiBehavior = ${dartString(editor.contentPolicy.unsupportedApiBehavior)};
+  static const int maximumListDepth = ${editor.contentPolicy.maximumListDepth};
   static const List<int> creatableHeadingLevels = <int>${dartList(editor.creatableHeadingLevels, String)};
   static const double compactContentInlinePadding = ${editor.mobile.layout.compactContentInlinePaddingDp}.0;
   static const double regularContentInlinePadding = ${editor.mobile.layout.regularContentInlinePaddingDp}.0;

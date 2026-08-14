@@ -1,5 +1,5 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "2.4.1";
+export const FOUNDATION_VERSION = "3.0.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
   "bold": "粗体",
@@ -15,9 +15,6 @@ export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "ordered-list": "有序列表",
   "hr": "分隔线",
   "dice": "骰子",
-  "task-list": "任务列表",
-  "code-block": "代码块",
-  "table": "表格",
   "mention": "提及",
   "sticker": "表情包"
 });
@@ -146,10 +143,17 @@ export const EDITOR_CONTEXTUAL_MOBILE = Object.freeze([
 ]);
 export const EDITOR_INVARIANTS = Object.freeze({
   "storageContractOwner": "backend-markdown-contract",
-  "unsupportedMarkdown": "preserve-source",
-  "unknownProtocol": "read-only-preserve",
+  "unsupportedMarkdown": "literal-text-client-reject-api",
+  "unknownProtocol": "literal-text-client-reject-api",
   "editRenderTypography": "equivalent",
   "clipboardIdentityOwner": "backend-node-contract"
+});
+export const EDITOR_CONTENT_POLICY = Object.freeze({
+  "markdownContractVersion": 3,
+  "structuredCapabilitySource": "toolbar",
+  "unsupportedClientBehavior": "literal-text-silent",
+  "unsupportedApiBehavior": "reject",
+  "maximumListDepth": 3
 });
 export const EDITOR_WEB_LAYOUT = Object.freeze({
   "frameMaxRem": 50,
@@ -277,24 +281,6 @@ export const EDITOR_WEB_CAPABILITIES = Object.freeze({
     "rendering": "native",
     "roundTrip": "identity-preserving"
   },
-  "task-list": {
-    "creation": "source",
-    "editing": "structured",
-    "rendering": "native",
-    "roundTrip": "structured"
-  },
-  "code-block": {
-    "creation": "source",
-    "editing": "structured",
-    "rendering": "native",
-    "roundTrip": "structured"
-  },
-  "table": {
-    "creation": "source",
-    "editing": "structured",
-    "rendering": "native",
-    "roundTrip": "structured"
-  },
   "mention": {
     "creation": "contextual",
     "editing": "atomic",
@@ -393,24 +379,6 @@ export const EDITOR_MOBILE_CAPABILITIES = Object.freeze({
     "rendering": "native",
     "roundTrip": "identity-preserving"
   },
-  "task-list": {
-    "creation": "source",
-    "editing": "source-preserve",
-    "rendering": "native",
-    "roundTrip": "source-preserve"
-  },
-  "code-block": {
-    "creation": "source",
-    "editing": "source-preserve",
-    "rendering": "native",
-    "roundTrip": "source-preserve"
-  },
-  "table": {
-    "creation": "source",
-    "editing": "source-preserve",
-    "rendering": "native",
-    "roundTrip": "source-preserve"
-  },
   "mention": {
     "creation": "contextual",
     "editing": "atomic",
@@ -424,11 +392,6 @@ export const EDITOR_MOBILE_CAPABILITIES = Object.freeze({
     "roundTrip": "identity-preserving"
   }
 });
-export const EDITOR_SYNTAX_ONLY = Object.freeze([
-  "task-list",
-  "code-block",
-  "table"
-]);
 export const EDITOR_CREATABLE_HEADING_LEVELS = Object.freeze([
   2,
   3
