@@ -417,12 +417,12 @@
         },
         "mobile": {
           "type": "object",
-          "required": ["surfaces", "toolbar", "primary", "wideAdditions", "moreInline", "contextual", "layout"],
+          "required": ["surfaces", "toolbar", "primary", "wideAdditions", "primaryCore", "primaryPromotionOrder", "moreInline", "contextual", "layout"],
           "properties": {
             "surfaces": { "$ref": "#/$defs/nonEmptyStringArray" },
             "toolbar": { "type": "object", "required": ["placementWhenKeyboardVisible", "primaryLayout", "horizontalOverflow", "morePresentation"], "properties": { "placementWhenKeyboardVisible": { "const": "above-keyboard-dock" }, "primaryLayout": { "const": "responsive-single-row" }, "horizontalOverflow": { "const": "forbidden" }, "morePresentation": { "const": "inline" } }, "additionalProperties": false },
-            "primary": { "$ref": "#/$defs/nonEmptyStringArray" }, "wideAdditions": { "$ref": "#/$defs/nonEmptyStringArray" }, "moreInline": { "$ref": "#/$defs/nonEmptyStringArray" }, "contextual": { "$ref": "#/$defs/nonEmptyStringArray" },
-            "layout": { "type": "object", "required": ["compactContentInlinePaddingDp", "regularContentInlinePaddingDp", "toolbarHorizontalPaddingDp", "bodySp", "lineHeight", "respectsSystemTextScale"], "properties": { "compactContentInlinePaddingDp": { "$ref": "#/$defs/nonNegativeNumber" }, "regularContentInlinePaddingDp": { "$ref": "#/$defs/positiveNumber" }, "toolbarHorizontalPaddingDp": { "$ref": "#/$defs/nonNegativeNumber" }, "bodySp": { "$ref": "#/$defs/positiveNumber" }, "lineHeight": { "$ref": "#/$defs/positiveNumber" }, "respectsSystemTextScale": { "const": true } }, "additionalProperties": false }
+            "primary": { "$ref": "#/$defs/nonEmptyStringArray" }, "wideAdditions": { "$ref": "#/$defs/nonEmptyStringArray" }, "primaryCore": { "$ref": "#/$defs/nonEmptyStringArray" }, "primaryPromotionOrder": { "$ref": "#/$defs/nonEmptyStringArray" }, "moreInline": { "$ref": "#/$defs/nonEmptyStringArray" }, "contextual": { "$ref": "#/$defs/nonEmptyStringArray" },
+            "layout": { "type": "object", "required": ["compactContentInlinePaddingDp", "regularContentInlinePaddingDp", "toolbarHorizontalPaddingDp", "minimumActionExtentDp", "bodySp", "lineHeight", "respectsSystemTextScale"], "properties": { "compactContentInlinePaddingDp": { "$ref": "#/$defs/nonNegativeNumber" }, "regularContentInlinePaddingDp": { "$ref": "#/$defs/positiveNumber" }, "toolbarHorizontalPaddingDp": { "$ref": "#/$defs/nonNegativeNumber" }, "minimumActionExtentDp": { "$ref": "#/$defs/positiveNumber" }, "bodySp": { "$ref": "#/$defs/positiveNumber" }, "lineHeight": { "$ref": "#/$defs/positiveNumber" }, "respectsSystemTextScale": { "const": true } }, "additionalProperties": false }
           },
           "additionalProperties": false
         },

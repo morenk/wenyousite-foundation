@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '2.2.0';
+  static const String value = '2.3.0';
   static const int schema = 1;
 }
 
@@ -252,7 +252,9 @@ abstract final class WenyouEditorContract {
     'sticker': '表情包',
   };
   static const List<String> primary = <String>['heading', 'bold', 'italic', 'image', 'more'];
-  static const List<String> wideAdditions = <String>['strikethrough', 'draft'];
+  static const List<String> wideAdditions = <String>['draft', 'quote', 'hr', 'sticker'];
+  static const List<String> primaryCore = <String>['heading', 'bold', 'italic', 'image', 'more'];
+  static const List<String> primaryPromotionOrder = <String>['draft', 'quote', 'hr', 'sticker'];
   static const List<String> surfaces = <String>['page', 'expandableSheet', 'inline'];
   static const String keyboardToolbarPlacement = 'above-keyboard-dock';
   static const String primaryLayout = 'responsive-single-row';
@@ -265,6 +267,7 @@ abstract final class WenyouEditorContract {
   static const double compactContentInlinePadding = 4.0;
   static const double regularContentInlinePadding = 16.0;
   static const double toolbarHorizontalPadding = 4.0;
+  static const double minimumActionExtent = 48.0;
   static const double bodyFontSize = 17.0;
   static const double bodyLineHeight = 1.8;
   static const bool respectsSystemTextScale = true;

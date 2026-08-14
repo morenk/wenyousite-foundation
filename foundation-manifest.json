@@ -1,8 +1,8 @@
 {
-  "version": "2.2.0",
+  "version": "2.3.0",
   "schemaVersion": 1,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "405eb5ee2be5d8cc1d595fc45d46e01e26491d05056100101a2bcaa94d172f14",
+  "contractSha256": "0e36ece614d5bc5ff6f7cf5de340f7f983b3577df9a7d897fa2f1052cd7b0a6e",
   "features": {
     "typography": true,
     "interaction": true,
@@ -12,8 +12,8 @@
   "artifactSha256": {
     "dist/icons.js": "440d3282455649a3ff59c71a95405e727bd87bb23074c0d79f60146f19b766bf",
     "dist/icons.d.ts": "2aee66f197349eff9b68394f94e165b5faa1b2187c74bead1ec69d01bb30309a",
-    "dist/editor.js": "b65c3242e2b51ddef0a89b5be2da9b6d966a1e518c1dab9306b68daf68517c61",
-    "dist/editor.d.ts": "ddbbdccd68381304e4cba665aa8eea492b995aa2a05e133c917f78251e3528eb",
+    "dist/editor.js": "8ac7f9f9461d29d594112ff682fc7a847447e78f7f9e220cbf56ac7f2165ac59",
+    "dist/editor.d.ts": "f93d28ce1513bc10fb471078aac4006153ad3ffc53fb580cf46169566c1ccd72",
     "dist/images.js": "48bda60db403d754b5c601d5f092beb0b4ea942bd4596b77aba1399d8aa5c3a4",
     "dist/images.d.ts": "de0d1b52f15967ab723c7b0de317db670e863c3381eb93c9c84cc9446b97da26",
     "dist/collections.js": "665b720eb2a0bcc148ce1f67894aa9068154eef9d49b41a62b7d2bc281342793",
@@ -30,7 +30,7 @@
     "dist/language.d.ts": "7f178e8bb8b62b56e9732c482d2d580d69af70a4e265bb2e9949542345818d6f",
     "web/tokens.css": "8006477fcb5c3b96dd450729a0677c5c846aef1d2d9c0c06a6f605db29f10de1",
     "web/fonts.css": "2064b6f73a60f670ce27ddeaa7dbc9590776fb3c31b5644c5ee0dd35c4f31ed7",
-    "packages/flutter/lib/src/foundation_tokens.dart": "2e0924855ac7d0c39c402ee7b75a246a41fa1502ede7ca7cd4d114444eaf332c",
+    "packages/flutter/lib/src/foundation_tokens.dart": "7196b520c786ab787e0d100a507cf2e237dba232b4ddc8d3cf21dbb9155a6d2e",
     "packages/flutter/lib/src/wenyou_icons.dart": "075754bba3cee7940bc7c6e448718caddfefd9ba4c9c81da0e1513b38dbcebc7"
   },
   "icons": {

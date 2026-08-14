@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "2.2.0",
+  "version": "2.3.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -466,13 +466,16 @@
           "morePresentation": "inline"
         },
         "primary": ["heading", "bold", "italic", "image", "more"],
-        "wideAdditions": ["strikethrough", "draft"],
+        "wideAdditions": ["draft", "quote", "hr", "sticker"],
+        "primaryCore": ["heading", "bold", "italic", "image", "more"],
+        "primaryPromotionOrder": ["draft", "quote", "hr", "sticker"],
         "moreInline": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "sticker", "draft", "strikethrough"],
         "contextual": ["mention", "sticker"],
         "layout": {
           "compactContentInlinePaddingDp": 4,
           "regularContentInlinePaddingDp": 16,
           "toolbarHorizontalPaddingDp": 4,
+          "minimumActionExtentDp": 48,
           "bodySp": 17,
           "lineHeight": 1.8,
           "respectsSystemTextScale": true

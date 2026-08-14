@@ -1,5 +1,5 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "2.2.0";
+export const FOUNDATION_VERSION = "2.3.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
   "bold": "粗体",
@@ -164,6 +164,7 @@ export const EDITOR_MOBILE_LAYOUT = Object.freeze({
   "compactContentInlinePaddingDp": 4,
   "regularContentInlinePaddingDp": 16,
   "toolbarHorizontalPaddingDp": 4,
+  "minimumActionExtentDp": 48,
   "bodySp": 17,
   "lineHeight": 1.8,
   "respectsSystemTextScale": true

@@ -680,6 +680,8 @@ ${labelEntries}
   };
   static const List<String> primary = <String>${dartList(editor.mobile.primary)};
   static const List<String> wideAdditions = <String>${dartList(editor.mobile.wideAdditions)};
+  static const List<String> primaryCore = <String>${dartList(editor.mobile.primaryCore)};
+  static const List<String> primaryPromotionOrder = <String>${dartList(editor.mobile.primaryPromotionOrder)};
   static const List<String> surfaces = <String>${dartList(editor.mobile.surfaces)};
   static const String keyboardToolbarPlacement = ${dartString(editor.mobile.toolbar.placementWhenKeyboardVisible)};
   static const String primaryLayout = ${dartString(editor.mobile.toolbar.primaryLayout)};
@@ -692,6 +694,7 @@ ${labelEntries}
   static const double compactContentInlinePadding = ${editor.mobile.layout.compactContentInlinePaddingDp}.0;
   static const double regularContentInlinePadding = ${editor.mobile.layout.regularContentInlinePaddingDp}.0;
   static const double toolbarHorizontalPadding = ${editor.mobile.layout.toolbarHorizontalPaddingDp}.0;
+  static const double minimumActionExtent = ${editor.mobile.layout.minimumActionExtentDp}.0;
   static const double bodyFontSize = ${editor.mobile.layout.bodySp}.0;
   static const double bodyLineHeight = ${editor.mobile.layout.lineHeight};
   static const bool respectsSystemTextScale = ${editor.mobile.layout.respectsSystemTextScale};

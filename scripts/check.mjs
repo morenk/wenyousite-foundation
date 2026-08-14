@@ -222,6 +222,8 @@ for (const [name, ids] of Object.entries({
   progressiveCollapse: editor.web.progressiveCollapse,
   mobilePrimary: editor.mobile.primary,
   mobileWideAdditions: editor.mobile.wideAdditions,
+  mobilePrimaryCore: editor.mobile.primaryCore,
+  mobilePrimaryPromotionOrder: editor.mobile.primaryPromotionOrder,
   mobileMoreInline: editor.mobile.moreInline,
   webContextual: editor.web.contextual,
   mobileContextual: editor.mobile.contextual,
@@ -237,6 +239,15 @@ for (const [name, ids] of Object.entries({
 if (editor.web.widePrimary.includes("more")) failures.push("Web 宽栏不得显示更多");
 if (!editor.web.collapsedPrimary.includes("more")) failures.push("Web 收纳栏必须保留更多");
 if (!editor.mobile.primary.includes("more")) failures.push("Flutter 一级栏必须保留更多");
+if (editor.mobile.primaryCore.join(",") !== "heading,bold,italic,image,more") {
+  failures.push("Flutter 编辑器核心一级栏顺序必须保持稳定");
+}
+if (editor.mobile.primaryPromotionOrder.join(",") !== "draft,quote,hr,sticker") {
+  failures.push("Flutter 编辑器宽度提升顺序必须为草稿、引用、分隔线、表情包");
+}
+if (editor.mobile.layout.minimumActionExtentDp !== contract.profiles.mobile.minimumControlTarget) {
+  failures.push("Flutter 编辑器按钮最小尺寸必须服从移动端触控目标");
+}
 if (editor.mobile.surfaces.join(",") !== "page,expandableSheet,inline") {
   failures.push("Flutter 编辑器必须固定 page、expandableSheet 与 inline 三种承载面");
 }
