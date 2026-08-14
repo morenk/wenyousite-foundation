@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "2.1.0",
+  "version": "2.2.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -51,15 +51,49 @@
     "standardEase": "cubic-bezier(0.2, 0.8, 0.2, 1)",
     "exitEase": "cubic-bezier(0.4, 0, 1, 1)"
   },
+  "accessibility": {
+    "contrast": {
+      "normalText": 4.5,
+      "largeText": 3,
+      "nonText": 3
+    },
+    "invariants": {
+      "focusVisible": true,
+      "statusNeverColorOnly": true,
+      "iconOnlyControlHasLabel": true,
+      "reducedMotion": "respect-user",
+      "asyncAnnouncement": "polite-unless-critical"
+    },
+    "web": {
+      "keyboardOperable": true,
+      "browserZoom": "preserve-function"
+    },
+    "mobile": {
+      "systemTextScale": true,
+      "safeArea": true,
+      "systemBack": true
+    }
+  },
   "profiles": {
     "web": {
       "unit": "px",
       "minimumViewport": 1024,
+      "expandedChromeFrom": 1280,
       "minimumControlTarget": 40,
       "minimumCompactTarget": 32,
       "radii": { "compact": 10, "control": 12, "panel": 16 },
       "layoutRem": { "narrow": 30, "moment": 36, "feed": 42, "content": 48, "workspace": 72, "chromeWorkspace": 78, "wide": 80 },
-      "reading": { "bodyPx": 17, "lineHeightPx": 32, "maxFullWidthCharacters": 40 }
+      "reading": { "bodyPx": 17, "lineHeightPx": 32, "maxFullWidthCharacters": 40 },
+      "typeScale": {
+        "pageTitle": { "family": "display", "size": 28, "lineHeight": 36, "weight": 700 },
+        "sectionTitle": { "family": "display", "size": 20, "lineHeight": 32, "weight": 700 },
+        "subsectionTitle": { "family": "display", "size": 18, "lineHeight": 24, "weight": 700 },
+        "body": { "family": "body", "size": 16, "lineHeight": 1.65, "weight": 400 },
+        "compactBody": { "family": "body", "size": 14, "lineHeight": 20, "weight": 400 },
+        "label": { "family": "body", "size": 14, "lineHeight": 20, "weight": 600 },
+        "caption": { "family": "body", "size": 12, "lineHeight": 1.4, "weight": 400 },
+        "reading": { "family": "body", "size": 17, "lineHeight": 32, "weight": 400 }
+      }
     },
     "mobile": {
       "unit": "dp",
@@ -68,7 +102,19 @@
       "spacing": [4, 8, 12, 16, 20, 24, 32],
       "radii": { "compact": 12, "control": 16, "panel": 20, "pill": 999 },
       "horizontalPadding": { "compact": 12, "regular": 24, "regularFrom": 401 },
-      "reading": { "bodySp": 17, "lineHeight": 1.8 }
+      "pageContentMaxWidth": 520,
+      "wideContainerMaxWidth": 600,
+      "reading": { "bodySp": 17, "lineHeight": 1.8 },
+      "typeScale": {
+        "pageTitle": { "family": "display", "size": 22, "lineHeight": 1.3, "weight": 500 },
+        "sectionTitle": { "family": "display", "size": 18, "lineHeight": 1.35, "weight": 500 },
+        "subsectionTitle": { "family": "display", "size": 16, "lineHeight": 1.35, "weight": 500 },
+        "body": { "family": "body", "size": 16, "lineHeight": 1.6, "weight": 400 },
+        "compactBody": { "family": "body", "size": 14, "lineHeight": 1.45, "weight": 400 },
+        "label": { "family": "body", "size": 14, "lineHeight": 1.4, "weight": 700 },
+        "caption": { "family": "body", "size": 12, "lineHeight": 1.4, "weight": 400 },
+        "reading": { "family": "body", "size": 17, "lineHeight": 1.8, "weight": 400 }
+      }
     }
   },
   "experiences": {
@@ -205,6 +251,130 @@
       "mobile": {
         "layout": "single-column",
         "itemWidth": "available"
+      }
+    },
+    "feedback": {
+      "resourceStates": ["loading", "refreshing", "loading-more", "empty", "no-results", "error", "offline", "restricted"],
+      "mutationStates": ["idle", "pending", "success", "error"],
+      "invariants": {
+        "initialLoadingOwnsRegion": true,
+        "refreshPreservesContent": true,
+        "paginationPreservesContent": true,
+        "pendingPreventsDuplicateSubmit": true,
+        "retryOnlyWhenSafe": true,
+        "emptyActionOnlyWhenExecutable": true,
+        "blockingFailureStaysInContext": true,
+        "transientFeedbackNeverSoleCriticalResult": true
+      },
+      "web": {
+        "transientChannel": "toast",
+        "asyncLiveRegion": "polite"
+      },
+      "mobile": {
+        "transientChannel": "snackbar",
+        "asyncLiveRegion": "polite"
+      }
+    },
+    "overlays": {
+      "invariants": {
+        "modalBlocksBackground": true,
+        "explicitClosePath": true,
+        "restoreFocus": true,
+        "backdropNeverSoleDismissal": true
+      },
+      "web": {
+        "layers": {
+          "sticky": 30,
+          "chrome": 40,
+          "floating": 60,
+          "popup": 70,
+          "modalBackdrop": 80,
+          "modal": 81,
+          "tooltip": 90,
+          "nestedPopup": 100,
+          "globalProgress": 110
+        },
+        "shadows": {
+          "popover": "0 12px 32px rgb(52 47 62 / 12%)",
+          "dialog": "0 24px 64px rgb(52 47 62 / 16%)",
+          "floating": "0 10px 28px rgb(52 47 62 / 14%)"
+        },
+        "scrim": {
+          "color": "rgb(52 47 62 / 40%)",
+          "blurPx": 1
+        },
+        "dismiss": ["explicit-control", "escape"]
+      },
+      "mobile": {
+        "elevation": { "flat": 0, "floating": 2, "popup": 4 },
+        "dismiss": ["explicit-control", "system-back"],
+        "safeArea": true
+      }
+    },
+    "navigation": {
+      "labels": {
+        "discover": "发现",
+        "moments": "动态",
+        "publish": "发布",
+        "messages": "消息",
+        "profile": "我的",
+        "search": "搜索",
+        "notifications": "通知",
+        "directMessages": "私聊",
+        "bookmarks": "收藏"
+      },
+      "icons": {
+        "discover": "navigation.home",
+        "moments": "navigation.moments",
+        "publish": "navigation.publish",
+        "messages": "navigation.messages",
+        "profile": "navigation.profile",
+        "search": "action.search",
+        "notifications": "status.notifications",
+        "directMessages": "navigation.messages",
+        "bookmarks": "action.bookmark"
+      },
+      "invariants": {
+        "routeOwner": "client",
+        "selectedState": "same-destination-semantics",
+        "messageUnreadAggregation": "notifications-plus-direct-messages"
+      },
+      "web": {
+        "primary": ["discover", "moments", "search"],
+        "accountShortcuts": ["notifications", "directMessages", "bookmarks"],
+        "publishPresentation": "separate-action",
+        "profilePresentation": "account-entry"
+      },
+      "mobile": {
+        "primary": ["discover", "moments", "publish", "messages", "profile"],
+        "messageSections": ["notifications", "directMessages"]
+      }
+    },
+    "language": {
+      "nouns": {
+        "thread": "主题帖",
+        "subthread": "子贴",
+        "post": "楼层",
+        "reply": "回复",
+        "moment": "动态",
+        "notification": "通知",
+        "directMessage": "私聊",
+        "bookmark": "收藏"
+      },
+      "actions": {
+        "publish": "发布",
+        "save": "保存",
+        "delete": "删除",
+        "hide": "隐藏",
+        "restore": "恢复",
+        "retry": "重试",
+        "cancel": "取消",
+        "close": "关闭"
+      },
+      "invariants": {
+        "sameActionKeepsVerb": true,
+        "sentencesOwnedByClient": true,
+        "protocolNamesNeverUserFacing": true
       }
     },
     "notifications": {

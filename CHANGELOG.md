@@ -1,5 +1,13 @@
 # Foundation Changelog
 
+## 2.2.0
+
+- `shared`：新增语义排版、资源与 Mutation 反馈状态、无障碍最低要求、浮层层级、导航目的地和稳定界面词汇契约。
+- `web`：生成排版、断点、阴影、遮罩与九级浮层 CSS Token，并固定桌面导航和账户快捷入口语义。
+- `mobile`：生成语义排版、页面宽度、反馈、无障碍、elevation、导航与界面语言常量；实际客户端升级仍须在 Windows 环境完成。
+- `generated`：新增 `typography`、`interaction`、`navigation`、`language` Web 模块及类型声明，Manifest 记录全部生成产物校验和。
+- `governance`：Foundation Schema 严格覆盖全部契约分支，`pnpm check` 同时执行正向校验和反向失败用例；生成器不再写死阴影与贴纸上限。
+
 ## 2.1.0
 
 - `shared`：通知中心固定为“互动、订阅、系统”三组筛选，并明确“全部”默认入口与未知事件降级语义。

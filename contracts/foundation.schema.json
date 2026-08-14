@@ -3,52 +3,479 @@
   "$id": "https://wenyou.site/contracts/foundation-v1.schema.json",
   "title": "Wenyou Foundation Contract",
   "type": "object",
-  "required": ["schemaVersion", "version", "identity", "palette", "typography", "motion", "profiles", "experiences", "fonts"],
+  "required": ["$schema", "schemaVersion", "version", "identity", "palette", "typography", "motion", "accessibility", "profiles", "experiences", "fonts"],
   "properties": {
+    "$schema": { "const": "./foundation.schema.json" },
     "schemaVersion": { "const": 1 },
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
-    "identity": { "type": "object" },
-    "palette": { "type": "object", "additionalProperties": { "type": "string", "pattern": "^#[0-9A-F]{6}$" } },
-    "typography": { "type": "object" },
-    "motion": { "type": "object" },
-    "profiles": { "type": "object", "required": ["web", "mobile"] },
+    "identity": {
+      "type": "object",
+      "required": ["subject", "keywords", "canvas", "signature"],
+      "properties": {
+        "subject": { "$ref": "#/$defs/nonEmptyString" },
+        "keywords": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "canvas": { "const": "pure-white" },
+        "signature": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "palette": {
+      "type": "object",
+      "required": ["background", "foreground", "surface", "primary", "onPrimary", "brandStrong", "secondary", "onSecondary", "muted", "mutedForeground", "accent", "onAccent", "border", "input", "destructive", "onDestructive", "destructiveSoft", "success", "successSoft", "warning", "warningSoft", "info", "infoSoft", "categoryDeduction", "categoryDeductionSoft", "categoryNation", "categoryNationSoft", "categoryRpg", "categoryRpgSoft"],
+      "properties": {
+        "background": { "$ref": "#/$defs/hexColor" },
+        "foreground": { "$ref": "#/$defs/hexColor" },
+        "surface": { "$ref": "#/$defs/hexColor" },
+        "primary": { "$ref": "#/$defs/hexColor" },
+        "onPrimary": { "$ref": "#/$defs/hexColor" },
+        "brandStrong": { "$ref": "#/$defs/hexColor" },
+        "secondary": { "$ref": "#/$defs/hexColor" },
+        "onSecondary": { "$ref": "#/$defs/hexColor" },
+        "muted": { "$ref": "#/$defs/hexColor" },
+        "mutedForeground": { "$ref": "#/$defs/hexColor" },
+        "accent": { "$ref": "#/$defs/hexColor" },
+        "onAccent": { "$ref": "#/$defs/hexColor" },
+        "border": { "$ref": "#/$defs/hexColor" },
+        "input": { "$ref": "#/$defs/hexColor" },
+        "destructive": { "$ref": "#/$defs/hexColor" },
+        "onDestructive": { "$ref": "#/$defs/hexColor" },
+        "destructiveSoft": { "$ref": "#/$defs/hexColor" },
+        "success": { "$ref": "#/$defs/hexColor" },
+        "successSoft": { "$ref": "#/$defs/hexColor" },
+        "warning": { "$ref": "#/$defs/hexColor" },
+        "warningSoft": { "$ref": "#/$defs/hexColor" },
+        "info": { "$ref": "#/$defs/hexColor" },
+        "infoSoft": { "$ref": "#/$defs/hexColor" },
+        "categoryDeduction": { "$ref": "#/$defs/hexColor" },
+        "categoryDeductionSoft": { "$ref": "#/$defs/hexColor" },
+        "categoryNation": { "$ref": "#/$defs/hexColor" },
+        "categoryNationSoft": { "$ref": "#/$defs/hexColor" },
+        "categoryRpg": { "$ref": "#/$defs/hexColor" },
+        "categoryRpgSoft": { "$ref": "#/$defs/hexColor" }
+      },
+      "additionalProperties": false
+    },
+    "typography": {
+      "type": "object",
+      "required": ["body", "display", "utility"],
+      "properties": {
+        "body": { "$ref": "#/$defs/fontFamily" },
+        "display": { "$ref": "#/$defs/fontFamily" },
+        "utility": { "$ref": "#/$defs/fontFamily" }
+      },
+      "additionalProperties": false
+    },
+    "motion": {
+      "type": "object",
+      "required": ["fastMs", "standardMs", "slowMs", "standardEase", "exitEase"],
+      "properties": {
+        "fastMs": { "$ref": "#/$defs/positiveNumber" },
+        "standardMs": { "$ref": "#/$defs/positiveNumber" },
+        "slowMs": { "$ref": "#/$defs/positiveNumber" },
+        "standardEase": { "$ref": "#/$defs/nonEmptyString" },
+        "exitEase": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "accessibility": { "$ref": "#/$defs/accessibility" },
+    "profiles": {
+      "type": "object",
+      "required": ["web", "mobile"],
+      "properties": {
+        "web": { "$ref": "#/$defs/webProfile" },
+        "mobile": { "$ref": "#/$defs/mobileProfile" }
+      },
+      "additionalProperties": false
+    },
     "experiences": {
       "type": "object",
-      "required": ["collections", "editor", "icons", "images", "notifications"],
+      "required": ["icons", "collections", "feedback", "overlays", "navigation", "language", "notifications", "editor", "images"],
       "properties": {
-        "notifications": {
+        "icons": { "$ref": "#/$defs/icons" },
+        "collections": { "$ref": "#/$defs/collections" },
+        "feedback": { "$ref": "#/$defs/feedback" },
+        "overlays": { "$ref": "#/$defs/overlays" },
+        "navigation": { "$ref": "#/$defs/navigation" },
+        "language": { "$ref": "#/$defs/language" },
+        "notifications": { "$ref": "#/$defs/notifications" },
+        "editor": { "$ref": "#/$defs/editor" },
+        "images": { "$ref": "#/$defs/images" }
+      },
+      "additionalProperties": false
+    },
+    "fonts": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/fontAsset" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "hexColor": { "type": "string", "pattern": "^#[0-9A-F]{6}$" },
+    "positiveNumber": { "type": "number", "exclusiveMinimum": 0 },
+    "nonNegativeNumber": { "type": "number", "minimum": 0 },
+    "fontFamily": {
+      "type": "object",
+      "required": ["family", "weights", "fallback"],
+      "properties": {
+        "family": { "$ref": "#/$defs/nonEmptyString" },
+        "weights": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 100, "maximum": 900, "multipleOf": 100 } },
+        "fallback": { "$ref": "#/$defs/nonEmptyStringArray" }
+      },
+      "additionalProperties": false
+    },
+    "typeStyle": {
+      "type": "object",
+      "required": ["family", "size", "lineHeight", "weight"],
+      "properties": {
+        "family": { "enum": ["body", "display", "utility"] },
+        "size": { "$ref": "#/$defs/positiveNumber" },
+        "lineHeight": { "$ref": "#/$defs/positiveNumber" },
+        "weight": { "type": "integer", "minimum": 100, "maximum": 900, "multipleOf": 100 }
+      },
+      "additionalProperties": false
+    },
+    "typeScale": {
+      "type": "object",
+      "required": ["pageTitle", "sectionTitle", "subsectionTitle", "body", "compactBody", "label", "caption", "reading"],
+      "properties": {
+        "pageTitle": { "$ref": "#/$defs/typeStyle" },
+        "sectionTitle": { "$ref": "#/$defs/typeStyle" },
+        "subsectionTitle": { "$ref": "#/$defs/typeStyle" },
+        "body": { "$ref": "#/$defs/typeStyle" },
+        "compactBody": { "$ref": "#/$defs/typeStyle" },
+        "label": { "$ref": "#/$defs/typeStyle" },
+        "caption": { "$ref": "#/$defs/typeStyle" },
+        "reading": { "$ref": "#/$defs/typeStyle" }
+      },
+      "additionalProperties": false
+    },
+    "accessibility": {
+      "type": "object",
+      "required": ["contrast", "invariants", "web", "mobile"],
+      "properties": {
+        "contrast": {
           "type": "object",
-          "required": ["allLabel", "eventTypeOwner", "unknownTypeVisibility", "groups"],
+          "required": ["normalText", "largeText", "nonText"],
           "properties": {
-            "allLabel": { "type": "string", "minLength": 1 },
-            "eventTypeOwner": { "const": "backend-notification-contract" },
-            "unknownTypeVisibility": { "const": "all" },
-            "groups": {
-              "type": "array",
-              "minItems": 3,
-              "maxItems": 3,
-              "items": {
-                "type": "object",
-                "required": ["id", "label", "types"],
-                "properties": {
-                  "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
-                  "label": { "type": "string", "minLength": 1 },
-                  "types": {
-                    "type": "array",
-                    "minItems": 1,
-                    "uniqueItems": true,
-                    "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
-                  }
-                },
-                "additionalProperties": false
-              }
-            }
+            "normalText": { "type": "number", "minimum": 4.5 },
+            "largeText": { "type": "number", "minimum": 3 },
+            "nonText": { "type": "number", "minimum": 3 }
+          },
+          "additionalProperties": false
+        },
+        "invariants": {
+          "type": "object",
+          "required": ["focusVisible", "statusNeverColorOnly", "iconOnlyControlHasLabel", "reducedMotion", "asyncAnnouncement"],
+          "properties": {
+            "focusVisible": { "const": true },
+            "statusNeverColorOnly": { "const": true },
+            "iconOnlyControlHasLabel": { "const": true },
+            "reducedMotion": { "const": "respect-user" },
+            "asyncAnnouncement": { "const": "polite-unless-critical" }
+          },
+          "additionalProperties": false
+        },
+        "web": {
+          "type": "object",
+          "required": ["keyboardOperable", "browserZoom"],
+          "properties": { "keyboardOperable": { "const": true }, "browserZoom": { "const": "preserve-function" } },
+          "additionalProperties": false
+        },
+        "mobile": {
+          "type": "object",
+          "required": ["systemTextScale", "safeArea", "systemBack"],
+          "properties": { "systemTextScale": { "const": true }, "safeArea": { "const": true }, "systemBack": { "const": true } },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "radii": {
+      "type": "object",
+      "required": ["compact", "control", "panel"],
+      "properties": {
+        "compact": { "$ref": "#/$defs/positiveNumber" },
+        "control": { "$ref": "#/$defs/positiveNumber" },
+        "panel": { "$ref": "#/$defs/positiveNumber" },
+        "pill": { "$ref": "#/$defs/positiveNumber" }
+      },
+      "additionalProperties": false
+    },
+    "webProfile": {
+      "type": "object",
+      "required": ["unit", "minimumViewport", "expandedChromeFrom", "minimumControlTarget", "minimumCompactTarget", "radii", "layoutRem", "reading", "typeScale"],
+      "properties": {
+        "unit": { "const": "px" },
+        "minimumViewport": { "$ref": "#/$defs/positiveNumber" },
+        "expandedChromeFrom": { "$ref": "#/$defs/positiveNumber" },
+        "minimumControlTarget": { "$ref": "#/$defs/positiveNumber" },
+        "minimumCompactTarget": { "$ref": "#/$defs/positiveNumber" },
+        "radii": { "$ref": "#/$defs/radii" },
+        "layoutRem": {
+          "type": "object",
+          "required": ["narrow", "moment", "feed", "content", "workspace", "chromeWorkspace", "wide"],
+          "properties": {
+            "narrow": { "$ref": "#/$defs/positiveNumber" }, "moment": { "$ref": "#/$defs/positiveNumber" }, "feed": { "$ref": "#/$defs/positiveNumber" }, "content": { "$ref": "#/$defs/positiveNumber" }, "workspace": { "$ref": "#/$defs/positiveNumber" }, "chromeWorkspace": { "$ref": "#/$defs/positiveNumber" }, "wide": { "$ref": "#/$defs/positiveNumber" }
+          },
+          "additionalProperties": false
+        },
+        "reading": {
+          "type": "object",
+          "required": ["bodyPx", "lineHeightPx", "maxFullWidthCharacters"],
+          "properties": { "bodyPx": { "$ref": "#/$defs/positiveNumber" }, "lineHeightPx": { "$ref": "#/$defs/positiveNumber" }, "maxFullWidthCharacters": { "$ref": "#/$defs/positiveNumber" } },
+          "additionalProperties": false
+        },
+        "typeScale": { "$ref": "#/$defs/typeScale" }
+      },
+      "additionalProperties": false
+    },
+    "mobileProfile": {
+      "type": "object",
+      "required": ["unit", "minimumViewport", "minimumControlTarget", "spacing", "radii", "horizontalPadding", "pageContentMaxWidth", "wideContainerMaxWidth", "reading", "typeScale"],
+      "properties": {
+        "unit": { "const": "dp" },
+        "minimumViewport": { "$ref": "#/$defs/positiveNumber" },
+        "minimumControlTarget": { "$ref": "#/$defs/positiveNumber" },
+        "spacing": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/positiveNumber" } },
+        "radii": { "$ref": "#/$defs/radii" },
+        "horizontalPadding": {
+          "type": "object",
+          "required": ["compact", "regular", "regularFrom"],
+          "properties": { "compact": { "$ref": "#/$defs/positiveNumber" }, "regular": { "$ref": "#/$defs/positiveNumber" }, "regularFrom": { "$ref": "#/$defs/positiveNumber" } },
+          "additionalProperties": false
+        },
+        "pageContentMaxWidth": { "$ref": "#/$defs/positiveNumber" },
+        "wideContainerMaxWidth": { "$ref": "#/$defs/positiveNumber" },
+        "reading": {
+          "type": "object",
+          "required": ["bodySp", "lineHeight"],
+          "properties": { "bodySp": { "$ref": "#/$defs/positiveNumber" }, "lineHeight": { "$ref": "#/$defs/positiveNumber" } },
+          "additionalProperties": false
+        },
+        "typeScale": { "$ref": "#/$defs/typeScale" }
+      },
+      "additionalProperties": false
+    },
+    "icons": {
+      "type": "object",
+      "required": ["source", "style", "semantics", "platformExceptions"],
+      "properties": {
+        "source": {
+          "type": "object",
+          "required": ["family", "package", "version", "integrity", "license", "viewBox"],
+          "properties": {
+            "family": { "$ref": "#/$defs/nonEmptyString" }, "package": { "$ref": "#/$defs/nonEmptyString" }, "version": { "$ref": "#/$defs/nonEmptyString" }, "integrity": { "$ref": "#/$defs/nonEmptyString" }, "license": { "$ref": "#/$defs/nonEmptyString" }, "viewBox": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        "style": {
+          "type": "object",
+          "required": ["strokeWidth", "lineCap", "lineJoin", "compactSize", "defaultSize", "navigationSize", "selectedState", "decorativeSemantics", "interactiveLabelOwner"],
+          "properties": {
+            "strokeWidth": { "$ref": "#/$defs/positiveNumber" }, "lineCap": { "const": "round" }, "lineJoin": { "const": "round" }, "compactSize": { "$ref": "#/$defs/positiveNumber" }, "defaultSize": { "$ref": "#/$defs/positiveNumber" }, "navigationSize": { "$ref": "#/$defs/positiveNumber" }, "selectedState": { "const": "same-glyph-on-accent-container" }, "decorativeSemantics": { "const": "hidden" }, "interactiveLabelOwner": { "const": "control" }
+          },
+          "additionalProperties": false
+        },
+        "semantics": { "type": "object", "minProperties": 1, "propertyNames": { "pattern": "^[a-z][a-z0-9-]*(\\.[a-z0-9-]+)+$" }, "additionalProperties": { "$ref": "#/$defs/nonEmptyString" } },
+        "platformExceptions": { "$ref": "#/$defs/nonEmptyStringArray" }
+      },
+      "additionalProperties": false
+    },
+    "collections": {
+      "type": "object",
+      "required": ["invariants", "web", "mobile"],
+      "properties": {
+        "invariants": {
+          "type": "object",
+          "required": ["containerWidth", "itemWidth", "narrowContentDoesNotChangeItemWidth", "horizontalOverflow", "contentSizedExceptions"],
+          "properties": { "containerWidth": { "const": "available" }, "itemWidth": { "const": "available" }, "narrowContentDoesNotChangeItemWidth": { "const": true }, "horizontalOverflow": { "const": "explicit-only" }, "contentSizedExceptions": { "$ref": "#/$defs/nonEmptyStringArray" } },
+          "additionalProperties": false
+        },
+        "web": { "type": "object", "required": ["tabPanelWidth", "multiColumn"], "properties": { "tabPanelWidth": { "const": "available" }, "multiColumn": { "const": "explicit-grid-only" } }, "additionalProperties": false },
+        "mobile": { "type": "object", "required": ["layout", "itemWidth"], "properties": { "layout": { "const": "single-column" }, "itemWidth": { "const": "available" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "feedback": {
+      "type": "object",
+      "required": ["resourceStates", "mutationStates", "invariants", "web", "mobile"],
+      "properties": {
+        "resourceStates": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "mutationStates": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "invariants": {
+          "type": "object",
+          "required": ["initialLoadingOwnsRegion", "refreshPreservesContent", "paginationPreservesContent", "pendingPreventsDuplicateSubmit", "retryOnlyWhenSafe", "emptyActionOnlyWhenExecutable", "blockingFailureStaysInContext", "transientFeedbackNeverSoleCriticalResult"],
+          "properties": {
+            "initialLoadingOwnsRegion": { "const": true }, "refreshPreservesContent": { "const": true }, "paginationPreservesContent": { "const": true }, "pendingPreventsDuplicateSubmit": { "const": true }, "retryOnlyWhenSafe": { "const": true }, "emptyActionOnlyWhenExecutable": { "const": true }, "blockingFailureStaysInContext": { "const": true }, "transientFeedbackNeverSoleCriticalResult": { "const": true }
+          },
+          "additionalProperties": false
+        },
+        "web": { "type": "object", "required": ["transientChannel", "asyncLiveRegion"], "properties": { "transientChannel": { "const": "toast" }, "asyncLiveRegion": { "const": "polite" } }, "additionalProperties": false },
+        "mobile": { "type": "object", "required": ["transientChannel", "asyncLiveRegion"], "properties": { "transientChannel": { "const": "snackbar" }, "asyncLiveRegion": { "const": "polite" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "overlays": {
+      "type": "object",
+      "required": ["invariants", "web", "mobile"],
+      "properties": {
+        "invariants": {
+          "type": "object",
+          "required": ["modalBlocksBackground", "explicitClosePath", "restoreFocus", "backdropNeverSoleDismissal"],
+          "properties": { "modalBlocksBackground": { "const": true }, "explicitClosePath": { "const": true }, "restoreFocus": { "const": true }, "backdropNeverSoleDismissal": { "const": true } },
+          "additionalProperties": false
+        },
+        "web": {
+          "type": "object",
+          "required": ["layers", "shadows", "scrim", "dismiss"],
+          "properties": {
+            "layers": {
+              "type": "object",
+              "required": ["sticky", "chrome", "floating", "popup", "modalBackdrop", "modal", "tooltip", "nestedPopup", "globalProgress"],
+              "properties": { "sticky": { "type": "integer", "minimum": 0 }, "chrome": { "type": "integer", "minimum": 0 }, "floating": { "type": "integer", "minimum": 0 }, "popup": { "type": "integer", "minimum": 0 }, "modalBackdrop": { "type": "integer", "minimum": 0 }, "modal": { "type": "integer", "minimum": 0 }, "tooltip": { "type": "integer", "minimum": 0 }, "nestedPopup": { "type": "integer", "minimum": 0 }, "globalProgress": { "type": "integer", "minimum": 0 } },
+              "additionalProperties": false
+            },
+            "shadows": { "type": "object", "required": ["popover", "dialog", "floating"], "properties": { "popover": { "$ref": "#/$defs/nonEmptyString" }, "dialog": { "$ref": "#/$defs/nonEmptyString" }, "floating": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
+            "scrim": { "type": "object", "required": ["color", "blurPx"], "properties": { "color": { "$ref": "#/$defs/nonEmptyString" }, "blurPx": { "$ref": "#/$defs/nonNegativeNumber" } }, "additionalProperties": false },
+            "dismiss": { "type": "array", "minItems": 2, "maxItems": 2, "prefixItems": [{ "const": "explicit-control" }, { "const": "escape" }], "items": false }
+          },
+          "additionalProperties": false
+        },
+        "mobile": {
+          "type": "object",
+          "required": ["elevation", "dismiss", "safeArea"],
+          "properties": {
+            "elevation": { "type": "object", "required": ["flat", "floating", "popup"], "properties": { "flat": { "$ref": "#/$defs/nonNegativeNumber" }, "floating": { "$ref": "#/$defs/nonNegativeNumber" }, "popup": { "$ref": "#/$defs/nonNegativeNumber" } }, "additionalProperties": false },
+            "dismiss": { "type": "array", "minItems": 2, "maxItems": 2, "prefixItems": [{ "const": "explicit-control" }, { "const": "system-back" }], "items": false },
+            "safeArea": { "const": true }
           },
           "additionalProperties": false
         }
-      }
+      },
+      "additionalProperties": false
     },
-    "fonts": { "type": "array", "minItems": 3 }
-  },
-  "additionalProperties": false
+    "navigation": {
+      "type": "object",
+      "required": ["labels", "icons", "invariants", "web", "mobile"],
+      "properties": {
+        "labels": { "$ref": "#/$defs/stringMap" },
+        "icons": { "$ref": "#/$defs/stringMap" },
+        "invariants": { "type": "object", "required": ["routeOwner", "selectedState", "messageUnreadAggregation"], "properties": { "routeOwner": { "const": "client" }, "selectedState": { "const": "same-destination-semantics" }, "messageUnreadAggregation": { "const": "notifications-plus-direct-messages" } }, "additionalProperties": false },
+        "web": { "type": "object", "required": ["primary", "accountShortcuts", "publishPresentation", "profilePresentation"], "properties": { "primary": { "$ref": "#/$defs/nonEmptyStringArray" }, "accountShortcuts": { "$ref": "#/$defs/nonEmptyStringArray" }, "publishPresentation": { "const": "separate-action" }, "profilePresentation": { "const": "account-entry" } }, "additionalProperties": false },
+        "mobile": { "type": "object", "required": ["primary", "messageSections"], "properties": { "primary": { "$ref": "#/$defs/nonEmptyStringArray" }, "messageSections": { "$ref": "#/$defs/nonEmptyStringArray" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "language": {
+      "type": "object",
+      "required": ["nouns", "actions", "invariants"],
+      "properties": {
+        "nouns": { "$ref": "#/$defs/stringMap" },
+        "actions": { "$ref": "#/$defs/stringMap" },
+        "invariants": { "type": "object", "required": ["sameActionKeepsVerb", "sentencesOwnedByClient", "protocolNamesNeverUserFacing"], "properties": { "sameActionKeepsVerb": { "const": true }, "sentencesOwnedByClient": { "const": true }, "protocolNamesNeverUserFacing": { "const": true } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "stringMap": { "type": "object", "minProperties": 1, "propertyNames": { "pattern": "^[a-z][a-zA-Z0-9]*$" }, "additionalProperties": { "$ref": "#/$defs/nonEmptyString" } },
+    "notifications": {
+      "type": "object",
+      "required": ["allLabel", "eventTypeOwner", "unknownTypeVisibility", "groups"],
+      "properties": {
+        "allLabel": { "$ref": "#/$defs/nonEmptyString" },
+        "eventTypeOwner": { "const": "backend-notification-contract" },
+        "unknownTypeVisibility": { "const": "all" },
+        "groups": {
+          "type": "array", "minItems": 3, "maxItems": 3,
+          "items": { "type": "object", "required": ["id", "label", "types"], "properties": { "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }, "label": { "$ref": "#/$defs/nonEmptyString" }, "types": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" } } }, "additionalProperties": false }
+        }
+      },
+      "additionalProperties": false
+    },
+    "editor": {
+      "type": "object",
+      "required": ["labels", "invariants", "web", "mobile", "syntaxOnly", "creatableHeadingLevels", "capabilities"],
+      "properties": {
+        "labels": { "type": "object", "minProperties": 1, "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" }, "additionalProperties": { "$ref": "#/$defs/nonEmptyString" } },
+        "invariants": { "$ref": "#/$defs/stringMap" },
+        "web": {
+          "type": "object",
+          "required": ["widePrimary", "collapsedPrimary", "moreFallback", "progressiveCollapse", "densityOrder", "primaryByDensity", "moreByDensity", "contextual", "layout"],
+          "properties": {
+            "widePrimary": { "$ref": "#/$defs/nonEmptyStringArray" }, "collapsedPrimary": { "$ref": "#/$defs/nonEmptyStringArray" }, "moreFallback": { "$ref": "#/$defs/nonEmptyStringArray" }, "progressiveCollapse": { "$ref": "#/$defs/nonEmptyStringArray" }, "densityOrder": { "$ref": "#/$defs/nonEmptyStringArray" }, "primaryByDensity": { "$ref": "#/$defs/densityMap" }, "moreByDensity": { "$ref": "#/$defs/densityMap" }, "contextual": { "$ref": "#/$defs/nonEmptyStringArray" },
+            "layout": { "type": "object", "required": ["frameMaxRem", "textMeasurePx", "contentInlinePaddingPx", "toolbarInlinePaddingPx", "firstControlInternalInsetPx", "bodyPx", "lineHeight"], "properties": { "frameMaxRem": { "$ref": "#/$defs/positiveNumber" }, "textMeasurePx": { "$ref": "#/$defs/positiveNumber" }, "contentInlinePaddingPx": { "$ref": "#/$defs/positiveNumber" }, "toolbarInlinePaddingPx": { "$ref": "#/$defs/positiveNumber" }, "firstControlInternalInsetPx": { "$ref": "#/$defs/positiveNumber" }, "bodyPx": { "$ref": "#/$defs/positiveNumber" }, "lineHeight": { "$ref": "#/$defs/positiveNumber" } }, "additionalProperties": false }
+          },
+          "additionalProperties": false
+        },
+        "mobile": {
+          "type": "object",
+          "required": ["surfaces", "toolbar", "primary", "wideAdditions", "moreInline", "contextual", "layout"],
+          "properties": {
+            "surfaces": { "$ref": "#/$defs/nonEmptyStringArray" },
+            "toolbar": { "type": "object", "required": ["placementWhenKeyboardVisible", "primaryLayout", "horizontalOverflow", "morePresentation"], "properties": { "placementWhenKeyboardVisible": { "const": "above-keyboard-dock" }, "primaryLayout": { "const": "responsive-single-row" }, "horizontalOverflow": { "const": "forbidden" }, "morePresentation": { "const": "inline" } }, "additionalProperties": false },
+            "primary": { "$ref": "#/$defs/nonEmptyStringArray" }, "wideAdditions": { "$ref": "#/$defs/nonEmptyStringArray" }, "moreInline": { "$ref": "#/$defs/nonEmptyStringArray" }, "contextual": { "$ref": "#/$defs/nonEmptyStringArray" },
+            "layout": { "type": "object", "required": ["compactContentInlinePaddingDp", "regularContentInlinePaddingDp", "toolbarHorizontalPaddingDp", "bodySp", "lineHeight", "respectsSystemTextScale"], "properties": { "compactContentInlinePaddingDp": { "$ref": "#/$defs/nonNegativeNumber" }, "regularContentInlinePaddingDp": { "$ref": "#/$defs/positiveNumber" }, "toolbarHorizontalPaddingDp": { "$ref": "#/$defs/nonNegativeNumber" }, "bodySp": { "$ref": "#/$defs/positiveNumber" }, "lineHeight": { "$ref": "#/$defs/positiveNumber" }, "respectsSystemTextScale": { "const": true } }, "additionalProperties": false }
+          },
+          "additionalProperties": false
+        },
+        "syntaxOnly": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "creatableHeadingLevels": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 2, "maximum": 6 } },
+        "capabilities": { "type": "object", "required": ["web", "mobile"], "properties": { "web": { "$ref": "#/$defs/capabilityMap" }, "mobile": { "$ref": "#/$defs/capabilityMap" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "densityMap": {
+      "type": "object",
+      "required": ["expanded", "with-more", "without-draft", "compact"],
+      "properties": { "expanded": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" } }, "with-more": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" } }, "without-draft": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" } }, "compact": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" } } },
+      "additionalProperties": false
+    },
+    "capabilityMap": { "type": "object", "minProperties": 1, "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" }, "additionalProperties": { "$ref": "#/$defs/capability" } },
+    "capability": {
+      "type": "object",
+      "required": ["creation", "editing", "rendering", "roundTrip"],
+      "properties": {
+        "creation": { "enum": ["primary", "secondary", "contextual", "source"] },
+        "editing": { "enum": ["structured", "atomic", "source-preserve", "ui-only"] },
+        "rendering": { "enum": ["native", "not-applicable"] },
+        "roundTrip": { "enum": ["structured", "identity-preserving", "source-preserve", "not-applicable"] }
+      },
+      "additionalProperties": false
+    },
+    "images": {
+      "type": "object",
+      "required": ["roles", "invariants", "states", "web", "mobile"],
+      "properties": {
+        "roles": { "type": "object", "required": ["avatar", "cover", "content", "galleryThumbnail", "sticker"], "properties": { "avatar": { "$ref": "#/$defs/imageRole" }, "cover": { "$ref": "#/$defs/imageRole" }, "content": { "$ref": "#/$defs/imageRole" }, "galleryThumbnail": { "$ref": "#/$defs/imageRole" }, "sticker": { "$ref": "#/$defs/imageRole" } }, "additionalProperties": false },
+        "invariants": { "type": "object", "required": ["reserveSpaceWhenDimensionsKnown", "neverDeriveVariantUrls", "failureKeepsContext", "statusNeverColorOnly", "altText", "decorativeAlt", "contentCropping"], "properties": { "reserveSpaceWhenDimensionsKnown": { "const": true }, "neverDeriveVariantUrls": { "const": true }, "failureKeepsContext": { "const": true }, "statusNeverColorOnly": { "const": true }, "altText": { "const": "contextual-never-filename" }, "decorativeAlt": { "const": "empty" }, "contentCropping": { "const": "forbidden" } }, "additionalProperties": false },
+        "states": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "web": { "type": "object", "required": ["viewer", "dismiss", "zoom", "stickerDisplayMaxRem"], "properties": { "viewer": { "const": "modal-lightbox" }, "dismiss": { "$ref": "#/$defs/nonEmptyStringArray" }, "zoom": { "$ref": "#/$defs/nonEmptyStringArray" }, "stickerDisplayMaxRem": { "$ref": "#/$defs/positiveNumber" } }, "additionalProperties": false },
+        "mobile": { "type": "object", "required": ["viewer", "dismiss", "zoom", "stickerDisplayMaxDp"], "properties": { "viewer": { "const": "fullscreen-route" }, "dismiss": { "$ref": "#/$defs/nonEmptyStringArray" }, "zoom": { "$ref": "#/$defs/nonEmptyStringArray" }, "stickerDisplayMaxDp": { "$ref": "#/$defs/positiveNumber" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "imageRole": {
+      "type": "object",
+      "required": ["fit", "crop", "shape", "viewer"],
+      "properties": { "fit": { "enum": ["cover", "contain"] }, "crop": { "enum": ["allowed", "forbidden"] }, "shape": { "enum": ["circle", "rounded", "content"] }, "viewer": { "enum": ["none", "full-source", "optional"] } },
+      "additionalProperties": false
+    },
+    "fontAsset": {
+      "type": "object",
+      "required": ["role", "family", "source", "revision", "flutterAsset", "sha256", "license"],
+      "properties": {
+        "role": { "enum": ["body", "display", "utility"] }, "family": { "$ref": "#/$defs/nonEmptyString" }, "source": { "$ref": "#/$defs/nonEmptyString" }, "revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" }, "flutterAsset": { "$ref": "#/$defs/nonEmptyString" }, "webAsset": { "$ref": "#/$defs/nonEmptyString" }, "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }, "webSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }, "license": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "dependentRequired": { "webAsset": ["webSha256"], "webSha256": ["webAsset"] },
+      "additionalProperties": false
+    }
+  }
 }

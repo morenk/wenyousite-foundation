@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '2.1.0';
+  static const String value = '2.2.0';
   static const int schema = 1;
 }
 
@@ -43,6 +43,46 @@ abstract final class WenyouFoundationTypography {
   static const String display = 'Wenyou LXGW WenKai';
   static const String utility = 'Wenyou Nunito';
   static const List<String> chineseFallback = <String>['Noto Sans SC', 'sans-serif'];
+  static const Map<String, String> mobileFamilies = <String, String>{
+    'pageTitle': 'display',
+    'sectionTitle': 'display',
+    'subsectionTitle': 'display',
+    'body': 'body',
+    'compactBody': 'body',
+    'label': 'body',
+    'caption': 'body',
+    'reading': 'body',
+  };
+  static const Map<String, double> mobileSizes = <String, double>{
+    'pageTitle': 22.0,
+    'sectionTitle': 18.0,
+    'subsectionTitle': 16.0,
+    'body': 16.0,
+    'compactBody': 14.0,
+    'label': 14.0,
+    'caption': 12.0,
+    'reading': 17.0,
+  };
+  static const Map<String, double> mobileLineHeights = <String, double>{
+    'pageTitle': 1.3,
+    'sectionTitle': 1.35,
+    'subsectionTitle': 1.35,
+    'body': 1.6,
+    'compactBody': 1.45,
+    'label': 1.4,
+    'caption': 1.4,
+    'reading': 1.8,
+  };
+  static const Map<String, int> mobileWeights = <String, int>{
+    'pageTitle': 500,
+    'sectionTitle': 500,
+    'subsectionTitle': 500,
+    'body': 400,
+    'compactBody': 400,
+    'label': 700,
+    'caption': 400,
+    'reading': 400,
+  };
 }
 
 abstract final class WenyouFoundationMotion {
@@ -67,6 +107,103 @@ abstract final class WenyouFoundationMobile {
   static const double radiusPill = 999.0;
   static const double compactHorizontalPadding = 12.0;
   static const double regularHorizontalPadding = 24.0;
+  static const double regularHorizontalPaddingFrom = 401.0;
+  static const double pageContentMaxWidth = 520.0;
+  static const double wideContainerMaxWidth = 600.0;
+}
+
+abstract final class WenyouAccessibilityContract {
+  static const double normalTextContrast = 4.5;
+  static const double largeTextContrast = 3.0;
+  static const double nonTextContrast = 3.0;
+  static const bool focusVisible = true;
+  static const bool statusNeverColorOnly = true;
+  static const bool iconOnlyControlHasLabel = true;
+  static const String reducedMotion = 'respect-user';
+  static const String asyncAnnouncement = 'polite-unless-critical';
+  static const bool systemTextScale = true;
+  static const bool safeArea = true;
+  static const bool systemBack = true;
+}
+
+abstract final class WenyouFeedbackContract {
+  static const List<String> resourceStates = <String>['loading', 'refreshing', 'loading-more', 'empty', 'no-results', 'error', 'offline', 'restricted'];
+  static const List<String> mutationStates = <String>['idle', 'pending', 'success', 'error'];
+  static const String transientChannel = 'snackbar';
+  static const String asyncLiveRegion = 'polite';
+  static const bool refreshPreservesContent = true;
+  static const bool paginationPreservesContent = true;
+  static const bool pendingPreventsDuplicateSubmit = true;
+  static const bool retryOnlyWhenSafe = true;
+  static const bool blockingFailureStaysInContext = true;
+}
+
+abstract final class WenyouOverlayContract {
+  static const Map<String, double> elevation = <String, double>{
+    'flat': 0.0,
+    'floating': 2.0,
+    'popup': 4.0,
+  };
+  static const List<String> dismiss = <String>['explicit-control', 'system-back'];
+  static const bool safeArea = true;
+  static const bool modalBlocksBackground = true;
+  static const bool explicitClosePath = true;
+  static const bool restoreFocus = true;
+}
+
+abstract final class WenyouNavigationContract {
+  static const Map<String, String> labels = <String, String>{
+    'discover': '发现',
+    'moments': '动态',
+    'publish': '发布',
+    'messages': '消息',
+    'profile': '我的',
+    'search': '搜索',
+    'notifications': '通知',
+    'directMessages': '私聊',
+    'bookmarks': '收藏',
+  };
+  static const Map<String, String> icons = <String, String>{
+    'discover': 'navigation.home',
+    'moments': 'navigation.moments',
+    'publish': 'navigation.publish',
+    'messages': 'navigation.messages',
+    'profile': 'navigation.profile',
+    'search': 'action.search',
+    'notifications': 'status.notifications',
+    'directMessages': 'navigation.messages',
+    'bookmarks': 'action.bookmark',
+  };
+  static const List<String> primary = <String>['discover', 'moments', 'publish', 'messages', 'profile'];
+  static const List<String> messageSections = <String>['notifications', 'directMessages'];
+  static const String routeOwner = 'client';
+  static const String messageUnreadAggregation = 'notifications-plus-direct-messages';
+}
+
+abstract final class WenyouLanguageContract {
+  static const Map<String, String> nouns = <String, String>{
+    'thread': '主题帖',
+    'subthread': '子贴',
+    'post': '楼层',
+    'reply': '回复',
+    'moment': '动态',
+    'notification': '通知',
+    'directMessage': '私聊',
+    'bookmark': '收藏',
+  };
+  static const Map<String, String> actions = <String, String>{
+    'publish': '发布',
+    'save': '保存',
+    'delete': '删除',
+    'hide': '隐藏',
+    'restore': '恢复',
+    'retry': '重试',
+    'cancel': '取消',
+    'close': '关闭',
+  };
+  static const bool sameActionKeepsVerb = true;
+  static const bool sentencesOwnedByClient = true;
+  static const bool protocolNamesNeverUserFacing = true;
 }
 
 abstract final class WenyouCollectionContract {

@@ -1,6 +1,6 @@
 {
   "name": "@wenyousite/foundation",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -21,6 +21,22 @@
     "./notifications": {
       "types": "./dist/notifications.d.ts",
       "default": "./dist/notifications.js"
+    },
+    "./typography": {
+      "types": "./dist/typography.d.ts",
+      "default": "./dist/typography.js"
+    },
+    "./interaction": {
+      "types": "./dist/interaction.d.ts",
+      "default": "./dist/interaction.js"
+    },
+    "./navigation": {
+      "types": "./dist/navigation.d.ts",
+      "default": "./dist/navigation.js"
+    },
+    "./language": {
+      "types": "./dist/language.d.ts",
+      "default": "./dist/language.js"
     },
     "./icons": {
       "types": "./dist/icons.d.ts",
@@ -46,6 +62,9 @@
     "@fontsource-variable/noto-sans-sc": "5.3.0",
     "@fontsource-variable/nunito": "5.3.0",
     "lucide-static": "1.28.0"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1"
   },
   "packageManager": "pnpm@11.17.0"
 }

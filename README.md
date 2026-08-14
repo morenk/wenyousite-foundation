@@ -8,6 +8,8 @@
 - [图片呈现契约](docs/images.md)
 - [图标目录与治理](docs/icons.md)
 - [通知分组契约](docs/notifications.md)
+- [反馈、无障碍与浮层契约](docs/interaction.md)
+- [导航与界面语言契约](docs/navigation-language.md)
 - [机器契约](contracts/foundation.v1.json)
 - [Codex 审美指导 Skill](skills/wenyou-design/SKILL.md)
 

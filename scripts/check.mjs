@@ -2,13 +2,32 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import Ajv2020 from "ajv/dist/2020.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relativePath) => fs.readFileSync(path.join(root, relativePath), "utf8");
 const contract = JSON.parse(read("contracts/foundation.v1.json"));
+const schema = JSON.parse(read("contracts/foundation.schema.json"));
 const manifest = JSON.parse(read("foundation-manifest.json"));
 const packageJson = JSON.parse(read("package.json"));
 const failures = [];
+
+const ajv = new Ajv2020({ allErrors: true, strict: true });
+const validateContract = ajv.compile(schema);
+if (!validateContract(contract)) {
+  failures.push(`Foundation JSON Schema 校验失败：${ajv.errorsText(validateContract.errors, { separator: "; " })}`);
+}
+for (const [label, mutate] of [
+  ["未知根字段", (value) => { value.unknown = true; }],
+  ["未知 profile 字段", (value) => { value.profiles.web.unknown = true; }],
+  ["缺少无障碍契约", (value) => { delete value.accessibility; }],
+  ["错误平台单位", (value) => { value.profiles.mobile.unit = "px"; }],
+  ["非法浮层数值", (value) => { value.experiences.overlays.web.layers.popup = "70"; }],
+]) {
+  const invalid = structuredClone(contract);
+  mutate(invalid);
+  if (validateContract(invalid)) failures.push(`JSON Schema 反向用例未拒绝：${label}`);
+}
 
 if (contract.schemaVersion !== 1) failures.push("foundation schemaVersion 必须为 1");
 if (packageJson.version !== contract.version) failures.push("根 package 版本与契约不一致");
@@ -17,6 +36,20 @@ const contractSha256 = crypto
   .update(fs.readFileSync(path.join(root, "contracts/foundation.v1.json")))
   .digest("hex");
 if (manifest.contractSha256 !== contractSha256) failures.push("契约清单哈希与事实源不一致");
+if (Object.keys(manifest.artifactSha256 ?? {}).length !== 22) {
+  failures.push("发布清单未完整记录 22 个生成代码与 Token 产物");
+}
+for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha256 ?? {})) {
+  if (!fs.existsSync(path.join(root, relativePath))) {
+    failures.push(`发布清单引用了不存在的生成产物 ${relativePath}`);
+    continue;
+  }
+  const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
+  if (hash !== expectedHash) failures.push(`生成产物校验和不一致 ${relativePath}`);
+}
+if (!manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.navigation || !manifest.features?.language) {
+  failures.push("发布清单缺少 v2.2 语义能力清单");
+}
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
@@ -94,10 +127,90 @@ function contrast(first, second) {
 
 for (const [surface, foreground, label] of [
   [contract.palette.primary, contract.palette.onPrimary, "primary/onPrimary"],
+  [contract.palette.secondary, contract.palette.onSecondary, "secondary/onSecondary"],
+  [contract.palette.accent, contract.palette.onAccent, "accent/onAccent"],
+  [contract.palette.destructive, contract.palette.onDestructive, "destructive/onDestructive"],
+  [contract.palette.destructiveSoft, contract.palette.destructive, "destructiveSoft/destructive"],
+  [contract.palette.successSoft, contract.palette.success, "successSoft/success"],
+  [contract.palette.warningSoft, contract.palette.warning, "warningSoft/warning"],
+  [contract.palette.infoSoft, contract.palette.info, "infoSoft/info"],
   [contract.palette.background, contract.palette.foreground, "background/foreground"],
   [contract.palette.background, contract.palette.mutedForeground, "background/mutedForeground"],
 ]) {
-  if (contrast(surface, foreground) < 4.5) failures.push(`${label} 未达到 WCAG AA`);
+  if (contrast(surface, foreground) < contract.accessibility.contrast.normalText) {
+    failures.push(`${label} 未达到普通文字对比度要求`);
+  }
+}
+
+const typeRoleIds = ["pageTitle", "sectionTitle", "subsectionTitle", "body", "compactBody", "label", "caption", "reading"];
+for (const platform of ["web", "mobile"]) {
+  const scale = contract.profiles[platform].typeScale;
+  if (JSON.stringify(Object.keys(scale)) !== JSON.stringify(typeRoleIds)) {
+    failures.push(`${platform} 语义排版角色不完整或顺序不稳定`);
+  }
+}
+if (
+  contract.profiles.web.typeScale.reading.size !== contract.profiles.web.reading.bodyPx ||
+  contract.profiles.web.typeScale.reading.lineHeight !== contract.profiles.web.reading.lineHeightPx ||
+  contract.profiles.mobile.typeScale.reading.size !== contract.profiles.mobile.reading.bodySp ||
+  contract.profiles.mobile.typeScale.reading.lineHeight !== contract.profiles.mobile.reading.lineHeight
+) {
+  failures.push("语义 reading 角色必须与平台阅读 profile 保持一致");
+}
+if (
+  contract.profiles.web.expandedChromeFrom !== 1280 ||
+  contract.profiles.mobile.horizontalPadding.regularFrom !== 401 ||
+  contract.profiles.mobile.pageContentMaxWidth !== 520 ||
+  contract.profiles.mobile.wideContainerMaxWidth !== 600 ||
+  contract.profiles.mobile.radii.pill !== 999 ||
+  "pill" in contract.profiles.web.radii
+) {
+  failures.push("平台断点与内容宽度不符合 v2.2 profile");
+}
+
+const feedback = contract.experiences.feedback;
+if (feedback.resourceStates.join(",") !== "loading,refreshing,loading-more,empty,no-results,error,offline,restricted") {
+  failures.push("资源反馈状态必须使用 v2.2 固定集合");
+}
+if (feedback.mutationStates.join(",") !== "idle,pending,success,error") {
+  failures.push("Mutation 反馈状态必须使用 v2.2 固定集合");
+}
+for (const invariant of ["refreshPreservesContent", "paginationPreservesContent", "pendingPreventsDuplicateSubmit", "retryOnlyWhenSafe", "blockingFailureStaysInContext", "transientFeedbackNeverSoleCriticalResult"]) {
+  if (!feedback.invariants[invariant]) failures.push(`反馈契约未保证 ${invariant}`);
+}
+
+const overlays = contract.experiences.overlays;
+const expectedLayers = { sticky: 30, chrome: 40, floating: 60, popup: 70, modalBackdrop: 80, modal: 81, tooltip: 90, nestedPopup: 100, globalProgress: 110 };
+if (JSON.stringify(overlays.web.layers) !== JSON.stringify(expectedLayers)) {
+  failures.push("Web 浮层层级必须使用 v2.2 语义顺序");
+}
+const layerValues = Object.values(overlays.web.layers);
+if (layerValues.some((value, index) => index > 0 && value <= layerValues[index - 1])) {
+  failures.push("Web 浮层层级必须严格递增");
+}
+if (JSON.stringify(overlays.mobile.elevation) !== JSON.stringify({ flat: 0, floating: 2, popup: 4 })) {
+  failures.push("Flutter elevation 角色必须固定为 0/2/4");
+}
+
+const navigation = contract.experiences.navigation;
+const expectedNavigationLabels = {
+  discover: "发现", moments: "动态", publish: "发布", messages: "消息", profile: "我的",
+  search: "搜索", notifications: "通知", directMessages: "私聊", bookmarks: "收藏",
+};
+if (JSON.stringify(navigation.labels) !== JSON.stringify(expectedNavigationLabels)) {
+  failures.push("导航标签必须使用共享词汇");
+}
+for (const id of [...navigation.web.primary, ...navigation.web.accountShortcuts, ...navigation.mobile.primary, ...navigation.mobile.messageSections]) {
+  if (!navigation.labels[id]) failures.push(`导航 profile 引用了未知目的地 ${id}`);
+}
+for (const [id, semanticId] of Object.entries(navigation.icons)) {
+  if (!navigation.labels[id]) failures.push(`导航图标引用了未知目的地 ${id}`);
+  if (!contract.experiences.icons.semantics[semanticId]) failures.push(`导航目的地 ${id} 缺少图标语义 ${semanticId}`);
+}
+
+const language = contract.experiences.language;
+if (language.actions.hide !== "隐藏" || language.actions.restore !== "恢复" || language.nouns.thread !== "主题帖") {
+  failures.push("共享界面词汇未保留稳定名词与动作");
 }
 
 const editor = contract.experiences.editor;
@@ -252,7 +365,7 @@ for (const font of contract.fonts) {
 }
 
 const skill = read("skills/wenyou-design/SKILL.md");
-if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("docs/icons.md") || !skill.includes("experiences.collections") || !skill.includes("experiences.icons")) {
+if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("docs/icons.md") || !skill.includes("docs/interaction.md") || !skill.includes("docs/navigation-language.md") || !skill.includes("experiences.collections") || !skill.includes("experiences.icons") || !skill.includes("experiences.feedback") || !skill.includes("experiences.navigation")) {
   failures.push("wenyou-design Skill 未正确引用中央事实源");
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");
@@ -260,4 +373,4 @@ if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色�
 if (failures.length > 0) {
   throw new Error(`Foundation 检查失败：\n- ${failures.join("\n- ")}`);
 }
-console.log(`Foundation ${contract.version} contract, contrast, fonts, notifications, editor matrix, and skill are valid`);
+console.log(`Foundation ${contract.version} schema, artifacts, contrast, typography, interaction, navigation, editor, and skill are valid`);

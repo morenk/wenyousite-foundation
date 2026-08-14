@@ -45,6 +45,13 @@ const icons = contract.experiences.icons;
 const images = contract.experiences.images;
 const collections = contract.experiences.collections;
 const notifications = contract.experiences.notifications;
+const accessibility = contract.accessibility;
+const feedback = contract.experiences.feedback;
+const overlays = contract.experiences.overlays;
+const navigation = contract.experiences.navigation;
+const language = contract.experiences.language;
+const typeRoleIds = Object.keys(contract.profiles.web.typeScale);
+const kebab = (value) => value.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 
 const iconSourceRoot = path.join(root, "node_modules", icons.source.package, "icons");
 const iconLicenseHeader = /^<!-- @license[^>]+-->\s*/;
@@ -324,6 +331,100 @@ export declare const NOTIFICATION_INVARIANTS: Readonly<{
   unknownTypeVisibility: "all";
 }>;`);
 
+write("dist/typography.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const TYPOGRAPHY_FAMILIES = Object.freeze(${js(contract.typography)});
+export const WEB_TYPE_SCALE = Object.freeze(${js(contract.profiles.web.typeScale)});
+export const MOBILE_TYPE_SCALE = Object.freeze(${js(contract.profiles.mobile.typeScale)});`);
+
+const typeRoleUnion = typeRoleIds.map((id) => JSON.stringify(id)).join(" | ");
+write("dist/typography.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export type TypographyRoleId = ${typeRoleUnion};
+export type TypographyFamilyRole = "body" | "display" | "utility";
+export interface TypographyStyleContract {
+  readonly family: TypographyFamilyRole;
+  readonly size: number;
+  readonly lineHeight: number;
+  readonly weight: number;
+}
+export declare const TYPOGRAPHY_FAMILIES: Readonly<Record<TypographyFamilyRole, Readonly<{
+  family: string;
+  weights: readonly number[];
+  fallback: readonly string[];
+}>>>;
+export declare const WEB_TYPE_SCALE: Readonly<Record<TypographyRoleId, TypographyStyleContract>>;
+export declare const MOBILE_TYPE_SCALE: Readonly<Record<TypographyRoleId, TypographyStyleContract>>;`);
+
+write("dist/interaction.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const ACCESSIBILITY_CONTRACT = Object.freeze(${js(accessibility)});
+export const FEEDBACK_RESOURCE_STATES = Object.freeze(${js(feedback.resourceStates)});
+export const FEEDBACK_MUTATION_STATES = Object.freeze(${js(feedback.mutationStates)});
+export const FEEDBACK_INVARIANTS = Object.freeze(${js(feedback.invariants)});
+export const FEEDBACK_WEB_PROFILE = Object.freeze(${js(feedback.web)});
+export const FEEDBACK_MOBILE_PROFILE = Object.freeze(${js(feedback.mobile)});
+export const OVERLAY_INVARIANTS = Object.freeze(${js(overlays.invariants)});
+export const OVERLAY_WEB_PROFILE = Object.freeze(${js(overlays.web)});
+export const OVERLAY_MOBILE_PROFILE = Object.freeze(${js(overlays.mobile)});`);
+
+write("dist/interaction.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export type FeedbackResourceState = ${feedback.resourceStates.map((id) => JSON.stringify(id)).join(" | ")};
+export type FeedbackMutationState = ${feedback.mutationStates.map((id) => JSON.stringify(id)).join(" | ")};
+export type OverlayLayerId = ${Object.keys(overlays.web.layers).map((id) => JSON.stringify(id)).join(" | ")};
+export declare const ACCESSIBILITY_CONTRACT: Readonly<${JSON.stringify(accessibility)}>;
+export declare const FEEDBACK_RESOURCE_STATES: readonly FeedbackResourceState[];
+export declare const FEEDBACK_MUTATION_STATES: readonly FeedbackMutationState[];
+export declare const FEEDBACK_INVARIANTS: Readonly<Record<string, boolean>>;
+export declare const FEEDBACK_WEB_PROFILE: Readonly<{ transientChannel: "toast"; asyncLiveRegion: "polite" }>;
+export declare const FEEDBACK_MOBILE_PROFILE: Readonly<{ transientChannel: "snackbar"; asyncLiveRegion: "polite" }>;
+export declare const OVERLAY_INVARIANTS: Readonly<Record<string, boolean>>;
+export declare const OVERLAY_WEB_PROFILE: Readonly<{
+  layers: Readonly<Record<OverlayLayerId, number>>;
+  shadows: Readonly<Record<"popover" | "dialog" | "floating", string>>;
+  scrim: Readonly<{ color: string; blurPx: number }>;
+  dismiss: readonly ("explicit-control" | "escape")[];
+}>;
+export declare const OVERLAY_MOBILE_PROFILE: Readonly<{
+  elevation: Readonly<Record<"flat" | "floating" | "popup", number>>;
+  dismiss: readonly ("explicit-control" | "system-back")[];
+  safeArea: true;
+}>;`);
+
+write("dist/navigation.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const NAVIGATION_LABELS = Object.freeze(${js(navigation.labels)});
+export const NAVIGATION_ICONS = Object.freeze(${js(navigation.icons)});
+export const NAVIGATION_INVARIANTS = Object.freeze(${js(navigation.invariants)});
+export const NAVIGATION_WEB_PROFILE = Object.freeze(${js(navigation.web)});
+export const NAVIGATION_MOBILE_PROFILE = Object.freeze(${js(navigation.mobile)});`);
+
+const navigationIdUnion = Object.keys(navigation.labels).map((id) => JSON.stringify(id)).join(" | ");
+write("dist/navigation.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+import type { IconSemanticId } from "./icons.js";
+export type NavigationDestinationId = ${navigationIdUnion};
+export declare const NAVIGATION_LABELS: Readonly<Record<NavigationDestinationId, string>>;
+export declare const NAVIGATION_ICONS: Readonly<Record<NavigationDestinationId, IconSemanticId>>;
+export declare const NAVIGATION_INVARIANTS: Readonly<Record<string, string>>;
+export declare const NAVIGATION_WEB_PROFILE: Readonly<{
+  primary: readonly NavigationDestinationId[];
+  accountShortcuts: readonly NavigationDestinationId[];
+  publishPresentation: "separate-action";
+  profilePresentation: "account-entry";
+}>;
+export declare const NAVIGATION_MOBILE_PROFILE: Readonly<{
+  primary: readonly NavigationDestinationId[];
+  messageSections: readonly NavigationDestinationId[];
+}>;`);
+
+write("dist/language.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const LANGUAGE_NOUNS = Object.freeze(${js(language.nouns)});
+export const LANGUAGE_ACTIONS = Object.freeze(${js(language.actions)});
+export const LANGUAGE_INVARIANTS = Object.freeze(${js(language.invariants)});`);
+
+write("dist/language.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export type LanguageNounId = ${Object.keys(language.nouns).map((id) => JSON.stringify(id)).join(" | ")};
+export type LanguageActionId = ${Object.keys(language.actions).map((id) => JSON.stringify(id)).join(" | ")};
+export declare const LANGUAGE_NOUNS: Readonly<Record<LanguageNounId, string>>;
+export declare const LANGUAGE_ACTIONS: Readonly<Record<LanguageActionId, string>>;
+export declare const LANGUAGE_INVARIANTS: Readonly<Record<string, boolean>>;`);
+
 const p = contract.palette;
 const web = contract.profiles.web;
 const motion = contract.motion;
@@ -373,16 +474,29 @@ write("web/tokens.css", `/* 由 contracts/foundation.v1.json 生成，禁止手�
   --layout-workspace: ${web.layoutRem.workspace}rem;
   --layout-chrome-workspace: ${web.layoutRem.chromeWorkspace}rem;
   --layout-wide: ${web.layoutRem.wide}rem;
+  --breakpoint-chrome-expanded: ${web.expandedChromeFrom / 16}rem;
+${typeRoleIds.flatMap((role) => {
+  const style = web.typeScale[role];
+  const prefix = `  --type-${kebab(role)}`;
+  return [
+    `${prefix}-size: ${style.size}px;`,
+    `${prefix}-line-height: ${style.lineHeight >= 4 ? `${style.lineHeight}px` : style.lineHeight};`,
+    `${prefix}-weight: ${style.weight};`,
+  ];
+}).join("\n")}
   --editor-frame-max: ${editor.web.layout.frameMaxRem}rem;
   --editor-text-measure: ${editor.web.layout.textMeasurePx}px;
   --editor-content-inline-padding: ${editor.web.layout.contentInlinePaddingPx}px;
   --editor-toolbar-inline-padding: ${editor.web.layout.toolbarInlinePaddingPx}px;
   --editor-body-size: ${editor.web.layout.bodyPx}px;
   --editor-body-line-height: ${editor.web.layout.lineHeight};
-  --sticker-display-max: 8rem;
-  --wenyou-shadow-popover: 0 12px 32px rgb(52 47 62 / 12%);
-  --wenyou-shadow-dialog: 0 24px 64px rgb(52 47 62 / 16%);
-  --wenyou-shadow-floating: 0 10px 28px rgb(52 47 62 / 14%);
+  --sticker-display-max: ${images.web.stickerDisplayMaxRem}rem;
+  --wenyou-shadow-popover: ${overlays.web.shadows.popover};
+  --wenyou-shadow-dialog: ${overlays.web.shadows.dialog};
+  --wenyou-shadow-floating: ${overlays.web.shadows.floating};
+  --overlay-scrim: ${overlays.web.scrim.color};
+  --overlay-scrim-blur: ${overlays.web.scrim.blurPx}px;
+${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id)}: ${value};`).join("\n")}
   --motion-fast: ${motion.fastMs}ms;
   --motion-standard: ${motion.standardMs}ms;
   --motion-slow: ${motion.slowMs}ms;
@@ -418,6 +532,15 @@ const notificationLabelEntries = notifications.groups
 const notificationTypeEntries = notifications.groups
   .map(({ id, types }) => `    ${dartString(id)}: <String>${dartList(types)},`)
   .join("\n");
+const dartStringMapEntries = (record) => Object.entries(record)
+  .map(([id, value]) => `    ${dartString(id)}: ${dartString(value)},`)
+  .join("\n");
+const mobileTypeFamilyEntries = Object.entries(mobile.typeScale)
+  .map(([id, style]) => `    ${dartString(id)}: ${dartString(style.family)},`)
+  .join("\n");
+const mobileTypeNumberEntries = (property, suffix = "") => Object.entries(mobile.typeScale)
+  .map(([id, style]) => `    ${dartString(id)}: ${style[property]}${suffix},`)
+  .join("\n");
 write("packages/flutter/lib/src/foundation_tokens.dart", `// 由 contracts/foundation.v1.json 生成，禁止手改。
 import 'package:flutter/material.dart';
 
@@ -435,6 +558,18 @@ abstract final class WenyouFoundationTypography {
   static const String display = 'Wenyou LXGW WenKai';
   static const String utility = 'Wenyou Nunito';
   static const List<String> chineseFallback = <String>['Noto Sans SC', 'sans-serif'];
+  static const Map<String, String> mobileFamilies = <String, String>{
+${mobileTypeFamilyEntries}
+  };
+  static const Map<String, double> mobileSizes = <String, double>{
+${mobileTypeNumberEntries("size", ".0")}
+  };
+  static const Map<String, double> mobileLineHeights = <String, double>{
+${mobileTypeNumberEntries("lineHeight")}
+  };
+  static const Map<String, int> mobileWeights = <String, int>{
+${mobileTypeNumberEntries("weight")}
+  };
 }
 
 abstract final class WenyouFoundationMotion {
@@ -453,6 +588,71 @@ ${mobile.spacing.map((value) => `  static const double space${value} = ${value}.
   static const double radiusPill = ${mobile.radii.pill}.0;
   static const double compactHorizontalPadding = ${mobile.horizontalPadding.compact}.0;
   static const double regularHorizontalPadding = ${mobile.horizontalPadding.regular}.0;
+  static const double regularHorizontalPaddingFrom = ${mobile.horizontalPadding.regularFrom}.0;
+  static const double pageContentMaxWidth = ${mobile.pageContentMaxWidth}.0;
+  static const double wideContainerMaxWidth = ${mobile.wideContainerMaxWidth}.0;
+}
+
+abstract final class WenyouAccessibilityContract {
+  static const double normalTextContrast = ${accessibility.contrast.normalText};
+  static const double largeTextContrast = ${accessibility.contrast.largeText}.0;
+  static const double nonTextContrast = ${accessibility.contrast.nonText}.0;
+  static const bool focusVisible = ${accessibility.invariants.focusVisible};
+  static const bool statusNeverColorOnly = ${accessibility.invariants.statusNeverColorOnly};
+  static const bool iconOnlyControlHasLabel = ${accessibility.invariants.iconOnlyControlHasLabel};
+  static const String reducedMotion = ${dartString(accessibility.invariants.reducedMotion)};
+  static const String asyncAnnouncement = ${dartString(accessibility.invariants.asyncAnnouncement)};
+  static const bool systemTextScale = ${accessibility.mobile.systemTextScale};
+  static const bool safeArea = ${accessibility.mobile.safeArea};
+  static const bool systemBack = ${accessibility.mobile.systemBack};
+}
+
+abstract final class WenyouFeedbackContract {
+  static const List<String> resourceStates = <String>${dartList(feedback.resourceStates)};
+  static const List<String> mutationStates = <String>${dartList(feedback.mutationStates)};
+  static const String transientChannel = ${dartString(feedback.mobile.transientChannel)};
+  static const String asyncLiveRegion = ${dartString(feedback.mobile.asyncLiveRegion)};
+  static const bool refreshPreservesContent = ${feedback.invariants.refreshPreservesContent};
+  static const bool paginationPreservesContent = ${feedback.invariants.paginationPreservesContent};
+  static const bool pendingPreventsDuplicateSubmit = ${feedback.invariants.pendingPreventsDuplicateSubmit};
+  static const bool retryOnlyWhenSafe = ${feedback.invariants.retryOnlyWhenSafe};
+  static const bool blockingFailureStaysInContext = ${feedback.invariants.blockingFailureStaysInContext};
+}
+
+abstract final class WenyouOverlayContract {
+  static const Map<String, double> elevation = <String, double>{
+${Object.entries(overlays.mobile.elevation).map(([id, value]) => `    ${dartString(id)}: ${value}.0,`).join("\n")}
+  };
+  static const List<String> dismiss = <String>${dartList(overlays.mobile.dismiss)};
+  static const bool safeArea = ${overlays.mobile.safeArea};
+  static const bool modalBlocksBackground = ${overlays.invariants.modalBlocksBackground};
+  static const bool explicitClosePath = ${overlays.invariants.explicitClosePath};
+  static const bool restoreFocus = ${overlays.invariants.restoreFocus};
+}
+
+abstract final class WenyouNavigationContract {
+  static const Map<String, String> labels = <String, String>{
+${dartStringMapEntries(navigation.labels)}
+  };
+  static const Map<String, String> icons = <String, String>{
+${dartStringMapEntries(navigation.icons)}
+  };
+  static const List<String> primary = <String>${dartList(navigation.mobile.primary)};
+  static const List<String> messageSections = <String>${dartList(navigation.mobile.messageSections)};
+  static const String routeOwner = ${dartString(navigation.invariants.routeOwner)};
+  static const String messageUnreadAggregation = ${dartString(navigation.invariants.messageUnreadAggregation)};
+}
+
+abstract final class WenyouLanguageContract {
+  static const Map<String, String> nouns = <String, String>{
+${dartStringMapEntries(language.nouns)}
+  };
+  static const Map<String, String> actions = <String, String>{
+${dartStringMapEntries(language.actions)}
+  };
+  static const bool sameActionKeepsVerb = ${language.invariants.sameActionKeepsVerb};
+  static const bool sentencesOwnedByClient = ${language.invariants.sentencesOwnedByClient};
+  static const bool protocolNamesNeverUserFacing = ${language.invariants.protocolNamesNeverUserFacing};
 }
 
 abstract final class WenyouCollectionContract {
@@ -574,11 +774,30 @@ class WenyouIcon extends StatelessWidget {
   }
 }`);
 
+const artifactPaths = [
+  ...["icons", "editor", "images", "collections", "notifications", "typography", "interaction", "navigation", "language"]
+    .flatMap((name) => [`dist/${name}.js`, `dist/${name}.d.ts`]),
+  "web/tokens.css",
+  "web/fonts.css",
+  "packages/flutter/lib/src/foundation_tokens.dart",
+  "packages/flutter/lib/src/wenyou_icons.dart",
+];
+const artifactSha256 = Object.fromEntries(artifactPaths.map((relativePath) => [
+  relativePath,
+  crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex"),
+]));
 const manifest = JSON.stringify({
   version: contract.version,
   schemaVersion: contract.schemaVersion,
   contract: "contracts/foundation.v1.json",
   contractSha256,
+  features: {
+    typography: true,
+    interaction: true,
+    navigation: true,
+    language: true,
+  },
+  artifactSha256,
   icons: {
     family: icons.source.family,
     version: icons.source.version,

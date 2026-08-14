@@ -14,7 +14,7 @@
 
 共享色板以 `contracts/foundation.v1.json` 为准：纯白背景、深紫灰正文、柔粉主色、淡紫次色、低饱和状态色。普通文字满足 WCAG AA。核心导航、操作、编辑器能力和常见状态使用同一份语义图标契约，具体映射与贡献规则见 `docs/icons.md`。
 
-字体采用三个稳定角色：Noto Sans SC Variable 用于正文、控件与长时间阅读；LXGW WenKai Lite Medium 用于品牌和标题；Nunito Variable 用于数字、时间、计数与短标签。字体全部随客户端打包，缺字按 Noto Sans SC、平台中文字体顺序安全回退。
+字体采用三个稳定家族角色：Noto Sans SC Variable 用于正文、控件与长时间阅读；LXGW WenKai Lite Medium 用于品牌和标题；Nunito Variable 用于数字、时间、计数与短标签。页面标题、区块标题、正文、紧凑正文、标签、说明和阅读正文使用共享语义排版角色，但 Web 与 Flutter 分别消费本平台字号、行高与字重，不追求像素一致。字体全部随客户端打包，缺字按 Noto Sans SC、平台中文字体顺序安全回退。
 
 常规反馈使用 120–240ms 的颜色、边框、透明度和短位移；尊重减少动态效果，不使用持续漂浮、弹跳或视差。
 
@@ -23,6 +23,8 @@
 - 使用用户认识的功能名称和主动语态；按钮、完成提示和错误保持同一动词。
 - 错误说明发生了什么以及下一步；空状态只提供真实可执行动作。
 - 内部 Token 名、设计概念、发布阶段和宣传式氛围文案不进入界面。
+
+资源加载、刷新、分页、空结果、失败与受限状态，以及 Mutation pending、成功和失败语义由 [`interaction.md`](./interaction.md) 统一。界面导航名称、稳定产品名词和动作词见 [`navigation-language.md`](./navigation-language.md)。
 
 ## 集合与列表
 
