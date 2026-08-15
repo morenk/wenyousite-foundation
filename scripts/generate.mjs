@@ -773,7 +773,11 @@ class WenyouIcon extends StatelessWidget {
       excludeFromSemantics: semanticLabel == null,
       semanticsLabel: semanticLabel,
     );
-    return SizedBox.square(dimension: size, child: picture);
+    return Align(
+      widthFactor: 1,
+      heightFactor: 1,
+      child: SizedBox.square(dimension: size, child: picture),
+    );
   }
 }`);
 
