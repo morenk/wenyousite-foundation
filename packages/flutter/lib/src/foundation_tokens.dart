@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '3.0.0';
+  static const String value = '3.0.1';
   static const int schema = 1;
 }
 
