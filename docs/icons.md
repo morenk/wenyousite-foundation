@@ -5,9 +5,10 @@
 ## 使用规则
 
 - Web 与 Flutter 必须消费 Foundation 生成产物；第三方编辑器使用同源 SVG 字符串，不手写近似路径。
-- 未选中图标使用低强调紫灰描边；普通选中态保持同一图形，使用柔粉背景和前景色。
-- 点赞与收藏是显式语义例外：选中后仍使用同一 Lucide 图形，分别切换为实心鲜粉与实心金色，并使用极浅同色容器。计数和文字保持中性正文色。
-- 只读指标与导航目的地不继承互动色；危险命令只使用 destructive 色对，不能借用点赞色。
+- 未选中图标使用低强调紫灰描边；hover 与 focus 提前切换到该动作的语义色，并在图标命中区使用 10% 同色圆形状态层，pressed 使用 15%。
+- 选中态没有常驻背景。点赞、收藏与主题帖订阅保持同一 Lucide 路径，分别切换为实心鲜粉、实心金色与实心品牌深紫；计数和文字保持中性正文色。
+- 通用 Toggle 若没有填充或图形变化，必须提供可见状态文字；只读指标、导航目的地和通知状态不继承互动色。
+- 危险命令只使用 destructive 色对，不能借用点赞色；专色互动图标只放在审定的中性表面，有色容器改用对应 on-color 中性色。
 - 有文字的控件由控件承担可访问名称，内部图标隐藏；独立图标按钮必须提供明确名称。
 - 新增语义前先搜索本目录。同一图形可以承载多个经过审查的近义语义，但同一语义只能映射一个图形。
 - 品牌标识、分类标记、插画和操作系统专属动作属于显式例外，不进入核心 UI 图标映射。
@@ -25,11 +26,14 @@
 | 状态 | 图标 | 容器 | 辅助文字 | 图形 |
 | --- | --- | --- | --- | --- |
 | 未选中 | `mutedForeground` | 透明 | `mutedForeground` | 描边 |
-| 普通选中 | `onAccent` | `accent` | `onAccent` | 保持原图形 |
-| 已点赞 | `like` (#D81B60) | `likeSoft` (#FCE7F0) | `foreground` | 实心 |
-| 已收藏 | `bookmark` (#B77900) | `bookmarkSoft` (#FFF3BF) | `foreground` | 实心 |
+| Hover / Focus | 当前 tone | 图标命中区 10% 同色圆形状态层 | 保持中性 | 保持当前图形 |
+| Pressed | 当前 tone | 图标命中区 15% 同色圆形状态层 | 保持中性 | 保持当前图形 |
+| 普通选中 | `onAccent` | 透明 | `foreground` | 保持原图形并要求可见状态文字 |
+| 已点赞 | `like` (#D81B60) | 透明 | `foreground` | 实心 |
+| 已收藏 | `bookmark` (#B77900) | 透明 | `foreground` | 实心 |
+| 已订阅 | `brandStrong` (#704C65) | 透明 | `foreground` | 实心 |
 
-Web hover 与 pressed 状态层透明度分别为 0.08 与 0.12；禁用内容透明度为 0.38。Pending 保持提交前状态并显示加载指示，不能回退成未选中态。
+状态层颜色继承图标 currentColor，hover/focus 与 pressed 透明度分别为 0.1 与 0.15；禁用内容透明度为 0.38。Pending 保持提交前 tone 并显示同色加载指示，不能回退成未选中态。
 
 ## 语义目录
 
@@ -88,6 +92,8 @@ Web hover 与 pressed 状态层透明度分别为 0.08 与 0.12；禁用内容�
 | `action.block` | `ban` | `ccb7543486de959c1e9490932f36e3891c4ce84e8575afefd7fff90cac5966be` |
 | `action.follow` | `user-plus` | `50166f2032718c6a9207eeceff53b221cb40172a217bbb0bbb7280b7ac68e201` |
 | `action.unfollow` | `user-minus` | `48acf1487228dca6a86b33af506aa552813b4aae4bf8752db2d756a5b73b6326` |
+| `action.subscribe` | `bell` | `af3facedb58dafe3909a8d517e293a1e07ca40b6294cef18edd520780103a5ac` |
+| `action.unsubscribe` | `bell-off` | `ed8141466478682718299493393e9dbfa33047040f01ccc8a22f0c668810c015` |
 | `action.bookmark` | `bookmark` | `0cb65566a3db0a7166a3519d944d24d7961343ef0ac63abd63713c1d51ad8e9e` |
 | `action.remove-bookmark` | `bookmark-x` | `05b66b7cb71f72d6d36fda5c4a6a56621a8c319a701febe7f34387c5b698f922` |
 | `action.remove-tag` | `tag-x` | `eea9f5920fd64baa602c1eb02b8f754b512723471030773492526926df6f5739` |

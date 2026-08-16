@@ -1,5 +1,13 @@
 # Foundation Changelog
 
+## 5.1.0
+
+- `shared`：图标 Toggle 改为透明静止容器；hover/focus 使用 10% 当前语义色圆形状态层，pressed 使用 15%，选中关系只由图标颜色、填充和平台状态语义表达。
+- `icons`：点赞保留鲜粉实心心形，收藏保留金色实心书签，新增品牌深紫实心铃铛的主题帖订阅 tone 与 `action.subscribe` / `action.unsubscribe` 语义。
+- `generated`：删除 `likeSoft`、`bookmarkSoft`，为 heart、bookmark、bell 生成同路径实心 SVG 变体，并向 TypeScript 与 Flutter 图标接口公开 outline/filled 选择。
+- `accessibility`：专色互动图标限制在已校验的中性表面；无图形变化的普通 Toggle 必须提供可见状态文字，计数和辅助文字保持中性。
+- `compatibility`：本次按产品版本要求保留在 5.x；删除的两个公开色彩 Token 需要消费者升级时同步迁移。
+
 ## 5.0.0
 
 - `elements`：主题帖分类 API 删除颜色字段后，移除 Foundation 中用于兼容历史字段的 `apiColorBehavior` 语义。

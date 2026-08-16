@@ -21,7 +21,7 @@
     },
     "palette": {
       "type": "object",
-      "required": ["background", "foreground", "surface", "primary", "onPrimary", "brandStrong", "secondary", "onSecondary", "muted", "mutedForeground", "accent", "onAccent", "like", "likeSoft", "bookmark", "bookmarkSoft", "border", "input", "destructive", "onDestructive", "destructiveSoft", "success", "successSoft", "warning", "warningSoft", "info", "infoSoft", "categoryDeduction", "categoryDeductionSoft", "categoryNation", "categoryNationSoft", "categoryRpg", "categoryRpgSoft"],
+      "required": ["background", "foreground", "surface", "primary", "onPrimary", "brandStrong", "secondary", "onSecondary", "muted", "mutedForeground", "accent", "onAccent", "like", "bookmark", "border", "input", "destructive", "onDestructive", "destructiveSoft", "success", "successSoft", "warning", "warningSoft", "info", "infoSoft", "categoryDeduction", "categoryDeductionSoft", "categoryNation", "categoryNationSoft", "categoryRpg", "categoryRpgSoft"],
       "properties": {
         "background": { "$ref": "#/$defs/hexColor" },
         "foreground": { "$ref": "#/$defs/hexColor" },
@@ -36,9 +36,7 @@
         "accent": { "$ref": "#/$defs/hexColor" },
         "onAccent": { "$ref": "#/$defs/hexColor" },
         "like": { "$ref": "#/$defs/hexColor" },
-        "likeSoft": { "$ref": "#/$defs/hexColor" },
         "bookmark": { "$ref": "#/$defs/hexColor" },
-        "bookmarkSoft": { "$ref": "#/$defs/hexColor" },
         "border": { "$ref": "#/$defs/hexColor" },
         "input": { "$ref": "#/$defs/hexColor" },
         "destructive": { "$ref": "#/$defs/hexColor" },
@@ -286,13 +284,13 @@
           "type": "object",
           "required": ["strokeWidth", "lineCap", "lineJoin", "compactSize", "defaultSize", "navigationSize", "selectedState", "decorativeSemantics", "interactiveLabelOwner"],
           "properties": {
-            "strokeWidth": { "$ref": "#/$defs/positiveNumber" }, "lineCap": { "const": "round" }, "lineJoin": { "const": "round" }, "compactSize": { "$ref": "#/$defs/positiveNumber" }, "defaultSize": { "$ref": "#/$defs/positiveNumber" }, "navigationSize": { "$ref": "#/$defs/positiveNumber" }, "selectedState": { "const": "same-glyph-on-accent-container" }, "decorativeSemantics": { "const": "hidden" }, "interactiveLabelOwner": { "const": "control" }
+            "strokeWidth": { "$ref": "#/$defs/positiveNumber" }, "lineCap": { "const": "round" }, "lineJoin": { "const": "round" }, "compactSize": { "$ref": "#/$defs/positiveNumber" }, "defaultSize": { "$ref": "#/$defs/positiveNumber" }, "navigationSize": { "$ref": "#/$defs/positiveNumber" }, "selectedState": { "const": "semantic-color-on-transparent-container" }, "decorativeSemantics": { "const": "hidden" }, "interactiveLabelOwner": { "const": "control" }
           },
           "additionalProperties": false
         },
         "controls": {
           "type": "object",
-          "required": ["inactive", "selected", "commands", "supportingContent", "focusRing", "stateLayerOpacity", "pendingVisual"],
+          "required": ["inactive", "selected", "commands", "supportingContent", "focusRing", "stateLayer", "disabledContentOpacity", "hostSurfaces", "coloredSurfaceBehavior", "pendingVisual"],
           "properties": {
             "inactive": {
               "type": "object",
@@ -306,15 +304,16 @@
             },
             "selected": {
               "type": "object",
-              "required": ["default", "like", "bookmark"],
+              "required": ["default", "like", "bookmark", "subscription"],
               "properties": {
                 "default": {
                   "type": "object",
-                  "required": ["foreground", "surface", "glyph"],
+                  "required": ["foreground", "surface", "glyph", "requiresVisibleStateCue"],
                   "properties": {
                     "foreground": { "const": "onAccent" },
-                    "surface": { "const": "accent" },
-                    "glyph": { "const": "unchanged" }
+                    "surface": { "const": "transparent" },
+                    "glyph": { "const": "unchanged" },
+                    "requiresVisibleStateCue": { "const": true }
                   },
                   "additionalProperties": false
                 },
@@ -324,7 +323,7 @@
                   "properties": {
                     "semanticId": { "const": "action.like" },
                     "foreground": { "const": "like" },
-                    "surface": { "const": "likeSoft" },
+                    "surface": { "const": "transparent" },
                     "glyph": { "const": "filled" }
                   },
                   "additionalProperties": false
@@ -335,7 +334,18 @@
                   "properties": {
                     "semanticId": { "const": "action.bookmark" },
                     "foreground": { "const": "bookmark" },
-                    "surface": { "const": "bookmarkSoft" },
+                    "surface": { "const": "transparent" },
+                    "glyph": { "const": "filled" }
+                  },
+                  "additionalProperties": false
+                },
+                "subscription": {
+                  "type": "object",
+                  "required": ["semanticId", "foreground", "surface", "glyph"],
+                  "properties": {
+                    "semanticId": { "const": "action.subscribe" },
+                    "foreground": { "const": "brandStrong" },
+                    "surface": { "const": "transparent" },
                     "glyph": { "const": "filled" }
                   },
                   "additionalProperties": false
@@ -378,16 +388,22 @@
               "additionalProperties": false
             },
             "focusRing": { "const": "brandStrong" },
-            "stateLayerOpacity": {
+            "stateLayer": {
               "type": "object",
-              "required": ["hover", "pressed", "disabledContent"],
+              "required": ["color", "shape", "target", "hoverOpacity", "focusOpacity", "pressedOpacity"],
               "properties": {
-                "hover": { "const": 0.08 },
-                "pressed": { "const": 0.12 },
-                "disabledContent": { "const": 0.38 }
+                "color": { "const": "currentColor" },
+                "shape": { "const": "circle" },
+                "target": { "const": "icon-hit-area" },
+                "hoverOpacity": { "const": 0.1 },
+                "focusOpacity": { "const": 0.1 },
+                "pressedOpacity": { "const": 0.15 }
               },
               "additionalProperties": false
             },
+            "disabledContentOpacity": { "const": 0.38 },
+            "hostSurfaces": { "type": "array", "prefixItems": [{ "const": "background" }, { "const": "surface" }, { "const": "muted" }], "items": false, "minItems": 3, "maxItems": 3 },
+            "coloredSurfaceBehavior": { "const": "use-on-color-neutral" },
             "pendingVisual": { "const": "preserve-state-with-loading-indicator" }
           },
           "additionalProperties": false

@@ -1,8 +1,8 @@
 {
-  "version": "5.0.0",
+  "version": "5.1.0",
   "schemaVersion": 1,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "86ab033211fd1abe1a7a05f0f2565fc9eb32c509553e35eb100b3fbe2691b42b",
+  "contractSha256": "8c2681a684aa1cae3f2616ef780e007c210811f4ee97502a33841d4758ceb129",
   "features": {
     "typography": true,
     "interaction": true,
@@ -12,10 +12,10 @@
     "elements": true
   },
   "artifactSha256": {
-    "dist/icons.js": "5f4d1a19d22020f9e485aa8f1072d1705687b94f467d93fa2939c88d668f5b30",
-    "dist/icons.d.ts": "8a73116d2c0ee1ed10d238103711c599dbff32f2a1875cc191421e7ff498a29f",
-    "dist/editor.js": "2ccef8612600ffe61a368ec30e20cb5a8c8331b7c304b0ed46be89ac0d285f6a",
-    "dist/editor.d.ts": "48db5acea5e332628dca10de2c9560291f105a13d265d36aae1330f0c8ce187c",
+    "dist/icons.js": "cb3ac880f6943a06bd8950a14493e8f910fa7a8af615e783e8ec1703d7073add",
+    "dist/icons.d.ts": "efb9659ef3ebeb9ff381d6d06be3f56b0e2803ebc2ab7aacc2e5e8e7ee197e1b",
+    "dist/editor.js": "9329eb4098050fa72e4534feb80f596b47fdc0b4f9201fd919a83e8836a2b865",
+    "dist/editor.d.ts": "bfbc012e0ac5664e099c396d9ef1ea00c18c4e5a23758d8b58a7118bff7ff4ee",
     "dist/images.js": "48bda60db403d754b5c601d5f092beb0b4ea942bd4596b77aba1399d8aa5c3a4",
     "dist/images.d.ts": "de0d1b52f15967ab723c7b0de317db670e863c3381eb93c9c84cc9446b97da26",
     "dist/collections.js": "665b720eb2a0bcc148ce1f67894aa9068154eef9d49b41a62b7d2bc281342793",
@@ -32,10 +32,10 @@
     "dist/language.d.ts": "7f178e8bb8b62b56e9732c482d2d580d69af70a4e265bb2e9949542345818d6f",
     "dist/elements.js": "fc560c1b8457ade79e8f254783ecb0b6a9fdea2644a654546bf30c444a8d5a2b",
     "dist/elements.d.ts": "0117d46903ae35de171c01eb2f48c76080dba0609fae9590150350cdcc874ced",
-    "web/tokens.css": "886fc8e742797cc3402a37a3ff1e680e9b9930c22aaf6e2917af4142fe2a3bf3",
+    "web/tokens.css": "eb6d97669d963268add4087ada6c7d472d844d10464a5b45572ea508ed02c19c",
     "web/fonts.css": "2064b6f73a60f670ce27ddeaa7dbc9590776fb3c31b5644c5ee0dd35c4f31ed7",
-    "packages/flutter/lib/src/foundation_tokens.dart": "c099890d2e425b312c27bd25a0de6c8c22b03995d466e21c5f97f2263a071008",
-    "packages/flutter/lib/src/wenyou_icons.dart": "c0b833be42aeca92d9b0522022b5f42321fdc8d113af1e53487d80f4e721f658"
+    "packages/flutter/lib/src/foundation_tokens.dart": "e8c4161c500d34474fe63428aacc5ea3658a7ee5eb860769f58fdeb5e50b2af5",
+    "packages/flutter/lib/src/wenyou_icons.dart": "f8e2b1196688e7decfca4026c2959dd7059bb066b4dfc91725526af67237ad13"
   },
   "icons": {
     "family": "Lucide",
@@ -183,6 +183,11 @@
       "users-round": "9893bfacbda15f29511f9e8abb1496c1c961fa417579645d66826a9cc68e32a8",
       "wallet-cards": "2d987ecedcfeae35938f30f8933c69434c93c83a8917a8a3b70e8408705e31a6",
       "x": "f90eb6b04596e70b2f3752684be5ec2b75a871dd4cf45a8eee792aad7263a612"
+    },
+    "filledGlyphSha256": {
+      "bell": "4c66d688671f94e3476a448a8130768ae9f247a3f341d1fd687b5ac4b8c378c9",
+      "bookmark": "a64fa60e99b661639db1d8cff00a6cf44753e01e17d525fa1b8bc0466c53fea4",
+      "heart": "33912a7ab5c79f76822f983321c5e641541d718f79bd183cdf6dff92f91120f6"
     }
   },
   "fonts": [

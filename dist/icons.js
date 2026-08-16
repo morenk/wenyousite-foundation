@@ -8,7 +8,7 @@ export const ICON_STYLE = Object.freeze({
   "compactSize": 16,
   "defaultSize": 20,
   "navigationSize": 24,
-  "selectedState": "same-glyph-on-accent-container",
+  "selectedState": "semantic-color-on-transparent-container",
   "decorativeSemantics": "hidden",
   "interactiveLabelOwner": "control"
 });
@@ -21,19 +21,26 @@ export const ICON_CONTROL_STATES = Object.freeze({
   "selected": {
     "default": {
       "foreground": "onAccent",
-      "surface": "accent",
-      "glyph": "unchanged"
+      "surface": "transparent",
+      "glyph": "unchanged",
+      "requiresVisibleStateCue": true
     },
     "like": {
       "semanticId": "action.like",
       "foreground": "like",
-      "surface": "likeSoft",
+      "surface": "transparent",
       "glyph": "filled"
     },
     "bookmark": {
       "semanticId": "action.bookmark",
       "foreground": "bookmark",
-      "surface": "bookmarkSoft",
+      "surface": "transparent",
+      "glyph": "filled"
+    },
+    "subscription": {
+      "semanticId": "action.subscribe",
+      "foreground": "brandStrong",
+      "surface": "transparent",
       "glyph": "filled"
     }
   },
@@ -52,11 +59,21 @@ export const ICON_CONTROL_STATES = Object.freeze({
     "selected": "foreground"
   },
   "focusRing": "brandStrong",
-  "stateLayerOpacity": {
-    "hover": 0.08,
-    "pressed": 0.12,
-    "disabledContent": 0.38
+  "stateLayer": {
+    "color": "currentColor",
+    "shape": "circle",
+    "target": "icon-hit-area",
+    "hoverOpacity": 0.1,
+    "focusOpacity": 0.1,
+    "pressedOpacity": 0.15
   },
+  "disabledContentOpacity": 0.38,
+  "hostSurfaces": [
+    "background",
+    "surface",
+    "muted"
+  ],
+  "coloredSurfaceBehavior": "use-on-color-neutral",
   "pendingVisual": "preserve-state-with-loading-indicator"
 });
 export const ICON_SEMANTICS = Object.freeze({
@@ -113,6 +130,8 @@ export const ICON_SEMANTICS = Object.freeze({
   "action.block": "ban",
   "action.follow": "user-plus",
   "action.unfollow": "user-minus",
+  "action.subscribe": "bell",
+  "action.unsubscribe": "bell-off",
   "action.bookmark": "bookmark",
   "action.remove-bookmark": "bookmark-x",
   "action.remove-tag": "tag-x",
@@ -3749,6 +3768,16 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "wallet-cards": "2d987ecedcfeae35938f30f8933c69434c93c83a8917a8a3b70e8408705e31a6",
   "x": "f90eb6b04596e70b2f3752684be5ec2b75a871dd4cf45a8eee792aad7263a612"
 });
+export const ICON_GLYPH_FILLED_SVGS = Object.freeze({
+  "bell": "<svg class=\"lucide lucide-bell\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M10.268 21a2 2 0 0 0 3.464 0\" /><path d=\"M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326\" /></svg>",
+  "bookmark": "<svg class=\"lucide lucide-bookmark\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z\" /></svg>",
+  "heart": "<svg class=\"lucide lucide-heart\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5\" /></svg>"
+});
+export const ICON_GLYPH_FILLED_SHA256 = Object.freeze({
+  "bell": "4c66d688671f94e3476a448a8130768ae9f247a3f341d1fd687b5ac4b8c378c9",
+  "bookmark": "a64fa60e99b661639db1d8cff00a6cf44753e01e17d525fa1b8bc0466c53fea4",
+  "heart": "33912a7ab5c79f76822f983321c5e641541d718f79bd183cdf6dff92f91120f6"
+});
 export const ICON_PLATFORM_EXCEPTIONS = Object.freeze([
   "brand-mark",
   "category-marker",
@@ -3765,4 +3794,9 @@ export function iconNode(semanticId) {
 export function iconSvg(semanticId) {
   const glyphId = iconGlyphId(semanticId);
   return glyphId ? ICON_GLYPH_SVGS[glyphId] : undefined;
+}
+export function iconVariantSvg(semanticId, variant = "outline") {
+  const glyphId = iconGlyphId(semanticId);
+  if (!glyphId) return undefined;
+  return variant === "filled" ? ICON_GLYPH_FILLED_SVGS[glyphId] : ICON_GLYPH_SVGS[glyphId];
 }

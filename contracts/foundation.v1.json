@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "5.0.0",
+  "version": "5.1.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -22,9 +22,7 @@
     "accent": "#F7DBEA",
     "onAccent": "#68455D",
     "like": "#D81B60",
-    "likeSoft": "#FCE7F0",
     "bookmark": "#B77900",
-    "bookmarkSoft": "#FFF3BF",
     "border": "#E8E3EB",
     "input": "#DCD5E0",
     "destructive": "#8A3F50",
@@ -138,7 +136,7 @@
         "compactSize": 16,
         "defaultSize": 20,
         "navigationSize": 24,
-        "selectedState": "same-glyph-on-accent-container",
+        "selectedState": "semantic-color-on-transparent-container",
         "decorativeSemantics": "hidden",
         "interactiveLabelOwner": "control"
       },
@@ -151,19 +149,26 @@
         "selected": {
           "default": {
             "foreground": "onAccent",
-            "surface": "accent",
-            "glyph": "unchanged"
+            "surface": "transparent",
+            "glyph": "unchanged",
+            "requiresVisibleStateCue": true
           },
           "like": {
             "semanticId": "action.like",
             "foreground": "like",
-            "surface": "likeSoft",
+            "surface": "transparent",
             "glyph": "filled"
           },
           "bookmark": {
             "semanticId": "action.bookmark",
             "foreground": "bookmark",
-            "surface": "bookmarkSoft",
+            "surface": "transparent",
+            "glyph": "filled"
+          },
+          "subscription": {
+            "semanticId": "action.subscribe",
+            "foreground": "brandStrong",
+            "surface": "transparent",
             "glyph": "filled"
           }
         },
@@ -182,11 +187,17 @@
           "selected": "foreground"
         },
         "focusRing": "brandStrong",
-        "stateLayerOpacity": {
-          "hover": 0.08,
-          "pressed": 0.12,
-          "disabledContent": 0.38
+        "stateLayer": {
+          "color": "currentColor",
+          "shape": "circle",
+          "target": "icon-hit-area",
+          "hoverOpacity": 0.1,
+          "focusOpacity": 0.1,
+          "pressedOpacity": 0.15
         },
+        "disabledContentOpacity": 0.38,
+        "hostSurfaces": ["background", "surface", "muted"],
+        "coloredSurfaceBehavior": "use-on-color-neutral",
         "pendingVisual": "preserve-state-with-loading-indicator"
       },
       "semantics": {
@@ -243,6 +254,8 @@
         "action.block": "ban",
         "action.follow": "user-plus",
         "action.unfollow": "user-minus",
+        "action.subscribe": "bell",
+        "action.unsubscribe": "bell-off",
         "action.bookmark": "bookmark",
         "action.remove-bookmark": "bookmark-x",
         "action.remove-tag": "tag-x",

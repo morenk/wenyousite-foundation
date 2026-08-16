@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '5.0.0';
+  static const String value = '5.1.0';
   static const int schema = 1;
 }
 
@@ -20,9 +20,7 @@ abstract final class WenyouFoundationPalette {
   static const Color accent = Color(0xFFF7DBEA);
   static const Color onAccent = Color(0xFF68455D);
   static const Color like = Color(0xFFD81B60);
-  static const Color likeSoft = Color(0xFFFCE7F0);
   static const Color bookmark = Color(0xFFB77900);
-  static const Color bookmarkSoft = Color(0xFFFFF3BF);
   static const Color border = Color(0xFFE8E3EB);
   static const Color input = Color(0xFFDCD5E0);
   static const Color destructive = Color(0xFF8A3F50);
@@ -45,16 +43,22 @@ abstract final class WenyouFoundationPalette {
 abstract final class WenyouIconControlContract {
   static const Color inactiveForeground = WenyouFoundationPalette.mutedForeground;
   static const Color genericSelectedForeground = WenyouFoundationPalette.onAccent;
-  static const Color genericSelectedSurface = WenyouFoundationPalette.accent;
+  static const Color genericSelectedSurface = Colors.transparent;
   static const Color likeSelectedForeground = WenyouFoundationPalette.like;
-  static const Color likeSelectedSurface = WenyouFoundationPalette.likeSoft;
+  static const Color likeSelectedSurface = Colors.transparent;
   static const Color bookmarkSelectedForeground = WenyouFoundationPalette.bookmark;
-  static const Color bookmarkSelectedSurface = WenyouFoundationPalette.bookmarkSoft;
+  static const Color bookmarkSelectedSurface = Colors.transparent;
+  static const Color subscriptionSelectedForeground = WenyouFoundationPalette.brandStrong;
+  static const Color subscriptionSelectedSurface = Colors.transparent;
   static const Color supportingInactive = WenyouFoundationPalette.mutedForeground;
   static const Color supportingSelected = WenyouFoundationPalette.foreground;
   static const Color focusRing = WenyouFoundationPalette.brandStrong;
-  static const double hoverStateLayerOpacity = 0.08;
-  static const double pressedStateLayerOpacity = 0.12;
+  static const String stateLayerColor = 'currentColor';
+  static const String stateLayerShape = 'circle';
+  static const String stateLayerTarget = 'icon-hit-area';
+  static const double hoverStateLayerOpacity = 0.1;
+  static const double focusStateLayerOpacity = 0.1;
+  static const double pressedStateLayerOpacity = 0.15;
   static const double disabledContentOpacity = 0.38;
   static const String pendingVisual = 'preserve-state-with-loading-indicator';
 }

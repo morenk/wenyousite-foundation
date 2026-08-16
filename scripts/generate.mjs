@@ -104,10 +104,26 @@ const glyphSha256 = Object.fromEntries(glyphIds.map((glyphId) => [
   glyphId,
   crypto.createHash("sha256").update(glyphSvgs[glyphId]).digest("hex"),
 ]));
+const filledGlyphIds = [...new Set(Object.values(icons.controls.selected)
+  .filter((state) => state.glyph === "filled" && state.semanticId)
+  .map((state) => icons.semantics[state.semanticId]))]
+  .sort();
+const filledGlyphSvgs = Object.fromEntries(filledGlyphIds.map((glyphId) => [
+  glyphId,
+  glyphSvgs[glyphId].replace('fill="none"', 'fill="currentColor"'),
+]));
+const filledGlyphSha256 = Object.fromEntries(filledGlyphIds.map((glyphId) => [
+  glyphId,
+  crypto.createHash("sha256").update(filledGlyphSvgs[glyphId]).digest("hex"),
+]));
 const flutterIconDirectory = path.join(root, "packages", "flutter", "icons");
+const flutterIconFiles = new Set([
+  ...glyphIds.map((glyphId) => `${glyphId}.svg`),
+  ...filledGlyphIds.map((glyphId) => `${glyphId}-filled.svg`),
+]);
 if (!checkOnly && fs.existsSync(flutterIconDirectory)) {
   for (const fileName of fs.readdirSync(flutterIconDirectory)) {
-    if (fileName.endsWith(".svg") && !glyphIds.includes(fileName.slice(0, -4))) {
+    if (fileName.endsWith(".svg") && !flutterIconFiles.has(fileName)) {
       fs.unlinkSync(path.join(flutterIconDirectory, fileName));
     }
   }
@@ -122,6 +138,8 @@ export const ICON_SEMANTICS = Object.freeze(${js(icons.semantics)});
 export const ICON_GLYPH_NODES = Object.freeze(${js(glyphNodes)});
 export const ICON_GLYPH_SVGS = Object.freeze(${js(glyphSvgs)});
 export const ICON_GLYPH_SHA256 = Object.freeze(${js(glyphSha256)});
+export const ICON_GLYPH_FILLED_SVGS = Object.freeze(${js(filledGlyphSvgs)});
+export const ICON_GLYPH_FILLED_SHA256 = Object.freeze(${js(filledGlyphSha256)});
 export const ICON_PLATFORM_EXCEPTIONS = Object.freeze(${js(icons.platformExceptions)});
 export function iconGlyphId(semanticId) {
   return ICON_SEMANTICS[semanticId];
@@ -133,14 +151,21 @@ export function iconNode(semanticId) {
 export function iconSvg(semanticId) {
   const glyphId = iconGlyphId(semanticId);
   return glyphId ? ICON_GLYPH_SVGS[glyphId] : undefined;
+}
+export function iconVariantSvg(semanticId, variant = "outline") {
+  const glyphId = iconGlyphId(semanticId);
+  if (!glyphId) return undefined;
+  return variant === "filled" ? ICON_GLYPH_FILLED_SVGS[glyphId] : ICON_GLYPH_SVGS[glyphId];
 }`);
 
 const semanticUnion = Object.keys(icons.semantics).map((id) => JSON.stringify(id)).join(" | ");
 const glyphUnion = glyphIds.map((id) => JSON.stringify(id)).join(" | ");
+const controlToneUnion = Object.keys(icons.controls.selected).map((id) => JSON.stringify(id)).join(" | ");
 write("dist/icons.d.ts", `/** 由 contracts/foundation.v1.json 与 Lucide ${icons.source.version} 生成，禁止手改。 */
 export type IconSemanticId = ${semanticUnion};
 export type IconGlyphId = ${glyphUnion};
-export type IconControlTone = "default" | "like" | "bookmark";
+export type IconControlTone = ${controlToneUnion};
+export type IconVisualVariant = "outline" | "filled";
 export type IconNode = readonly [elementName: "circle" | "ellipse" | "line" | "path" | "polygon" | "polyline" | "rect", attributes: Readonly<Record<string, string>>];
 export declare const ICON_FAMILY: ${JSON.stringify(icons.source.family)};
 export declare const ICON_VERSION: ${JSON.stringify(icons.source.version)};
@@ -151,7 +176,7 @@ export declare const ICON_STYLE: Readonly<{
   compactSize: number;
   defaultSize: number;
   navigationSize: number;
-  selectedState: "same-glyph-on-accent-container";
+  selectedState: "semantic-color-on-transparent-container";
   decorativeSemantics: "hidden";
   interactiveLabelOwner: "control";
 }>;
@@ -160,10 +185,13 @@ export declare const ICON_SEMANTICS: Readonly<Record<IconSemanticId, IconGlyphId
 export declare const ICON_GLYPH_NODES: Readonly<Record<IconGlyphId, readonly IconNode[]>>;
 export declare const ICON_GLYPH_SVGS: Readonly<Record<IconGlyphId, string>>;
 export declare const ICON_GLYPH_SHA256: Readonly<Record<IconGlyphId, string>>;
+export declare const ICON_GLYPH_FILLED_SVGS: Readonly<Partial<Record<IconGlyphId, string>>>;
+export declare const ICON_GLYPH_FILLED_SHA256: Readonly<Partial<Record<IconGlyphId, string>>>;
 export declare const ICON_PLATFORM_EXCEPTIONS: readonly string[];
 export declare function iconGlyphId(semanticId: IconSemanticId): IconGlyphId;
 export declare function iconNode(semanticId: IconSemanticId): readonly IconNode[];
-export declare function iconSvg(semanticId: IconSemanticId): string;`);
+export declare function iconSvg(semanticId: IconSemanticId): string;
+export declare function iconVariantSvg(semanticId: IconSemanticId, variant?: IconVisualVariant): string | undefined;`);
 
 const iconCatalogRows = Object.entries(icons.semantics)
   .map(([semanticId, glyphId]) => `| \`${semanticId}\` | \`${glyphId}\` | \`${glyphSha256[glyphId]}\` |`)
@@ -175,9 +203,10 @@ write("docs/icons.md", `# 图标目录与治理
 ## 使用规则
 
 - Web 与 Flutter 必须消费 Foundation 生成产物；第三方编辑器使用同源 SVG 字符串，不手写近似路径。
-- 未选中图标使用低强调紫灰描边；普通选中态保持同一图形，使用柔粉背景和前景色。
-- 点赞与收藏是显式语义例外：选中后仍使用同一 Lucide 图形，分别切换为实心鲜粉与实心金色，并使用极浅同色容器。计数和文字保持中性正文色。
-- 只读指标与导航目的地不继承互动色；危险命令只使用 destructive 色对，不能借用点赞色。
+- 未选中图标使用低强调紫灰描边；hover 与 focus 提前切换到该动作的语义色，并在图标命中区使用 10% 同色圆形状态层，pressed 使用 15%。
+- 选中态没有常驻背景。点赞、收藏与主题帖订阅保持同一 Lucide 路径，分别切换为实心鲜粉、实心金色与实心品牌深紫；计数和文字保持中性正文色。
+- 通用 Toggle 若没有填充或图形变化，必须提供可见状态文字；只读指标、导航目的地和通知状态不继承互动色。
+- 危险命令只使用 destructive 色对，不能借用点赞色；专色互动图标只放在审定的中性表面，有色容器改用对应 on-color 中性色。
 - 有文字的控件由控件承担可访问名称，内部图标隐藏；独立图标按钮必须提供明确名称。
 - 新增语义前先搜索本目录。同一图形可以承载多个经过审查的近义语义，但同一语义只能映射一个图形。
 - 品牌标识、分类标记、插画和操作系统专属动作属于显式例外，不进入核心 UI 图标映射。
@@ -195,11 +224,14 @@ write("docs/icons.md", `# 图标目录与治理
 | 状态 | 图标 | 容器 | 辅助文字 | 图形 |
 | --- | --- | --- | --- | --- |
 | 未选中 | \`mutedForeground\` | 透明 | \`mutedForeground\` | 描边 |
-| 普通选中 | \`onAccent\` | \`accent\` | \`onAccent\` | 保持原图形 |
-| 已点赞 | \`like\` (${contract.palette.like}) | \`likeSoft\` (${contract.palette.likeSoft}) | \`foreground\` | 实心 |
-| 已收藏 | \`bookmark\` (${contract.palette.bookmark}) | \`bookmarkSoft\` (${contract.palette.bookmarkSoft}) | \`foreground\` | 实心 |
+| Hover / Focus | 当前 tone | 图标命中区 10% 同色圆形状态层 | 保持中性 | 保持当前图形 |
+| Pressed | 当前 tone | 图标命中区 15% 同色圆形状态层 | 保持中性 | 保持当前图形 |
+| 普通选中 | \`onAccent\` | 透明 | \`foreground\` | 保持原图形并要求可见状态文字 |
+| 已点赞 | \`like\` (${contract.palette.like}) | 透明 | \`foreground\` | 实心 |
+| 已收藏 | \`bookmark\` (${contract.palette.bookmark}) | 透明 | \`foreground\` | 实心 |
+| 已订阅 | \`brandStrong\` (${contract.palette.brandStrong}) | 透明 | \`foreground\` | 实心 |
 
-Web hover 与 pressed 状态层透明度分别为 ${icons.controls.stateLayerOpacity.hover} 与 ${icons.controls.stateLayerOpacity.pressed}；禁用内容透明度为 ${icons.controls.stateLayerOpacity.disabledContent}。Pending 保持提交前状态并显示加载指示，不能回退成未选中态。
+状态层颜色继承图标 currentColor，hover/focus 与 pressed 透明度分别为 ${icons.controls.stateLayer.hoverOpacity} 与 ${icons.controls.stateLayer.pressedOpacity}；禁用内容透明度为 ${icons.controls.disabledContentOpacity}。Pending 保持提交前 tone 并显示同色加载指示，不能回退成未选中态。
 
 ## 语义目录
 
@@ -513,9 +545,7 @@ write("web/tokens.css", `/* 由 contracts/foundation.v1.json 生成，禁止手�
   --accent: ${cssHex(p.accent)};
   --accent-foreground: ${cssHex(p.onAccent)};
   --like: ${cssHex(p.like)};
-  --like-soft: ${cssHex(p.likeSoft)};
   --bookmark: ${cssHex(p.bookmark)};
-  --bookmark-soft: ${cssHex(p.bookmarkSoft)};
   --destructive: ${cssHex(p.destructive)};
   --destructive-foreground: ${cssHex(p.onDestructive)};
   --destructive-soft: ${cssHex(p.destructiveSoft)};
@@ -573,9 +603,12 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --motion-slow: ${motion.slowMs}ms;
   --ease-standard: ${motion.standardEase};
   --ease-exit: ${motion.exitEase};
-  --icon-control-hover-state-opacity: ${icons.controls.stateLayerOpacity.hover};
-  --icon-control-pressed-state-opacity: ${icons.controls.stateLayerOpacity.pressed};
-  --icon-control-disabled-content-opacity: ${icons.controls.stateLayerOpacity.disabledContent};
+  --icon-control-state-layer-color: currentColor;
+  --icon-control-state-layer-radius: 999px;
+  --icon-control-hover-state-opacity: ${icons.controls.stateLayer.hoverOpacity};
+  --icon-control-focus-state-opacity: ${icons.controls.stateLayer.focusOpacity};
+  --icon-control-pressed-state-opacity: ${icons.controls.stateLayer.pressedOpacity};
+  --icon-control-disabled-content-opacity: ${icons.controls.disabledContentOpacity};
   --element-internal-reference-foreground: ${cssPaletteValue(elements.inline.internalReference.foreground)};
   --element-internal-reference-surface: ${cssPaletteValue(elements.inline.internalReference.surface)};
   --element-internal-reference-padding-block: ${elements.web.internalReference.paddingBlockEm}em;
@@ -672,17 +705,23 @@ ${paletteLines}
 abstract final class WenyouIconControlContract {
   static const Color inactiveForeground = WenyouFoundationPalette.mutedForeground;
   static const Color genericSelectedForeground = WenyouFoundationPalette.onAccent;
-  static const Color genericSelectedSurface = WenyouFoundationPalette.accent;
+  static const Color genericSelectedSurface = Colors.transparent;
   static const Color likeSelectedForeground = WenyouFoundationPalette.like;
-  static const Color likeSelectedSurface = WenyouFoundationPalette.likeSoft;
+  static const Color likeSelectedSurface = Colors.transparent;
   static const Color bookmarkSelectedForeground = WenyouFoundationPalette.bookmark;
-  static const Color bookmarkSelectedSurface = WenyouFoundationPalette.bookmarkSoft;
+  static const Color bookmarkSelectedSurface = Colors.transparent;
+  static const Color subscriptionSelectedForeground = WenyouFoundationPalette.brandStrong;
+  static const Color subscriptionSelectedSurface = Colors.transparent;
   static const Color supportingInactive = WenyouFoundationPalette.mutedForeground;
   static const Color supportingSelected = WenyouFoundationPalette.foreground;
   static const Color focusRing = WenyouFoundationPalette.brandStrong;
-  static const double hoverStateLayerOpacity = ${icons.controls.stateLayerOpacity.hover};
-  static const double pressedStateLayerOpacity = ${icons.controls.stateLayerOpacity.pressed};
-  static const double disabledContentOpacity = ${icons.controls.stateLayerOpacity.disabledContent};
+  static const String stateLayerColor = ${dartString(icons.controls.stateLayer.color)};
+  static const String stateLayerShape = ${dartString(icons.controls.stateLayer.shape)};
+  static const String stateLayerTarget = ${dartString(icons.controls.stateLayer.target)};
+  static const double hoverStateLayerOpacity = ${icons.controls.stateLayer.hoverOpacity};
+  static const double focusStateLayerOpacity = ${icons.controls.stateLayer.focusOpacity};
+  static const double pressedStateLayerOpacity = ${icons.controls.stateLayer.pressedOpacity};
+  static const double disabledContentOpacity = ${icons.controls.disabledContentOpacity};
   static const String pendingVisual = ${dartString(icons.controls.pendingVisual)};
 }
 
@@ -877,6 +916,9 @@ ${Object.entries(images.roles).map(([role, value]) => `    ${dartString(role)}: 
 for (const glyphId of glyphIds) {
   write(`packages/flutter/icons/${glyphId}.svg`, glyphSvgs[glyphId]);
 }
+for (const glyphId of filledGlyphIds) {
+  write(`packages/flutter/icons/${glyphId}-filled.svg`, filledGlyphSvgs[glyphId]);
+}
 const dartSemanticFields = Object.entries(icons.semantics)
   .map(([semanticId, glyphId]) => `  static const String ${dartIdentifier(semanticId)} = ${dartString(semanticId)}; // ${glyphId}`)
   .join("\n");
@@ -886,6 +928,8 @@ const dartSemanticEntries = Object.entries(icons.semantics)
 write("packages/flutter/lib/src/wenyou_icons.dart", `// 由 contracts/foundation.v1.json 与 Lucide ${icons.source.version} 生成，禁止手改。
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+enum WenyouIconVariant { outline, filled }
 
 abstract final class WenyouIconIds {
 ${dartSemanticFields}
@@ -900,10 +944,20 @@ abstract final class WenyouIconContract {
   static const Map<String, String> glyphs = <String, String>{
 ${dartSemanticEntries}
   };
+  static const Set<String> filledGlyphs = <String>{${filledGlyphIds.map(dartString).join(", ")}};
 
-  static String assetName(String semanticId) {
+  static String assetName(
+    String semanticId, {
+    WenyouIconVariant variant = WenyouIconVariant.outline,
+  }) {
     final glyph = glyphs[semanticId];
     if (glyph == null) throw ArgumentError.value(semanticId, 'semanticId', 'Unknown Wenyou icon semantic');
+    if (variant == WenyouIconVariant.filled) {
+      if (!filledGlyphs.contains(glyph)) {
+        throw ArgumentError.value(semanticId, 'semanticId', 'Wenyou icon has no filled variant');
+      }
+      return 'icons/\$glyph-filled.svg';
+    }
     return 'icons/\$glyph.svg';
   }
 }
@@ -914,6 +968,7 @@ class WenyouIcon extends StatelessWidget {
     this.size = WenyouIconContract.defaultSize,
     this.color,
     this.semanticLabel,
+    this.variant = WenyouIconVariant.outline,
     super.key,
   });
 
@@ -921,12 +976,13 @@ class WenyouIcon extends StatelessWidget {
   final double size;
   final Color? color;
   final String? semanticLabel;
+  final WenyouIconVariant variant;
 
   @override
   Widget build(BuildContext context) {
     final resolvedColor = color ?? IconTheme.of(context).color ?? DefaultTextStyle.of(context).style.color;
     final picture = SvgPicture.asset(
-      WenyouIconContract.assetName(semanticId),
+      WenyouIconContract.assetName(semanticId, variant: variant),
       package: 'wenyousite_foundation',
       width: size,
       height: size,
@@ -974,6 +1030,7 @@ const manifest = JSON.stringify({
     version: icons.source.version,
     license: icons.source.license,
     glyphSha256,
+    filledGlyphSha256,
   },
   fonts: contract.fonts.map(({ role, family, sha256, webSha256 }) => ({
     role,

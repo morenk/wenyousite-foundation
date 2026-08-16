@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+enum WenyouIconVariant { outline, filled }
+
 abstract final class WenyouIconIds {
   static const String navigationHome = 'navigation.home'; // house
   static const String navigationMoments = 'navigation.moments'; // sparkles
@@ -56,6 +58,8 @@ abstract final class WenyouIconIds {
   static const String actionBlock = 'action.block'; // ban
   static const String actionFollow = 'action.follow'; // user-plus
   static const String actionUnfollow = 'action.unfollow'; // user-minus
+  static const String actionSubscribe = 'action.subscribe'; // bell
+  static const String actionUnsubscribe = 'action.unsubscribe'; // bell-off
   static const String actionBookmark = 'action.bookmark'; // bookmark
   static const String actionRemoveBookmark = 'action.remove-bookmark'; // bookmark-x
   static const String actionRemoveTag = 'action.remove-tag'; // tag-x
@@ -238,6 +242,8 @@ abstract final class WenyouIconContract {
     'action.block': 'ban',
     'action.follow': 'user-plus',
     'action.unfollow': 'user-minus',
+    'action.subscribe': 'bell',
+    'action.unsubscribe': 'bell-off',
     'action.bookmark': 'bookmark',
     'action.remove-bookmark': 'bookmark-x',
     'action.remove-tag': 'tag-x',
@@ -359,10 +365,20 @@ abstract final class WenyouIconContract {
     'status.trending': 'trending-up',
     'status.user-unavailable': 'user-round-x',
   };
+  static const Set<String> filledGlyphs = <String>{'bell', 'bookmark', 'heart'};
 
-  static String assetName(String semanticId) {
+  static String assetName(
+    String semanticId, {
+    WenyouIconVariant variant = WenyouIconVariant.outline,
+  }) {
     final glyph = glyphs[semanticId];
     if (glyph == null) throw ArgumentError.value(semanticId, 'semanticId', 'Unknown Wenyou icon semantic');
+    if (variant == WenyouIconVariant.filled) {
+      if (!filledGlyphs.contains(glyph)) {
+        throw ArgumentError.value(semanticId, 'semanticId', 'Wenyou icon has no filled variant');
+      }
+      return 'icons/$glyph-filled.svg';
+    }
     return 'icons/$glyph.svg';
   }
 }
@@ -373,6 +389,7 @@ class WenyouIcon extends StatelessWidget {
     this.size = WenyouIconContract.defaultSize,
     this.color,
     this.semanticLabel,
+    this.variant = WenyouIconVariant.outline,
     super.key,
   });
 
@@ -380,12 +397,13 @@ class WenyouIcon extends StatelessWidget {
   final double size;
   final Color? color;
   final String? semanticLabel;
+  final WenyouIconVariant variant;
 
   @override
   Widget build(BuildContext context) {
     final resolvedColor = color ?? IconTheme.of(context).color ?? DefaultTextStyle.of(context).style.color;
     final picture = SvgPicture.asset(
-      WenyouIconContract.assetName(semanticId),
+      WenyouIconContract.assetName(semanticId, variant: variant),
       package: 'wenyousite_foundation',
       width: size,
       height: size,

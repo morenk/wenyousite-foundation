@@ -23,6 +23,9 @@ for (const [label, mutate] of [
   ["缺少无障碍契约", (value) => { delete value.accessibility; }],
   ["缺少互动控件契约", (value) => { delete value.experiences.icons.controls; }],
   ["未知互动控件字段", (value) => { value.experiences.icons.controls.unknown = true; }],
+  ["缺少订阅互动 tone", (value) => { delete value.experiences.icons.controls.selected.subscription; }],
+  ["选中态错误使用背景", (value) => { value.experiences.icons.controls.selected.like.surface = "accent"; }],
+  ["遗留互动柔和色", (value) => { value.palette.likeSoft = "#FCE7F0"; }],
   ["缺少元素契约", (value) => { delete value.experiences.elements; }],
   ["未知元素字段", (value) => { value.experiences.elements.unknown = true; }],
   ["错误平台单位", (value) => { value.profiles.mobile.unit = "px"; }],
@@ -86,6 +89,9 @@ if (!read("pnpm-lock.yaml").includes(icons.source.integrity)) failures.push("Luc
 if (!fs.existsSync(path.join(root, icons.source.license))) failures.push("Lucide 图标许可证不存在");
 const semanticIds = Object.keys(icons.semantics);
 const glyphIds = [...new Set(Object.values(icons.semantics))];
+const filledGlyphIds = [...new Set(Object.values(icons.controls.selected)
+  .filter((state) => state.glyph === "filled" && state.semanticId)
+  .map((state) => icons.semantics[state.semanticId]))];
 if (semanticIds.length !== new Set(semanticIds).size) failures.push("图标语义 ID 重复");
 for (const glyphId of glyphIds) {
   const upstream = path.join(root, "node_modules", icons.source.package, "icons", `${glyphId}.svg`);
@@ -98,11 +104,27 @@ for (const glyphId of glyphIds) {
     if (hash !== manifest.icons?.glyphSha256?.[glyphId]) failures.push(`Flutter 图标资产校验和不一致 ${glyphId}`);
   }
 }
-const packagedGlyphs = fs.readdirSync(path.join(root, "packages", "flutter", "icons"))
-  .filter((fileName) => fileName.endsWith(".svg"))
-  .map((fileName) => fileName.slice(0, -4));
-for (const glyphId of packagedGlyphs) {
-  if (!glyphIds.includes(glyphId)) failures.push(`Flutter package 存在未纳入契约的图标 ${glyphId}`);
+for (const glyphId of filledGlyphIds) {
+  const outlineAsset = `packages/flutter/icons/${glyphId}.svg`;
+  const filledAsset = `packages/flutter/icons/${glyphId}-filled.svg`;
+  if (!fs.existsSync(path.join(root, filledAsset))) {
+    failures.push(`Flutter package 缺少实心图标资产 ${glyphId}`);
+    continue;
+  }
+  const expected = read(outlineAsset).trimEnd().replace('fill="none"', 'fill="currentColor"');
+  const actual = read(filledAsset).trimEnd();
+  if (actual !== expected) failures.push(`实心图标 ${glyphId} 必须只改变同一 Lucide 路径的填充呈现`);
+  const hash = crypto.createHash("sha256").update(actual).digest("hex");
+  if (hash !== manifest.icons?.filledGlyphSha256?.[glyphId]) failures.push(`实心图标资产校验和不一致 ${glyphId}`);
+}
+const packagedIconFiles = fs.readdirSync(path.join(root, "packages", "flutter", "icons"))
+  .filter((fileName) => fileName.endsWith(".svg"));
+const expectedIconFiles = new Set([
+  ...glyphIds.map((glyphId) => `${glyphId}.svg`),
+  ...filledGlyphIds.map((glyphId) => `${glyphId}-filled.svg`),
+]);
+for (const fileName of packagedIconFiles) {
+  if (!expectedIconFiles.has(fileName)) failures.push(`Flutter package 存在未纳入契约的图标 ${fileName}`);
 }
 for (const capability of Object.keys(contract.experiences.editor.labels)) {
   const semanticId = capability === "hr"
@@ -117,8 +139,7 @@ for (const capability of Object.keys(contract.experiences.editor.labels)) {
 
 const requiredPalette = [
   "background", "foreground", "surface", "primary", "onPrimary", "brandStrong",
-  "secondary", "muted", "mutedForeground", "accent", "like", "likeSoft",
-  "bookmark", "bookmarkSoft", "border", "input",
+  "secondary", "muted", "mutedForeground", "accent", "like", "bookmark", "border", "input",
 ];
 for (const token of requiredPalette) {
   if (!/^#[0-9A-F]{6}$/.test(contract.palette[token] ?? "")) {
@@ -127,9 +148,7 @@ for (const token of requiredPalette) {
 }
 const expectedInteractionPalette = {
   like: "#D81B60",
-  likeSoft: "#FCE7F0",
   bookmark: "#B77900",
-  bookmarkSoft: "#FFF3BF",
 };
 if (JSON.stringify(Object.fromEntries(Object.keys(expectedInteractionPalette).map((token) => [token, contract.palette[token]]))) !== JSON.stringify(expectedInteractionPalette)) {
   failures.push("点赞与收藏互动色偏离已审定色板");
@@ -168,22 +187,16 @@ for (const [surface, foreground, label] of [
   }
 }
 
-for (const [surface, foreground, label] of [
-  [contract.palette.background, contract.palette.like, "background/like"],
-  [contract.palette.likeSoft, contract.palette.like, "likeSoft/like"],
-  [contract.palette.background, contract.palette.bookmark, "background/bookmark"],
-  [contract.palette.bookmarkSoft, contract.palette.bookmark, "bookmarkSoft/bookmark"],
-]) {
-  if (contrast(surface, foreground) < contract.accessibility.contrast.nonText) {
-    failures.push(`${label} 未达到图标与控件状态对比度要求`);
-  }
-}
-for (const [surface, label] of [
-  [contract.palette.likeSoft, "likeSoft/foreground"],
-  [contract.palette.bookmarkSoft, "bookmarkSoft/foreground"],
-]) {
-  if (contrast(surface, contract.palette.foreground) < contract.accessibility.contrast.normalText) {
-    failures.push(`${label} 未达到辅助文字对比度要求`);
+for (const surfaceToken of icons.controls.hostSurfaces) {
+  for (const [foregroundToken, label] of [
+    [icons.controls.selected.default.foreground, "default"],
+    [icons.controls.selected.like.foreground, "like"],
+    [icons.controls.selected.bookmark.foreground, "bookmark"],
+    [icons.controls.selected.subscription.foreground, "subscription"],
+  ]) {
+    if (contrast(contract.palette[surfaceToken], contract.palette[foregroundToken]) < contract.accessibility.contrast.nonText) {
+      failures.push(`${surfaceToken}/${label} 未达到透明图标控件状态对比度要求`);
+    }
   }
 }
 
@@ -191,10 +204,32 @@ const iconControls = icons.controls;
 if (
   iconControls.selected.like.semanticId !== "action.like"
   || iconControls.selected.bookmark.semanticId !== "action.bookmark"
+  || iconControls.selected.subscription.semanticId !== "action.subscribe"
   || icons.semantics[iconControls.selected.like.semanticId] !== "heart"
   || icons.semantics[iconControls.selected.bookmark.semanticId] !== "bookmark"
+  || icons.semantics[iconControls.selected.subscription.semanticId] !== "bell"
 ) {
-  failures.push("点赞与收藏互动色必须绑定对应 Foundation 语义图标");
+  failures.push("点赞、收藏与订阅互动色必须绑定对应 Foundation 语义图标");
+}
+if (
+  Object.values(iconControls.selected).some((state) => state.surface !== "transparent")
+  || iconControls.selected.like.glyph !== "filled"
+  || iconControls.selected.bookmark.glyph !== "filled"
+  || iconControls.selected.subscription.glyph !== "filled"
+  || !iconControls.selected.default.requiresVisibleStateCue
+) {
+  failures.push("图标选中态必须使用透明容器，并通过实心图形或可见文字提供非颜色线索");
+}
+if (
+  iconControls.stateLayer.color !== "currentColor"
+  || iconControls.stateLayer.shape !== "circle"
+  || iconControls.stateLayer.target !== "icon-hit-area"
+  || iconControls.stateLayer.hoverOpacity !== 0.1
+  || iconControls.stateLayer.focusOpacity !== 0.1
+  || iconControls.stateLayer.pressedOpacity !== 0.15
+  || iconControls.disabledContentOpacity !== 0.38
+) {
+  failures.push("图标控件瞬时状态层或禁用透明度偏离审定值");
 }
 
 const elements = contract.experiences.elements;
@@ -214,12 +249,6 @@ if (
   || elements.web.internalReference.iconSizeEm !== 0.9
 ) {
   failures.push("Web 站内传送门尺寸偏离审定的轻量内联胶囊");
-}
-if (
-  elements.web.internalReference.hoverStateOpacity !== icons.controls.stateLayerOpacity.hover
-  || elements.web.internalReference.pressedStateOpacity !== icons.controls.stateLayerOpacity.pressed
-) {
-  failures.push("传送门 hover/pressed 状态层必须复用互动控件透明度");
 }
 if (
   elements.block.quote.fontStyle !== "normal"
