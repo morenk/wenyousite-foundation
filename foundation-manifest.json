@@ -1,8 +1,8 @@
 {
-  "version": "4.0.0",
+  "version": "5.0.0",
   "schemaVersion": 1,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "9e566f7c3e18e4bb6d8b78bf1f24a0940f41b976bc79ab2117549000c3e657cc",
+  "contractSha256": "86ab033211fd1abe1a7a05f0f2565fc9eb32c509553e35eb100b3fbe2691b42b",
   "features": {
     "typography": true,
     "interaction": true,
@@ -14,8 +14,8 @@
   "artifactSha256": {
     "dist/icons.js": "5f4d1a19d22020f9e485aa8f1072d1705687b94f467d93fa2939c88d668f5b30",
     "dist/icons.d.ts": "8a73116d2c0ee1ed10d238103711c599dbff32f2a1875cc191421e7ff498a29f",
-    "dist/editor.js": "ac807c9bee02e77d89698fbe776b167542c6a1ce6a3cc70e1ebf9dcc321e7a67",
-    "dist/editor.d.ts": "d35a156533bc68b732867815d87837aae0555c8f7b64ef4959fe3ec43cfabb99",
+    "dist/editor.js": "2ccef8612600ffe61a368ec30e20cb5a8c8331b7c304b0ed46be89ac0d285f6a",
+    "dist/editor.d.ts": "48db5acea5e332628dca10de2c9560291f105a13d265d36aae1330f0c8ce187c",
     "dist/images.js": "48bda60db403d754b5c601d5f092beb0b4ea942bd4596b77aba1399d8aa5c3a4",
     "dist/images.d.ts": "de0d1b52f15967ab723c7b0de317db670e863c3381eb93c9c84cc9446b97da26",
     "dist/collections.js": "665b720eb2a0bcc148ce1f67894aa9068154eef9d49b41a62b7d2bc281342793",
@@ -30,11 +30,11 @@
     "dist/navigation.d.ts": "c69a86188a60a8e299e996dc5f6457fd96bb34237d0340b128784d982c88b2c4",
     "dist/language.js": "3de00fdc91803990975314b5d1b16d787ea72f28586dcaa860f04827cdd157d9",
     "dist/language.d.ts": "7f178e8bb8b62b56e9732c482d2d580d69af70a4e265bb2e9949542345818d6f",
-    "dist/elements.js": "c0ae7e0010c043ab94f195a6a8e1f6f662dda61e5456da6a866126d1ec25c89e",
-    "dist/elements.d.ts": "c8931721ec3b297170c1e7d5d1c67192a1ce61f25d9f1e693a6b18cf391d8610",
+    "dist/elements.js": "fc560c1b8457ade79e8f254783ecb0b6a9fdea2644a654546bf30c444a8d5a2b",
+    "dist/elements.d.ts": "0117d46903ae35de171c01eb2f48c76080dba0609fae9590150350cdcc874ced",
     "web/tokens.css": "886fc8e742797cc3402a37a3ff1e680e9b9930c22aaf6e2917af4142fe2a3bf3",
     "web/fonts.css": "2064b6f73a60f670ce27ddeaa7dbc9590776fb3c31b5644c5ee0dd35c4f31ed7",
-    "packages/flutter/lib/src/foundation_tokens.dart": "bf185f7db42dec61c1bc99c99061907ac303ff90d4c4fd01ed1478538e999777",
+    "packages/flutter/lib/src/foundation_tokens.dart": "c099890d2e425b312c27bd25a0de6c8c22b03995d466e21c5f97f2263a071008",
     "packages/flutter/lib/src/wenyou_icons.dart": "c0b833be42aeca92d9b0522022b5f42321fdc8d113af1e53487d80f4e721f658"
   },
   "icons": {

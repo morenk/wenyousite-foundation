@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '4.0.0';
+  static const String value = '5.0.0';
   static const int schema = 1;
 }
 
@@ -82,7 +82,6 @@ abstract final class WenyouElementContract {
   static const double categoryMarkerWidth = 4.0;
   static const Color categoryMarkerForeground = WenyouFoundationPalette.mutedForeground;
   static const String categoryBadgeTone = 'neutral';
-  static const bool ignoreApiCategoryColor = true;
 }
 
 abstract final class WenyouFoundationTypography {

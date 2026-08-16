@@ -251,7 +251,6 @@ if (
   || elements.metadata.categoryMarker.colorOwner !== "foundation"
   || elements.metadata.categoryMarker.foreground !== "mutedForeground"
   || elements.metadata.categoryMarker.badgeTone !== "neutral"
-  || elements.metadata.categoryMarker.apiColorBehavior !== "ignored"
   || !elements.metadata.categoryMarker.neverSoleCue
 ) {
   failures.push("跨端元素命中区或分类中性标记规则不符合平台 profile");

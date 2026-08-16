@@ -162,7 +162,6 @@ export const METADATA_ELEMENT_STYLES = Object.freeze({
     "colorOwner": "foundation",
     "foreground": "mutedForeground",
     "badgeTone": "neutral",
-    "apiColorBehavior": "ignored",
     "neverSoleCue": true
   }
 });

@@ -1,5 +1,10 @@
 # Foundation Changelog
 
+## 5.0.0
+
+- `elements`：主题帖分类 API 删除颜色字段后，移除 Foundation 中用于兼容历史字段的 `apiColorBehavior` 语义。
+- 分类线路与 Badge 继续使用 Foundation 中性呈现，不改变既有布局和文字线索。
+
 ## 4.0.0
 
 - `elements`：移除主题帖分类专属色语义；分类线路统一使用中性前景，分类 Badge 复用 neutral tone，客户端忽略 API 历史颜色值。

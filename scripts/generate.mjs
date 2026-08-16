@@ -709,7 +709,6 @@ abstract final class WenyouElementContract {
   static const double categoryMarkerWidth = ${elements.mobile.categoryMarkerWidthDp}.0;
   static const Color categoryMarkerForeground = WenyouFoundationPalette.mutedForeground;
   static const String categoryBadgeTone = ${dartString(elements.metadata.categoryMarker.badgeTone)};
-  static const bool ignoreApiCategoryColor = true;
 }
 
 abstract final class WenyouFoundationTypography {
