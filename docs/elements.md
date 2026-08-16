@@ -7,7 +7,7 @@
 - 状态与类别不能只靠颜色表达；文字、图标、前缀或结构至少保留一种非色彩线索。
 - 阅读态与编辑态使用等价元素。编辑器中的传送门保持原子编辑并阻止导航，发布后才按链接行为打开目标。
 - 非交互 Badge 按内容收缩，不为视觉对齐伪造点击命中区；独立可点击元素服从 Web 32px、Flutter 48dp 的平台下限。
-- Markdown、站内坐标、通知数量与分类色值仍由后端/API 契约拥有，Foundation 只定义呈现。
+- Markdown、站内坐标与通知数量仍由后端/API 契约拥有；分类接口中的历史颜色字段不参与客户端呈现。
 
 ## 正文内联与块级元素
 
@@ -26,10 +26,10 @@
 - Badge 只有 `default` 与 `compact` 两种尺寸，tone 固定为 `neutral`、`brand`、`success`、`warning`、`danger`、`info`；所有 tone 复用既有色对。
 - 主题标签是可点击浏览入口，以 `#` 提供文字线索并使用中性描边；Web 命中高度不小于 32px。
 - 等级固定为 `Lv.N`，使用紧凑圆角和 utility 数字；未读数隐藏零值、超过 99 显示 `99+`。
-- 分类线路消费 API 提供的类别颜色。Web 线路宽 4px；分类 Badge 只用低透明度同色底与边，前景保持正文色，且必须同时显示类别文字。
+- 分类不再使用专属色。Web 线路保持 4px 结构宽度并统一使用 `mutedForeground`；分类 Badge 复用 neutral tone，且必须同时显示类别文字。API 即使返回历史颜色值也应忽略。
 
 ## 生成物
 
 - Web/TypeScript：`@wenyousite/foundation/elements` 导出元素样式、平台 profile、`ElementTone` 与 `BadgeSize`。
 - Web/CSS：`web/tokens.css` 导出 `--element-*`。
-- Flutter：`WenyouElementContract` 导出移动 profile 的尺寸、状态与分类透明度常量。
+- Flutter：`WenyouElementContract` 导出移动 profile 的尺寸、状态与分类中性呈现常量。

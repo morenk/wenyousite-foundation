@@ -248,9 +248,13 @@ if (
   elements.web.interactiveMinimumPx !== contract.profiles.web.minimumCompactTarget
   || elements.mobile.interactiveMinimumDp !== contract.profiles.mobile.minimumControlTarget
   || elements.web.categoryMarkerWidthPx !== 4
+  || elements.metadata.categoryMarker.colorOwner !== "foundation"
+  || elements.metadata.categoryMarker.foreground !== "mutedForeground"
+  || elements.metadata.categoryMarker.badgeTone !== "neutral"
+  || elements.metadata.categoryMarker.apiColorBehavior !== "ignored"
   || !elements.metadata.categoryMarker.neverSoleCue
 ) {
-  failures.push("跨端元素命中区或分类标记无障碍规则不符合平台 profile");
+  failures.push("跨端元素命中区或分类中性标记规则不符合平台 profile");
 }
 if (
   iconControls.supportingContent.selected !== "foreground"

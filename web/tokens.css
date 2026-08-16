@@ -143,6 +143,5 @@
   --element-unread-count-height: 16px;
   --element-unread-count-font-size: 10px;
   --element-category-marker-width: 4px;
-  --element-category-badge-tint-opacity: 0.12;
-  --element-category-badge-border-opacity: 0.33;
+  --element-category-marker-foreground: var(--muted-foreground);
 }

@@ -1,5 +1,10 @@
 # Foundation Changelog
 
+## 4.0.0
+
+- `elements`：移除主题帖分类专属色语义；分类线路统一使用中性前景，分类 Badge 复用 neutral tone，客户端忽略 API 历史颜色值。
+- `generated`：以 `--element-category-marker-foreground` 与跨端中性呈现常量替代分类 Badge 透明度常量。
+
 ## 3.2.0
 
 - `shared`：新增核心元素系统，统一传送门、普通链接、提及、行内代码、骰子、引用、分隔线以及五类元数据元素的语义、状态和跨端边界。

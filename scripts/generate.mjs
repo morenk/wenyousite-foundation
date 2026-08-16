@@ -617,8 +617,7 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --element-unread-count-height: ${elements.metadata.unreadCount.heightPx}px;
   --element-unread-count-font-size: ${elements.metadata.unreadCount.fontSizePx}px;
   --element-category-marker-width: ${elements.web.categoryMarkerWidthPx}px;
-  --element-category-badge-tint-opacity: ${elements.metadata.categoryMarker.badgeTintOpacity};
-  --element-category-badge-border-opacity: ${elements.metadata.categoryMarker.badgeBorderOpacity};
+  --element-category-marker-foreground: ${cssPaletteValue(elements.metadata.categoryMarker.foreground)};
 }`);
 
 write("web/fonts.css", `/* 字体版本与校验和以 contracts/foundation.v1.json 为准。 */
@@ -708,8 +707,9 @@ abstract final class WenyouElementContract {
   static const double unreadCountFontSize = ${elements.metadata.unreadCount.fontSizePx}.0;
   static const String unreadMaximumDisplay = ${dartString(elements.metadata.unreadCount.maximumDisplay)};
   static const double categoryMarkerWidth = ${elements.mobile.categoryMarkerWidthDp}.0;
-  static const double categoryBadgeTintOpacity = ${elements.metadata.categoryMarker.badgeTintOpacity};
-  static const double categoryBadgeBorderOpacity = ${elements.metadata.categoryMarker.badgeBorderOpacity};
+  static const Color categoryMarkerForeground = WenyouFoundationPalette.mutedForeground;
+  static const String categoryBadgeTone = ${dartString(elements.metadata.categoryMarker.badgeTone)};
+  static const bool ignoreApiCategoryColor = true;
 }
 
 abstract final class WenyouFoundationTypography {

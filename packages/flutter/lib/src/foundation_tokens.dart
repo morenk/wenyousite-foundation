@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '3.2.0';
+  static const String value = '4.0.0';
   static const int schema = 1;
 }
 
@@ -80,8 +80,9 @@ abstract final class WenyouElementContract {
   static const double unreadCountFontSize = 10.0;
   static const String unreadMaximumDisplay = '99+';
   static const double categoryMarkerWidth = 4.0;
-  static const double categoryBadgeTintOpacity = 0.12;
-  static const double categoryBadgeBorderOpacity = 0.33;
+  static const Color categoryMarkerForeground = WenyouFoundationPalette.mutedForeground;
+  static const String categoryBadgeTone = 'neutral';
+  static const bool ignoreApiCategoryColor = true;
 }
 
 abstract final class WenyouFoundationTypography {

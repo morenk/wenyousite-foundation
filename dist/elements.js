@@ -159,10 +159,10 @@ export const METADATA_ELEMENT_STYLES = Object.freeze({
     "zeroBehavior": "hidden"
   },
   "categoryMarker": {
-    "colorOwner": "api-category",
-    "badgeForeground": "foreground",
-    "badgeTintOpacity": 0.12,
-    "badgeBorderOpacity": 0.33,
+    "colorOwner": "foundation",
+    "foreground": "mutedForeground",
+    "badgeTone": "neutral",
+    "apiColorBehavior": "ignored",
     "neverSoleCue": true
   }
 });
