@@ -96,6 +96,7 @@ write("dist/icons.js", `/** 由 contracts/foundation.v1.json 与 Lucide ${icons.
 export const ICON_FAMILY = ${JSON.stringify(icons.source.family)};
 export const ICON_VERSION = ${JSON.stringify(icons.source.version)};
 export const ICON_STYLE = Object.freeze(${js(icons.style)});
+export const ICON_CONTROL_STATES = Object.freeze(${js(icons.controls)});
 export const ICON_SEMANTICS = Object.freeze(${js(icons.semantics)});
 export const ICON_GLYPH_NODES = Object.freeze(${js(glyphNodes)});
 export const ICON_GLYPH_SVGS = Object.freeze(${js(glyphSvgs)});
@@ -118,6 +119,7 @@ const glyphUnion = glyphIds.map((id) => JSON.stringify(id)).join(" | ");
 write("dist/icons.d.ts", `/** 由 contracts/foundation.v1.json 与 Lucide ${icons.source.version} 生成，禁止手改。 */
 export type IconSemanticId = ${semanticUnion};
 export type IconGlyphId = ${glyphUnion};
+export type IconControlTone = "default" | "like" | "bookmark";
 export type IconNode = readonly [elementName: "circle" | "ellipse" | "line" | "path" | "polygon" | "polyline" | "rect", attributes: Readonly<Record<string, string>>];
 export declare const ICON_FAMILY: ${JSON.stringify(icons.source.family)};
 export declare const ICON_VERSION: ${JSON.stringify(icons.source.version)};
@@ -132,6 +134,7 @@ export declare const ICON_STYLE: Readonly<{
   decorativeSemantics: "hidden";
   interactiveLabelOwner: "control";
 }>;
+export declare const ICON_CONTROL_STATES: Readonly<${JSON.stringify(icons.controls)}>;
 export declare const ICON_SEMANTICS: Readonly<Record<IconSemanticId, IconGlyphId>>;
 export declare const ICON_GLYPH_NODES: Readonly<Record<IconGlyphId, readonly IconNode[]>>;
 export declare const ICON_GLYPH_SVGS: Readonly<Record<IconGlyphId, string>>;
@@ -151,7 +154,9 @@ write("docs/icons.md", `# 图标目录与治理
 ## 使用规则
 
 - Web 与 Flutter 必须消费 Foundation 生成产物；第三方编辑器使用同源 SVG 字符串，不手写近似路径。
-- 交互状态由控件容器表达；选中态保持同一图形，使用柔粉背景和前景色。
+- 未选中图标使用低强调紫灰描边；普通选中态保持同一图形，使用柔粉背景和前景色。
+- 点赞与收藏是显式语义例外：选中后仍使用同一 Lucide 图形，分别切换为实心鲜粉与实心金色，并使用极浅同色容器。计数和文字保持中性正文色。
+- 只读指标与导航目的地不继承互动色；危险命令只使用 destructive 色对，不能借用点赞色。
 - 有文字的控件由控件承担可访问名称，内部图标隐藏；独立图标按钮必须提供明确名称。
 - 新增语义前先搜索本目录。同一图形可以承载多个经过审查的近义语义，但同一语义只能映射一个图形。
 - 品牌标识、分类标记、插画和操作系统专属动作属于显式例外，不进入核心 UI 图标映射。
@@ -163,6 +168,17 @@ write("docs/icons.md", `# 图标目录与治理
 - 画板：${icons.source.viewBox}
 - 默认线宽：${icons.style.strokeWidth}
 - 尺寸角色：紧凑 ${icons.style.compactSize}、默认 ${icons.style.defaultSize}、导航 ${icons.style.navigationSize}
+
+## 互动控件状态
+
+| 状态 | 图标 | 容器 | 辅助文字 | 图形 |
+| --- | --- | --- | --- | --- |
+| 未选中 | \`mutedForeground\` | 透明 | \`mutedForeground\` | 描边 |
+| 普通选中 | \`onAccent\` | \`accent\` | \`onAccent\` | 保持原图形 |
+| 已点赞 | \`like\` (${contract.palette.like}) | \`likeSoft\` (${contract.palette.likeSoft}) | \`foreground\` | 实心 |
+| 已收藏 | \`bookmark\` (${contract.palette.bookmark}) | \`bookmarkSoft\` (${contract.palette.bookmarkSoft}) | \`foreground\` | 实心 |
+
+Web hover 与 pressed 状态层透明度分别为 ${icons.controls.stateLayerOpacity.hover} 与 ${icons.controls.stateLayerOpacity.pressed}；禁用内容透明度为 ${icons.controls.stateLayerOpacity.disabledContent}。Pending 保持提交前状态并显示加载指示，不能回退成未选中态。
 
 ## 语义目录
 
@@ -451,6 +467,10 @@ write("web/tokens.css", `/* 由 contracts/foundation.v1.json 生成，禁止手�
   --muted-foreground: ${cssHex(p.mutedForeground)};
   --accent: ${cssHex(p.accent)};
   --accent-foreground: ${cssHex(p.onAccent)};
+  --like: ${cssHex(p.like)};
+  --like-soft: ${cssHex(p.likeSoft)};
+  --bookmark: ${cssHex(p.bookmark)};
+  --bookmark-soft: ${cssHex(p.bookmarkSoft)};
   --destructive: ${cssHex(p.destructive)};
   --destructive-foreground: ${cssHex(p.onDestructive)};
   --destructive-soft: ${cssHex(p.destructiveSoft)};
@@ -508,6 +528,9 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --motion-slow: ${motion.slowMs}ms;
   --ease-standard: ${motion.standardEase};
   --ease-exit: ${motion.exitEase};
+  --icon-control-hover-state-opacity: ${icons.controls.stateLayerOpacity.hover};
+  --icon-control-pressed-state-opacity: ${icons.controls.stateLayerOpacity.pressed};
+  --icon-control-disabled-content-opacity: ${icons.controls.stateLayerOpacity.disabledContent};
 }`);
 
 write("web/fonts.css", `/* 字体版本与校验和以 contracts/foundation.v1.json 为准。 */
@@ -557,6 +580,23 @@ abstract final class WenyouFoundationVersion {
 
 abstract final class WenyouFoundationPalette {
 ${paletteLines}
+}
+
+abstract final class WenyouIconControlContract {
+  static const Color inactiveForeground = WenyouFoundationPalette.mutedForeground;
+  static const Color genericSelectedForeground = WenyouFoundationPalette.onAccent;
+  static const Color genericSelectedSurface = WenyouFoundationPalette.accent;
+  static const Color likeSelectedForeground = WenyouFoundationPalette.like;
+  static const Color likeSelectedSurface = WenyouFoundationPalette.likeSoft;
+  static const Color bookmarkSelectedForeground = WenyouFoundationPalette.bookmark;
+  static const Color bookmarkSelectedSurface = WenyouFoundationPalette.bookmarkSoft;
+  static const Color supportingInactive = WenyouFoundationPalette.mutedForeground;
+  static const Color supportingSelected = WenyouFoundationPalette.foreground;
+  static const Color focusRing = WenyouFoundationPalette.brandStrong;
+  static const double hoverStateLayerOpacity = ${icons.controls.stateLayerOpacity.hover};
+  static const double pressedStateLayerOpacity = ${icons.controls.stateLayerOpacity.pressed};
+  static const double disabledContentOpacity = ${icons.controls.stateLayerOpacity.disabledContent};
+  static const String pendingVisual = ${dartString(icons.controls.pendingVisual)};
 }
 
 abstract final class WenyouFoundationTypography {
@@ -811,6 +851,7 @@ const manifest = JSON.stringify({
   features: {
     typography: true,
     interaction: true,
+    iconControls: true,
     navigation: true,
     language: true,
   },

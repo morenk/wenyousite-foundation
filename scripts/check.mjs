@@ -21,6 +21,8 @@ for (const [label, mutate] of [
   ["未知根字段", (value) => { value.unknown = true; }],
   ["未知 profile 字段", (value) => { value.profiles.web.unknown = true; }],
   ["缺少无障碍契约", (value) => { delete value.accessibility; }],
+  ["缺少互动控件契约", (value) => { delete value.experiences.icons.controls; }],
+  ["未知互动控件字段", (value) => { value.experiences.icons.controls.unknown = true; }],
   ["错误平台单位", (value) => { value.profiles.mobile.unit = "px"; }],
   ["非法浮层数值", (value) => { value.experiences.overlays.web.layers.popup = "70"; }],
 ]) {
@@ -47,7 +49,7 @@ for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha25
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
   if (hash !== expectedHash) failures.push(`生成产物校验和不一致 ${relativePath}`);
 }
-if (!manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.navigation || !manifest.features?.language) {
+if (!manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language) {
   failures.push("发布清单缺少 v2.2 语义能力清单");
 }
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
@@ -101,12 +103,22 @@ for (const capability of Object.keys(contract.experiences.editor.labels)) {
 
 const requiredPalette = [
   "background", "foreground", "surface", "primary", "onPrimary", "brandStrong",
-  "secondary", "muted", "mutedForeground", "accent", "border", "input",
+  "secondary", "muted", "mutedForeground", "accent", "like", "likeSoft",
+  "bookmark", "bookmarkSoft", "border", "input",
 ];
 for (const token of requiredPalette) {
   if (!/^#[0-9A-F]{6}$/.test(contract.palette[token] ?? "")) {
     failures.push(`缺少或无效色彩 Token：${token}`);
   }
+}
+const expectedInteractionPalette = {
+  like: "#D81B60",
+  likeSoft: "#FCE7F0",
+  bookmark: "#B77900",
+  bookmarkSoft: "#FFF3BF",
+};
+if (JSON.stringify(Object.fromEntries(Object.keys(expectedInteractionPalette).map((token) => [token, contract.palette[token]]))) !== JSON.stringify(expectedInteractionPalette)) {
+  failures.push("点赞与收藏互动色偏离已审定色板");
 }
 
 function luminance(hex) {
@@ -140,6 +152,41 @@ for (const [surface, foreground, label] of [
   if (contrast(surface, foreground) < contract.accessibility.contrast.normalText) {
     failures.push(`${label} 未达到普通文字对比度要求`);
   }
+}
+
+for (const [surface, foreground, label] of [
+  [contract.palette.background, contract.palette.like, "background/like"],
+  [contract.palette.likeSoft, contract.palette.like, "likeSoft/like"],
+  [contract.palette.background, contract.palette.bookmark, "background/bookmark"],
+  [contract.palette.bookmarkSoft, contract.palette.bookmark, "bookmarkSoft/bookmark"],
+]) {
+  if (contrast(surface, foreground) < contract.accessibility.contrast.nonText) {
+    failures.push(`${label} 未达到图标与控件状态对比度要求`);
+  }
+}
+for (const [surface, label] of [
+  [contract.palette.likeSoft, "likeSoft/foreground"],
+  [contract.palette.bookmarkSoft, "bookmarkSoft/foreground"],
+]) {
+  if (contrast(surface, contract.palette.foreground) < contract.accessibility.contrast.normalText) {
+    failures.push(`${label} 未达到辅助文字对比度要求`);
+  }
+}
+
+const iconControls = icons.controls;
+if (
+  iconControls.selected.like.semanticId !== "action.like"
+  || iconControls.selected.bookmark.semanticId !== "action.bookmark"
+  || icons.semantics[iconControls.selected.like.semanticId] !== "heart"
+  || icons.semantics[iconControls.selected.bookmark.semanticId] !== "bookmark"
+) {
+  failures.push("点赞与收藏互动色必须绑定对应 Foundation 语义图标");
+}
+if (
+  iconControls.supportingContent.selected !== "foreground"
+  || iconControls.pendingVisual !== "preserve-state-with-loading-indicator"
+) {
+  failures.push("互动控件辅助内容或 pending 语义发生漂移");
 }
 
 const typeRoleIds = ["pageTitle", "sectionTitle", "subsectionTitle", "body", "compactBody", "label", "caption", "reading"];

@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 1,
-  "version": "3.0.1",
+  "version": "3.1.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -21,6 +21,10 @@
     "mutedForeground": "#6D6775",
     "accent": "#F7DBEA",
     "onAccent": "#68455D",
+    "like": "#D81B60",
+    "likeSoft": "#FCE7F0",
+    "bookmark": "#B77900",
+    "bookmarkSoft": "#FFF3BF",
     "border": "#E8E3EB",
     "input": "#DCD5E0",
     "destructive": "#8A3F50",
@@ -137,6 +141,53 @@
         "selectedState": "same-glyph-on-accent-container",
         "decorativeSemantics": "hidden",
         "interactiveLabelOwner": "control"
+      },
+      "controls": {
+        "inactive": {
+          "foreground": "mutedForeground",
+          "surface": "transparent",
+          "glyph": "outline"
+        },
+        "selected": {
+          "default": {
+            "foreground": "onAccent",
+            "surface": "accent",
+            "glyph": "unchanged"
+          },
+          "like": {
+            "semanticId": "action.like",
+            "foreground": "like",
+            "surface": "likeSoft",
+            "glyph": "filled"
+          },
+          "bookmark": {
+            "semanticId": "action.bookmark",
+            "foreground": "bookmark",
+            "surface": "bookmarkSoft",
+            "glyph": "filled"
+          }
+        },
+        "commands": {
+          "neutral": {
+            "foreground": "foreground",
+            "hoverSurface": "muted"
+          },
+          "destructive": {
+            "foreground": "destructive",
+            "hoverSurface": "destructiveSoft"
+          }
+        },
+        "supportingContent": {
+          "inactive": "mutedForeground",
+          "selected": "foreground"
+        },
+        "focusRing": "brandStrong",
+        "stateLayerOpacity": {
+          "hover": 0.08,
+          "pressed": 0.12,
+          "disabledContent": 0.38
+        },
+        "pendingVisual": "preserve-state-with-loading-indicator"
       },
       "semantics": {
         "navigation.home": "house",

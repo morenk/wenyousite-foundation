@@ -15,6 +15,10 @@
   --muted-foreground: #6d6775;
   --accent: #f7dbea;
   --accent-foreground: #68455d;
+  --like: #d81b60;
+  --like-soft: #fce7f0;
+  --bookmark: #b77900;
+  --bookmark-soft: #fff3bf;
   --destructive: #8a3f50;
   --destructive-foreground: #ffffff;
   --destructive-soft: #f8d2d8;
@@ -95,4 +99,7 @@
   --motion-slow: 240ms;
   --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --icon-control-hover-state-opacity: 0.08;
+  --icon-control-pressed-state-opacity: 0.12;
+  --icon-control-disabled-content-opacity: 0.38;
 }

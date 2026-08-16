@@ -1,5 +1,12 @@
 # Foundation Changelog
 
+## 3.1.0
+
+- `shared`：新增点赞鲜粉与收藏金色的互动语义色对，未选中、普通选中、危险命令、状态层、禁用与 pending 行为进入机器契约。
+- `icons`：点赞与收藏选中态使用同一 Lucide 图形的实心状态和极浅同色容器；只读指标、导航目的地和辅助计数不继承互动色。
+- `generated`：Web 新增互动色与状态层 CSS Token，TypeScript 导出 `ICON_CONTROL_STATES`，Flutter 生成对应色彩与 `WenyouIconControlContract`。
+- `accessibility`：校验互动图标在白底和选中容器上的非文字对比度，并要求辅助文字保持普通文字对比度。
+
 ## 3.0.1
 
 - `mobile`：语义 SVG 在输入框、图标按钮与导航等较大约束容器内保持声明尺寸居中，不再被 48dp 触控区拉伸。

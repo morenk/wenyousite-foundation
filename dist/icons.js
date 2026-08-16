@@ -12,6 +12,53 @@ export const ICON_STYLE = Object.freeze({
   "decorativeSemantics": "hidden",
   "interactiveLabelOwner": "control"
 });
+export const ICON_CONTROL_STATES = Object.freeze({
+  "inactive": {
+    "foreground": "mutedForeground",
+    "surface": "transparent",
+    "glyph": "outline"
+  },
+  "selected": {
+    "default": {
+      "foreground": "onAccent",
+      "surface": "accent",
+      "glyph": "unchanged"
+    },
+    "like": {
+      "semanticId": "action.like",
+      "foreground": "like",
+      "surface": "likeSoft",
+      "glyph": "filled"
+    },
+    "bookmark": {
+      "semanticId": "action.bookmark",
+      "foreground": "bookmark",
+      "surface": "bookmarkSoft",
+      "glyph": "filled"
+    }
+  },
+  "commands": {
+    "neutral": {
+      "foreground": "foreground",
+      "hoverSurface": "muted"
+    },
+    "destructive": {
+      "foreground": "destructive",
+      "hoverSurface": "destructiveSoft"
+    }
+  },
+  "supportingContent": {
+    "inactive": "mutedForeground",
+    "selected": "foreground"
+  },
+  "focusRing": "brandStrong",
+  "stateLayerOpacity": {
+    "hover": 0.08,
+    "pressed": 0.12,
+    "disabledContent": 0.38
+  },
+  "pendingVisual": "preserve-state-with-loading-indicator"
+});
 export const ICON_SEMANTICS = Object.freeze({
   "navigation.home": "house",
   "navigation.moments": "sparkles",
