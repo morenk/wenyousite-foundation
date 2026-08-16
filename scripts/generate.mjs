@@ -44,6 +44,7 @@ const editor = contract.experiences.editor;
 const icons = contract.experiences.icons;
 const images = contract.experiences.images;
 const collections = contract.experiences.collections;
+const elements = contract.experiences.elements;
 const notifications = contract.experiences.notifications;
 const accessibility = contract.accessibility;
 const feedback = contract.experiences.feedback;
@@ -52,6 +53,26 @@ const navigation = contract.experiences.navigation;
 const language = contract.experiences.language;
 const typeRoleIds = Object.keys(contract.profiles.web.typeScale);
 const kebab = (value) => value.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+const paletteCssNames = {
+  foreground: "--foreground",
+  mutedForeground: "--muted-foreground",
+  brandStrong: "--brand-strong",
+  primary: "--primary",
+  accent: "--accent",
+  onAccent: "--accent-foreground",
+  muted: "--muted",
+  border: "--border",
+  destructive: "--destructive",
+  onDestructive: "--destructive-foreground",
+  destructiveSoft: "--destructive-soft",
+  success: "--success",
+  successSoft: "--success-soft",
+  warning: "--warning",
+  warningSoft: "--warning-soft",
+  info: "--info",
+  infoSoft: "--info-soft",
+};
+const cssPaletteValue = (token) => token === "transparent" ? "transparent" : `var(${paletteCssNames[token]})`;
 
 const iconSourceRoot = path.join(root, "node_modules", icons.source.package, "icons");
 const iconLicenseHeader = /^<!-- @license[^>]+-->\s*/;
@@ -447,6 +468,30 @@ export declare const LANGUAGE_NOUNS: Readonly<Record<LanguageNounId, string>>;
 export declare const LANGUAGE_ACTIONS: Readonly<Record<LanguageActionId, string>>;
 export declare const LANGUAGE_INVARIANTS: Readonly<Record<string, boolean>>;`);
 
+write("dist/elements.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const ELEMENT_INVARIANTS = Object.freeze(${js(elements.invariants)});
+export const INLINE_ELEMENT_STYLES = Object.freeze(${js(elements.inline)});
+export const BLOCK_ELEMENT_STYLES = Object.freeze(${js(elements.block)});
+export const METADATA_ELEMENT_STYLES = Object.freeze(${js(elements.metadata)});
+export const ELEMENT_WEB_PROFILE = Object.freeze(${js(elements.web)});
+export const ELEMENT_MOBILE_PROFILE = Object.freeze(${js(elements.mobile)});`);
+
+const elementToneUnion = Object.keys(elements.metadata.badge.tones)
+  .map((tone) => JSON.stringify(tone))
+  .join(" | ");
+const badgeSizeUnion = elements.metadata.badge.sizes
+  .map((size) => JSON.stringify(size))
+  .join(" | ");
+write("dist/elements.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export type ElementTone = ${elementToneUnion};
+export type BadgeSize = ${badgeSizeUnion};
+export declare const ELEMENT_INVARIANTS: Readonly<${JSON.stringify(elements.invariants)}>;
+export declare const INLINE_ELEMENT_STYLES: Readonly<${JSON.stringify(elements.inline)}>;
+export declare const BLOCK_ELEMENT_STYLES: Readonly<${JSON.stringify(elements.block)}>;
+export declare const METADATA_ELEMENT_STYLES: Readonly<${JSON.stringify(elements.metadata)}>;
+export declare const ELEMENT_WEB_PROFILE: Readonly<${JSON.stringify(elements.web)}>;
+export declare const ELEMENT_MOBILE_PROFILE: Readonly<${JSON.stringify(elements.mobile)}>;`);
+
 const p = contract.palette;
 const web = contract.profiles.web;
 const motion = contract.motion;
@@ -531,6 +576,49 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --icon-control-hover-state-opacity: ${icons.controls.stateLayerOpacity.hover};
   --icon-control-pressed-state-opacity: ${icons.controls.stateLayerOpacity.pressed};
   --icon-control-disabled-content-opacity: ${icons.controls.stateLayerOpacity.disabledContent};
+  --element-internal-reference-foreground: ${cssPaletteValue(elements.inline.internalReference.foreground)};
+  --element-internal-reference-surface: ${cssPaletteValue(elements.inline.internalReference.surface)};
+  --element-internal-reference-padding-block: ${elements.web.internalReference.paddingBlockEm}em;
+  --element-internal-reference-padding-inline: ${elements.web.internalReference.paddingInlineEm}em;
+  --element-internal-reference-gap: ${elements.web.internalReference.gapEm}em;
+  --element-internal-reference-radius: ${elements.web.internalReference.radiusEm}em;
+  --element-internal-reference-icon-size: ${elements.web.internalReference.iconSizeEm}em;
+  --element-internal-reference-hover-state-opacity: ${elements.web.internalReference.hoverStateOpacity};
+  --element-internal-reference-pressed-state-opacity: ${elements.web.internalReference.pressedStateOpacity};
+  --element-link-foreground: ${cssPaletteValue(elements.inline.link.foreground)};
+  --element-link-underline-width: ${elements.inline.link.underlineWidthPx}px;
+  --element-link-underline-offset: ${elements.inline.link.underlineOffsetEm}em;
+  --element-code-foreground: ${cssPaletteValue(elements.inline.code.foreground)};
+  --element-code-surface: ${cssPaletteValue(elements.inline.code.surface)};
+  --element-code-size: ${elements.inline.code.sizeEm}em;
+  --element-code-radius: ${elements.inline.code.radiusEm}em;
+  --element-code-padding-block: ${elements.inline.code.paddingBlockEm}em;
+  --element-code-padding-inline: ${elements.inline.code.paddingInlineEm}em;
+  --element-dice-radius: ${elements.inline.dice.radiusEm}em;
+  --element-dice-padding-block: ${elements.inline.dice.paddingBlockEm}em;
+  --element-dice-padding-inline: ${elements.inline.dice.paddingInlineEm}em;
+  --element-dice-settled-foreground: ${cssPaletteValue(elements.inline.dice.settled.foreground)};
+  --element-dice-settled-surface: ${cssPaletteValue(elements.inline.dice.settled.surface)};
+  --element-dice-pending-foreground: ${cssPaletteValue(elements.inline.dice.pending.foreground)};
+  --element-dice-pending-surface: ${cssPaletteValue(elements.inline.dice.pending.surface)};
+  --element-quote-marker-width: ${elements.block.quote.markerWidthPx}px;
+  --element-quote-padding-block: ${elements.block.quote.paddingBlockEm}em;
+  --element-quote-padding-inline: ${elements.block.quote.paddingInlineEm}em;
+  --element-divider-width: ${elements.block.divider.widthPx}px;
+  --element-badge-default-height: ${elements.metadata.badge.default.heightPx}px;
+  --element-badge-default-font-size: ${elements.metadata.badge.default.fontSizePx}px;
+  --element-badge-default-icon-size: ${elements.metadata.badge.default.iconSizePx}px;
+  --element-badge-compact-height: ${elements.metadata.badge.compact.heightPx}px;
+  --element-badge-compact-font-size: ${elements.metadata.badge.compact.fontSizePx}px;
+  --element-badge-compact-icon-size: ${elements.metadata.badge.compact.iconSizePx}px;
+  --element-topic-tag-min-height: ${elements.web.interactiveMinimumPx}px;
+  --element-level-height: ${elements.metadata.level.heightPx}px;
+  --element-level-font-size: ${elements.metadata.level.fontSizePx}px;
+  --element-unread-count-height: ${elements.metadata.unreadCount.heightPx}px;
+  --element-unread-count-font-size: ${elements.metadata.unreadCount.fontSizePx}px;
+  --element-category-marker-width: ${elements.web.categoryMarkerWidthPx}px;
+  --element-category-badge-tint-opacity: ${elements.metadata.categoryMarker.badgeTintOpacity};
+  --element-category-badge-border-opacity: ${elements.metadata.categoryMarker.badgeBorderOpacity};
 }`);
 
 write("web/fonts.css", `/* 字体版本与校验和以 contracts/foundation.v1.json 为准。 */
@@ -597,6 +685,31 @@ abstract final class WenyouIconControlContract {
   static const double pressedStateLayerOpacity = ${icons.controls.stateLayerOpacity.pressed};
   static const double disabledContentOpacity = ${icons.controls.stateLayerOpacity.disabledContent};
   static const String pendingVisual = ${dartString(icons.controls.pendingVisual)};
+}
+
+abstract final class WenyouElementContract {
+  static const double interactiveMinimumTarget = ${elements.mobile.interactiveMinimumDp}.0;
+  static const double internalReferencePaddingBlock = ${elements.mobile.internalReference.paddingBlockEm};
+  static const double internalReferencePaddingInline = ${elements.mobile.internalReference.paddingInlineEm};
+  static const double internalReferenceGap = ${elements.mobile.internalReference.gapEm};
+  static const double internalReferenceRadius = ${elements.mobile.internalReference.radiusEm};
+  static const double internalReferenceIconSize = ${elements.mobile.internalReference.iconSizeEm};
+  static const double internalReferencePressedStateOpacity = ${elements.mobile.internalReference.pressedStateOpacity};
+  static const String internalReferenceIcon = ${dartString(elements.inline.internalReference.icon)};
+  static const bool readingEditorEquivalent = ${elements.invariants.readingEditorEquivalent};
+  static const bool statusNeverColorOnly = ${elements.invariants.statusNeverColorOnly};
+  static const double badgeDefaultHeight = ${elements.metadata.badge.default.heightPx}.0;
+  static const double badgeCompactHeight = ${elements.metadata.badge.compact.heightPx}.0;
+  static const double badgeDefaultFontSize = ${elements.metadata.badge.default.fontSizePx}.0;
+  static const double badgeCompactFontSize = ${elements.metadata.badge.compact.fontSizePx}.0;
+  static const double levelHeight = ${elements.metadata.level.heightPx}.0;
+  static const double levelFontSize = ${elements.metadata.level.fontSizePx}.0;
+  static const double unreadCountHeight = ${elements.metadata.unreadCount.heightPx}.0;
+  static const double unreadCountFontSize = ${elements.metadata.unreadCount.fontSizePx}.0;
+  static const String unreadMaximumDisplay = ${dartString(elements.metadata.unreadCount.maximumDisplay)};
+  static const double categoryMarkerWidth = ${elements.mobile.categoryMarkerWidthDp}.0;
+  static const double categoryBadgeTintOpacity = ${elements.metadata.categoryMarker.badgeTintOpacity};
+  static const double categoryBadgeBorderOpacity = ${elements.metadata.categoryMarker.badgeBorderOpacity};
 }
 
 abstract final class WenyouFoundationTypography {
@@ -832,7 +945,7 @@ class WenyouIcon extends StatelessWidget {
 }`);
 
 const artifactPaths = [
-  ...["icons", "editor", "images", "collections", "notifications", "typography", "interaction", "navigation", "language"]
+  ...["icons", "editor", "images", "collections", "notifications", "typography", "interaction", "navigation", "language", "elements"]
     .flatMap((name) => [`dist/${name}.js`, `dist/${name}.d.ts`]),
   "web/tokens.css",
   "web/fonts.css",
@@ -854,6 +967,7 @@ const manifest = JSON.stringify({
     iconControls: true,
     navigation: true,
     language: true,
+    elements: true,
   },
   artifactSha256,
   icons: {

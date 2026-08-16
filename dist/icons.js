@@ -147,6 +147,7 @@ export const ICON_SEMANTICS = Object.freeze({
   "content.folder-open": "folder-open",
   "content.gallery": "images",
   "content.invitation": "mail-plus",
+  "content.internal-reference": "door-open",
   "content.layers": "layers",
   "content.list": "list",
   "content.moment": "sparkles",
@@ -980,6 +981,38 @@ export const ICON_GLYPH_NODES = Object.freeze({
       "path",
       {
         "d": "M18 9h.01"
+      }
+    ]
+  ],
+  "door-open": [
+    [
+      "path",
+      {
+        "d": "M11 20H2"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M11 4.562v16.157a1 1 0 0 0 1.242.97L19 20V5.562a2 2 0 0 0-1.515-1.94l-4-1A2 2 0 0 0 11 4.561z"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M11 4H8a2 2 0 0 0-2 2v14"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M14 12h.01"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M22 20h-3"
       }
     ]
   ],
@@ -3470,6 +3503,7 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "copy-plus": "<svg class=\"lucide lucide-copy-plus\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><line x1=\"15\" x2=\"15\" y1=\"12\" y2=\"18\" /><line x1=\"12\" x2=\"18\" y1=\"15\" y2=\"15\" /><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\" /><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\" /></svg>",
   "crown": "<svg class=\"lucide lucide-crown\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z\" /><path d=\"M5 21h14\" /></svg>",
   "dices": "<svg class=\"lucide lucide-dices\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><rect width=\"12\" height=\"12\" x=\"2\" y=\"10\" rx=\"2\" ry=\"2\" /><path d=\"m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6\" /><path d=\"M6 18h.01\" /><path d=\"M10 14h.01\" /><path d=\"M15 6h.01\" /><path d=\"M18 9h.01\" /></svg>",
+  "door-open": "<svg class=\"lucide lucide-door-open\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M11 20H2\" /><path d=\"M11 4.562v16.157a1 1 0 0 0 1.242.97L19 20V5.562a2 2 0 0 0-1.515-1.94l-4-1A2 2 0 0 0 11 4.561z\" /><path d=\"M11 4H8a2 2 0 0 0-2 2v14\" /><path d=\"M14 12h.01\" /><path d=\"M22 20h-3\" /></svg>",
   "download": "<svg class=\"lucide lucide-download\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M12 15V3\" /><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\" /><path d=\"m7 10 5 5 5-5\" /></svg>",
   "drama": "<svg class=\"lucide lucide-drama\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M10 11h.01\" /><path d=\"M14 6h.01\" /><path d=\"M18 6h.01\" /><path d=\"M6.5 13.1h.01\" /><path d=\"M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3\" /><path d=\"M17.4 9.9c-.8.8-2 .8-2.8 0\" /><path d=\"M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7\" /><path d=\"M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4\" /></svg>",
   "ellipsis": "<svg class=\"lucide lucide-ellipsis\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><circle cx=\"12\" cy=\"12\" r=\"1\" /><circle cx=\"19\" cy=\"12\" r=\"1\" /><circle cx=\"5\" cy=\"12\" r=\"1\" /></svg>",
@@ -3612,6 +3646,7 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "copy-plus": "28cda8428b627268cf54b234ce768d477cd551f851dbabeec0cb773b30e6f520",
   "crown": "9d3e53dee80039152b5852ea83eb4799d85f0a46bacea23a19013436f6aba417",
   "dices": "45929a46324246faa64738faa66d2fc40eb5ea2159fac8382728654849ad3814",
+  "door-open": "6879c48bf20fec309918805708921d8863fb7a317944a0559801ad423244f249",
   "download": "de2b9cb905656d6f27b131b3514b7bac4b513c9e8bf85d4b3277132f1bc321f7",
   "drama": "411edc400762765c12db7cdc86c4d37d727a408c27e9b18aa0d330dd1b514cef",
   "ellipsis": "918bc1045886f9ac4070b5fca49eff5a33d69c5a86854bcd9fbf14a795d9c511",

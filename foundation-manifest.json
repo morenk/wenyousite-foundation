@@ -1,20 +1,21 @@
 {
-  "version": "3.1.0",
+  "version": "3.2.0",
   "schemaVersion": 1,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "bf4dea3e9eae989fca38b5fcf21202bfb9da2487c90657ab7d871583336b4c03",
+  "contractSha256": "6585f099e3ef2effd21089bac9b7a0dc111a0277aef78c7fc473ed3bb0af8069",
   "features": {
     "typography": true,
     "interaction": true,
     "iconControls": true,
     "navigation": true,
-    "language": true
+    "language": true,
+    "elements": true
   },
   "artifactSha256": {
-    "dist/icons.js": "ac88f4821f6f0b848174ae027e793139cdcc0f11ae01be862223414b23302a51",
-    "dist/icons.d.ts": "749615808e552e4c5b18a53152aa82ded2b9aced981e75f4a437d51c89a1016c",
-    "dist/editor.js": "2311d1af8c5ba206fec69c3a2c7b3de81f7c38f34ab4aa73c2c3d326a08f76b4",
-    "dist/editor.d.ts": "434ad206ffe1652c247580d9b021a17e1b6019e440435be1a13477781dd4fde4",
+    "dist/icons.js": "5f4d1a19d22020f9e485aa8f1072d1705687b94f467d93fa2939c88d668f5b30",
+    "dist/icons.d.ts": "8a73116d2c0ee1ed10d238103711c599dbff32f2a1875cc191421e7ff498a29f",
+    "dist/editor.js": "3fa012debacc280ed03b4c4fbf0128031ea6fcca16bc70fa317019bd79ef7238",
+    "dist/editor.d.ts": "aa6f43bc2836483229f61161ebc1defe07f331c30f21269c2f1a4b8026fbbe63",
     "dist/images.js": "48bda60db403d754b5c601d5f092beb0b4ea942bd4596b77aba1399d8aa5c3a4",
     "dist/images.d.ts": "de0d1b52f15967ab723c7b0de317db670e863c3381eb93c9c84cc9446b97da26",
     "dist/collections.js": "665b720eb2a0bcc148ce1f67894aa9068154eef9d49b41a62b7d2bc281342793",
@@ -29,10 +30,12 @@
     "dist/navigation.d.ts": "c69a86188a60a8e299e996dc5f6457fd96bb34237d0340b128784d982c88b2c4",
     "dist/language.js": "3de00fdc91803990975314b5d1b16d787ea72f28586dcaa860f04827cdd157d9",
     "dist/language.d.ts": "7f178e8bb8b62b56e9732c482d2d580d69af70a4e265bb2e9949542345818d6f",
-    "web/tokens.css": "f12af91128310d54e1528f8345775cbcc023153db58e2d752d821f097fd3bfea",
+    "dist/elements.js": "87e6ed2edc9d7eda87713668c259a56019a7a8d72e09d7341f86624e4c579e7e",
+    "dist/elements.d.ts": "7a2f2d3372859d17ae23bd1bd7a3797da9d1c5cc43e58f7566602de3ba4e0b4b",
+    "web/tokens.css": "90bb66e902383d02cc1a4997003c727fab4bb5adeed895c2dfa1990a3d94e860",
     "web/fonts.css": "2064b6f73a60f670ce27ddeaa7dbc9590776fb3c31b5644c5ee0dd35c4f31ed7",
-    "packages/flutter/lib/src/foundation_tokens.dart": "6e8800483cd5b54048ae363e9ef7089f4fe6b7c972650d4f38a67d718deecbca",
-    "packages/flutter/lib/src/wenyou_icons.dart": "67991b420c5b54f554b3c6d9e9c4e4e8f9eaa10dfd94363194ba79fd80232ac7"
+    "packages/flutter/lib/src/foundation_tokens.dart": "3488220f848910e942d6c66b5eb85066c8c0b2f8c4cb04593404ef81f8f682ae",
+    "packages/flutter/lib/src/wenyou_icons.dart": "c0b833be42aeca92d9b0522022b5f42321fdc8d113af1e53487d80f4e721f658"
   },
   "icons": {
     "family": "Lucide",
@@ -78,6 +81,7 @@
       "copy-plus": "28cda8428b627268cf54b234ce768d477cd551f851dbabeec0cb773b30e6f520",
       "crown": "9d3e53dee80039152b5852ea83eb4799d85f0a46bacea23a19013436f6aba417",
       "dices": "45929a46324246faa64738faa66d2fc40eb5ea2159fac8382728654849ad3814",
+      "door-open": "6879c48bf20fec309918805708921d8863fb7a317944a0559801ad423244f249",
       "download": "de2b9cb905656d6f27b131b3514b7bac4b513c9e8bf85d4b3277132f1bc321f7",
       "drama": "411edc400762765c12db7cdc86c4d37d727a408c27e9b18aa0d330dd1b514cef",
       "ellipsis": "918bc1045886f9ac4070b5fca49eff5a33d69c5a86854bcd9fbf14a795d9c511",

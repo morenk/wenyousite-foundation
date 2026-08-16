@@ -1,5 +1,12 @@
 # Foundation Changelog
 
+## 3.2.0
+
+- `shared`：新增核心元素系统，统一传送门、普通链接、提及、行内代码、骰子、引用、分隔线以及五类元数据元素的语义、状态和跨端边界。
+- `web`：站内传送门改为可换行的轻量内联胶囊；Badge、主题标签、等级、未读数与分类线路获得统一尺寸和无障碍线索。
+- `mobile`：生成 `WenyouElementContract` 供本地 Windows 客户端后续升级消费；本次不修改移动端仓库。
+- `generated`：新增 `@wenyousite/foundation/elements`、`--element-*` CSS Token、`content.internal-reference` 同源 Lucide 图标与 Manifest `elements` 能力。
+
 ## 3.1.0
 
 - `shared`：新增点赞鲜粉与收藏金色的互动语义色对，未选中、普通选中、危险命令、状态层、禁用与 pending 行为进入机器契约。

@@ -23,6 +23,8 @@ for (const [label, mutate] of [
   ["缺少无障碍契约", (value) => { delete value.accessibility; }],
   ["缺少互动控件契约", (value) => { delete value.experiences.icons.controls; }],
   ["未知互动控件字段", (value) => { value.experiences.icons.controls.unknown = true; }],
+  ["缺少元素契约", (value) => { delete value.experiences.elements; }],
+  ["未知元素字段", (value) => { value.experiences.elements.unknown = true; }],
   ["错误平台单位", (value) => { value.profiles.mobile.unit = "px"; }],
   ["非法浮层数值", (value) => { value.experiences.overlays.web.layers.popup = "70"; }],
 ]) {
@@ -33,13 +35,19 @@ for (const [label, mutate] of [
 
 if (contract.schemaVersion !== 1) failures.push("foundation schemaVersion 必须为 1");
 if (packageJson.version !== contract.version) failures.push("根 package 版本与契约不一致");
+if (
+  packageJson.exports?.["./elements"]?.types !== "./dist/elements.d.ts"
+  || packageJson.exports?.["./elements"]?.default !== "./dist/elements.js"
+) {
+  failures.push("根 package 未导出元素契约模块");
+}
 const contractSha256 = crypto
   .createHash("sha256")
   .update(fs.readFileSync(path.join(root, "contracts/foundation.v1.json")))
   .digest("hex");
 if (manifest.contractSha256 !== contractSha256) failures.push("契约清单哈希与事实源不一致");
-if (Object.keys(manifest.artifactSha256 ?? {}).length !== 22) {
-  failures.push("发布清单未完整记录 22 个生成代码与 Token 产物");
+if (Object.keys(manifest.artifactSha256 ?? {}).length !== 24) {
+  failures.push("发布清单未完整记录 24 个生成代码与 Token 产物");
 }
 for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha256 ?? {})) {
   if (!fs.existsSync(path.join(root, relativePath))) {
@@ -49,11 +57,17 @@ for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha25
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
   if (hash !== expectedHash) failures.push(`生成产物校验和不一致 ${relativePath}`);
 }
-if (!manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language) {
-  failures.push("发布清单缺少 v2.2 语义能力清单");
+if (!manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
+  failures.push("发布清单缺少共享语义能力清单");
 }
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
+}
+for (const claim of ["--element-internal-reference-surface", "--element-badge-default-height", "--element-category-marker-width"]) {
+  if (!read("web/tokens.css").includes(`${claim}:`)) failures.push(`Web Token 缺少 ${claim}`);
+}
+if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouElementContract")) {
+  failures.push("Flutter 生成物缺少 WenyouElementContract");
 }
 for (const font of contract.fonts) {
   if (!read("packages/flutter/LICENSE").includes(font.family)) {
@@ -181,6 +195,62 @@ if (
   || icons.semantics[iconControls.selected.bookmark.semanticId] !== "bookmark"
 ) {
   failures.push("点赞与收藏互动色必须绑定对应 Foundation 语义图标");
+}
+
+const elements = contract.experiences.elements;
+if (
+  elements.inline.internalReference.icon !== "content.internal-reference"
+  || icons.semantics[elements.inline.internalReference.icon] !== "door-open"
+  || elements.inline.internalReference.overflow !== "wrap-no-truncate"
+  || elements.inline.internalReference.editorBehavior !== "atomic-no-navigation"
+) {
+  failures.push("站内传送门必须绑定同源 door-open 语义并在阅读/编辑态保持可换行胶囊");
+}
+if (
+  elements.web.internalReference.paddingBlockEm !== 0.06
+  || elements.web.internalReference.paddingInlineEm !== 0.38
+  || elements.web.internalReference.gapEm !== 0.26
+  || elements.web.internalReference.radiusEm !== 0.4
+  || elements.web.internalReference.iconSizeEm !== 0.9
+) {
+  failures.push("Web 站内传送门尺寸偏离审定的轻量内联胶囊");
+}
+if (
+  elements.web.internalReference.hoverStateOpacity !== icons.controls.stateLayerOpacity.hover
+  || elements.web.internalReference.pressedStateOpacity !== icons.controls.stateLayerOpacity.pressed
+) {
+  failures.push("传送门 hover/pressed 状态层必须复用互动控件透明度");
+}
+if (
+  elements.block.quote.fontStyle !== "normal"
+  || elements.block.quote.markerWidthPx !== 3
+  || elements.block.divider.color !== "border"
+) {
+  failures.push("引用与分隔线必须使用统一块级元素语义");
+}
+if (elements.metadata.badge.sizes.join(",") !== "default,compact") {
+  failures.push("Badge 只能使用 default 与 compact 两种尺寸");
+}
+if (JSON.stringify(Object.keys(elements.metadata.badge.tones)) !== JSON.stringify(["neutral", "brand", "success", "warning", "danger", "info"])) {
+  failures.push("Badge tone 集合或顺序不稳定");
+}
+if (
+  elements.metadata.badge.default.heightPx !== 24
+  || elements.metadata.badge.compact.heightPx !== 20
+  || elements.metadata.topicTag.prefix !== "#"
+  || elements.metadata.level.format !== "Lv.N"
+  || elements.metadata.unreadCount.maximumDisplay !== "99+"
+  || elements.metadata.unreadCount.zeroBehavior !== "hidden"
+) {
+  failures.push("元数据元素的尺寸、文本线索或计数降级规则发生漂移");
+}
+if (
+  elements.web.interactiveMinimumPx !== contract.profiles.web.minimumCompactTarget
+  || elements.mobile.interactiveMinimumDp !== contract.profiles.mobile.minimumControlTarget
+  || elements.web.categoryMarkerWidthPx !== 4
+  || !elements.metadata.categoryMarker.neverSoleCue
+) {
+  failures.push("跨端元素命中区或分类标记无障碍规则不符合平台 profile");
 }
 if (
   iconControls.supportingContent.selected !== "foreground"
@@ -431,7 +501,7 @@ for (const font of contract.fonts) {
 }
 
 const skill = read("skills/wenyou-design/SKILL.md");
-if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("docs/icons.md") || !skill.includes("docs/interaction.md") || !skill.includes("docs/navigation-language.md") || !skill.includes("experiences.collections") || !skill.includes("experiences.icons") || !skill.includes("experiences.feedback") || !skill.includes("experiences.navigation")) {
+if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("docs/icons.md") || !skill.includes("docs/elements.md") || !skill.includes("docs/interaction.md") || !skill.includes("docs/navigation-language.md") || !skill.includes("experiences.collections") || !skill.includes("experiences.elements") || !skill.includes("experiences.icons") || !skill.includes("experiences.feedback") || !skill.includes("experiences.navigation")) {
   failures.push("wenyou-design Skill 未正确引用中央事实源");
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");
@@ -439,4 +509,4 @@ if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色�
 if (failures.length > 0) {
   throw new Error(`Foundation 检查失败：\n- ${failures.join("\n- ")}`);
 }
-console.log(`Foundation ${contract.version} schema, artifacts, contrast, typography, interaction, navigation, editor, and skill are valid`);
+console.log(`Foundation ${contract.version} schema, artifacts, contrast, typography, elements, interaction, navigation, editor, and skill are valid`);

@@ -93,10 +93,11 @@
     },
     "experiences": {
       "type": "object",
-      "required": ["icons", "collections", "feedback", "overlays", "navigation", "language", "notifications", "editor", "images"],
+      "required": ["icons", "collections", "elements", "feedback", "overlays", "navigation", "language", "notifications", "editor", "images"],
       "properties": {
         "icons": { "$ref": "#/$defs/icons" },
         "collections": { "$ref": "#/$defs/collections" },
+        "elements": { "$ref": "#/$defs/elements" },
         "feedback": { "$ref": "#/$defs/feedback" },
         "overlays": { "$ref": "#/$defs/overlays" },
         "navigation": { "$ref": "#/$defs/navigation" },
@@ -408,6 +409,154 @@
         },
         "web": { "type": "object", "required": ["tabPanelWidth", "multiColumn"], "properties": { "tabPanelWidth": { "const": "available" }, "multiColumn": { "const": "explicit-grid-only" } }, "additionalProperties": false },
         "mobile": { "type": "object", "required": ["layout", "itemWidth"], "properties": { "layout": { "const": "single-column" }, "itemWidth": { "const": "available" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "elementTone": { "enum": ["neutral", "brand", "success", "warning", "danger", "info"] },
+    "paletteToken": {
+      "enum": ["transparent", "foreground", "mutedForeground", "brandStrong", "primary", "accent", "onAccent", "muted", "border", "destructive", "onDestructive", "destructiveSoft", "success", "successSoft", "warning", "warningSoft", "info", "infoSoft"]
+    },
+    "elementColorPair": {
+      "type": "object",
+      "required": ["foreground", "surface"],
+      "properties": { "foreground": { "$ref": "#/$defs/paletteToken" }, "surface": { "$ref": "#/$defs/paletteToken" } },
+      "additionalProperties": false
+    },
+    "elements": {
+      "type": "object",
+      "required": ["ownership", "invariants", "inline", "block", "metadata", "web", "mobile"],
+      "properties": {
+        "ownership": {
+          "type": "object",
+          "required": ["inline", "block", "metadata", "controls", "surfaces"],
+          "properties": {
+            "inline": { "const": "elements.inline" },
+            "block": { "const": "elements.block" },
+            "metadata": { "const": "elements.metadata" },
+            "controls": { "const": "icons.controls" },
+            "surfaces": { "const": "profiles" }
+          },
+          "additionalProperties": false
+        },
+        "invariants": {
+          "type": "object",
+          "required": ["statusNeverColorOnly", "readingEditorEquivalent", "editorInternalReferenceNavigation", "nonInteractiveBadgeTarget", "interactiveTargetUsesPlatformMinimum", "protocolOwner", "categoryColorNeedsTextLabel"],
+          "properties": {
+            "statusNeverColorOnly": { "const": true },
+            "readingEditorEquivalent": { "const": true },
+            "editorInternalReferenceNavigation": { "const": "prevented" },
+            "nonInteractiveBadgeTarget": { "const": "content-sized" },
+            "interactiveTargetUsesPlatformMinimum": { "const": true },
+            "protocolOwner": { "const": "backend-contracts" },
+            "categoryColorNeedsTextLabel": { "const": true }
+          },
+          "additionalProperties": false
+        },
+        "inline": {
+          "type": "object",
+          "required": ["internalReference", "link", "mention", "code", "dice"],
+          "properties": {
+            "internalReference": {
+              "type": "object",
+              "required": ["tone", "foreground", "surface", "border", "weight", "icon", "overflow", "editorBehavior"],
+              "properties": {
+                "tone": { "const": "brand" }, "foreground": { "const": "onAccent" }, "surface": { "const": "accent" }, "border": { "const": "transparent" }, "weight": { "const": 600 }, "icon": { "const": "content.internal-reference" }, "overflow": { "const": "wrap-no-truncate" }, "editorBehavior": { "const": "atomic-no-navigation" }
+              },
+              "additionalProperties": false
+            },
+            "link": {
+              "type": "object",
+              "required": ["tone", "foreground", "weight", "underlineWidthPx", "underlineOffsetEm", "externalBehavior"],
+              "properties": {
+                "tone": { "const": "brand" }, "foreground": { "const": "brandStrong" }, "weight": { "const": 600 }, "underlineWidthPx": { "const": 1 }, "underlineOffsetEm": { "const": 0.18 }, "externalBehavior": { "const": "new-tab" }
+              },
+              "additionalProperties": false
+            },
+            "mention": {
+              "type": "object",
+              "required": ["tone", "foreground", "surface", "weight", "prefix", "editorBehavior"],
+              "properties": {
+                "tone": { "const": "brand" }, "foreground": { "const": "brandStrong" }, "surface": { "const": "transparent" }, "weight": { "const": 600 }, "prefix": { "const": "@" }, "editorBehavior": { "const": "atomic" }
+              },
+              "additionalProperties": false
+            },
+            "code": {
+              "type": "object",
+              "required": ["tone", "foreground", "surface", "family", "sizeEm", "radiusEm", "paddingBlockEm", "paddingInlineEm"],
+              "properties": {
+                "tone": { "const": "neutral" }, "foreground": { "const": "foreground" }, "surface": { "const": "muted" }, "family": { "const": "platform-monospace" }, "sizeEm": { "const": 0.88 }, "radiusEm": { "const": 0.35 }, "paddingBlockEm": { "const": 0.12 }, "paddingInlineEm": { "const": 0.35 }
+              },
+              "additionalProperties": false
+            },
+            "dice": {
+              "type": "object",
+              "required": ["tone", "family", "numbers", "radiusEm", "paddingBlockEm", "paddingInlineEm", "settled", "pending"],
+              "properties": {
+                "tone": { "const": "brand" }, "family": { "const": "utility" }, "numbers": { "const": "tabular" }, "radiusEm": { "const": 0.3 }, "paddingBlockEm": { "const": 0.08 }, "paddingInlineEm": { "const": 0.3 },
+                "settled": { "$ref": "#/$defs/elementColorPair" },
+                "pending": { "type": "object", "required": ["foreground", "surface", "display"], "properties": { "foreground": { "const": "warning" }, "surface": { "const": "warningSoft" }, "display": { "const": "?" } }, "additionalProperties": false }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "block": {
+          "type": "object",
+          "required": ["quote", "divider"],
+          "properties": {
+            "quote": {
+              "type": "object",
+              "required": ["foreground", "surface", "marker", "markerWidthPx", "radius", "fontStyle", "paddingBlockEm", "paddingInlineEm"],
+              "properties": { "foreground": { "const": "foreground" }, "surface": { "const": "muted" }, "marker": { "const": "primary" }, "markerWidthPx": { "const": 3 }, "radius": { "const": "compact" }, "fontStyle": { "const": "normal" }, "paddingBlockEm": { "const": 0.75 }, "paddingInlineEm": { "const": 1 } },
+              "additionalProperties": false
+            },
+            "divider": { "type": "object", "required": ["color", "widthPx"], "properties": { "color": { "const": "border" }, "widthPx": { "const": 1 } }, "additionalProperties": false }
+          },
+          "additionalProperties": false
+        },
+        "metadata": {
+          "type": "object",
+          "required": ["badge", "topicTag", "level", "unreadCount", "categoryMarker"],
+          "properties": {
+            "badge": {
+              "type": "object",
+              "required": ["sizes", "shape", "weight", "family", "tones", "default", "compact"],
+              "properties": {
+                "sizes": { "type": "array", "prefixItems": [{ "const": "default" }, { "const": "compact" }], "minItems": 2, "maxItems": 2 }, "shape": { "const": "pill" }, "weight": { "const": 700 }, "family": { "const": "utility" },
+                "tones": { "type": "object", "required": ["neutral", "brand", "success", "warning", "danger", "info"], "properties": { "neutral": { "$ref": "#/$defs/elementColorPair" }, "brand": { "$ref": "#/$defs/elementColorPair" }, "success": { "$ref": "#/$defs/elementColorPair" }, "warning": { "$ref": "#/$defs/elementColorPair" }, "danger": { "$ref": "#/$defs/elementColorPair" }, "info": { "$ref": "#/$defs/elementColorPair" } }, "additionalProperties": false },
+                "default": { "type": "object", "required": ["heightPx", "fontSizePx", "iconSizePx"], "properties": { "heightPx": { "const": 24 }, "fontSizePx": { "const": 12 }, "iconSizePx": { "const": 14 } }, "additionalProperties": false },
+                "compact": { "type": "object", "required": ["heightPx", "fontSizePx", "iconSizePx"], "properties": { "heightPx": { "const": 20 }, "fontSizePx": { "const": 11 }, "iconSizePx": { "const": 12 } }, "additionalProperties": false }
+              },
+              "additionalProperties": false
+            },
+            "topicTag": { "type": "object", "required": ["tone", "prefix", "foreground", "surface", "border", "hoverSurface", "weight"], "properties": { "tone": { "const": "neutral" }, "prefix": { "const": "#" }, "foreground": { "const": "mutedForeground" }, "surface": { "const": "transparent" }, "border": { "const": "border" }, "hoverSurface": { "const": "muted" }, "weight": { "const": 500 } }, "additionalProperties": false },
+            "level": { "type": "object", "required": ["tone", "format", "foreground", "surface", "heightPx", "fontSizePx", "weight", "family", "numbers", "radius"], "properties": { "tone": { "const": "brand" }, "format": { "const": "Lv.N" }, "foreground": { "const": "onAccent" }, "surface": { "const": "accent" }, "heightPx": { "const": 20 }, "fontSizePx": { "const": 11 }, "weight": { "const": 700 }, "family": { "const": "utility" }, "numbers": { "const": "tabular" }, "radius": { "const": "compact" } }, "additionalProperties": false },
+            "unreadCount": { "type": "object", "required": ["tone", "foreground", "surface", "heightPx", "fontSizePx", "weight", "family", "numbers", "maximumDisplay", "zeroBehavior"], "properties": { "tone": { "const": "danger" }, "foreground": { "const": "onDestructive" }, "surface": { "const": "destructive" }, "heightPx": { "const": 16 }, "fontSizePx": { "const": 10 }, "weight": { "const": 700 }, "family": { "const": "utility" }, "numbers": { "const": "tabular" }, "maximumDisplay": { "const": "99+" }, "zeroBehavior": { "const": "hidden" } }, "additionalProperties": false },
+            "categoryMarker": { "type": "object", "required": ["colorOwner", "badgeForeground", "badgeTintOpacity", "badgeBorderOpacity", "neverSoleCue"], "properties": { "colorOwner": { "const": "api-category" }, "badgeForeground": { "const": "foreground" }, "badgeTintOpacity": { "const": 0.12 }, "badgeBorderOpacity": { "const": 0.33 }, "neverSoleCue": { "const": true } }, "additionalProperties": false }
+          },
+          "additionalProperties": false
+        },
+        "web": {
+          "type": "object",
+          "required": ["interactiveMinimumPx", "internalReference", "categoryMarkerWidthPx"],
+          "properties": {
+            "interactiveMinimumPx": { "const": 32 },
+            "internalReference": { "type": "object", "required": ["paddingBlockEm", "paddingInlineEm", "gapEm", "radiusEm", "iconSizeEm", "hoverStateOpacity", "pressedStateOpacity"], "properties": { "paddingBlockEm": { "const": 0.06 }, "paddingInlineEm": { "const": 0.38 }, "gapEm": { "const": 0.26 }, "radiusEm": { "const": 0.4 }, "iconSizeEm": { "const": 0.9 }, "hoverStateOpacity": { "const": 0.08 }, "pressedStateOpacity": { "const": 0.12 } }, "additionalProperties": false },
+            "categoryMarkerWidthPx": { "const": 4 }
+          },
+          "additionalProperties": false
+        },
+        "mobile": {
+          "type": "object",
+          "required": ["interactiveMinimumDp", "internalReference", "categoryMarkerWidthDp"],
+          "properties": {
+            "interactiveMinimumDp": { "const": 48 },
+            "internalReference": { "type": "object", "required": ["paddingBlockEm", "paddingInlineEm", "gapEm", "radiusEm", "iconSizeEm", "pressedStateOpacity"], "properties": { "paddingBlockEm": { "const": 0.08 }, "paddingInlineEm": { "const": 0.38 }, "gapEm": { "const": 0.28 }, "radiusEm": { "const": 0.4 }, "iconSizeEm": { "const": 0.92 }, "pressedStateOpacity": { "const": 0.12 } }, "additionalProperties": false },
+            "categoryMarkerWidthDp": { "const": 4 }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },

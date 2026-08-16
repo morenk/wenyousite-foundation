@@ -90,6 +90,7 @@ abstract final class WenyouIconIds {
   static const String contentFolderOpen = 'content.folder-open'; // folder-open
   static const String contentGallery = 'content.gallery'; // images
   static const String contentInvitation = 'content.invitation'; // mail-plus
+  static const String contentInternalReference = 'content.internal-reference'; // door-open
   static const String contentLayers = 'content.layers'; // layers
   static const String contentList = 'content.list'; // list
   static const String contentMoment = 'content.moment'; // sparkles
@@ -271,6 +272,7 @@ abstract final class WenyouIconContract {
     'content.folder-open': 'folder-open',
     'content.gallery': 'images',
     'content.invitation': 'mail-plus',
+    'content.internal-reference': 'door-open',
     'content.layers': 'layers',
     'content.list': 'list',
     'content.moment': 'sparkles',

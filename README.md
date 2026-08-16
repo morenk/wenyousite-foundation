@@ -7,6 +7,7 @@
 - [Flutter profile](docs/platforms/mobile.md)
 - [图片呈现契约](docs/images.md)
 - [图标目录与治理](docs/icons.md)
+- [核心元素系统](docs/elements.md)
 - [通知分组契约](docs/notifications.md)
 - [反馈、无障碍与浮层契约](docs/interaction.md)
 - [导航与界面语言契约](docs/navigation-language.md)

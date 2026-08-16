@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '3.1.0';
+  static const String value = '3.2.0';
   static const int schema = 1;
 }
 
@@ -57,6 +57,31 @@ abstract final class WenyouIconControlContract {
   static const double pressedStateLayerOpacity = 0.12;
   static const double disabledContentOpacity = 0.38;
   static const String pendingVisual = 'preserve-state-with-loading-indicator';
+}
+
+abstract final class WenyouElementContract {
+  static const double interactiveMinimumTarget = 48.0;
+  static const double internalReferencePaddingBlock = 0.08;
+  static const double internalReferencePaddingInline = 0.38;
+  static const double internalReferenceGap = 0.28;
+  static const double internalReferenceRadius = 0.4;
+  static const double internalReferenceIconSize = 0.92;
+  static const double internalReferencePressedStateOpacity = 0.12;
+  static const String internalReferenceIcon = 'content.internal-reference';
+  static const bool readingEditorEquivalent = true;
+  static const bool statusNeverColorOnly = true;
+  static const double badgeDefaultHeight = 24.0;
+  static const double badgeCompactHeight = 20.0;
+  static const double badgeDefaultFontSize = 12.0;
+  static const double badgeCompactFontSize = 11.0;
+  static const double levelHeight = 20.0;
+  static const double levelFontSize = 11.0;
+  static const double unreadCountHeight = 16.0;
+  static const double unreadCountFontSize = 10.0;
+  static const String unreadMaximumDisplay = '99+';
+  static const double categoryMarkerWidth = 4.0;
+  static const double categoryBadgeTintOpacity = 0.12;
+  static const double categoryBadgeBorderOpacity = 0.33;
 }
 
 abstract final class WenyouFoundationTypography {

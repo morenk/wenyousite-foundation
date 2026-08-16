@@ -122,6 +122,7 @@ Web hover 与 pressed 状态层透明度分别为 0.08 与 0.12；禁用内容�
 | `content.folder-open` | `folder-open` | `2bb84e7613a3987add5e7acffc51b7506454f83a186525d42179c7767278194a` |
 | `content.gallery` | `images` | `34ab979c08108dd367cb19acbbe5253dff91be3aab0f98273aabdaa32ef4c69b` |
 | `content.invitation` | `mail-plus` | `ef5db89abcc1b2e9c0d3a2fe47c0a202b825e38646a3882f4be3302f3dedfcd7` |
+| `content.internal-reference` | `door-open` | `6879c48bf20fec309918805708921d8863fb7a317944a0559801ad423244f249` |
 | `content.layers` | `layers` | `96688ab27c552989c2e39424ada4f7ad295d239f41a11ccaf926e9dccc4f563f` |
 | `content.list` | `list` | `e10c1b8ee76dd75cb02dfd84615ff0c9adbce5e5ac232fa3b9f1452b2424bba3` |
 | `content.moment` | `sparkles` | `667eb1a2a7853e7b6345c45e2343d4f48cbdcede9ce4f62c58bc8388ebbe90d0` |
