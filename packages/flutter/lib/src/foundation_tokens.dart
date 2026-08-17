@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '5.1.0';
-  static const int schema = 1;
+  static const String value = '6.0.0';
+  static const int schema = 2;
 }
 
 abstract final class WenyouFoundationPalette {
@@ -86,6 +86,57 @@ abstract final class WenyouElementContract {
   static const double categoryMarkerWidth = 4.0;
   static const Color categoryMarkerForeground = WenyouFoundationPalette.mutedForeground;
   static const String categoryBadgeTone = 'neutral';
+}
+
+@immutable
+class WenyouLevelTier {
+  const WenyouLevelTier({required this.id, required this.minimum, required this.maximum, required this.foreground, required this.surface, required this.border});
+  final String id;
+  final int minimum;
+  final int maximum;
+  final Color foreground;
+  final Color surface;
+  final Color border;
+}
+
+abstract final class WenyouLevelContract {
+  static const List<WenyouLevelTier> tiers = <WenyouLevelTier>[
+    WenyouLevelTier(id: 'mist', minimum: 1, maximum: 1, foreground: Color(0xFF6D6775), surface: Color(0xFFF7F5F8), border: Color(0xFFE8E3EB)),
+    WenyouLevelTier(id: 'peach', minimum: 2, maximum: 3, foreground: Color(0xFF765346), surface: Color(0xFFFBE9E2), border: Color(0xFFF2CFC3)),
+    WenyouLevelTier(id: 'rose', minimum: 4, maximum: 5, foreground: Color(0xFF784653), surface: Color(0xFFF8D9DF), border: Color(0xFFEEBBC5)),
+    WenyouLevelTier(id: 'coral', minimum: 6, maximum: 7, foreground: Color(0xFF5F2935), surface: Color(0xFFEE9AAA), border: Color(0xFFD96F84)),
+    WenyouLevelTier(id: 'berry', minimum: 8, maximum: 9, foreground: Color(0xFFFFFFFF), surface: Color(0xFF922F50), border: Color(0xFF7B2442)),
+  ];
+  static WenyouLevelTier? resolve(int level) {
+    if (level < 1) return null;
+    for (final tier in tiers) {
+      if (level <= tier.maximum) return tier;
+    }
+    return tiers.last;
+  }
+}
+
+abstract final class WenyouIdentityContract {
+  static const String missingAvatarFallback = 'first-readable-character';
+  static const String unavailableAvatarFallback = 'neutral-user-icon';
+  static const Map<String, String> roleTones = <String, String>{
+    'owner': 'brand',
+    'staff': 'brand',
+    'collaborator': 'info',
+    'player': 'neutral',
+    'member': 'neutral',
+  };
+  static const String emailVerificationPublicIdentity = 'hidden';
+  static const String emailVerificationAccountSecurityEntry = 'when-unverified';
+  static const String emailVerificationRestrictedActionGuidance = 'contextual';
+}
+
+abstract final class WenyouControlContract {
+  static const List<String> actionRoles = <String>['primary', 'secondary', 'quiet', 'destructive', 'link'];
+  static const List<String> fieldStates = <String>['default', 'focus', 'disabled', 'read-only', 'error'];
+  static const List<String> selectionPatterns = <String>['tabs', 'filter', 'sort', 'single-select', 'multi-select'];
+  static const double minimumTarget = 48.0;
+  static const String levelProgressFill = 'current-level-tier';
 }
 
 abstract final class WenyouFoundationTypography {

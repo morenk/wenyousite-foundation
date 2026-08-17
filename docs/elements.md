@@ -25,11 +25,16 @@
 
 - Badge 只有 `default` 与 `compact` 两种尺寸，tone 固定为 `neutral`、`brand`、`success`、`warning`、`danger`、`info`；所有 tone 复用既有色对。
 - 主题标签是可点击浏览入口，以 `#` 提供文字线索并使用中性描边；Web 命中高度不小于 32px。
-- 等级固定为 `Lv.N`，使用紧凑圆角和 utility 数字；未读数隐藏零值、超过 99 显示 `99+`。
+- 等级固定为 `Lv.N`，使用紧凑圆角和 utility 数字。Lv.1 为雾灰，Lv.2–3 为杏桃，Lv.4–5 为玫瑰，Lv.6–7 为珊瑚，Lv.8–9 为深莓实心白字；色彩从低到高提高彩度与强调度，但文字始终是等级的非色彩线索。未来更高等级沿用最高档，无效等级不渲染。
+- 等级经验进度的填充跟随当前等级档，轨道保持中性。普通进度、上传和等待不能借用等级色。
+- 身份角色按职责分层：楼主和站务使用品牌 tone，协作者使用 info，玩家与普通成员保持 neutral。头像缺失或加载失败使用首个可读字符，匿名或失效身份使用中性用户图标。
+- 邮箱是否验证不属于身份展示：列表、详情和个人资料不显示徽标或状态；账号安全入口与受限操作引导由认证业务保留。
+- 置顶/新内容使用品牌 tone，私密/锁定使用 warning，归档/失效使用 neutral，封禁/错误使用 danger。收入可用 success，正常支出保持普通前景色。
+- 未读数隐藏零值、超过 99 显示 `99+`。
 - 分类不使用专属色。Web 线路保持 4px 结构宽度并统一使用 `mutedForeground`；分类 Badge 复用 neutral tone，且必须同时显示类别文字。
 
 ## 生成物
 
-- Web/TypeScript：`@wenyousite/foundation/elements` 导出元素样式、平台 profile、`ElementTone` 与 `BadgeSize`。
+- Web/TypeScript：`@wenyousite/foundation/elements` 导出元素样式、五档等级解析、身份/状态/经济 tone、平台 profile 与相关类型。
 - Web/CSS：`web/tokens.css` 导出 `--element-*`。
-- Flutter：`WenyouElementContract` 导出移动 profile 的尺寸、状态与分类中性呈现常量。
+- Flutter：`WenyouElementContract`、`WenyouLevelContract` 与 `WenyouIdentityContract` 导出移动端等价语义。

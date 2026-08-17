@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
-  "schemaVersion": 1,
-  "version": "5.1.0",
+  "schemaVersion": 2,
+  "version": "6.0.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -44,14 +44,27 @@
   "typography": {
     "body": { "family": "Noto Sans SC Variable", "weights": [400, 500, 600, 700], "fallback": ["Noto Sans SC", "system-ui", "sans-serif"] },
     "display": { "family": "LXGW WenKai", "weights": [500], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] },
-    "utility": { "family": "Nunito Variable", "weights": [400, 600, 700], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] }
+    "utility": { "family": "Nunito Variable", "weights": [400, 600, 700], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] },
+    "usage": {
+      "displayContexts": ["brand", "page-title", "section-title", "detail-content-title", "text-cover-title"],
+      "bodySemiboldContexts": ["list-item-title", "dialog-title", "sheet-title", "popover-title", "state-title"],
+      "bodyOnlyContexts": ["control", "navigation", "username", "rich-text-heading"],
+      "utilityContexts": ["numeric", "time", "counter"],
+      "displayWeight": 500,
+      "listTitleWeight": 600
+    }
   },
   "motion": {
     "fastMs": 120,
     "standardMs": 180,
     "slowMs": 240,
     "standardEase": "cubic-bezier(0.2, 0.8, 0.2, 1)",
-    "exitEase": "cubic-bezier(0.4, 0, 1, 1)"
+    "exitEase": "cubic-bezier(0.4, 0, 1, 1)",
+    "usage": {
+      "allowed": ["state-feedback", "expand-collapse", "overlay-relationship"],
+      "forbidden": ["decorative-drift", "list-layout-shift", "ambient-loop"],
+      "reducedMotion": "remove-nonessential-and-use-static-skeleton"
+    }
   },
   "accessibility": {
     "contrast": {
@@ -87,9 +100,9 @@
       "layoutRem": { "narrow": 30, "moment": 36, "feed": 42, "content": 48, "workspace": 72, "chromeWorkspace": 78, "wide": 80 },
       "reading": { "bodyPx": 17, "lineHeightPx": 32, "maxFullWidthCharacters": 40 },
       "typeScale": {
-        "pageTitle": { "family": "display", "size": 28, "lineHeight": 36, "weight": 700 },
-        "sectionTitle": { "family": "display", "size": 20, "lineHeight": 32, "weight": 700 },
-        "subsectionTitle": { "family": "display", "size": 18, "lineHeight": 24, "weight": 700 },
+        "pageTitle": { "family": "display", "size": 28, "lineHeight": 36, "weight": 500 },
+        "sectionTitle": { "family": "display", "size": 20, "lineHeight": 32, "weight": 500 },
+        "subsectionTitle": { "family": "display", "size": 18, "lineHeight": 24, "weight": 500 },
         "body": { "family": "body", "size": 16, "lineHeight": 1.65, "weight": 400 },
         "compactBody": { "family": "body", "size": 14, "lineHeight": 20, "weight": 400 },
         "label": { "family": "body", "size": 14, "lineHeight": 20, "weight": 600 },
@@ -387,6 +400,29 @@
         "horizontalOverflow": "explicit-only",
         "contentSizedExceptions": ["message-bubble", "chip", "badge", "compact-action"]
       },
+      "content": {
+        "slots": ["title", "identity", "time", "summary", "cover", "tags", "metrics", "status", "actions"],
+        "list": {
+          "titleFamily": "body",
+          "titleWeight": 600,
+          "purpose": "scan-and-enter",
+          "summary": "optional-preview",
+          "surface": "platform-flat-or-light-card"
+        },
+        "detail": {
+          "titleFamily": "display",
+          "titleWeight": 500,
+          "purpose": "continuous-reading",
+          "summary": "do-not-repeat-list-summary",
+          "surface": "continuous-main-flow-with-accessory-panels"
+        },
+        "invariants": {
+          "titlePrecedesSupportingMetadata": true,
+          "statusNeverColorOnly": true,
+          "nestedCards": "forbidden",
+          "domainProfiles": "differences-only"
+        }
+      },
       "web": {
         "tabPanelWidth": "available",
         "multiColumn": "explicit-grid-only"
@@ -395,6 +431,44 @@
         "layout": "single-column",
         "itemWidth": "available"
       }
+    },
+    "controls": {
+      "actions": {
+        "roles": ["primary", "secondary", "quiet", "destructive", "link"],
+        "invariants": {
+          "onePrimaryPerDecisionRegion": true,
+          "pendingPreservesDimensions": true,
+          "pendingPreventsDuplicateSubmit": true,
+          "disabledRemainsLegible": true,
+          "iconOnlyHasAccessibleName": true
+        }
+      },
+      "fields": {
+        "anatomy": ["label", "control", "helper-or-error"],
+        "states": ["default", "focus", "disabled", "read-only", "error"],
+        "invariants": {
+          "placeholderNeverReplacesLabel": true,
+          "errorBoundToField": true,
+          "requiredHasNonColorCue": true
+        }
+      },
+      "selection": {
+        "patterns": ["tabs", "filter", "sort", "single-select", "multi-select"],
+        "invariants": {
+          "selectedHasNonColorCue": true,
+          "clearOnlyWhenSelectionExists": true,
+          "selectionDoesNotImplySubmission": true
+        }
+      },
+      "progress": {
+        "roles": ["level", "upload", "operation"],
+        "levelFill": "current-level-tier",
+        "track": "muted",
+        "showPercentWhenActionable": true,
+        "indeterminateUsesSpinner": true
+      },
+      "web": { "minimumTargetPx": 40, "compactTargetPx": 32 },
+      "mobile": { "minimumTargetDp": 48 }
     },
     "elements": {
       "ownership": {
@@ -501,16 +575,22 @@
           "weight": 500
         },
         "level": {
-          "tone": "brand",
           "format": "Lv.N",
-          "foreground": "onAccent",
-          "surface": "accent",
           "heightPx": 20,
           "fontSizePx": 11,
           "weight": 700,
           "family": "utility",
           "numbers": "tabular",
-          "radius": "compact"
+          "radius": "compact",
+          "invalidBehavior": "hidden",
+          "futureLevelBehavior": "highest-tier",
+          "tiers": [
+            { "id": "mist", "minimum": 1, "maximum": 1, "foreground": "#6D6775", "surface": "#F7F5F8", "border": "#E8E3EB" },
+            { "id": "peach", "minimum": 2, "maximum": 3, "foreground": "#765346", "surface": "#FBE9E2", "border": "#F2CFC3" },
+            { "id": "rose", "minimum": 4, "maximum": 5, "foreground": "#784653", "surface": "#F8D9DF", "border": "#EEBBC5" },
+            { "id": "coral", "minimum": 6, "maximum": 7, "foreground": "#5F2935", "surface": "#EE9AAA", "border": "#D96F84" },
+            { "id": "berry", "minimum": 8, "maximum": 9, "foreground": "#FFFFFF", "surface": "#922F50", "border": "#7B2442" }
+          ]
         },
         "unreadCount": {
           "tone": "danger",
@@ -530,6 +610,40 @@
           "badgeTone": "neutral",
           "neverSoleCue": true
         }
+      },
+      "identity": {
+        "avatarFallback": {
+          "missingOrFailed": "first-readable-character",
+          "unavailableOrAnonymous": "neutral-user-icon"
+        },
+        "roleTones": {
+          "owner": "brand",
+          "staff": "brand",
+          "collaborator": "info",
+          "player": "neutral",
+          "member": "neutral"
+        },
+        "emailVerification": {
+          "publicIdentity": "hidden",
+          "accountSecurityEntry": "when-unverified",
+          "restrictedActionGuidance": "contextual"
+        }
+      },
+      "statusTones": {
+        "pinned": "brand",
+        "new": "brand",
+        "private": "warning",
+        "locked": "warning",
+        "archived": "neutral",
+        "unavailable": "neutral",
+        "blocked": "danger",
+        "error": "danger"
+      },
+      "economyTones": {
+        "income": "success",
+        "expense": "foreground",
+        "balance": "foreground",
+        "pending": "warning"
       },
       "web": {
         "interactiveMinimumPx": 32,
@@ -570,6 +684,13 @@
         "blockingFailureStaysInContext": true,
         "transientFeedbackNeverSoleCriticalResult": true
       },
+      "presentation": {
+        "initialContentLoading": "structure-preserving-skeleton",
+        "smallIndeterminateLoading": "spinner",
+        "buttonPending": "inline-spinner-preserve-label-width",
+        "refresh": "preserve-content-and-mark-busy",
+        "stateAnatomy": ["icon-optional", "title", "message-optional", "action-optional"]
+      },
       "web": {
         "transientChannel": "toast",
         "asyncLiveRegion": "polite"
@@ -585,6 +706,18 @@
         "explicitClosePath": true,
         "restoreFocus": true,
         "backdropNeverSoleDismissal": true
+      },
+      "tasks": {
+        "tooltip": "brief-nonessential-help",
+        "popover": "anchored-quick-action-or-selection",
+        "sheet": "mobile-long-choice-or-multi-action",
+        "dialog": "blocking-decision-form-or-confirmation"
+      },
+      "destructiveActions": {
+        "lowRiskUndoable": "execute-and-offer-undo",
+        "irreversibleOrAffectsOthers": "explicit-confirmation",
+        "confirmationNamesAction": true,
+        "pendingBlocksDismissal": true
       },
       "web": {
         "layers": {
@@ -613,6 +746,27 @@
         "elevation": { "flat": 0, "floating": 2, "popup": 4 },
         "dismiss": ["explicit-control", "system-back"],
         "safeArea": true
+      }
+    },
+    "formatting": {
+      "relativeTime": {
+        "relativeWindowSeconds": 259200,
+        "justNowSeconds": 60,
+        "minutesUntilSeconds": 3600,
+        "hoursUntilSeconds": 86400,
+        "sameYearFallback": "MM-dd HH:mm",
+        "crossYearFallback": "yyyy-MM-dd HH:mm",
+        "futureBehavior": "absolute",
+        "timezone": "user-local",
+        "exactValueExposure": ["web-title", "mobile-semantics"]
+      },
+      "counts": {
+        "compactFrom": 10000,
+        "wanFrom": 10000,
+        "yiFrom": 100000000,
+        "maximumFractionDigits": 1,
+        "trimTrailingZero": true,
+        "exactValueExposure": "accessible-name"
       }
     },
     "navigation": {

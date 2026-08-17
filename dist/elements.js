@@ -135,16 +135,57 @@ export const METADATA_ELEMENT_STYLES = Object.freeze({
     "weight": 500
   },
   "level": {
-    "tone": "brand",
     "format": "Lv.N",
-    "foreground": "onAccent",
-    "surface": "accent",
     "heightPx": 20,
     "fontSizePx": 11,
     "weight": 700,
     "family": "utility",
     "numbers": "tabular",
-    "radius": "compact"
+    "radius": "compact",
+    "invalidBehavior": "hidden",
+    "futureLevelBehavior": "highest-tier",
+    "tiers": [
+      {
+        "id": "mist",
+        "minimum": 1,
+        "maximum": 1,
+        "foreground": "#6D6775",
+        "surface": "#F7F5F8",
+        "border": "#E8E3EB"
+      },
+      {
+        "id": "peach",
+        "minimum": 2,
+        "maximum": 3,
+        "foreground": "#765346",
+        "surface": "#FBE9E2",
+        "border": "#F2CFC3"
+      },
+      {
+        "id": "rose",
+        "minimum": 4,
+        "maximum": 5,
+        "foreground": "#784653",
+        "surface": "#F8D9DF",
+        "border": "#EEBBC5"
+      },
+      {
+        "id": "coral",
+        "minimum": 6,
+        "maximum": 7,
+        "foreground": "#5F2935",
+        "surface": "#EE9AAA",
+        "border": "#D96F84"
+      },
+      {
+        "id": "berry",
+        "minimum": 8,
+        "maximum": 9,
+        "foreground": "#FFFFFF",
+        "surface": "#922F50",
+        "border": "#7B2442"
+      }
+    ]
   },
   "unreadCount": {
     "tone": "danger",
@@ -164,6 +205,40 @@ export const METADATA_ELEMENT_STYLES = Object.freeze({
     "badgeTone": "neutral",
     "neverSoleCue": true
   }
+});
+export const IDENTITY_PRESENTATION = Object.freeze({
+  "avatarFallback": {
+    "missingOrFailed": "first-readable-character",
+    "unavailableOrAnonymous": "neutral-user-icon"
+  },
+  "roleTones": {
+    "owner": "brand",
+    "staff": "brand",
+    "collaborator": "info",
+    "player": "neutral",
+    "member": "neutral"
+  },
+  "emailVerification": {
+    "publicIdentity": "hidden",
+    "accountSecurityEntry": "when-unverified",
+    "restrictedActionGuidance": "contextual"
+  }
+});
+export const CONTENT_STATUS_TONES = Object.freeze({
+  "pinned": "brand",
+  "new": "brand",
+  "private": "warning",
+  "locked": "warning",
+  "archived": "neutral",
+  "unavailable": "neutral",
+  "blocked": "danger",
+  "error": "danger"
+});
+export const ECONOMY_TONES = Object.freeze({
+  "income": "success",
+  "expense": "foreground",
+  "balance": "foreground",
+  "pending": "warning"
 });
 export const ELEMENT_WEB_PROFILE = Object.freeze({
   "interactiveMinimumPx": 32,
@@ -190,3 +265,8 @@ export const ELEMENT_MOBILE_PROFILE = Object.freeze({
   },
   "categoryMarkerWidthDp": 4
 });
+export function levelTier(level) {
+  if (!Number.isInteger(level) || level < 1) return undefined;
+  return METADATA_ELEMENT_STYLES.level.tiers.find((tier) => level <= tier.maximum)
+    ?? METADATA_ELEMENT_STYLES.level.tiers.at(-1);
+}

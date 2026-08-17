@@ -1,6 +1,6 @@
 {
   "name": "@wenyousite/foundation",
-  "version": "5.1.0",
+  "version": "6.0.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -29,6 +29,14 @@
     "./interaction": {
       "types": "./dist/interaction.d.ts",
       "default": "./dist/interaction.js"
+    },
+    "./controls": {
+      "types": "./dist/controls.d.ts",
+      "default": "./dist/controls.js"
+    },
+    "./formatting": {
+      "types": "./dist/formatting.d.ts",
+      "default": "./dist/formatting.js"
     },
     "./elements": {
       "types": "./dist/elements.d.ts",

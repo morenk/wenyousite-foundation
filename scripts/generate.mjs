@@ -44,11 +44,13 @@ const editor = contract.experiences.editor;
 const icons = contract.experiences.icons;
 const images = contract.experiences.images;
 const collections = contract.experiences.collections;
+const controls = contract.experiences.controls;
 const elements = contract.experiences.elements;
 const notifications = contract.experiences.notifications;
 const accessibility = contract.accessibility;
 const feedback = contract.experiences.feedback;
 const overlays = contract.experiences.overlays;
+const formatting = contract.experiences.formatting;
 const navigation = contract.experiences.navigation;
 const language = contract.experiences.language;
 const typeRoleIds = Object.keys(contract.profiles.web.typeScale);
@@ -357,6 +359,7 @@ export declare const IMAGE_MOBILE_PROFILE: Readonly<Record<string, string | numb
 
 write("dist/collections.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const COLLECTION_INVARIANTS = Object.freeze(${js(collections.invariants)});
+export const CONTENT_PRESENTATION = Object.freeze(${js(collections.content)});
 export const COLLECTION_WEB_PROFILE = Object.freeze(${js(collections.web)});
 export const COLLECTION_MOBILE_PROFILE = Object.freeze(${js(collections.mobile)});`);
 
@@ -368,6 +371,7 @@ export declare const COLLECTION_INVARIANTS: Readonly<{
   horizontalOverflow: "explicit-only";
   contentSizedExceptions: readonly ("message-bubble" | "chip" | "badge" | "compact-action")[];
 }>;
+export declare const CONTENT_PRESENTATION: Readonly<${JSON.stringify(collections.content)}>;
 export declare const COLLECTION_WEB_PROFILE: Readonly<{
   tabPanelWidth: "available";
   multiColumn: "explicit-grid-only";
@@ -376,6 +380,26 @@ export declare const COLLECTION_MOBILE_PROFILE: Readonly<{
   layout: "single-column";
   itemWidth: "available";
 }>;`);
+
+write("dist/controls.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const ACTION_CONTROL_CONTRACT = Object.freeze(${js(controls.actions)});
+export const FIELD_CONTROL_CONTRACT = Object.freeze(${js(controls.fields)});
+export const SELECTION_CONTROL_CONTRACT = Object.freeze(${js(controls.selection)});
+export const PROGRESS_CONTROL_CONTRACT = Object.freeze(${js(controls.progress)});
+export const CONTROL_WEB_PROFILE = Object.freeze(${js(controls.web)});
+export const CONTROL_MOBILE_PROFILE = Object.freeze(${js(controls.mobile)});`);
+
+write("dist/controls.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export type ActionControlRole = ${controls.actions.roles.map((id) => JSON.stringify(id)).join(" | ")};
+export type FieldControlState = ${controls.fields.states.map((id) => JSON.stringify(id)).join(" | ")};
+export type SelectionControlPattern = ${controls.selection.patterns.map((id) => JSON.stringify(id)).join(" | ")};
+export type ProgressControlRole = ${controls.progress.roles.map((id) => JSON.stringify(id)).join(" | ")};
+export declare const ACTION_CONTROL_CONTRACT: Readonly<${JSON.stringify(controls.actions)}>;
+export declare const FIELD_CONTROL_CONTRACT: Readonly<${JSON.stringify(controls.fields)}>;
+export declare const SELECTION_CONTROL_CONTRACT: Readonly<${JSON.stringify(controls.selection)}>;
+export declare const PROGRESS_CONTROL_CONTRACT: Readonly<${JSON.stringify(controls.progress)}>;
+export declare const CONTROL_WEB_PROFILE: Readonly<${JSON.stringify(controls.web)}>;
+export declare const CONTROL_MOBILE_PROFILE: Readonly<${JSON.stringify(controls.mobile)}>;`);
 
 write("dist/notifications.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const NOTIFICATION_ALL_LABEL = ${JSON.stringify(notifications.allLabel)};
@@ -407,7 +431,12 @@ export declare const NOTIFICATION_INVARIANTS: Readonly<{
 }>;`);
 
 write("dist/typography.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const TYPOGRAPHY_FAMILIES = Object.freeze(${js(contract.typography)});
+export const TYPOGRAPHY_FAMILIES = Object.freeze(${js({
+  body: contract.typography.body,
+  display: contract.typography.display,
+  utility: contract.typography.utility,
+})});
+export const TYPOGRAPHY_USAGE = Object.freeze(${js(contract.typography.usage)});
 export const WEB_TYPE_SCALE = Object.freeze(${js(contract.profiles.web.typeScale)});
 export const MOBILE_TYPE_SCALE = Object.freeze(${js(contract.profiles.mobile.typeScale)});`);
 
@@ -426,6 +455,7 @@ export declare const TYPOGRAPHY_FAMILIES: Readonly<Record<TypographyFamilyRole, 
   weights: readonly number[];
   fallback: readonly string[];
 }>>>;
+export declare const TYPOGRAPHY_USAGE: Readonly<${JSON.stringify(contract.typography.usage)}>;
 export declare const WEB_TYPE_SCALE: Readonly<Record<TypographyRoleId, TypographyStyleContract>>;
 export declare const MOBILE_TYPE_SCALE: Readonly<Record<TypographyRoleId, TypographyStyleContract>>;`);
 
@@ -434,11 +464,15 @@ export const ACCESSIBILITY_CONTRACT = Object.freeze(${js(accessibility)});
 export const FEEDBACK_RESOURCE_STATES = Object.freeze(${js(feedback.resourceStates)});
 export const FEEDBACK_MUTATION_STATES = Object.freeze(${js(feedback.mutationStates)});
 export const FEEDBACK_INVARIANTS = Object.freeze(${js(feedback.invariants)});
+export const FEEDBACK_PRESENTATION = Object.freeze(${js(feedback.presentation)});
 export const FEEDBACK_WEB_PROFILE = Object.freeze(${js(feedback.web)});
 export const FEEDBACK_MOBILE_PROFILE = Object.freeze(${js(feedback.mobile)});
 export const OVERLAY_INVARIANTS = Object.freeze(${js(overlays.invariants)});
+export const OVERLAY_TASKS = Object.freeze(${js(overlays.tasks)});
+export const DESTRUCTIVE_ACTION_POLICY = Object.freeze(${js(overlays.destructiveActions)});
 export const OVERLAY_WEB_PROFILE = Object.freeze(${js(overlays.web)});
-export const OVERLAY_MOBILE_PROFILE = Object.freeze(${js(overlays.mobile)});`);
+export const OVERLAY_MOBILE_PROFILE = Object.freeze(${js(overlays.mobile)});
+export const MOTION_USAGE = Object.freeze(${js(contract.motion.usage)});`);
 
 write("dist/interaction.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export type FeedbackResourceState = ${feedback.resourceStates.map((id) => JSON.stringify(id)).join(" | ")};
@@ -448,9 +482,12 @@ export declare const ACCESSIBILITY_CONTRACT: Readonly<${JSON.stringify(accessibi
 export declare const FEEDBACK_RESOURCE_STATES: readonly FeedbackResourceState[];
 export declare const FEEDBACK_MUTATION_STATES: readonly FeedbackMutationState[];
 export declare const FEEDBACK_INVARIANTS: Readonly<Record<string, boolean>>;
+export declare const FEEDBACK_PRESENTATION: Readonly<${JSON.stringify(feedback.presentation)}>;
 export declare const FEEDBACK_WEB_PROFILE: Readonly<{ transientChannel: "toast"; asyncLiveRegion: "polite" }>;
 export declare const FEEDBACK_MOBILE_PROFILE: Readonly<{ transientChannel: "snackbar"; asyncLiveRegion: "polite" }>;
 export declare const OVERLAY_INVARIANTS: Readonly<Record<string, boolean>>;
+export declare const OVERLAY_TASKS: Readonly<${JSON.stringify(overlays.tasks)}>;
+export declare const DESTRUCTIVE_ACTION_POLICY: Readonly<${JSON.stringify(overlays.destructiveActions)}>;
 export declare const OVERLAY_WEB_PROFILE: Readonly<{
   layers: Readonly<Record<OverlayLayerId, number>>;
   shadows: Readonly<Record<"popover" | "dialog" | "floating", string>>;
@@ -461,7 +498,60 @@ export declare const OVERLAY_MOBILE_PROFILE: Readonly<{
   elevation: Readonly<Record<"flat" | "floating" | "popup", number>>;
   dismiss: readonly ("explicit-control" | "system-back")[];
   safeArea: true;
-}>;`);
+}>;
+export declare const MOTION_USAGE: Readonly<${JSON.stringify(contract.motion.usage)}>;`);
+
+write("dist/formatting.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const FORMATTING_CONTRACT = Object.freeze(${js(formatting)});
+
+const pad2 = (value) => String(value).padStart(2, "0");
+const validDate = (value) => {
+  const date = value instanceof Date ? new Date(value.getTime()) : new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+};
+
+export function formatWenyouExactTime(value) {
+  const date = validDate(value);
+  if (!date) return "—";
+  return [date.getFullYear(), pad2(date.getMonth() + 1), pad2(date.getDate())].join("-")
+    + " " + [pad2(date.getHours()), pad2(date.getMinutes())].join(":");
+}
+
+export function formatWenyouTime(value, reference = new Date()) {
+  const date = validDate(value);
+  const now = validDate(reference);
+  if (!date || !now) return "—";
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const policy = FORMATTING_CONTRACT.relativeTime;
+  if (seconds >= 0 && seconds < policy.justNowSeconds) return "刚刚";
+  if (seconds >= policy.justNowSeconds && seconds < policy.minutesUntilSeconds) return \`\${Math.floor(seconds / 60)} 分钟前\`;
+  if (seconds >= policy.minutesUntilSeconds && seconds < policy.hoursUntilSeconds) return \`\${Math.floor(seconds / 3600)} 小时前\`;
+  if (seconds >= policy.hoursUntilSeconds && seconds < policy.relativeWindowSeconds) return \`\${Math.floor(seconds / 86400)} 天前\`;
+  const datePart = date.getFullYear() === now.getFullYear()
+    ? [pad2(date.getMonth() + 1), pad2(date.getDate())].join("-")
+    : [date.getFullYear(), pad2(date.getMonth() + 1), pad2(date.getDate())].join("-");
+  return datePart + " " + [pad2(date.getHours()), pad2(date.getMinutes())].join(":");
+}
+
+const compact = (value, divisor, suffix) => {
+  const scaled = Math.round((value / divisor) * 10) / 10;
+  return \`\${Number.isInteger(scaled) ? scaled.toFixed(0) : scaled.toFixed(1)}\${suffix}\`;
+};
+
+export function formatWenyouCompactCount(value) {
+  if (!Number.isFinite(value) || value < 0) return "—";
+  const count = Math.trunc(value);
+  if (count >= FORMATTING_CONTRACT.counts.yiFrom) return compact(count, FORMATTING_CONTRACT.counts.yiFrom, "亿");
+  if (count >= FORMATTING_CONTRACT.counts.wanFrom) return compact(count, FORMATTING_CONTRACT.counts.wanFrom, "万");
+  return String(count);
+}`);
+
+write("dist/formatting.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export declare const FORMATTING_CONTRACT: Readonly<${JSON.stringify(formatting)}>;
+export type WenyouDateInput = Date | string | number;
+export declare function formatWenyouExactTime(value: WenyouDateInput): string;
+export declare function formatWenyouTime(value: WenyouDateInput, reference?: WenyouDateInput): string;
+export declare function formatWenyouCompactCount(value: number): string;`);
 
 write("dist/navigation.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const NAVIGATION_LABELS = Object.freeze(${js(navigation.labels)});
@@ -505,8 +595,16 @@ export const ELEMENT_INVARIANTS = Object.freeze(${js(elements.invariants)});
 export const INLINE_ELEMENT_STYLES = Object.freeze(${js(elements.inline)});
 export const BLOCK_ELEMENT_STYLES = Object.freeze(${js(elements.block)});
 export const METADATA_ELEMENT_STYLES = Object.freeze(${js(elements.metadata)});
+export const IDENTITY_PRESENTATION = Object.freeze(${js(elements.identity)});
+export const CONTENT_STATUS_TONES = Object.freeze(${js(elements.statusTones)});
+export const ECONOMY_TONES = Object.freeze(${js(elements.economyTones)});
 export const ELEMENT_WEB_PROFILE = Object.freeze(${js(elements.web)});
-export const ELEMENT_MOBILE_PROFILE = Object.freeze(${js(elements.mobile)});`);
+export const ELEMENT_MOBILE_PROFILE = Object.freeze(${js(elements.mobile)});
+export function levelTier(level) {
+  if (!Number.isInteger(level) || level < 1) return undefined;
+  return METADATA_ELEMENT_STYLES.level.tiers.find((tier) => level <= tier.maximum)
+    ?? METADATA_ELEMENT_STYLES.level.tiers.at(-1);
+}`);
 
 const elementToneUnion = Object.keys(elements.metadata.badge.tones)
   .map((tone) => JSON.stringify(tone))
@@ -514,15 +612,23 @@ const elementToneUnion = Object.keys(elements.metadata.badge.tones)
 const badgeSizeUnion = elements.metadata.badge.sizes
   .map((size) => JSON.stringify(size))
   .join(" | ");
+const levelTierUnion = elements.metadata.level.tiers
+  .map(({ id }) => JSON.stringify(id))
+  .join(" | ");
 write("dist/elements.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export type ElementTone = ${elementToneUnion};
 export type BadgeSize = ${badgeSizeUnion};
+export type LevelTierId = ${levelTierUnion};
 export declare const ELEMENT_INVARIANTS: Readonly<${JSON.stringify(elements.invariants)}>;
 export declare const INLINE_ELEMENT_STYLES: Readonly<${JSON.stringify(elements.inline)}>;
 export declare const BLOCK_ELEMENT_STYLES: Readonly<${JSON.stringify(elements.block)}>;
 export declare const METADATA_ELEMENT_STYLES: Readonly<${JSON.stringify(elements.metadata)}>;
+export declare const IDENTITY_PRESENTATION: Readonly<${JSON.stringify(elements.identity)}>;
+export declare const CONTENT_STATUS_TONES: Readonly<${JSON.stringify(elements.statusTones)}>;
+export declare const ECONOMY_TONES: Readonly<${JSON.stringify(elements.economyTones)}>;
 export declare const ELEMENT_WEB_PROFILE: Readonly<${JSON.stringify(elements.web)}>;
-export declare const ELEMENT_MOBILE_PROFILE: Readonly<${JSON.stringify(elements.mobile)}>;`);
+export declare const ELEMENT_MOBILE_PROFILE: Readonly<${JSON.stringify(elements.mobile)}>;
+export declare function levelTier(level: number): Readonly<(typeof METADATA_ELEMENT_STYLES)["level"]["tiers"][number]> | undefined;`);
 
 const p = contract.palette;
 const web = contract.profiles.web;
@@ -647,6 +753,11 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --element-topic-tag-min-height: ${elements.web.interactiveMinimumPx}px;
   --element-level-height: ${elements.metadata.level.heightPx}px;
   --element-level-font-size: ${elements.metadata.level.fontSizePx}px;
+${elements.metadata.level.tiers.flatMap((tier) => [
+  `  --element-level-${tier.id}-foreground: ${cssHex(tier.foreground)};`,
+  `  --element-level-${tier.id}-surface: ${cssHex(tier.surface)};`,
+  `  --element-level-${tier.id}-border: ${cssHex(tier.border)};`,
+]).join("\n")}
   --element-unread-count-height: ${elements.metadata.unreadCount.heightPx}px;
   --element-unread-count-font-size: ${elements.metadata.unreadCount.fontSizePx}px;
   --element-category-marker-width: ${elements.web.categoryMarkerWidthPx}px;
@@ -689,6 +800,9 @@ const mobileTypeFamilyEntries = Object.entries(mobile.typeScale)
   .join("\n");
 const mobileTypeNumberEntries = (property, suffix = "") => Object.entries(mobile.typeScale)
   .map(([id, style]) => `    ${dartString(id)}: ${style[property]}${suffix},`)
+  .join("\n");
+const levelTierEntries = elements.metadata.level.tiers
+  .map((tier) => `    WenyouLevelTier(id: ${dartString(tier.id)}, minimum: ${tier.minimum}, maximum: ${tier.maximum}, foreground: ${dartColor(tier.foreground)}, surface: ${dartColor(tier.surface)}, border: ${dartColor(tier.border)}),`)
   .join("\n");
 write("packages/flutter/lib/src/foundation_tokens.dart", `// 由 contracts/foundation.v1.json 生成，禁止手改。
 import 'package:flutter/material.dart';
@@ -748,6 +862,49 @@ abstract final class WenyouElementContract {
   static const double categoryMarkerWidth = ${elements.mobile.categoryMarkerWidthDp}.0;
   static const Color categoryMarkerForeground = WenyouFoundationPalette.mutedForeground;
   static const String categoryBadgeTone = ${dartString(elements.metadata.categoryMarker.badgeTone)};
+}
+
+@immutable
+class WenyouLevelTier {
+  const WenyouLevelTier({required this.id, required this.minimum, required this.maximum, required this.foreground, required this.surface, required this.border});
+  final String id;
+  final int minimum;
+  final int maximum;
+  final Color foreground;
+  final Color surface;
+  final Color border;
+}
+
+abstract final class WenyouLevelContract {
+  static const List<WenyouLevelTier> tiers = <WenyouLevelTier>[
+${levelTierEntries}
+  ];
+  static WenyouLevelTier? resolve(int level) {
+    if (level < 1) return null;
+    for (final tier in tiers) {
+      if (level <= tier.maximum) return tier;
+    }
+    return tiers.last;
+  }
+}
+
+abstract final class WenyouIdentityContract {
+  static const String missingAvatarFallback = ${dartString(elements.identity.avatarFallback.missingOrFailed)};
+  static const String unavailableAvatarFallback = ${dartString(elements.identity.avatarFallback.unavailableOrAnonymous)};
+  static const Map<String, String> roleTones = <String, String>{
+${dartStringMapEntries(elements.identity.roleTones)}
+  };
+  static const String emailVerificationPublicIdentity = ${dartString(elements.identity.emailVerification.publicIdentity)};
+  static const String emailVerificationAccountSecurityEntry = ${dartString(elements.identity.emailVerification.accountSecurityEntry)};
+  static const String emailVerificationRestrictedActionGuidance = ${dartString(elements.identity.emailVerification.restrictedActionGuidance)};
+}
+
+abstract final class WenyouControlContract {
+  static const List<String> actionRoles = <String>${dartList(controls.actions.roles)};
+  static const List<String> fieldStates = <String>${dartList(controls.fields.states)};
+  static const List<String> selectionPatterns = <String>${dartList(controls.selection.patterns)};
+  static const double minimumTarget = ${controls.mobile.minimumTargetDp}.0;
+  static const String levelProgressFill = ${dartString(controls.progress.levelFill)};
 }
 
 abstract final class WenyouFoundationTypography {
@@ -913,6 +1070,58 @@ ${Object.entries(images.roles).map(([role, value]) => `    ${dartString(role)}: 
   static const double stickerDisplayMax = ${images.mobile.stickerDisplayMaxDp}.0;
 }`);
 
+write("packages/flutter/lib/src/foundation_formatters.dart", `// 由 contracts/foundation.v1.json 生成，禁止手改。
+abstract final class WenyouFormattingContract {
+  static const Duration relativeWindow = Duration(seconds: ${formatting.relativeTime.relativeWindowSeconds});
+  static const Duration justNow = Duration(seconds: ${formatting.relativeTime.justNowSeconds});
+  static const Duration minutesUntil = Duration(seconds: ${formatting.relativeTime.minutesUntilSeconds});
+  static const Duration hoursUntil = Duration(seconds: ${formatting.relativeTime.hoursUntilSeconds});
+  static const int compactCountFrom = ${formatting.counts.compactFrom};
+  static const int yiCountFrom = ${formatting.counts.yiFrom};
+}
+
+String _wenyouPad2(int value) => value.toString().padLeft(2, '0');
+
+String formatWenyouExactTime(DateTime value) {
+  final date = value.toLocal();
+  return date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day)
+      + ' ' + _wenyouPad2(date.hour) + ':' + _wenyouPad2(date.minute);
+}
+
+String formatWenyouTime(DateTime value, {DateTime? reference}) {
+  final date = value.toLocal();
+  final now = (reference ?? DateTime.now()).toLocal();
+  final difference = now.difference(date);
+  if (!difference.isNegative && difference < WenyouFormattingContract.justNow) return '刚刚';
+  if (difference >= WenyouFormattingContract.justNow && difference < WenyouFormattingContract.minutesUntil) {
+    return difference.inMinutes.toString() + ' 分钟前';
+  }
+  if (difference >= WenyouFormattingContract.minutesUntil && difference < WenyouFormattingContract.hoursUntil) {
+    return difference.inHours.toString() + ' 小时前';
+  }
+  if (difference >= WenyouFormattingContract.hoursUntil && difference < WenyouFormattingContract.relativeWindow) {
+    return difference.inDays.toString() + ' 天前';
+  }
+  final datePart = date.year == now.year
+      ? _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day)
+      : date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day);
+  return datePart + ' ' + _wenyouPad2(date.hour) + ':' + _wenyouPad2(date.minute);
+}
+
+String _formatWenyouCompact(num value, num divisor, String suffix) {
+  final scaled = (value / divisor * 10).round() / 10;
+  final digits = scaled == scaled.roundToDouble() ? 0 : ${formatting.counts.maximumFractionDigits};
+  return scaled.toStringAsFixed(digits) + suffix;
+}
+
+String formatWenyouCompactCount(num value) {
+  if (!value.isFinite || value < 0) return '—';
+  final count = value.truncate();
+  if (count >= ${formatting.counts.yiFrom}) return _formatWenyouCompact(count, ${formatting.counts.yiFrom}, '亿');
+  if (count >= ${formatting.counts.wanFrom}) return _formatWenyouCompact(count, ${formatting.counts.wanFrom}, '万');
+  return count.toString();
+}`);
+
 for (const glyphId of glyphIds) {
   write(`packages/flutter/icons/${glyphId}.svg`, glyphSvgs[glyphId]);
 }
@@ -1000,11 +1209,12 @@ class WenyouIcon extends StatelessWidget {
 }`);
 
 const artifactPaths = [
-  ...["icons", "editor", "images", "collections", "notifications", "typography", "interaction", "navigation", "language", "elements"]
+  ...["icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
     .flatMap((name) => [`dist/${name}.js`, `dist/${name}.d.ts`]),
   "web/tokens.css",
   "web/fonts.css",
   "packages/flutter/lib/src/foundation_tokens.dart",
+  "packages/flutter/lib/src/foundation_formatters.dart",
   "packages/flutter/lib/src/wenyou_icons.dart",
 ];
 const artifactSha256 = Object.fromEntries(artifactPaths.map((relativePath) => [
@@ -1019,6 +1229,9 @@ const manifest = JSON.stringify({
   features: {
     typography: true,
     interaction: true,
+    controls: true,
+    formatting: true,
+    contentPresentation: true,
     iconControls: true,
     navigation: true,
     language: true,

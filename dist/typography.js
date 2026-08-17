@@ -41,24 +41,53 @@ export const TYPOGRAPHY_FAMILIES = Object.freeze({
     ]
   }
 });
+export const TYPOGRAPHY_USAGE = Object.freeze({
+  "displayContexts": [
+    "brand",
+    "page-title",
+    "section-title",
+    "detail-content-title",
+    "text-cover-title"
+  ],
+  "bodySemiboldContexts": [
+    "list-item-title",
+    "dialog-title",
+    "sheet-title",
+    "popover-title",
+    "state-title"
+  ],
+  "bodyOnlyContexts": [
+    "control",
+    "navigation",
+    "username",
+    "rich-text-heading"
+  ],
+  "utilityContexts": [
+    "numeric",
+    "time",
+    "counter"
+  ],
+  "displayWeight": 500,
+  "listTitleWeight": 600
+});
 export const WEB_TYPE_SCALE = Object.freeze({
   "pageTitle": {
     "family": "display",
     "size": 28,
     "lineHeight": 36,
-    "weight": 700
+    "weight": 500
   },
   "sectionTitle": {
     "family": "display",
     "size": 20,
     "lineHeight": 32,
-    "weight": 700
+    "weight": 500
   },
   "subsectionTitle": {
     "family": "display",
     "size": 18,
     "lineHeight": 24,
-    "weight": 700
+    "weight": 500
   },
   "body": {
     "family": "body",

@@ -12,5 +12,6 @@ export declare const TYPOGRAPHY_FAMILIES: Readonly<Record<TypographyFamilyRole, 
   weights: readonly number[];
   fallback: readonly string[];
 }>>>;
+export declare const TYPOGRAPHY_USAGE: Readonly<{"displayContexts":["brand","page-title","section-title","detail-content-title","text-cover-title"],"bodySemiboldContexts":["list-item-title","dialog-title","sheet-title","popover-title","state-title"],"bodyOnlyContexts":["control","navigation","username","rich-text-heading"],"utilityContexts":["numeric","time","counter"],"displayWeight":500,"listTitleWeight":600}>;
 export declare const WEB_TYPE_SCALE: Readonly<Record<TypographyRoleId, TypographyStyleContract>>;
 export declare const MOBILE_TYPE_SCALE: Readonly<Record<TypographyRoleId, TypographyStyleContract>>;

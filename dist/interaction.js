@@ -48,6 +48,18 @@ export const FEEDBACK_INVARIANTS = Object.freeze({
   "blockingFailureStaysInContext": true,
   "transientFeedbackNeverSoleCriticalResult": true
 });
+export const FEEDBACK_PRESENTATION = Object.freeze({
+  "initialContentLoading": "structure-preserving-skeleton",
+  "smallIndeterminateLoading": "spinner",
+  "buttonPending": "inline-spinner-preserve-label-width",
+  "refresh": "preserve-content-and-mark-busy",
+  "stateAnatomy": [
+    "icon-optional",
+    "title",
+    "message-optional",
+    "action-optional"
+  ]
+});
 export const FEEDBACK_WEB_PROFILE = Object.freeze({
   "transientChannel": "toast",
   "asyncLiveRegion": "polite"
@@ -61,6 +73,18 @@ export const OVERLAY_INVARIANTS = Object.freeze({
   "explicitClosePath": true,
   "restoreFocus": true,
   "backdropNeverSoleDismissal": true
+});
+export const OVERLAY_TASKS = Object.freeze({
+  "tooltip": "brief-nonessential-help",
+  "popover": "anchored-quick-action-or-selection",
+  "sheet": "mobile-long-choice-or-multi-action",
+  "dialog": "blocking-decision-form-or-confirmation"
+});
+export const DESTRUCTIVE_ACTION_POLICY = Object.freeze({
+  "lowRiskUndoable": "execute-and-offer-undo",
+  "irreversibleOrAffectsOthers": "explicit-confirmation",
+  "confirmationNamesAction": true,
+  "pendingBlocksDismissal": true
 });
 export const OVERLAY_WEB_PROFILE = Object.freeze({
   "layers": {
@@ -99,4 +123,17 @@ export const OVERLAY_MOBILE_PROFILE = Object.freeze({
     "system-back"
   ],
   "safeArea": true
+});
+export const MOTION_USAGE = Object.freeze({
+  "allowed": [
+    "state-feedback",
+    "expand-collapse",
+    "overlay-relationship"
+  ],
+  "forbidden": [
+    "decorative-drift",
+    "list-layout-shift",
+    "ambient-loop"
+  ],
+  "reducedMotion": "remove-nonessential-and-use-static-skeleton"
 });

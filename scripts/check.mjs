@@ -28,6 +28,9 @@ for (const [label, mutate] of [
   ["遗留互动柔和色", (value) => { value.palette.likeSoft = "#FCE7F0"; }],
   ["缺少元素契约", (value) => { delete value.experiences.elements; }],
   ["未知元素字段", (value) => { value.experiences.elements.unknown = true; }],
+  ["缺少控件契约", (value) => { delete value.experiences.controls; }],
+  ["缺少格式化契约", (value) => { delete value.experiences.formatting; }],
+  ["非法等级色", (value) => { value.experiences.elements.metadata.level.tiers[0].foreground = "gray"; }],
   ["错误平台单位", (value) => { value.profiles.mobile.unit = "px"; }],
   ["非法浮层数值", (value) => { value.experiences.overlays.web.layers.popup = "70"; }],
 ]) {
@@ -36,21 +39,23 @@ for (const [label, mutate] of [
   if (validateContract(invalid)) failures.push(`JSON Schema 反向用例未拒绝：${label}`);
 }
 
-if (contract.schemaVersion !== 1) failures.push("foundation schemaVersion 必须为 1");
+if (contract.schemaVersion !== 2) failures.push("foundation schemaVersion 必须为 2");
 if (packageJson.version !== contract.version) failures.push("根 package 版本与契约不一致");
 if (
   packageJson.exports?.["./elements"]?.types !== "./dist/elements.d.ts"
   || packageJson.exports?.["./elements"]?.default !== "./dist/elements.js"
+  || packageJson.exports?.["./controls"]?.types !== "./dist/controls.d.ts"
+  || packageJson.exports?.["./formatting"]?.types !== "./dist/formatting.d.ts"
 ) {
-  failures.push("根 package 未导出元素契约模块");
+  failures.push("根 package 未导出 v6 设计契约模块");
 }
 const contractSha256 = crypto
   .createHash("sha256")
   .update(fs.readFileSync(path.join(root, "contracts/foundation.v1.json")))
   .digest("hex");
 if (manifest.contractSha256 !== contractSha256) failures.push("契约清单哈希与事实源不一致");
-if (Object.keys(manifest.artifactSha256 ?? {}).length !== 24) {
-  failures.push("发布清单未完整记录 24 个生成代码与 Token 产物");
+if (Object.keys(manifest.artifactSha256 ?? {}).length !== 29) {
+  failures.push("发布清单未完整记录 29 个生成代码与 Token 产物");
 }
 for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha256 ?? {})) {
   if (!fs.existsSync(path.join(root, relativePath))) {
@@ -60,17 +65,20 @@ for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha25
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
   if (hash !== expectedHash) failures.push(`生成产物校验和不一致 ${relativePath}`);
 }
-if (!manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
+if (!manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.controls || !manifest.features?.formatting || !manifest.features?.contentPresentation || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
   failures.push("发布清单缺少共享语义能力清单");
 }
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
-for (const claim of ["--element-internal-reference-surface", "--element-badge-default-height", "--element-category-marker-width"]) {
+for (const claim of ["--element-internal-reference-surface", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
   if (!read("web/tokens.css").includes(`${claim}:`)) failures.push(`Web Token 缺少 ${claim}`);
 }
 if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouElementContract")) {
   failures.push("Flutter 生成物缺少 WenyouElementContract");
+}
+if (!read("packages/flutter/lib/src/foundation_formatters.dart").includes("formatWenyouTime")) {
+  failures.push("Flutter 生成物缺少统一时间格式化能力");
 }
 for (const font of contract.fonts) {
   if (!read("packages/flutter/LICENSE").includes(font.family)) {
@@ -82,6 +90,7 @@ if (!read("packages/flutter/pubspec.yaml").includes(`version: ${contract.version
 }
 
 const icons = contract.experiences.icons;
+const elements = contract.experiences.elements;
 if (icons.source.package !== "lucide-static" || icons.source.version !== packageJson.dependencies[icons.source.package]) {
   failures.push("Lucide 图标来源版本与根依赖不一致");
 }
@@ -187,6 +196,35 @@ for (const [surface, foreground, label] of [
   }
 }
 
+const expectedLevelRanges = [[1, 1], [2, 3], [4, 5], [6, 7], [8, 9]];
+for (const [index, tier] of elements.metadata.level.tiers.entries()) {
+  const [minimum, maximum] = expectedLevelRanges[index];
+  if (tier.minimum !== minimum || tier.maximum !== maximum) {
+    failures.push(`等级色阶 ${tier.id} 未覆盖审定范围 ${minimum}-${maximum}`);
+  }
+  if (contrast(tier.surface, tier.foreground) < contract.accessibility.contrast.normalText) {
+    failures.push(`等级色阶 ${tier.id} 未达到普通文字对比度要求`);
+  }
+}
+if (
+  contract.typography.usage.displayWeight !== 500
+  || contract.typography.usage.listTitleWeight !== 600
+  || !contract.typography.usage.bodyOnlyContexts.includes("username")
+  || !contract.typography.usage.bodySemiboldContexts.includes("dialog-title")
+) {
+  failures.push("文楷与黑体的使用语境偏离 v6 规范");
+}
+if (
+  contract.experiences.formatting.relativeTime.relativeWindowSeconds !== 72 * 60 * 60
+  || contract.experiences.formatting.relativeTime.sameYearFallback !== "MM-dd HH:mm"
+  || contract.experiences.formatting.relativeTime.crossYearFallback !== "yyyy-MM-dd HH:mm"
+) {
+  failures.push("相对时间三天窗口或绝对时间回退格式发生漂移");
+}
+if (elements.identity.emailVerification.publicIdentity !== "hidden") {
+  failures.push("邮箱验证不得进入公开身份呈现");
+}
+
 for (const surfaceToken of icons.controls.hostSurfaces) {
   for (const [foregroundToken, label] of [
     [icons.controls.selected.default.foreground, "default"],
@@ -232,7 +270,6 @@ if (
   failures.push("图标控件瞬时状态层或禁用透明度偏离审定值");
 }
 
-const elements = contract.experiences.elements;
 if (
   elements.inline.internalReference.icon !== "content.internal-reference"
   || icons.semantics[elements.inline.internalReference.icon] !== "door-open"
@@ -533,7 +570,7 @@ for (const font of contract.fonts) {
 }
 
 const skill = read("skills/wenyou-design/SKILL.md");
-if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("docs/icons.md") || !skill.includes("docs/elements.md") || !skill.includes("docs/interaction.md") || !skill.includes("docs/navigation-language.md") || !skill.includes("experiences.collections") || !skill.includes("experiences.elements") || !skill.includes("experiences.icons") || !skill.includes("experiences.feedback") || !skill.includes("experiences.navigation")) {
+if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("docs/icons.md") || !skill.includes("docs/elements.md") || !skill.includes("docs/interaction.md") || !skill.includes("docs/presentation.md") || !skill.includes("docs/navigation-language.md") || !skill.includes("experiences.collections") || !skill.includes("experiences.controls") || !skill.includes("experiences.formatting") || !skill.includes("experiences.elements") || !skill.includes("experiences.icons") || !skill.includes("experiences.feedback") || !skill.includes("experiences.navigation")) {
   failures.push("wenyou-design Skill 未正确引用中央事实源");
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");

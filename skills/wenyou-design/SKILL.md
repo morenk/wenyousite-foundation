@@ -21,6 +21,8 @@ description: Apply and review 温油站's shared visual identity and platform-sp
 
 任务涉及加载、提交、空结果、错误、无障碍、Dialog、菜单、Tooltip 或浮层时，还要完整读取 `docs/interaction.md`、顶层 `accessibility`、`experiences.feedback` 与 `experiences.overlays`。任务涉及全局导航、消息入口、用户可见名词或动作词时，还要读取 `docs/navigation-language.md`、`experiences.navigation` 与 `experiences.language`。
 
+任务涉及按钮、字段、筛选、列表、详情、卡片、时间或紧凑数字时，还要完整读取 `docs/presentation.md`、`experiences.controls`、`experiences.collections.content` 与 `experiences.formatting`。
+
 ## 设计工作流
 
 1. 明确页面的真实受众、单一主要任务和当前平台；检查现有页面、共享组件、Token 与视觉基线。
