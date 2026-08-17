@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.0.0';
+  static const String value = '6.0.1';
   static const int schema = 2;
 }
 
@@ -74,6 +74,13 @@ abstract final class WenyouElementContract {
   static const String internalReferenceIcon = 'content.internal-reference';
   static const bool readingEditorEquivalent = true;
   static const bool statusNeverColorOnly = true;
+  static const String diceSettledLabelPattern = '{notation} = {total}';
+  static const String dicePendingLabelPattern = '{notation} = ?';
+  static const String diceSettledSemanticsPattern = '骰子 {notation}，逐骰结果 {results}{modifierPhrase}，总计 {total}';
+  static const String dicePendingSemanticsPattern = '骰子 {notation}，待掷';
+  static const String diceResultBinding = 'node-id';
+  static const bool diceReadingEditorEquivalent = true;
+  static const bool diceNeverColorOnly = true;
   static const double badgeDefaultHeight = 24.0;
   static const double badgeCompactHeight = 20.0;
   static const double badgeDefaultFontSize = 12.0;

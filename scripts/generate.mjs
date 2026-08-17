@@ -850,6 +850,13 @@ abstract final class WenyouElementContract {
   static const String internalReferenceIcon = ${dartString(elements.inline.internalReference.icon)};
   static const bool readingEditorEquivalent = ${elements.invariants.readingEditorEquivalent};
   static const bool statusNeverColorOnly = ${elements.invariants.statusNeverColorOnly};
+  static const String diceSettledLabelPattern = ${dartString(elements.inline.dice.labels.settled)};
+  static const String dicePendingLabelPattern = ${dartString(elements.inline.dice.labels.pending)};
+  static const String diceSettledSemanticsPattern = ${dartString(elements.inline.dice.semantics.settled)};
+  static const String dicePendingSemanticsPattern = ${dartString(elements.inline.dice.semantics.pending)};
+  static const String diceResultBinding = ${dartString(elements.inline.dice.data.binding)};
+  static const bool diceReadingEditorEquivalent = ${elements.inline.dice.editor.readingEquivalent};
+  static const bool diceNeverColorOnly = ${elements.inline.dice.semantics.neverColorOnly};
   static const double badgeDefaultHeight = ${elements.metadata.badge.default.heightPx}.0;
   static const double badgeCompactHeight = ${elements.metadata.badge.compact.heightPx}.0;
   static const double badgeDefaultFontSize = ${elements.metadata.badge.default.fontSizePx}.0;

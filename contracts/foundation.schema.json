@@ -558,9 +558,49 @@
             },
             "dice": {
               "type": "object",
-              "required": ["tone", "family", "numbers", "radiusEm", "paddingBlockEm", "paddingInlineEm", "settled", "pending"],
+              "required": ["tone", "family", "numbers", "radiusEm", "paddingBlockEm", "paddingInlineEm", "layout", "labels", "semantics", "data", "editor", "settled", "pending"],
               "properties": {
                 "tone": { "const": "brand" }, "family": { "const": "utility" }, "numbers": { "const": "tabular" }, "radiusEm": { "const": 0.3 }, "paddingBlockEm": { "const": 0.08 }, "paddingInlineEm": { "const": 0.3 },
+                "layout": {
+                  "type": "object",
+                  "required": ["display", "verticalAlign", "internalWrap", "truncate", "icon"],
+                  "properties": {
+                    "display": { "const": "inline-atomic" }, "verticalAlign": { "const": "baseline" }, "internalWrap": { "const": "forbidden" }, "truncate": { "const": false }, "icon": { "const": "none" }
+                  },
+                  "additionalProperties": false
+                },
+                "labels": {
+                  "type": "object",
+                  "required": ["settled", "pending", "visibleResult", "resultBreakdown", "resultsSeparator", "positiveModifier", "negativeModifier", "zeroModifier"],
+                  "properties": {
+                    "settled": { "const": "{notation} = {total}" }, "pending": { "const": "{notation} = ?" }, "visibleResult": { "const": "total-only" }, "resultBreakdown": { "const": "accessible-description" }, "resultsSeparator": { "const": "、" }, "positiveModifier": { "const": "修正加 {modifier}" }, "negativeModifier": { "const": "修正减 {absoluteModifier}" }, "zeroModifier": { "const": "omit" }
+                  },
+                  "additionalProperties": false
+                },
+                "semantics": {
+                  "type": "object",
+                  "required": ["role", "settled", "pending", "neverColorOnly"],
+                  "properties": {
+                    "role": { "const": "note" }, "settled": { "const": "骰子 {notation}，逐骰结果 {results}{modifierPhrase}，总计 {total}" }, "pending": { "const": "骰子 {notation}，待掷" }, "neverColorOnly": { "const": true }
+                  },
+                  "additionalProperties": false
+                },
+                "data": {
+                  "type": "object",
+                  "required": ["binding", "resultSource", "settledResult", "missingResult"],
+                  "properties": {
+                    "binding": { "const": "node-id" }, "resultSource": { "const": "server-only" }, "settledResult": { "const": "immutable" }, "missingResult": { "const": "pending-no-fabrication" }
+                  },
+                  "additionalProperties": false
+                },
+                "editor": {
+                  "type": "object",
+                  "required": ["readingEquivalent", "selection", "activation"],
+                  "properties": {
+                    "readingEquivalent": { "const": true }, "selection": { "const": "atomic" }, "activation": { "const": "none" }
+                  },
+                  "additionalProperties": false
+                },
                 "settled": { "$ref": "#/$defs/elementColorPair" },
                 "pending": { "type": "object", "required": ["foreground", "surface", "display"], "properties": { "foreground": { "const": "warning" }, "surface": { "const": "warningSoft" }, "display": { "const": "?" } }, "additionalProperties": false }
               },

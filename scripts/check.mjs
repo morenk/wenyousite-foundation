@@ -224,6 +224,25 @@ if (
 if (elements.identity.emailVerification.publicIdentity !== "hidden") {
   failures.push("邮箱验证不得进入公开身份呈现");
 }
+const dice = elements.inline.dice;
+if (
+  dice.labels.settled !== "{notation} = {total}"
+  || dice.labels.pending !== "{notation} = ?"
+  || dice.labels.visibleResult !== "total-only"
+  || dice.labels.resultBreakdown !== "accessible-description"
+  || dice.layout.display !== "inline-atomic"
+  || dice.layout.internalWrap !== "forbidden"
+  || dice.layout.icon !== "none"
+  || dice.semantics.role !== "note"
+  || !dice.semantics.neverColorOnly
+  || dice.data.binding !== "node-id"
+  || dice.data.resultSource !== "server-only"
+  || dice.data.settledResult !== "immutable"
+  || dice.editor.selection !== "atomic"
+  || dice.editor.activation !== "none"
+) {
+  failures.push("骰子节点可见文案、无障碍、布局或服务端结果绑定偏离 v6 规范");
+}
 
 for (const surfaceToken of icons.controls.hostSurfaces) {
   for (const [foregroundToken, label] of [

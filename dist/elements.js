@@ -52,6 +52,40 @@ export const INLINE_ELEMENT_STYLES = Object.freeze({
     "radiusEm": 0.3,
     "paddingBlockEm": 0.08,
     "paddingInlineEm": 0.3,
+    "layout": {
+      "display": "inline-atomic",
+      "verticalAlign": "baseline",
+      "internalWrap": "forbidden",
+      "truncate": false,
+      "icon": "none"
+    },
+    "labels": {
+      "settled": "{notation} = {total}",
+      "pending": "{notation} = ?",
+      "visibleResult": "total-only",
+      "resultBreakdown": "accessible-description",
+      "resultsSeparator": "、",
+      "positiveModifier": "修正加 {modifier}",
+      "negativeModifier": "修正减 {absoluteModifier}",
+      "zeroModifier": "omit"
+    },
+    "semantics": {
+      "role": "note",
+      "settled": "骰子 {notation}，逐骰结果 {results}{modifierPhrase}，总计 {total}",
+      "pending": "骰子 {notation}，待掷",
+      "neverColorOnly": true
+    },
+    "data": {
+      "binding": "node-id",
+      "resultSource": "server-only",
+      "settledResult": "immutable",
+      "missingResult": "pending-no-fabrication"
+    },
+    "editor": {
+      "readingEquivalent": true,
+      "selection": "atomic",
+      "activation": "none"
+    },
     "settled": {
       "foreground": "onAccent",
       "surface": "accent"

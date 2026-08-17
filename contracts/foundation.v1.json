@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.0.0",
+  "version": "6.0.1",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -531,6 +531,40 @@
           "radiusEm": 0.3,
           "paddingBlockEm": 0.08,
           "paddingInlineEm": 0.3,
+          "layout": {
+            "display": "inline-atomic",
+            "verticalAlign": "baseline",
+            "internalWrap": "forbidden",
+            "truncate": false,
+            "icon": "none"
+          },
+          "labels": {
+            "settled": "{notation} = {total}",
+            "pending": "{notation} = ?",
+            "visibleResult": "total-only",
+            "resultBreakdown": "accessible-description",
+            "resultsSeparator": "、",
+            "positiveModifier": "修正加 {modifier}",
+            "negativeModifier": "修正减 {absoluteModifier}",
+            "zeroModifier": "omit"
+          },
+          "semantics": {
+            "role": "note",
+            "settled": "骰子 {notation}，逐骰结果 {results}{modifierPhrase}，总计 {total}",
+            "pending": "骰子 {notation}，待掷",
+            "neverColorOnly": true
+          },
+          "data": {
+            "binding": "node-id",
+            "resultSource": "server-only",
+            "settledResult": "immutable",
+            "missingResult": "pending-no-fabrication"
+          },
+          "editor": {
+            "readingEquivalent": true,
+            "selection": "atomic",
+            "activation": "none"
+          },
           "settled": { "foreground": "onAccent", "surface": "accent" },
           "pending": { "foreground": "warning", "surface": "warningSoft", "display": "?" }
         }
