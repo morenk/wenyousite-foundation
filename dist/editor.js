@@ -1,5 +1,5 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "6.0.1";
+export const FOUNDATION_VERSION = "6.1.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
   "bold": "粗体",
@@ -177,6 +177,9 @@ export const EDITOR_MOBILE_SURFACES = Object.freeze([
   "page",
   "expandableSheet",
   "inline"
+]);
+export const EDITOR_MOBILE_RENDERING_EXCEPTIONS = Object.freeze([
+  "inline-code-padding-uses-flutter-quill-native-bounds"
 ]);
 export const EDITOR_MOBILE_TOOLBAR = Object.freeze({
   "placementWhenKeyboardVisible": "above-keyboard-dock",

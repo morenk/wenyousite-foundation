@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.0.1",
+  "version": "6.1.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -429,7 +429,10 @@
       },
       "mobile": {
         "layout": "single-column",
-        "itemWidth": "available"
+        "itemWidth": "available",
+        "domainLayoutExceptions": {
+          "moments-feed": "two-column-waterfall"
+        }
       }
     },
     "controls": {
@@ -955,6 +958,7 @@
       },
       "mobile": {
         "surfaces": ["page", "expandableSheet", "inline"],
+        "renderingExceptions": ["inline-code-padding-uses-flutter-quill-native-bounds"],
         "toolbar": {
           "placementWhenKeyboardVisible": "above-keyboard-dock",
           "primaryLayout": "responsive-single-row",

@@ -1,6 +1,6 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export type EditorCapabilityId = "heading" | "bold" | "italic" | "strikethrough" | "image" | "draft" | "more" | "link" | "inline-code" | "quote" | "bullet-list" | "ordered-list" | "hr" | "dice" | "mention" | "sticker";
-export declare const FOUNDATION_VERSION: "6.0.1";
+export declare const FOUNDATION_VERSION: "6.1.0";
 export declare const EDITOR_CAPABILITY_LABELS: Readonly<Record<EditorCapabilityId, string>>;
 export declare const EDITOR_PRIMARY_NARROW: readonly EditorCapabilityId[];
 export declare const EDITOR_PRIMARY_WIDE: readonly EditorCapabilityId[];
@@ -49,6 +49,8 @@ export declare const EDITOR_MOBILE_LAYOUT: Readonly<{
 }>;
 export type EditorMobileSurface = "page" | "expandableSheet" | "inline";
 export declare const EDITOR_MOBILE_SURFACES: readonly EditorMobileSurface[];
+export type EditorMobileRenderingException = "inline-code-padding-uses-flutter-quill-native-bounds";
+export declare const EDITOR_MOBILE_RENDERING_EXCEPTIONS: readonly EditorMobileRenderingException[];
 export declare const EDITOR_MOBILE_TOOLBAR: Readonly<{
   placementWhenKeyboardVisible: "above-keyboard-dock";
   primaryLayout: "responsive-single-row";

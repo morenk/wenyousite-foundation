@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.0.1';
+  static const String value = '6.1.0';
   static const int schema = 2;
 }
 
@@ -318,6 +318,11 @@ abstract final class WenyouCollectionContract {
   static const bool fillAvailableWidth = true;
   static const bool narrowContentKeepsItemWidth = true;
   static const Set<String> contentSizedExceptions = <String>{'message-bubble', 'chip', 'badge', 'compact-action'};
+  static const String mobileLayout = 'single-column';
+  static const String mobileItemWidth = 'available';
+  static const Map<String, String> mobileDomainLayoutExceptions = <String, String>{
+    'moments-feed': 'two-column-waterfall',
+  };
 }
 
 abstract final class WenyouNotificationContract {
@@ -361,6 +366,7 @@ abstract final class WenyouEditorContract {
   static const List<String> primaryCore = <String>['heading', 'bold', 'italic', 'image', 'more'];
   static const List<String> primaryPromotionOrder = <String>['draft', 'quote', 'hr', 'sticker'];
   static const List<String> surfaces = <String>['page', 'expandableSheet', 'inline'];
+  static const Set<String> mobileRenderingExceptions = <String>{'inline-code-padding-uses-flutter-quill-native-bounds'};
   static const String keyboardToolbarPlacement = 'above-keyboard-dock';
   static const String primaryLayout = 'responsive-single-row';
   static const String horizontalOverflow = 'forbidden';

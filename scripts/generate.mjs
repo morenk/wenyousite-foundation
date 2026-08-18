@@ -258,6 +258,7 @@ export const EDITOR_CONTENT_POLICY = Object.freeze(${js(editor.contentPolicy)});
 export const EDITOR_WEB_LAYOUT = Object.freeze(${js(editor.web.layout)});
 export const EDITOR_MOBILE_LAYOUT = Object.freeze(${js(editor.mobile.layout)});
 export const EDITOR_MOBILE_SURFACES = Object.freeze(${js(editor.mobile.surfaces)});
+export const EDITOR_MOBILE_RENDERING_EXCEPTIONS = Object.freeze(${js(editor.mobile.renderingExceptions)});
 export const EDITOR_MOBILE_TOOLBAR = Object.freeze(${js(editor.mobile.toolbar)});
 export const EDITOR_MOBILE_MORE_INLINE = Object.freeze(${js(editor.mobile.moreInline)});
 export const EDITOR_WEB_CAPABILITIES = Object.freeze(${js(editor.capabilities.web)});
@@ -321,6 +322,8 @@ export declare const EDITOR_MOBILE_LAYOUT: Readonly<{
 }>;
 export type EditorMobileSurface = ${editor.mobile.surfaces.map((surface) => JSON.stringify(surface)).join(" | ")};
 export declare const EDITOR_MOBILE_SURFACES: readonly EditorMobileSurface[];
+export type EditorMobileRenderingException = ${editor.mobile.renderingExceptions.map((exception) => JSON.stringify(exception)).join(" | ")};
+export declare const EDITOR_MOBILE_RENDERING_EXCEPTIONS: readonly EditorMobileRenderingException[];
 export declare const EDITOR_MOBILE_TOOLBAR: Readonly<{
   placementWhenKeyboardVisible: "above-keyboard-dock";
   primaryLayout: "responsive-single-row";
@@ -379,6 +382,9 @@ export declare const COLLECTION_WEB_PROFILE: Readonly<{
 export declare const COLLECTION_MOBILE_PROFILE: Readonly<{
   layout: "single-column";
   itemWidth: "available";
+  domainLayoutExceptions: Readonly<{
+    "moments-feed": "two-column-waterfall";
+  }>;
 }>;`);
 
 write("dist/controls.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
@@ -1020,6 +1026,11 @@ abstract final class WenyouCollectionContract {
   static const bool fillAvailableWidth = ${collections.invariants.itemWidth === "available"};
   static const bool narrowContentKeepsItemWidth = ${collections.invariants.narrowContentDoesNotChangeItemWidth};
   static const Set<String> contentSizedExceptions = <String>{${collections.invariants.contentSizedExceptions.map(dartString).join(", ")}};
+  static const String mobileLayout = ${dartString(collections.mobile.layout)};
+  static const String mobileItemWidth = ${dartString(collections.mobile.itemWidth)};
+  static const Map<String, String> mobileDomainLayoutExceptions = <String, String>{
+${dartStringMapEntries(collections.mobile.domainLayoutExceptions)}
+  };
 }
 
 abstract final class WenyouNotificationContract {
@@ -1044,6 +1055,7 @@ ${labelEntries}
   static const List<String> primaryCore = <String>${dartList(editor.mobile.primaryCore)};
   static const List<String> primaryPromotionOrder = <String>${dartList(editor.mobile.primaryPromotionOrder)};
   static const List<String> surfaces = <String>${dartList(editor.mobile.surfaces)};
+  static const Set<String> mobileRenderingExceptions = <String>{${editor.mobile.renderingExceptions.map(dartString).join(", ")}};
   static const String keyboardToolbarPlacement = ${dartString(editor.mobile.toolbar.placementWhenKeyboardVisible)};
   static const String primaryLayout = ${dartString(editor.mobile.toolbar.primaryLayout)};
   static const String horizontalOverflow = ${dartString(editor.mobile.toolbar.horizontalOverflow)};

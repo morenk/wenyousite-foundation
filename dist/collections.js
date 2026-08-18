@@ -50,5 +50,8 @@ export const COLLECTION_WEB_PROFILE = Object.freeze({
 });
 export const COLLECTION_MOBILE_PROFILE = Object.freeze({
   "layout": "single-column",
-  "itemWidth": "available"
+  "itemWidth": "available",
+  "domainLayoutExceptions": {
+    "moments-feed": "two-column-waterfall"
+  }
 });

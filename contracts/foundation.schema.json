@@ -462,7 +462,21 @@
           "additionalProperties": false
         },
         "web": { "type": "object", "required": ["tabPanelWidth", "multiColumn"], "properties": { "tabPanelWidth": { "const": "available" }, "multiColumn": { "const": "explicit-grid-only" } }, "additionalProperties": false },
-        "mobile": { "type": "object", "required": ["layout", "itemWidth"], "properties": { "layout": { "const": "single-column" }, "itemWidth": { "const": "available" } }, "additionalProperties": false }
+        "mobile": {
+          "type": "object",
+          "required": ["layout", "itemWidth", "domainLayoutExceptions"],
+          "properties": {
+            "layout": { "const": "single-column" },
+            "itemWidth": { "const": "available" },
+            "domainLayoutExceptions": {
+              "type": "object",
+              "required": ["moments-feed"],
+              "properties": { "moments-feed": { "const": "two-column-waterfall" } },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },
@@ -860,9 +874,16 @@
         },
         "mobile": {
           "type": "object",
-          "required": ["surfaces", "toolbar", "primary", "wideAdditions", "primaryCore", "primaryPromotionOrder", "moreInline", "contextual", "layout"],
+          "required": ["surfaces", "renderingExceptions", "toolbar", "primary", "wideAdditions", "primaryCore", "primaryPromotionOrder", "moreInline", "contextual", "layout"],
           "properties": {
             "surfaces": { "$ref": "#/$defs/nonEmptyStringArray" },
+            "renderingExceptions": {
+              "type": "array",
+              "prefixItems": [{ "const": "inline-code-padding-uses-flutter-quill-native-bounds" }],
+              "items": false,
+              "minItems": 1,
+              "maxItems": 1
+            },
             "toolbar": { "type": "object", "required": ["placementWhenKeyboardVisible", "primaryLayout", "horizontalOverflow", "morePresentation"], "properties": { "placementWhenKeyboardVisible": { "const": "above-keyboard-dock" }, "primaryLayout": { "const": "responsive-single-row" }, "horizontalOverflow": { "const": "forbidden" }, "morePresentation": { "const": "inline" } }, "additionalProperties": false },
             "primary": { "$ref": "#/$defs/nonEmptyStringArray" }, "wideAdditions": { "$ref": "#/$defs/nonEmptyStringArray" }, "primaryCore": { "$ref": "#/$defs/nonEmptyStringArray" }, "primaryPromotionOrder": { "$ref": "#/$defs/nonEmptyStringArray" }, "moreInline": { "$ref": "#/$defs/nonEmptyStringArray" }, "contextual": { "$ref": "#/$defs/nonEmptyStringArray" },
             "layout": { "type": "object", "required": ["compactContentInlinePaddingDp", "regularContentInlinePaddingDp", "toolbarHorizontalPaddingDp", "minimumActionExtentDp", "bodySp", "lineHeight", "respectsSystemTextScale"], "properties": { "compactContentInlinePaddingDp": { "$ref": "#/$defs/nonNegativeNumber" }, "regularContentInlinePaddingDp": { "$ref": "#/$defs/positiveNumber" }, "toolbarHorizontalPaddingDp": { "$ref": "#/$defs/nonNegativeNumber" }, "minimumActionExtentDp": { "$ref": "#/$defs/positiveNumber" }, "bodySp": { "$ref": "#/$defs/positiveNumber" }, "lineHeight": { "$ref": "#/$defs/positiveNumber" }, "respectsSystemTextScale": { "const": true } }, "additionalProperties": false }

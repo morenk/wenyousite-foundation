@@ -14,4 +14,7 @@ export declare const COLLECTION_WEB_PROFILE: Readonly<{
 export declare const COLLECTION_MOBILE_PROFILE: Readonly<{
   layout: "single-column";
   itemWidth: "available";
+  domainLayoutExceptions: Readonly<{
+    "moments-feed": "two-column-waterfall";
+  }>;
 }>;
