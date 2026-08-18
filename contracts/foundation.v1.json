@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.1.0",
+  "version": "6.2.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -531,31 +531,73 @@
           "tone": "brand",
           "family": "utility",
           "numbers": "tabular",
+          "lineHeight": 1.5,
           "radiusEm": 0.3,
-          "paddingBlockEm": 0.08,
+          "paddingBlockEm": 0.04,
           "paddingInlineEm": 0.3,
           "layout": {
             "display": "inline-atomic",
             "verticalAlign": "baseline",
             "internalWrap": "forbidden",
             "truncate": false,
-            "icon": "none"
+            "icon": "none",
+            "visibleAffordance": "none"
           },
           "labels": {
             "settled": "{notation} = {total}",
             "pending": "{notation} = ?",
             "visibleResult": "total-only",
-            "resultBreakdown": "accessible-description",
+            "resultBreakdown": "interactive-detail",
             "resultsSeparator": "、",
             "positiveModifier": "修正加 {modifier}",
             "negativeModifier": "修正减 {absoluteModifier}",
             "zeroModifier": "omit"
           },
           "semantics": {
-            "role": "note",
-            "settled": "骰子 {notation}，逐骰结果 {results}{modifierPhrase}，总计 {total}",
+            "settledRole": "button",
+            "pendingRole": "note",
+            "settled": "骰子 {notation}，总计 {total}",
             "pending": "骰子 {notation}，待掷",
+            "settledHint": "查看逐骰结果",
+            "resultItem": "第 {index} 枚，{value} 点",
             "neverColorOnly": true
+          },
+          "interaction": {
+            "settledActivation": "open-detail",
+            "pendingActivation": "none",
+            "keyboardActivation": ["enter", "space"],
+            "pointerCursor": true,
+            "visibleHint": "none",
+            "exposesExpandedState": true,
+            "restoreFocus": true
+          },
+          "detail": {
+            "title": "骰子结果",
+            "resultsLabel": "逐骰结果",
+            "resultOrder": "server-order",
+            "resultIndexOrigin": 1,
+            "resultLayout": "adaptive-number-tray",
+            "resultCell": {
+              "foreground": "foreground",
+              "surface": "muted",
+              "family": "utility",
+              "numbers": "tabular",
+              "minimumWidthEm": 2.75,
+              "paddingBlockEm": 0.3,
+              "paddingInlineEm": 0.5,
+              "radiusEm": 0.45
+            },
+            "calculation": {
+              "rows": ["subtotal", "modifier-when-nonzero", "total"],
+              "subtotalLabel": "骰面小计",
+              "modifierLabel": "修正",
+              "totalLabel": "总计",
+              "positiveModifier": "+{modifier}",
+              "negativeModifier": "−{absoluteModifier}",
+              "zeroModifier": "omit",
+              "subtotalSource": "sum-server-results",
+              "totalSource": "server-total"
+            }
           },
           "data": {
             "binding": "node-id",
@@ -565,8 +607,35 @@
           },
           "editor": {
             "readingEquivalent": true,
+            "readingEquivalentScope": "visual-presentation",
             "selection": "atomic",
-            "activation": "none"
+            "activation": "selection-only",
+            "insertion": {
+              "title": "插入骰子",
+              "fields": ["quantity", "sides", "modifier"],
+              "fieldLabels": {
+                "quantity": "骰子数",
+                "sides": "面数",
+                "modifier": "修正"
+              },
+              "fieldTypes": {
+                "quantity": "positive-integer",
+                "sides": "positive-integer",
+                "modifier": "signed-integer"
+              },
+              "defaults": {
+                "quantity": 1,
+                "sides": 20,
+                "modifier": 0
+              },
+              "quickSides": [4, 6, 8, 10, 12, 20, 100],
+              "quickSideBehavior": "replace-sides-only",
+              "layout": "responsive-expression-builder",
+              "preview": "{notation} = ?",
+              "previewBehavior": "live-canonical",
+              "zeroModifier": "omit",
+              "validationOwner": "backend-contracts"
+            }
           },
           "settled": { "foreground": "onAccent", "surface": "accent" },
           "pending": { "foreground": "warning", "surface": "warningSoft", "display": "?" }
@@ -685,7 +754,8 @@
       "web": {
         "interactiveMinimumPx": 32,
         "internalReference": {
-          "paddingBlockEm": 0.06,
+          "lineHeight": 1.5,
+          "paddingBlockEm": 0.04,
           "paddingInlineEm": 0.38,
           "gapEm": 0.26,
           "radiusEm": 0.4,
@@ -693,17 +763,36 @@
           "hoverStateOpacity": 0.08,
           "pressedStateOpacity": 0.12
         },
+        "dice": {
+          "hoverStateOpacity": 0.08,
+          "pressedStateOpacity": 0.12,
+          "detailSurface": "anchored-popover",
+          "detailWidthRem": 22,
+          "detailMaxHeightRem": 28,
+          "detailOverflow": "internal-scroll",
+          "detailViewportClamp": true,
+          "explicitClose": true
+        },
         "categoryMarkerWidthPx": 4
       },
       "mobile": {
         "interactiveMinimumDp": 48,
         "internalReference": {
-          "paddingBlockEm": 0.08,
+          "lineHeight": 1.5,
+          "paddingBlockEm": 0.04,
           "paddingInlineEm": 0.38,
           "gapEm": 0.28,
           "radiusEm": 0.4,
           "iconSizeEm": 0.92,
           "pressedStateOpacity": 0.12
+        },
+        "dice": {
+          "pressedStateOpacity": 0.12,
+          "detailSurface": "bottom-sheet",
+          "detailMaximumHeightFraction": 0.8,
+          "detailOverflow": "internal-scroll",
+          "safeArea": true,
+          "explicitClose": true
         },
         "categoryMarkerWidthDp": 4
       }
@@ -746,8 +835,8 @@
       },
       "tasks": {
         "tooltip": "brief-nonessential-help",
-        "popover": "anchored-quick-action-or-selection",
-        "sheet": "mobile-long-choice-or-multi-action",
+        "popover": "anchored-quick-action-selection-or-detail",
+        "sheet": "mobile-long-choice-multi-action-or-detail",
         "dialog": "blocking-decision-form-or-confirmation"
       },
       "destructiveActions": {

@@ -572,14 +572,14 @@
             },
             "dice": {
               "type": "object",
-              "required": ["tone", "family", "numbers", "radiusEm", "paddingBlockEm", "paddingInlineEm", "layout", "labels", "semantics", "data", "editor", "settled", "pending"],
+              "required": ["tone", "family", "numbers", "lineHeight", "radiusEm", "paddingBlockEm", "paddingInlineEm", "layout", "labels", "semantics", "interaction", "detail", "data", "editor", "settled", "pending"],
               "properties": {
-                "tone": { "const": "brand" }, "family": { "const": "utility" }, "numbers": { "const": "tabular" }, "radiusEm": { "const": 0.3 }, "paddingBlockEm": { "const": 0.08 }, "paddingInlineEm": { "const": 0.3 },
+                "tone": { "const": "brand" }, "family": { "const": "utility" }, "numbers": { "const": "tabular" }, "lineHeight": { "const": 1.5 }, "radiusEm": { "const": 0.3 }, "paddingBlockEm": { "const": 0.04 }, "paddingInlineEm": { "const": 0.3 },
                 "layout": {
                   "type": "object",
-                  "required": ["display", "verticalAlign", "internalWrap", "truncate", "icon"],
+                  "required": ["display", "verticalAlign", "internalWrap", "truncate", "icon", "visibleAffordance"],
                   "properties": {
-                    "display": { "const": "inline-atomic" }, "verticalAlign": { "const": "baseline" }, "internalWrap": { "const": "forbidden" }, "truncate": { "const": false }, "icon": { "const": "none" }
+                    "display": { "const": "inline-atomic" }, "verticalAlign": { "const": "baseline" }, "internalWrap": { "const": "forbidden" }, "truncate": { "const": false }, "icon": { "const": "none" }, "visibleAffordance": { "const": "none" }
                   },
                   "additionalProperties": false
                 },
@@ -587,15 +587,58 @@
                   "type": "object",
                   "required": ["settled", "pending", "visibleResult", "resultBreakdown", "resultsSeparator", "positiveModifier", "negativeModifier", "zeroModifier"],
                   "properties": {
-                    "settled": { "const": "{notation} = {total}" }, "pending": { "const": "{notation} = ?" }, "visibleResult": { "const": "total-only" }, "resultBreakdown": { "const": "accessible-description" }, "resultsSeparator": { "const": "、" }, "positiveModifier": { "const": "修正加 {modifier}" }, "negativeModifier": { "const": "修正减 {absoluteModifier}" }, "zeroModifier": { "const": "omit" }
+                    "settled": { "const": "{notation} = {total}" }, "pending": { "const": "{notation} = ?" }, "visibleResult": { "const": "total-only" }, "resultBreakdown": { "const": "interactive-detail" }, "resultsSeparator": { "const": "、" }, "positiveModifier": { "const": "修正加 {modifier}" }, "negativeModifier": { "const": "修正减 {absoluteModifier}" }, "zeroModifier": { "const": "omit" }
                   },
                   "additionalProperties": false
                 },
                 "semantics": {
                   "type": "object",
-                  "required": ["role", "settled", "pending", "neverColorOnly"],
+                  "required": ["settledRole", "pendingRole", "settled", "pending", "settledHint", "resultItem", "neverColorOnly"],
                   "properties": {
-                    "role": { "const": "note" }, "settled": { "const": "骰子 {notation}，逐骰结果 {results}{modifierPhrase}，总计 {total}" }, "pending": { "const": "骰子 {notation}，待掷" }, "neverColorOnly": { "const": true }
+                    "settledRole": { "const": "button" }, "pendingRole": { "const": "note" }, "settled": { "const": "骰子 {notation}，总计 {total}" }, "pending": { "const": "骰子 {notation}，待掷" }, "settledHint": { "const": "查看逐骰结果" }, "resultItem": { "const": "第 {index} 枚，{value} 点" }, "neverColorOnly": { "const": true }
+                  },
+                  "additionalProperties": false
+                },
+                "interaction": {
+                  "type": "object",
+                  "required": ["settledActivation", "pendingActivation", "keyboardActivation", "pointerCursor", "visibleHint", "exposesExpandedState", "restoreFocus"],
+                  "properties": {
+                    "settledActivation": { "const": "open-detail" },
+                    "pendingActivation": { "const": "none" },
+                    "keyboardActivation": { "type": "array", "prefixItems": [{ "const": "enter" }, { "const": "space" }], "items": false, "minItems": 2, "maxItems": 2 },
+                    "pointerCursor": { "const": true },
+                    "visibleHint": { "const": "none" },
+                    "exposesExpandedState": { "const": true },
+                    "restoreFocus": { "const": true }
+                  },
+                  "additionalProperties": false
+                },
+                "detail": {
+                  "type": "object",
+                  "required": ["title", "resultsLabel", "resultOrder", "resultIndexOrigin", "resultLayout", "resultCell", "calculation"],
+                  "properties": {
+                    "title": { "const": "骰子结果" },
+                    "resultsLabel": { "const": "逐骰结果" },
+                    "resultOrder": { "const": "server-order" },
+                    "resultIndexOrigin": { "const": 1 },
+                    "resultLayout": { "const": "adaptive-number-tray" },
+                    "resultCell": {
+                      "type": "object",
+                      "required": ["foreground", "surface", "family", "numbers", "minimumWidthEm", "paddingBlockEm", "paddingInlineEm", "radiusEm"],
+                      "properties": {
+                        "foreground": { "const": "foreground" }, "surface": { "const": "muted" }, "family": { "const": "utility" }, "numbers": { "const": "tabular" }, "minimumWidthEm": { "const": 2.75 }, "paddingBlockEm": { "const": 0.3 }, "paddingInlineEm": { "const": 0.5 }, "radiusEm": { "const": 0.45 }
+                      },
+                      "additionalProperties": false
+                    },
+                    "calculation": {
+                      "type": "object",
+                      "required": ["rows", "subtotalLabel", "modifierLabel", "totalLabel", "positiveModifier", "negativeModifier", "zeroModifier", "subtotalSource", "totalSource"],
+                      "properties": {
+                        "rows": { "type": "array", "prefixItems": [{ "const": "subtotal" }, { "const": "modifier-when-nonzero" }, { "const": "total" }], "items": false, "minItems": 3, "maxItems": 3 },
+                        "subtotalLabel": { "const": "骰面小计" }, "modifierLabel": { "const": "修正" }, "totalLabel": { "const": "总计" }, "positiveModifier": { "const": "+{modifier}" }, "negativeModifier": { "const": "−{absoluteModifier}" }, "zeroModifier": { "const": "omit" }, "subtotalSource": { "const": "sum-server-results" }, "totalSource": { "const": "server-total" }
+                      },
+                      "additionalProperties": false
+                    }
                   },
                   "additionalProperties": false
                 },
@@ -609,9 +652,28 @@
                 },
                 "editor": {
                   "type": "object",
-                  "required": ["readingEquivalent", "selection", "activation"],
+                  "required": ["readingEquivalent", "readingEquivalentScope", "selection", "activation", "insertion"],
                   "properties": {
-                    "readingEquivalent": { "const": true }, "selection": { "const": "atomic" }, "activation": { "const": "none" }
+                    "readingEquivalent": { "const": true }, "readingEquivalentScope": { "const": "visual-presentation" }, "selection": { "const": "atomic" }, "activation": { "const": "selection-only" },
+                    "insertion": {
+                      "type": "object",
+                      "required": ["title", "fields", "fieldLabels", "fieldTypes", "defaults", "quickSides", "quickSideBehavior", "layout", "preview", "previewBehavior", "zeroModifier", "validationOwner"],
+                      "properties": {
+                        "title": { "const": "插入骰子" },
+                        "fields": { "type": "array", "prefixItems": [{ "const": "quantity" }, { "const": "sides" }, { "const": "modifier" }], "items": false, "minItems": 3, "maxItems": 3 },
+                        "fieldLabels": { "type": "object", "required": ["quantity", "sides", "modifier"], "properties": { "quantity": { "const": "骰子数" }, "sides": { "const": "面数" }, "modifier": { "const": "修正" } }, "additionalProperties": false },
+                        "fieldTypes": { "type": "object", "required": ["quantity", "sides", "modifier"], "properties": { "quantity": { "const": "positive-integer" }, "sides": { "const": "positive-integer" }, "modifier": { "const": "signed-integer" } }, "additionalProperties": false },
+                        "defaults": { "type": "object", "required": ["quantity", "sides", "modifier"], "properties": { "quantity": { "const": 1 }, "sides": { "const": 20 }, "modifier": { "const": 0 } }, "additionalProperties": false },
+                        "quickSides": { "type": "array", "prefixItems": [{ "const": 4 }, { "const": 6 }, { "const": 8 }, { "const": 10 }, { "const": 12 }, { "const": 20 }, { "const": 100 }], "items": false, "minItems": 7, "maxItems": 7 },
+                        "quickSideBehavior": { "const": "replace-sides-only" },
+                        "layout": { "const": "responsive-expression-builder" },
+                        "preview": { "const": "{notation} = ?" },
+                        "previewBehavior": { "const": "live-canonical" },
+                        "zeroModifier": { "const": "omit" },
+                        "validationOwner": { "const": "backend-contracts" }
+                      },
+                      "additionalProperties": false
+                    }
                   },
                   "additionalProperties": false
                 },
@@ -681,20 +743,22 @@
         "economyTones": { "type": "object", "required": ["income", "expense", "balance", "pending"], "properties": { "income": { "const": "success" }, "expense": { "const": "foreground" }, "balance": { "const": "foreground" }, "pending": { "const": "warning" } }, "additionalProperties": false },
         "web": {
           "type": "object",
-          "required": ["interactiveMinimumPx", "internalReference", "categoryMarkerWidthPx"],
+          "required": ["interactiveMinimumPx", "internalReference", "dice", "categoryMarkerWidthPx"],
           "properties": {
             "interactiveMinimumPx": { "const": 32 },
-            "internalReference": { "type": "object", "required": ["paddingBlockEm", "paddingInlineEm", "gapEm", "radiusEm", "iconSizeEm", "hoverStateOpacity", "pressedStateOpacity"], "properties": { "paddingBlockEm": { "const": 0.06 }, "paddingInlineEm": { "const": 0.38 }, "gapEm": { "const": 0.26 }, "radiusEm": { "const": 0.4 }, "iconSizeEm": { "const": 0.9 }, "hoverStateOpacity": { "const": 0.08 }, "pressedStateOpacity": { "const": 0.12 } }, "additionalProperties": false },
+            "internalReference": { "type": "object", "required": ["lineHeight", "paddingBlockEm", "paddingInlineEm", "gapEm", "radiusEm", "iconSizeEm", "hoverStateOpacity", "pressedStateOpacity"], "properties": { "lineHeight": { "const": 1.5 }, "paddingBlockEm": { "const": 0.04 }, "paddingInlineEm": { "const": 0.38 }, "gapEm": { "const": 0.26 }, "radiusEm": { "const": 0.4 }, "iconSizeEm": { "const": 0.9 }, "hoverStateOpacity": { "const": 0.08 }, "pressedStateOpacity": { "const": 0.12 } }, "additionalProperties": false },
+            "dice": { "type": "object", "required": ["hoverStateOpacity", "pressedStateOpacity", "detailSurface", "detailWidthRem", "detailMaxHeightRem", "detailOverflow", "detailViewportClamp", "explicitClose"], "properties": { "hoverStateOpacity": { "const": 0.08 }, "pressedStateOpacity": { "const": 0.12 }, "detailSurface": { "const": "anchored-popover" }, "detailWidthRem": { "const": 22 }, "detailMaxHeightRem": { "const": 28 }, "detailOverflow": { "const": "internal-scroll" }, "detailViewportClamp": { "const": true }, "explicitClose": { "const": true } }, "additionalProperties": false },
             "categoryMarkerWidthPx": { "const": 4 }
           },
           "additionalProperties": false
         },
         "mobile": {
           "type": "object",
-          "required": ["interactiveMinimumDp", "internalReference", "categoryMarkerWidthDp"],
+          "required": ["interactiveMinimumDp", "internalReference", "dice", "categoryMarkerWidthDp"],
           "properties": {
             "interactiveMinimumDp": { "const": 48 },
-            "internalReference": { "type": "object", "required": ["paddingBlockEm", "paddingInlineEm", "gapEm", "radiusEm", "iconSizeEm", "pressedStateOpacity"], "properties": { "paddingBlockEm": { "const": 0.08 }, "paddingInlineEm": { "const": 0.38 }, "gapEm": { "const": 0.28 }, "radiusEm": { "const": 0.4 }, "iconSizeEm": { "const": 0.92 }, "pressedStateOpacity": { "const": 0.12 } }, "additionalProperties": false },
+            "internalReference": { "type": "object", "required": ["lineHeight", "paddingBlockEm", "paddingInlineEm", "gapEm", "radiusEm", "iconSizeEm", "pressedStateOpacity"], "properties": { "lineHeight": { "const": 1.5 }, "paddingBlockEm": { "const": 0.04 }, "paddingInlineEm": { "const": 0.38 }, "gapEm": { "const": 0.28 }, "radiusEm": { "const": 0.4 }, "iconSizeEm": { "const": 0.92 }, "pressedStateOpacity": { "const": 0.12 } }, "additionalProperties": false },
+            "dice": { "type": "object", "required": ["pressedStateOpacity", "detailSurface", "detailMaximumHeightFraction", "detailOverflow", "safeArea", "explicitClose"], "properties": { "pressedStateOpacity": { "const": 0.12 }, "detailSurface": { "const": "bottom-sheet" }, "detailMaximumHeightFraction": { "const": 0.8 }, "detailOverflow": { "const": "internal-scroll" }, "safeArea": { "const": true }, "explicitClose": { "const": true } }, "additionalProperties": false },
             "categoryMarkerWidthDp": { "const": 4 }
           },
           "additionalProperties": false
@@ -756,7 +820,7 @@
           "properties": { "modalBlocksBackground": { "const": true }, "explicitClosePath": { "const": true }, "restoreFocus": { "const": true }, "backdropNeverSoleDismissal": { "const": true } },
           "additionalProperties": false
         },
-        "tasks": { "type": "object", "required": ["tooltip", "popover", "sheet", "dialog"], "properties": { "tooltip": { "const": "brief-nonessential-help" }, "popover": { "const": "anchored-quick-action-or-selection" }, "sheet": { "const": "mobile-long-choice-or-multi-action" }, "dialog": { "const": "blocking-decision-form-or-confirmation" } }, "additionalProperties": false },
+        "tasks": { "type": "object", "required": ["tooltip", "popover", "sheet", "dialog"], "properties": { "tooltip": { "const": "brief-nonessential-help" }, "popover": { "const": "anchored-quick-action-selection-or-detail" }, "sheet": { "const": "mobile-long-choice-multi-action-or-detail" }, "dialog": { "const": "blocking-decision-form-or-confirmation" } }, "additionalProperties": false },
         "destructiveActions": { "type": "object", "required": ["lowRiskUndoable", "irreversibleOrAffectsOthers", "confirmationNamesAction", "pendingBlocksDismissal"], "properties": { "lowRiskUndoable": { "const": "execute-and-offer-undo" }, "irreversibleOrAffectsOthers": { "const": "explicit-confirmation" }, "confirmationNamesAction": { "const": true }, "pendingBlocksDismissal": { "const": true } }, "additionalProperties": false },
         "web": {
           "type": "object",

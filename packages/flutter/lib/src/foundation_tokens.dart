@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.1.0';
+  static const String value = '6.2.0';
   static const int schema = 2;
 }
 
@@ -65,7 +65,8 @@ abstract final class WenyouIconControlContract {
 
 abstract final class WenyouElementContract {
   static const double interactiveMinimumTarget = 48.0;
-  static const double internalReferencePaddingBlock = 0.08;
+  static const double internalReferenceLineHeight = 1.5;
+  static const double internalReferencePaddingBlock = 0.04;
   static const double internalReferencePaddingInline = 0.38;
   static const double internalReferenceGap = 0.28;
   static const double internalReferenceRadius = 0.4;
@@ -74,10 +75,63 @@ abstract final class WenyouElementContract {
   static const String internalReferenceIcon = 'content.internal-reference';
   static const bool readingEditorEquivalent = true;
   static const bool statusNeverColorOnly = true;
+  static const double diceLineHeight = 1.5;
+  static const double dicePaddingBlock = 0.04;
+  static const double dicePaddingInline = 0.3;
   static const String diceSettledLabelPattern = '{notation} = {total}';
   static const String dicePendingLabelPattern = '{notation} = ?';
-  static const String diceSettledSemanticsPattern = '骰子 {notation}，逐骰结果 {results}{modifierPhrase}，总计 {total}';
+  static const String diceSettledRole = 'button';
+  static const String dicePendingRole = 'note';
+  static const String diceSettledSemanticsPattern = '骰子 {notation}，总计 {total}';
   static const String dicePendingSemanticsPattern = '骰子 {notation}，待掷';
+  static const String diceSettledSemanticsHint = '查看逐骰结果';
+  static const String diceResultItemSemanticsPattern = '第 {index} 枚，{value} 点';
+  static const String diceDetailTitle = '骰子结果';
+  static const String diceDetailResultsLabel = '逐骰结果';
+  static const String diceDetailResultOrder = 'server-order';
+  static const int diceDetailResultIndexOrigin = 1;
+  static const String diceDetailSubtotalLabel = '骰面小计';
+  static const String diceDetailModifierLabel = '修正';
+  static const String diceDetailTotalLabel = '总计';
+  static const String dicePositiveModifierPattern = '+{modifier}';
+  static const String diceNegativeModifierPattern = '−{absoluteModifier}';
+  static const String diceZeroModifierBehavior = 'omit';
+  static const String diceSubtotalSource = 'sum-server-results';
+  static const String diceTotalSource = 'server-total';
+  static const double diceDetailCellMinimumWidth = 2.75;
+  static const double diceDetailCellPaddingBlock = 0.3;
+  static const double diceDetailCellPaddingInline = 0.5;
+  static const double diceDetailCellRadius = 0.45;
+  static const Color diceDetailCellForeground = WenyouFoundationPalette.foreground;
+  static const Color diceDetailCellSurface = WenyouFoundationPalette.muted;
+  static const String diceDetailSurface = 'bottom-sheet';
+  static const double diceDetailMaximumHeightFraction = 0.8;
+  static const double dicePressedStateOpacity = 0.12;
+  static const bool diceDetailUsesSafeArea = true;
+  static const bool diceDetailHasExplicitClose = true;
+  static const String diceSettledActivation = 'open-detail';
+  static const String dicePendingActivation = 'none';
+  static const bool diceExposesExpandedState = true;
+  static const bool diceRestoresFocus = true;
+  static const String diceEditorActivation = 'selection-only';
+  static const String diceReadingEditorEquivalentScope = 'visual-presentation';
+  static const String diceInsertionTitle = '插入骰子';
+  static const List<String> diceInsertionFields = ['quantity', 'sides', 'modifier'];
+  static const String diceQuantityLabel = '骰子数';
+  static const String diceSidesLabel = '面数';
+  static const String diceModifierLabel = '修正';
+  static const String diceQuantityFieldType = 'positive-integer';
+  static const String diceSidesFieldType = 'positive-integer';
+  static const String diceModifierFieldType = 'signed-integer';
+  static const int diceDefaultQuantity = 1;
+  static const int diceDefaultSides = 20;
+  static const int diceDefaultModifier = 0;
+  static const List<int> diceQuickSides = [4, 6, 8, 10, 12, 20, 100];
+  static const String diceQuickSideBehavior = 'replace-sides-only';
+  static const String diceInsertionLayout = 'responsive-expression-builder';
+  static const String diceInsertionPreviewPattern = '{notation} = ?';
+  static const String diceInsertionPreviewBehavior = 'live-canonical';
+  static const String diceValidationOwner = 'backend-contracts';
   static const String diceResultBinding = 'node-id';
   static const bool diceReadingEditorEquivalent = true;
   static const bool diceNeverColorOnly = true;

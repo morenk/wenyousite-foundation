@@ -76,8 +76,8 @@ export const OVERLAY_INVARIANTS = Object.freeze({
 });
 export const OVERLAY_TASKS = Object.freeze({
   "tooltip": "brief-nonessential-help",
-  "popover": "anchored-quick-action-or-selection",
-  "sheet": "mobile-long-choice-or-multi-action",
+  "popover": "anchored-quick-action-selection-or-detail",
+  "sheet": "mobile-long-choice-multi-action-or-detail",
   "dialog": "blocking-decision-form-or-confirmation"
 });
 export const DESTRUCTIVE_ACTION_POLICY = Object.freeze({

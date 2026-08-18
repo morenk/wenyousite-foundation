@@ -28,6 +28,9 @@ for (const [label, mutate] of [
   ["遗留互动柔和色", (value) => { value.palette.likeSoft = "#FCE7F0"; }],
   ["缺少元素契约", (value) => { delete value.experiences.elements; }],
   ["未知元素字段", (value) => { value.experiences.elements.unknown = true; }],
+  ["缺少骰子明细契约", (value) => { delete value.experiences.elements.inline.dice.detail; }],
+  ["骰子错误显示展开提示", (value) => { value.experiences.elements.inline.dice.layout.visibleAffordance = "icon"; }],
+  ["骰子待掷态错误可操作", (value) => { value.experiences.elements.inline.dice.interaction.pendingActivation = "open-detail"; }],
   ["缺少控件契约", (value) => { delete value.experiences.controls; }],
   ["缺少格式化契约", (value) => { delete value.experiences.formatting; }],
   ["非法等级色", (value) => { value.experiences.elements.metadata.level.tiers[0].foreground = "gray"; }],
@@ -71,7 +74,7 @@ if (!manifest.features?.typography || !manifest.features?.interaction || !manife
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
-for (const claim of ["--element-internal-reference-surface", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
+for (const claim of ["--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
   if (!read("web/tokens.css").includes(`${claim}:`)) failures.push(`Web Token 缺少 ${claim}`);
 }
 if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouElementContract")) {
@@ -224,24 +227,52 @@ if (
 if (elements.identity.emailVerification.publicIdentity !== "hidden") {
   failures.push("邮箱验证不得进入公开身份呈现");
 }
+if (
+  contract.experiences.overlays.tasks.popover !== "anchored-quick-action-selection-or-detail"
+  || contract.experiences.overlays.tasks.sheet !== "mobile-long-choice-multi-action-or-detail"
+) {
+  failures.push("Popover 与 Sheet 必须允许承载非阻断式上下文明细");
+}
 const dice = elements.inline.dice;
 if (
   dice.labels.settled !== "{notation} = {total}"
   || dice.labels.pending !== "{notation} = ?"
   || dice.labels.visibleResult !== "total-only"
-  || dice.labels.resultBreakdown !== "accessible-description"
+  || dice.labels.resultBreakdown !== "interactive-detail"
+  || dice.lineHeight !== 1.5
+  || dice.paddingBlockEm !== 0.04
   || dice.layout.display !== "inline-atomic"
   || dice.layout.internalWrap !== "forbidden"
   || dice.layout.icon !== "none"
-  || dice.semantics.role !== "note"
+  || dice.layout.visibleAffordance !== "none"
+  || dice.semantics.settledRole !== "button"
+  || dice.semantics.pendingRole !== "note"
+  || dice.semantics.settled !== "骰子 {notation}，总计 {total}"
+  || dice.interaction.settledActivation !== "open-detail"
+  || dice.interaction.pendingActivation !== "none"
+  || dice.interaction.visibleHint !== "none"
+  || !dice.interaction.exposesExpandedState
+  || !dice.interaction.restoreFocus
+  || dice.detail.resultLayout !== "adaptive-number-tray"
+  || dice.detail.resultOrder !== "server-order"
+  || dice.detail.resultIndexOrigin !== 1
+  || dice.detail.calculation.subtotalSource !== "sum-server-results"
+  || dice.detail.calculation.totalSource !== "server-total"
   || !dice.semantics.neverColorOnly
   || dice.data.binding !== "node-id"
   || dice.data.resultSource !== "server-only"
   || dice.data.settledResult !== "immutable"
   || dice.editor.selection !== "atomic"
-  || dice.editor.activation !== "none"
+  || dice.editor.activation !== "selection-only"
+  || dice.editor.readingEquivalentScope !== "visual-presentation"
+  || dice.editor.insertion.fields.join(",") !== "quantity,sides,modifier"
+  || dice.editor.insertion.fieldTypes.modifier !== "signed-integer"
+  || dice.editor.insertion.quickSides.join(",") !== "4,6,8,10,12,20,100"
+  || dice.editor.insertion.layout !== "responsive-expression-builder"
+  || dice.editor.insertion.previewBehavior !== "live-canonical"
+  || dice.editor.insertion.validationOwner !== "backend-contracts"
 ) {
-  failures.push("骰子节点可见文案、无障碍、布局或服务端结果绑定偏离 v6 规范");
+  failures.push("骰子节点文案、明细、插入器、无障碍或服务端结果绑定偏离 v6.1 规范");
 }
 
 for (const surfaceToken of icons.controls.hostSurfaces) {
@@ -298,13 +329,28 @@ if (
   failures.push("站内传送门必须绑定同源 door-open 语义并在阅读/编辑态保持可换行胶囊");
 }
 if (
-  elements.web.internalReference.paddingBlockEm !== 0.06
+  elements.web.internalReference.lineHeight !== 1.5
+  || elements.web.internalReference.paddingBlockEm !== 0.04
   || elements.web.internalReference.paddingInlineEm !== 0.38
   || elements.web.internalReference.gapEm !== 0.26
   || elements.web.internalReference.radiusEm !== 0.4
   || elements.web.internalReference.iconSizeEm !== 0.9
 ) {
   failures.push("Web 站内传送门尺寸偏离审定的轻量内联胶囊");
+}
+if (
+  elements.mobile.internalReference.lineHeight !== 1.5
+  || elements.mobile.internalReference.paddingBlockEm !== 0.04
+  || elements.web.dice.detailSurface !== "anchored-popover"
+  || elements.web.dice.detailWidthRem !== 22
+  || elements.web.dice.detailMaxHeightRem !== 28
+  || !elements.web.dice.detailViewportClamp
+  || elements.mobile.dice.detailSurface !== "bottom-sheet"
+  || elements.mobile.dice.detailMaximumHeightFraction !== 0.8
+  || !elements.web.dice.explicitClose
+  || !elements.mobile.dice.explicitClose
+) {
+  failures.push("跨端紧凑原子或骰子明细承载方式偏离 v6.1 规范");
 }
 if (
   elements.block.quote.fontStyle !== "normal"

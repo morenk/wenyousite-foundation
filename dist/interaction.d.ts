@@ -10,7 +10,7 @@ export declare const FEEDBACK_PRESENTATION: Readonly<{"initialContentLoading":"s
 export declare const FEEDBACK_WEB_PROFILE: Readonly<{ transientChannel: "toast"; asyncLiveRegion: "polite" }>;
 export declare const FEEDBACK_MOBILE_PROFILE: Readonly<{ transientChannel: "snackbar"; asyncLiveRegion: "polite" }>;
 export declare const OVERLAY_INVARIANTS: Readonly<Record<string, boolean>>;
-export declare const OVERLAY_TASKS: Readonly<{"tooltip":"brief-nonessential-help","popover":"anchored-quick-action-or-selection","sheet":"mobile-long-choice-or-multi-action","dialog":"blocking-decision-form-or-confirmation"}>;
+export declare const OVERLAY_TASKS: Readonly<{"tooltip":"brief-nonessential-help","popover":"anchored-quick-action-selection-or-detail","sheet":"mobile-long-choice-multi-action-or-detail","dialog":"blocking-decision-form-or-confirmation"}>;
 export declare const DESTRUCTIVE_ACTION_POLICY: Readonly<{"lowRiskUndoable":"execute-and-offer-undo","irreversibleOrAffectsOthers":"explicit-confirmation","confirmationNamesAction":true,"pendingBlocksDismissal":true}>;
 export declare const OVERLAY_WEB_PROFILE: Readonly<{
   layers: Readonly<Record<OverlayLayerId, number>>;
