@@ -3,6 +3,7 @@
 本仓库是温油站 Web 与 Flutter 的唯一审美和跨端体验事实源。它发布共享品牌语言、分平台 profile、语义 Token、字体资产与编辑器体验契约；客户端仓库只实现并锁定一个明确版本，不再复制规范正文。
 
 - [共享设计基础](docs/foundation.md)
+- [品牌标识与应用图标](docs/brand.md)
 - [Web profile](docs/platforms/web.md)
 - [Flutter profile](docs/platforms/mobile.md)
 - [图片呈现契约](docs/images.md)

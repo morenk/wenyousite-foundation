@@ -1,0 +1,4 @@
+/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export declare const BRAND: Readonly<{"name":"温油站","tagline":"最温油的文字共创社区","source":{"assetRoot":"brand","displayGlyphFont":"LXGW WenKai","fontLicense":"licenses/LXGWWenKaiLite-OFL.txt","description":"文与油管加油枪组成的温油站品牌标识"},"colors":{"surface":"primary","foreground":"brandStrong"},"assets":{"appIconMaster":"brand/masters/app-icon-master-1024.png","symbolMaster":"brand/masters/logo-symbol-transparent-1024.png","androidRoot":"brand/app/android","appleRoot":"brand/app/apple","webRoot":"brand/web"},"mobile":{"startupMarkDp":96,"authMarkDp":48,"appBarMarkDp":24,"startupSurface":"primary","titleTypeRole":"pageTitle","taglineTypeRole":"subsectionTitle"},"semantics":{"adjacentVisibleName":"decorative","standalone":"explicit-label"}}>;
+export declare const BRAND_NAME: "温油站";
+export declare const BRAND_TAGLINE: "最温油的文字共创社区";

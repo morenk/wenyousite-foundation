@@ -1,5 +1,12 @@
 # Foundation Changelog
 
+## 6.4.0
+
+- `brand`：发布“文”与油管加油枪组合标识、应用图标和“最温油的文字共创社区”正式文案，资源按源稿、Android、Apple、Web 与 Flutter 运行时分层治理。
+- `mobile`：固定启动页 96dp、认证入口 48dp、首页标题栏 24dp 的品牌尺寸与可访问性语义；原生启动层保持静态，完整文案进入 Flutter 第一帧。
+- `generated`：新增 `@wenyousite/foundation/brand`、Flutter `WenyouBrandContract` / `WenyouBrandMark`、平台同步资源与品牌 Manifest。
+- `governance`：新增 PNG 尺寸、透明度、Android adaptive 安全区、主色和全量哈希门禁，设计导出目录不再作为客户端依赖。
+
 ## 6.3.0
 
 - `elements`：普通 Markdown 引用统一为中性浅底的书签纸条，以 2px/2dp 深莓起始侧线、近端直角和平台 compact 远端圆角取代厚线整卡呈现。

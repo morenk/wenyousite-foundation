@@ -29,6 +29,31 @@ function write(relativePath, content) {
   fs.writeFileSync(target, normalized);
 }
 
+function copyBinary(sourceRelativePath, targetRelativePath) {
+  const source = path.join(root, sourceRelativePath);
+  const target = path.join(root, targetRelativePath);
+  const expected = fs.readFileSync(source);
+  if (checkOnly) {
+    const current = fs.existsSync(target) ? fs.readFileSync(target) : Buffer.alloc(0);
+    if (!current.equals(expected)) {
+      throw new Error(`${targetRelativePath} 与品牌事实源不一致，请运行 pnpm generate`);
+    }
+    return;
+  }
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.copyFileSync(source, target);
+}
+
+function listFiles(relativeDirectory) {
+  const directory = path.join(root, relativeDirectory);
+  return fs.readdirSync(directory, { withFileTypes: true })
+    .flatMap((entry) => {
+      const relativePath = path.posix.join(relativeDirectory.replaceAll("\\", "/"), entry.name);
+      return entry.isDirectory() ? listFiles(relativePath) : [relativePath];
+    })
+    .sort();
+}
+
 const js = (value) => JSON.stringify(value, null, 2);
 const cssHex = (value) => value.toLowerCase();
 const dartColor = (value) => `Color(0xFF${value.slice(1)})`;
@@ -41,6 +66,7 @@ const dartIdentifier = (value) => value
   .join("");
 
 const editor = contract.experiences.editor;
+const brand = contract.experiences.brand;
 const icons = contract.experiences.icons;
 const images = contract.experiences.images;
 const collections = contract.experiences.collections;
@@ -75,6 +101,15 @@ const paletteCssNames = {
   infoSoft: "--info-soft",
 };
 const cssPaletteValue = (token) => token === "transparent" ? "transparent" : `var(${paletteCssNames[token]})`;
+
+write("dist/brand.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const BRAND = Object.freeze(${js(brand)});
+export const BRAND_NAME = ${JSON.stringify(brand.name)};
+export const BRAND_TAGLINE = ${JSON.stringify(brand.tagline)};`);
+write("dist/brand.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export declare const BRAND: Readonly<${JSON.stringify(brand)}>;
+export declare const BRAND_NAME: ${JSON.stringify(brand.name)};
+export declare const BRAND_TAGLINE: ${JSON.stringify(brand.tagline)};`);
 
 const iconSourceRoot = path.join(root, "node_modules", icons.source.package, "icons");
 const iconLicenseHeader = /^<!-- @license[^>]+-->\s*/;
@@ -1230,6 +1265,74 @@ String formatWenyouCompactCount(num value) {
   return count.toString();
 }`);
 
+write("packages/flutter/lib/src/foundation_brand.dart", `// 由 contracts/foundation.v1.json 生成，禁止手改。
+import 'package:flutter/material.dart';
+
+abstract final class WenyouBrandContract {
+  static const String name = ${dartString(brand.name)};
+  static const String tagline = ${dartString(brand.tagline)};
+  static const String symbolAsset = 'brand_assets/runtime/logo-symbol-transparent-1024.png';
+  static const double startupMarkSize = ${brand.mobile.startupMarkDp}.0;
+  static const double authMarkSize = ${brand.mobile.authMarkDp}.0;
+  static const double appBarMarkSize = ${brand.mobile.appBarMarkDp}.0;
+}
+
+class WenyouBrandMark extends StatelessWidget {
+  const WenyouBrandMark.decorative({
+    this.size = WenyouBrandContract.appBarMarkSize,
+    super.key,
+  }) : semanticLabel = null;
+
+  const WenyouBrandMark.semantic({
+    required this.semanticLabel,
+    this.size = WenyouBrandContract.appBarMarkSize,
+    super.key,
+  });
+
+  final double size;
+  final String? semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final cacheSize = (size * MediaQuery.devicePixelRatioOf(context)).ceil();
+    return SizedBox.square(
+      dimension: size,
+      child: Image.asset(
+        WenyouBrandContract.symbolAsset,
+        package: 'wenyousite_foundation',
+        width: size,
+        height: size,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.high,
+        cacheWidth: cacheSize,
+        cacheHeight: cacheSize,
+        excludeFromSemantics: semanticLabel == null,
+        semanticLabel: semanticLabel,
+      ),
+    );
+  }
+}`);
+
+const brandSourceFiles = listFiles(brand.source.assetRoot);
+const brandAssetSha256 = Object.fromEntries(brandSourceFiles.map((relativePath) => [
+  relativePath,
+  crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex"),
+]));
+const brandPackageCopies = [
+  [brand.assets.symbolMaster, "packages/flutter/brand_assets/runtime/logo-symbol-transparent-1024.png"],
+  ...brandSourceFiles
+    .filter((relativePath) => relativePath.startsWith(`${brand.assets.androidRoot}/`) || relativePath.startsWith(`${brand.assets.appleRoot}/`))
+    .map((relativePath) => [relativePath, `packages/flutter/brand_assets/platform/${relativePath.slice("brand/app/".length)}`]),
+];
+for (const [sourceRelativePath, targetRelativePath] of brandPackageCopies) {
+  copyBinary(sourceRelativePath, targetRelativePath);
+}
+write("packages/flutter/brand_assets/manifest.json", JSON.stringify({
+  version: contract.version,
+  contract: "contracts/foundation.v1.json#experiences.brand",
+  assets: brandAssetSha256,
+}, null, 2));
+
 for (const glyphId of glyphIds) {
   write(`packages/flutter/icons/${glyphId}.svg`, glyphSvgs[glyphId]);
 }
@@ -1317,13 +1420,16 @@ class WenyouIcon extends StatelessWidget {
 }`);
 
 const artifactPaths = [
-  ...["icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
+  ...["brand", "icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
     .flatMap((name) => [`dist/${name}.js`, `dist/${name}.d.ts`]),
   "web/tokens.css",
   "web/fonts.css",
   "packages/flutter/lib/src/foundation_tokens.dart",
   "packages/flutter/lib/src/foundation_formatters.dart",
+  "packages/flutter/lib/src/foundation_brand.dart",
   "packages/flutter/lib/src/wenyou_icons.dart",
+  "packages/flutter/brand_assets/manifest.json",
+  ...brandPackageCopies.map(([, targetRelativePath]) => targetRelativePath),
 ];
 const artifactSha256 = Object.fromEntries(artifactPaths.map((relativePath) => [
   relativePath,
@@ -1344,6 +1450,7 @@ const manifest = JSON.stringify({
     navigation: true,
     language: true,
     elements: true,
+    brand: true,
   },
   artifactSha256,
   icons: {
@@ -1352,6 +1459,11 @@ const manifest = JSON.stringify({
     license: icons.source.license,
     glyphSha256,
     filledGlyphSha256,
+  },
+  brand: {
+    name: brand.name,
+    tagline: brand.tagline,
+    assets: brandAssetSha256,
   },
   fonts: contract.fonts.map(({ role, family, sha256, webSha256 }) => ({
     role,

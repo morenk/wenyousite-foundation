@@ -1,6 +1,6 @@
 name: wenyousite_foundation
 description: Shared Wenyou design tokens, experience contracts, and bundled fonts
-version: 6.3.0
+version: 6.4.0
 publish_to: none
 repository: https://github.com/morenk/wenyousite-foundation
 
@@ -18,4 +18,5 @@ dev_dependencies:
 
 flutter:
   assets:
+    - brand_assets/runtime/
     - icons/

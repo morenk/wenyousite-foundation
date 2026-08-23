@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
+import { PNG } from "pngjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relativePath) => fs.readFileSync(path.join(root, relativePath), "utf8");
@@ -19,6 +20,8 @@ if (!validateContract(contract)) {
 }
 for (const [label, mutate] of [
   ["未知根字段", (value) => { value.unknown = true; }],
+  ["缺少品牌契约", (value) => { delete value.experiences.brand; }],
+  ["未知品牌字段", (value) => { value.experiences.brand.unknown = true; }],
   ["未知 profile 字段", (value) => { value.profiles.web.unknown = true; }],
   ["缺少无障碍契约", (value) => { delete value.accessibility; }],
   ["缺少互动控件契约", (value) => { delete value.experiences.icons.controls; }],
@@ -46,6 +49,9 @@ for (const [label, mutate] of [
 if (contract.schemaVersion !== 2) failures.push("foundation schemaVersion 必须为 2");
 if (packageJson.version !== contract.version) failures.push("根 package 版本与契约不一致");
 if (
+  packageJson.exports?.["./brand"]?.types !== "./dist/brand.d.ts"
+  || packageJson.exports?.["./brand"]?.default !== "./dist/brand.js"
+  ||
   packageJson.exports?.["./elements"]?.types !== "./dist/elements.d.ts"
   || packageJson.exports?.["./elements"]?.default !== "./dist/elements.js"
   || packageJson.exports?.["./controls"]?.types !== "./dist/controls.d.ts"
@@ -58,8 +64,8 @@ const contractSha256 = crypto
   .update(fs.readFileSync(path.join(root, "contracts/foundation.v1.json")))
   .digest("hex");
 if (manifest.contractSha256 !== contractSha256) failures.push("契约清单哈希与事实源不一致");
-if (Object.keys(manifest.artifactSha256 ?? {}).length !== 29) {
-  failures.push("发布清单未完整记录 29 个生成代码与 Token 产物");
+if (Object.keys(manifest.artifactSha256 ?? {}).length < 33) {
+  failures.push("发布清单未完整记录品牌、生成代码与 Token 产物");
 }
 for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha256 ?? {})) {
   if (!fs.existsSync(path.join(root, relativePath))) {
@@ -69,7 +75,7 @@ for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha25
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
   if (hash !== expectedHash) failures.push(`生成产物校验和不一致 ${relativePath}`);
 }
-if (!manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.controls || !manifest.features?.formatting || !manifest.features?.contentPresentation || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
+if (!manifest.features?.brand || !manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.controls || !manifest.features?.formatting || !manifest.features?.contentPresentation || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
   failures.push("发布清单缺少共享语义能力清单");
 }
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
@@ -84,6 +90,9 @@ if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class Wen
 if (!read("packages/flutter/lib/src/foundation_formatters.dart").includes("formatWenyouTime")) {
   failures.push("Flutter 生成物缺少统一时间格式化能力");
 }
+if (!read("packages/flutter/lib/src/foundation_brand.dart").includes("class WenyouBrandMark")) {
+  failures.push("Flutter 生成物缺少 WenyouBrandMark");
+}
 for (const font of contract.fonts) {
   if (!read("packages/flutter/LICENSE").includes(font.family)) {
     failures.push(`Flutter package LICENSE 缺少 ${font.family}`);
@@ -94,7 +103,122 @@ if (!read("packages/flutter/pubspec.yaml").includes(`version: ${contract.version
 }
 
 const icons = contract.experiences.icons;
+const brand = contract.experiences.brand;
 const elements = contract.experiences.elements;
+
+const listFiles = (relativeDirectory) => fs.readdirSync(path.join(root, relativeDirectory), { withFileTypes: true })
+  .flatMap((entry) => {
+    const relativePath = path.posix.join(relativeDirectory, entry.name);
+    return entry.isDirectory() ? listFiles(relativePath) : [relativePath];
+  })
+  .sort();
+const expectedBrandFiles = listFiles(brand.source.assetRoot);
+const manifestedBrandFiles = Object.keys(manifest.brand?.assets ?? {}).sort();
+if (JSON.stringify(expectedBrandFiles) !== JSON.stringify(manifestedBrandFiles)) {
+  failures.push("品牌清单未精确覆盖 brand 事实源中的文件");
+}
+for (const relativePath of expectedBrandFiles) {
+  const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
+  if (manifest.brand?.assets?.[relativePath] !== hash) failures.push(`品牌资产校验和不一致 ${relativePath}`);
+}
+for (const relativePath of [brand.assets.appIconMaster, brand.assets.symbolMaster, brand.source.fontLicense]) {
+  if (!fs.existsSync(path.join(root, relativePath))) failures.push(`品牌契约引用了不存在的文件 ${relativePath}`);
+}
+if (manifest.brand?.name !== brand.name || manifest.brand?.tagline !== brand.tagline) {
+  failures.push("品牌清单名称或文案与契约不一致");
+}
+const expectedPngDimensions = {
+  "brand/masters/app-icon-master-1024.png": 1024,
+  "brand/masters/logo-symbol-transparent-1024.png": 1024,
+  "brand/app/android/play-store-icon-512.png": 512,
+  "brand/app/android/adaptive/ic_launcher_background-432.png": 432,
+  "brand/app/android/adaptive/ic_launcher_foreground-432.png": 432,
+  "brand/app/android/mipmap-mdpi/ic_launcher.png": 48,
+  "brand/app/android/mipmap-hdpi/ic_launcher.png": 72,
+  "brand/app/android/mipmap-xhdpi/ic_launcher.png": 96,
+  "brand/app/android/mipmap-xxhdpi/ic_launcher.png": 144,
+  "brand/app/android/mipmap-xxxhdpi/ic_launcher.png": 192,
+  "brand/app/apple/AppIcon-1024.png": 1024,
+  "brand/app/apple/legacy/AppIcon-20.png": 20,
+  "brand/app/apple/legacy/AppIcon-29.png": 29,
+  "brand/app/apple/legacy/AppIcon-40.png": 40,
+  "brand/app/apple/legacy/AppIcon-58.png": 58,
+  "brand/app/apple/legacy/AppIcon-60.png": 60,
+  "brand/app/apple/legacy/AppIcon-76.png": 76,
+  "brand/app/apple/legacy/AppIcon-80.png": 80,
+  "brand/app/apple/legacy/AppIcon-87.png": 87,
+  "brand/app/apple/legacy/AppIcon-120.png": 120,
+  "brand/app/apple/legacy/AppIcon-152.png": 152,
+  "brand/app/apple/legacy/AppIcon-167.png": 167,
+  "brand/app/apple/legacy/AppIcon-180.png": 180,
+  "brand/app/apple/launch/LaunchMark-96.png": 96,
+  "brand/app/apple/launch/LaunchMark-192.png": 192,
+  "brand/app/apple/launch/LaunchMark-288.png": 288,
+  ...Object.fromEntries([20, 24, 32, 40, 48, 64, 96, 128].map((size) => [`brand/ui/title-icon-${size}.png`, size])),
+  "brand/web/apple-touch-icon.png": 180,
+  "brand/web/favicon-16x16.png": 16,
+  "brand/web/favicon-32x32.png": 32,
+  "brand/web/favicon-48x48.png": 48,
+  "brand/web/pwa-icon-192.png": 192,
+  "brand/web/pwa-icon-512.png": 512,
+  "brand/web/pwa-icon-1024.png": 1024,
+  "brand/web/pwa-icon-maskable-512.png": 512,
+};
+const pngs = new Map();
+for (const [relativePath, expectedSize] of Object.entries(expectedPngDimensions)) {
+  if (!fs.existsSync(path.join(root, relativePath))) {
+    failures.push(`缺少品牌 PNG ${relativePath}`);
+    continue;
+  }
+  const png = PNG.sync.read(fs.readFileSync(path.join(root, relativePath)));
+  pngs.set(relativePath, png);
+  if (png.width !== expectedSize || png.height !== expectedSize) failures.push(`品牌 PNG 尺寸错误 ${relativePath}`);
+}
+const opaquePngs = [...pngs.entries()].filter(([relativePath]) =>
+  relativePath.includes("app-icon-master")
+  || relativePath.includes("ic_launcher_background")
+  || relativePath.includes("/mipmap-")
+  || relativePath.includes("play-store")
+  || relativePath.includes("/apple/AppIcon")
+  || relativePath.includes("/apple/legacy/")
+  || relativePath.includes("apple-touch")
+  || relativePath.includes("pwa-icon"));
+for (const [relativePath, png] of opaquePngs) {
+  for (let offset = 3; offset < png.data.length; offset += 4) {
+    if (png.data[offset] !== 255) {
+      failures.push(`应用图标不得含透明像素 ${relativePath}`);
+      break;
+    }
+  }
+}
+const foreground = pngs.get("brand/app/android/adaptive/ic_launcher_foreground-432.png");
+if (foreground) {
+  let left = foreground.width;
+  let top = foreground.height;
+  let right = -1;
+  let bottom = -1;
+  for (let y = 0; y < foreground.height; y += 1) {
+    for (let x = 0; x < foreground.width; x += 1) {
+      if (foreground.data[(y * foreground.width + x) * 4 + 3] > 0) {
+        left = Math.min(left, x); top = Math.min(top, y); right = Math.max(right, x); bottom = Math.max(bottom, y);
+      }
+    }
+  }
+  const safePixels = 264;
+  if (right < left || right - left + 1 > safePixels || bottom - top + 1 > safePixels) {
+    failures.push("Android adaptive foreground 超出 66dp 安全区");
+  }
+}
+const adaptiveBackground = pngs.get("brand/app/android/adaptive/ic_launcher_background-432.png");
+if (adaptiveBackground) {
+  const expected = contract.palette[brand.colors.surface].slice(1).match(/../g).map((value) => Number.parseInt(value, 16));
+  for (let offset = 0; offset < adaptiveBackground.data.length; offset += 4) {
+    if (adaptiveBackground.data[offset] !== expected[0] || adaptiveBackground.data[offset + 1] !== expected[1] || adaptiveBackground.data[offset + 2] !== expected[2] || adaptiveBackground.data[offset + 3] !== 255) {
+      failures.push("Android adaptive background 必须完全使用品牌主色");
+      break;
+    }
+  }
+}
 if (icons.source.package !== "lucide-static" || icons.source.version !== packageJson.dependencies[icons.source.package]) {
   failures.push("Lucide 图标来源版本与根依赖不一致");
 }

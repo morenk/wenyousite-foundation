@@ -1,6 +1,6 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export type EditorCapabilityId = "heading" | "bold" | "italic" | "strikethrough" | "image" | "draft" | "more" | "link" | "inline-code" | "quote" | "bullet-list" | "ordered-list" | "hr" | "dice" | "mention" | "sticker";
-export declare const FOUNDATION_VERSION: "6.3.0";
+export declare const FOUNDATION_VERSION: "6.4.0";
 export declare const EDITOR_CAPABILITY_LABELS: Readonly<Record<EditorCapabilityId, string>>;
 export declare const EDITOR_PRIMARY_NARROW: readonly EditorCapabilityId[];
 export declare const EDITOR_PRIMARY_WIDE: readonly EditorCapabilityId[];

@@ -93,8 +93,9 @@
     },
     "experiences": {
       "type": "object",
-      "required": ["icons", "collections", "controls", "elements", "feedback", "overlays", "formatting", "navigation", "language", "notifications", "editor", "images"],
+      "required": ["brand", "icons", "collections", "controls", "elements", "feedback", "overlays", "formatting", "navigation", "language", "notifications", "editor", "images"],
       "properties": {
+        "brand": { "$ref": "#/$defs/brand" },
         "icons": { "$ref": "#/$defs/icons" },
         "collections": { "$ref": "#/$defs/collections" },
         "controls": { "$ref": "#/$defs/controls" },
@@ -292,6 +293,69 @@
           "additionalProperties": false
         },
         "typeScale": { "$ref": "#/$defs/typeScale" }
+      },
+      "additionalProperties": false
+    },
+    "brand": {
+      "type": "object",
+      "required": ["name", "tagline", "source", "colors", "assets", "mobile", "semantics"],
+      "properties": {
+        "name": { "const": "温油站" },
+        "tagline": { "const": "最温油的文字共创社区" },
+        "source": {
+          "type": "object",
+          "required": ["assetRoot", "displayGlyphFont", "fontLicense", "description"],
+          "properties": {
+            "assetRoot": { "const": "brand" },
+            "displayGlyphFont": { "const": "LXGW WenKai" },
+            "fontLicense": { "$ref": "#/$defs/nonEmptyString" },
+            "description": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        "colors": {
+          "type": "object",
+          "required": ["surface", "foreground"],
+          "properties": {
+            "surface": { "const": "primary" },
+            "foreground": { "const": "brandStrong" }
+          },
+          "additionalProperties": false
+        },
+        "assets": {
+          "type": "object",
+          "required": ["appIconMaster", "symbolMaster", "androidRoot", "appleRoot", "webRoot"],
+          "properties": {
+            "appIconMaster": { "$ref": "#/$defs/nonEmptyString" },
+            "symbolMaster": { "$ref": "#/$defs/nonEmptyString" },
+            "androidRoot": { "$ref": "#/$defs/nonEmptyString" },
+            "appleRoot": { "$ref": "#/$defs/nonEmptyString" },
+            "webRoot": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        "mobile": {
+          "type": "object",
+          "required": ["startupMarkDp", "authMarkDp", "appBarMarkDp", "startupSurface", "titleTypeRole", "taglineTypeRole"],
+          "properties": {
+            "startupMarkDp": { "const": 96 },
+            "authMarkDp": { "const": 48 },
+            "appBarMarkDp": { "const": 24 },
+            "startupSurface": { "const": "primary" },
+            "titleTypeRole": { "const": "pageTitle" },
+            "taglineTypeRole": { "const": "subsectionTitle" }
+          },
+          "additionalProperties": false
+        },
+        "semantics": {
+          "type": "object",
+          "required": ["adjacentVisibleName", "standalone"],
+          "properties": {
+            "adjacentVisibleName": { "const": "decorative" },
+            "standalone": { "const": "explicit-label" }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },
