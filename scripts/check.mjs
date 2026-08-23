@@ -28,6 +28,7 @@ for (const [label, mutate] of [
   ["遗留互动柔和色", (value) => { value.palette.likeSoft = "#FCE7F0"; }],
   ["缺少元素契约", (value) => { delete value.experiences.elements; }],
   ["未知元素字段", (value) => { value.experiences.elements.unknown = true; }],
+  ["缺少移动端引用宽度", (value) => { delete value.experiences.elements.mobile.quote; }],
   ["缺少骰子明细契约", (value) => { delete value.experiences.elements.inline.dice.detail; }],
   ["骰子错误显示展开提示", (value) => { value.experiences.elements.inline.dice.layout.visibleAffordance = "icon"; }],
   ["骰子待掷态错误可操作", (value) => { value.experiences.elements.inline.dice.interaction.pendingActivation = "open-detail"; }],
@@ -74,7 +75,7 @@ if (!manifest.features?.typography || !manifest.features?.interaction || !manife
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
-for (const claim of ["--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
+for (const claim of ["--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
   if (!read("web/tokens.css").includes(`${claim}:`)) failures.push(`Web Token 缺少 ${claim}`);
 }
 if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouElementContract")) {
@@ -354,10 +355,30 @@ if (
 }
 if (
   elements.block.quote.fontStyle !== "normal"
-  || elements.block.quote.markerWidthPx !== 3
+  || elements.block.quote.fontFamily !== "body"
+  || elements.block.quote.fontSize !== "inherit"
+  || elements.block.quote.lineHeight !== "inherit"
+  || elements.block.quote.fontWeight !== 400
+  || elements.block.quote.marker !== "brandStrong"
+  || elements.block.quote.markerWidthPx !== 2
+  || elements.mobile.quote.markerWidthDp !== 2
+  || elements.block.quote.radiusApplication !== "trailing-only"
+  || elements.block.quote.width !== "available"
+  || elements.block.quote.paddingBlockEm !== 0.5
+  || elements.block.quote.paddingInlineEm !== 0.75
+  || elements.block.quote.outerSpacing !== "native-block-rhythm"
+  || elements.block.quote.contentSpacing !== "trim-outer-preserve-inner"
+  || elements.block.quote.generatedAdornment !== "none"
+  || elements.block.quote.shadow !== "none"
   || elements.block.divider.color !== "border"
 ) {
-  failures.push("引用与分隔线必须使用统一块级元素语义");
+  failures.push("引用书签纸条与分隔线必须使用统一块级元素语义");
+}
+if (
+  contrast(contract.palette[elements.block.quote.surface], contract.palette[elements.block.quote.foreground]) < contract.accessibility.contrast.normalText
+  || contrast(contract.palette[elements.block.quote.surface], contract.palette[elements.block.quote.marker]) < contract.accessibility.contrast.nonText
+) {
+  failures.push("引用正文或书签线未达到对比度要求");
 }
 if (elements.metadata.badge.sizes.join(",") !== "default,compact") {
   failures.push("Badge 只能使用 default 与 compact 两种尺寸");

@@ -1,5 +1,11 @@
 # Foundation Changelog
 
+## 6.3.0
+
+- `elements`：普通 Markdown 引用统一为中性浅底的书签纸条，以 2px/2dp 深莓起始侧线、近端直角和平台 compact 远端圆角取代厚线整卡呈现。
+- `elements`：引用继承正文排版，收紧为 `0.5em/0.75em` 内边距并固定无生成引号、图标、阴影或强制斜体；首尾内容收口、多段结构保留正常节奏。
+- `generated`：Web 补齐引用颜色与圆角 Token，Flutter `WenyouElementContract` 补齐引用颜色、尺寸、方向性形状和排版常量，客户端不再复制数字。
+
 ## 6.2.0
 
 - `dice`：已结算原子节点保持 `{notation} = {total}` 无图标主文案，并新增无可见提示的逐骰明细披露；Web 使用锚定 Popover，Flutter 使用安全区 Bottom Sheet，长骰池按服务端顺序进入可滚动数字骰盘。

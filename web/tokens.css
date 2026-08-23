@@ -140,9 +140,14 @@
   --element-dice-detail-cell-padding-block: 0.3em;
   --element-dice-detail-cell-padding-inline: 0.5em;
   --element-dice-detail-cell-radius: 0.45em;
-  --element-quote-marker-width: 3px;
-  --element-quote-padding-block: 0.75em;
-  --element-quote-padding-inline: 1em;
+  --element-quote-foreground: var(--foreground);
+  --element-quote-surface: var(--muted);
+  --element-quote-marker: var(--brand-strong);
+  --element-quote-marker-width: 2px;
+  --element-quote-radius: var(--radius-compact);
+  --element-quote-font-weight: 400;
+  --element-quote-padding-block: 0.5em;
+  --element-quote-padding-inline: 0.75em;
   --element-divider-width: 1px;
   --element-badge-default-height: 24px;
   --element-badge-default-font-size: 12px;

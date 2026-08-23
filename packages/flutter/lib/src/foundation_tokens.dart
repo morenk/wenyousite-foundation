@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.2.0';
+  static const String value = '6.3.0';
   static const int schema = 2;
 }
 
@@ -75,6 +75,24 @@ abstract final class WenyouElementContract {
   static const String internalReferenceIcon = 'content.internal-reference';
   static const bool readingEditorEquivalent = true;
   static const bool statusNeverColorOnly = true;
+  static const Color quoteForeground = WenyouFoundationPalette.foreground;
+  static const Color quoteSurface = WenyouFoundationPalette.muted;
+  static const Color quoteMarker = WenyouFoundationPalette.brandStrong;
+  static const double quoteMarkerWidth = 2.0;
+  static const double quoteRadius = WenyouFoundationMobile.radiusCompact;
+  static const String quoteRadiusApplication = 'trailing-only';
+  static const String quoteWidth = 'available';
+  static const String quoteFontFamily = 'body';
+  static const String quoteFontSize = 'inherit';
+  static const String quoteLineHeight = 'inherit';
+  static const int quoteFontWeight = 400;
+  static const String quoteFontStyle = 'normal';
+  static const double quotePaddingBlock = 0.5;
+  static const double quotePaddingInline = 0.75;
+  static const String quoteOuterSpacing = 'native-block-rhythm';
+  static const String quoteContentSpacing = 'trim-outer-preserve-inner';
+  static const String quoteGeneratedAdornment = 'none';
+  static const String quoteShadow = 'none';
   static const double diceLineHeight = 1.5;
   static const double dicePaddingBlock = 0.04;
   static const double dicePaddingInline = 0.3;

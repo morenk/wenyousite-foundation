@@ -189,12 +189,22 @@ export const BLOCK_ELEMENT_STYLES = Object.freeze({
   "quote": {
     "foreground": "foreground",
     "surface": "muted",
-    "marker": "primary",
-    "markerWidthPx": 3,
+    "marker": "brandStrong",
+    "markerWidthPx": 2,
     "radius": "compact",
+    "radiusApplication": "trailing-only",
+    "width": "available",
+    "fontFamily": "body",
+    "fontSize": "inherit",
+    "lineHeight": "inherit",
+    "fontWeight": 400,
     "fontStyle": "normal",
-    "paddingBlockEm": 0.75,
-    "paddingInlineEm": 1
+    "paddingBlockEm": 0.5,
+    "paddingInlineEm": 0.75,
+    "outerSpacing": "native-block-rhythm",
+    "contentSpacing": "trim-outer-preserve-inner",
+    "generatedAdornment": "none",
+    "shadow": "none"
   },
   "divider": {
     "color": "border",
@@ -388,6 +398,9 @@ export const ELEMENT_WEB_PROFILE = Object.freeze({
 });
 export const ELEMENT_MOBILE_PROFILE = Object.freeze({
   "interactiveMinimumDp": 48,
+  "quote": {
+    "markerWidthDp": 2
+  },
   "internalReference": {
     "lineHeight": 1.5,
     "paddingBlockEm": 0.04,

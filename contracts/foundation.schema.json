@@ -691,8 +691,27 @@
           "properties": {
             "quote": {
               "type": "object",
-              "required": ["foreground", "surface", "marker", "markerWidthPx", "radius", "fontStyle", "paddingBlockEm", "paddingInlineEm"],
-              "properties": { "foreground": { "const": "foreground" }, "surface": { "const": "muted" }, "marker": { "const": "primary" }, "markerWidthPx": { "const": 3 }, "radius": { "const": "compact" }, "fontStyle": { "const": "normal" }, "paddingBlockEm": { "const": 0.75 }, "paddingInlineEm": { "const": 1 } },
+              "required": ["foreground", "surface", "marker", "markerWidthPx", "radius", "radiusApplication", "width", "fontFamily", "fontSize", "lineHeight", "fontWeight", "fontStyle", "paddingBlockEm", "paddingInlineEm", "outerSpacing", "contentSpacing", "generatedAdornment", "shadow"],
+              "properties": {
+                "foreground": { "const": "foreground" },
+                "surface": { "const": "muted" },
+                "marker": { "const": "brandStrong" },
+                "markerWidthPx": { "const": 2 },
+                "radius": { "const": "compact" },
+                "radiusApplication": { "const": "trailing-only" },
+                "width": { "const": "available" },
+                "fontFamily": { "const": "body" },
+                "fontSize": { "const": "inherit" },
+                "lineHeight": { "const": "inherit" },
+                "fontWeight": { "const": 400 },
+                "fontStyle": { "const": "normal" },
+                "paddingBlockEm": { "const": 0.5 },
+                "paddingInlineEm": { "const": 0.75 },
+                "outerSpacing": { "const": "native-block-rhythm" },
+                "contentSpacing": { "const": "trim-outer-preserve-inner" },
+                "generatedAdornment": { "const": "none" },
+                "shadow": { "const": "none" }
+              },
               "additionalProperties": false
             },
             "divider": { "type": "object", "required": ["color", "widthPx"], "properties": { "color": { "const": "border" }, "widthPx": { "const": 1 } }, "additionalProperties": false }
@@ -754,9 +773,10 @@
         },
         "mobile": {
           "type": "object",
-          "required": ["interactiveMinimumDp", "internalReference", "dice", "categoryMarkerWidthDp"],
+          "required": ["interactiveMinimumDp", "quote", "internalReference", "dice", "categoryMarkerWidthDp"],
           "properties": {
             "interactiveMinimumDp": { "const": 48 },
+            "quote": { "type": "object", "required": ["markerWidthDp"], "properties": { "markerWidthDp": { "const": 2 } }, "additionalProperties": false },
             "internalReference": { "type": "object", "required": ["lineHeight", "paddingBlockEm", "paddingInlineEm", "gapEm", "radiusEm", "iconSizeEm", "pressedStateOpacity"], "properties": { "lineHeight": { "const": 1.5 }, "paddingBlockEm": { "const": 0.04 }, "paddingInlineEm": { "const": 0.38 }, "gapEm": { "const": 0.28 }, "radiusEm": { "const": 0.4 }, "iconSizeEm": { "const": 0.92 }, "pressedStateOpacity": { "const": 0.12 } }, "additionalProperties": false },
             "dice": { "type": "object", "required": ["pressedStateOpacity", "detailSurface", "detailMaximumHeightFraction", "detailOverflow", "safeArea", "explicitClose"], "properties": { "pressedStateOpacity": { "const": 0.12 }, "detailSurface": { "const": "bottom-sheet" }, "detailMaximumHeightFraction": { "const": 0.8 }, "detailOverflow": { "const": "internal-scroll" }, "safeArea": { "const": true }, "explicitClose": { "const": true } }, "additionalProperties": false },
             "categoryMarkerWidthDp": { "const": 4 }
