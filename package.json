@@ -1,6 +1,6 @@
 {
   "name": "@wenyousite/foundation",
-  "version": "6.4.0",
+  "version": "6.5.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -9,6 +9,10 @@
     "./brand": {
       "types": "./dist/brand.d.ts",
       "default": "./dist/brand.js"
+    },
+    "./theme": {
+      "types": "./dist/theme.d.ts",
+      "default": "./dist/theme.js"
     },
     "./editor": {
       "types": "./dist/editor.d.ts",

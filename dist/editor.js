@@ -1,5 +1,5 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "6.4.0";
+export const FOUNDATION_VERSION = "6.5.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
   "bold": "粗体",

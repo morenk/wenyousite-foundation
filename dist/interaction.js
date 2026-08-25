@@ -107,6 +107,7 @@ export const OVERLAY_WEB_PROFILE = Object.freeze({
     "color": "rgb(52 47 62 / 40%)",
     "blurPx": 1
   },
+  "imageViewerBackdrop": "rgb(52 47 62 / 88%)",
   "dismiss": [
     "explicit-control",
     "escape"

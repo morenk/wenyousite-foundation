@@ -29,6 +29,10 @@ for (const [label, mutate] of [
   ["缺少订阅互动 tone", (value) => { delete value.experiences.icons.controls.selected.subscription; }],
   ["选中态错误使用背景", (value) => { value.experiences.icons.controls.selected.like.surface = "accent"; }],
   ["遗留互动柔和色", (value) => { value.palette.likeSoft = "#FCE7F0"; }],
+  ["缺少黑夜主题", (value) => { delete value.themes.dark; }],
+  ["黑夜主题缺少色彩", (value) => { delete value.themes.dark.palette.foreground; }],
+  ["黑夜偏好顺序错误", (value) => { value.themes.preferences.reverse(); }],
+  ["黑夜等级缺少一档", (value) => { value.themes.dark.levelTiers.pop(); }],
   ["缺少元素契约", (value) => { delete value.experiences.elements; }],
   ["未知元素字段", (value) => { value.experiences.elements.unknown = true; }],
   ["缺少移动端引用宽度", (value) => { delete value.experiences.elements.mobile.quote; }],
@@ -51,6 +55,8 @@ if (packageJson.version !== contract.version) failures.push("根 package 版本�
 if (
   packageJson.exports?.["./brand"]?.types !== "./dist/brand.d.ts"
   || packageJson.exports?.["./brand"]?.default !== "./dist/brand.js"
+  || packageJson.exports?.["./theme"]?.types !== "./dist/theme.d.ts"
+  || packageJson.exports?.["./theme"]?.default !== "./dist/theme.js"
   ||
   packageJson.exports?.["./elements"]?.types !== "./dist/elements.d.ts"
   || packageJson.exports?.["./elements"]?.default !== "./dist/elements.js"
@@ -64,7 +70,7 @@ const contractSha256 = crypto
   .update(fs.readFileSync(path.join(root, "contracts/foundation.v1.json")))
   .digest("hex");
 if (manifest.contractSha256 !== contractSha256) failures.push("契约清单哈希与事实源不一致");
-if (Object.keys(manifest.artifactSha256 ?? {}).length < 33) {
+if (Object.keys(manifest.artifactSha256 ?? {}).length < 35) {
   failures.push("发布清单未完整记录品牌、生成代码与 Token 产物");
 }
 for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha256 ?? {})) {
@@ -75,17 +81,26 @@ for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha25
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
   if (hash !== expectedHash) failures.push(`生成产物校验和不一致 ${relativePath}`);
 }
-if (!manifest.features?.brand || !manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.controls || !manifest.features?.formatting || !manifest.features?.contentPresentation || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
+if (!manifest.features?.brand || !manifest.features?.themes || !manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.controls || !manifest.features?.formatting || !manifest.features?.contentPresentation || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
   failures.push("发布清单缺少共享语义能力清单");
 }
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
-for (const claim of ["--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
+for (const claim of ["--action-primary", "--action-primary-foreground", "--image-viewer-backdrop", "--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
   if (!read("web/tokens.css").includes(`${claim}:`)) failures.push(`Web Token 缺少 ${claim}`);
 }
 if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouElementContract")) {
   failures.push("Flutter 生成物缺少 WenyouElementContract");
+}
+if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouFoundationDarkPalette") || !read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouDarkLevelContract")) {
+  failures.push("Flutter 生成物缺少黑夜 palette 或等级契约");
+}
+if (!read("web/tokens.css").includes('[data-theme="dark"]') || !read("web/tokens.css").includes("prefers-color-scheme: dark")) {
+  failures.push("Web Token 缺少显式黑夜选择器或系统偏好回退");
+}
+if (!read("dist/theme.js").includes("THEME_PALETTES") || !read("dist/theme.d.ts").includes("ThemePreference")) {
+  failures.push("Web 主题模块缺少调色板或偏好类型");
 }
 if (!read("packages/flutter/lib/src/foundation_formatters.dart").includes("formatWenyouTime")) {
   failures.push("Flutter 生成物缺少统一时间格式化能力");
@@ -275,20 +290,40 @@ for (const capability of Object.keys(contract.experiences.editor.labels)) {
 }
 
 const requiredPalette = [
-  "background", "foreground", "surface", "primary", "onPrimary", "brandStrong",
-  "secondary", "muted", "mutedForeground", "accent", "like", "bookmark", "border", "input",
+  "background", "foreground", "surface", "primary", "onPrimary", "actionPrimary", "onActionPrimary", "brandStrong",
+  "secondary", "onSecondary", "muted", "mutedForeground", "accent", "onAccent", "like", "bookmark", "border", "input",
 ];
-for (const token of requiredPalette) {
-  if (!/^#[0-9A-F]{6}$/.test(contract.palette[token] ?? "")) {
-    failures.push(`缺少或无效色彩 Token：${token}`);
+const themePalettes = [
+  ["light", contract.palette],
+  ["dark", contract.themes.dark.palette],
+];
+if (JSON.stringify(Object.keys(contract.palette)) !== JSON.stringify(Object.keys(contract.themes.dark.palette))) {
+  failures.push("亮色与黑夜 palette 的语义键或顺序不一致");
+}
+if (contract.themes.defaultPreference !== "system" || contract.themes.preferences.join(",") !== "system,light,dark") {
+  failures.push("主题默认偏好或公开偏好顺序发生漂移");
+}
+for (const preference of contract.themes.preferences) {
+  if (!contract.themes.labels[preference] || !icons.semantics[contract.themes.icons[preference]]) {
+    failures.push(`主题偏好 ${preference} 缺少标签或语义图标`);
   }
 }
-const expectedInteractionPalette = {
-  like: "#D81B60",
-  bookmark: "#B77900",
+for (const [mode, palette] of themePalettes) {
+  for (const token of requiredPalette) {
+    if (!/^#[0-9A-F]{6}$/.test(palette[token] ?? "")) {
+      failures.push(`${mode} 缺少或无效色彩 Token：${token}`);
+    }
+  }
+}
+const expectedInteractionPalettes = {
+  light: { like: "#D81B60", bookmark: "#B77900" },
+  dark: { like: "#FF6FA9", bookmark: "#E9BE64" },
 };
-if (JSON.stringify(Object.fromEntries(Object.keys(expectedInteractionPalette).map((token) => [token, contract.palette[token]]))) !== JSON.stringify(expectedInteractionPalette)) {
-  failures.push("点赞与收藏互动色偏离已审定色板");
+for (const [mode, palette] of themePalettes) {
+  const expected = expectedInteractionPalettes[mode];
+  if (JSON.stringify(Object.fromEntries(Object.keys(expected).map((token) => [token, palette[token]]))) !== JSON.stringify(expected)) {
+    failures.push(`${mode} 点赞与收藏互动色偏离已审定色板`);
+  }
 }
 
 function luminance(hex) {
@@ -307,31 +342,42 @@ function contrast(first, second) {
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 
-for (const [surface, foreground, label] of [
-  [contract.palette.primary, contract.palette.onPrimary, "primary/onPrimary"],
-  [contract.palette.secondary, contract.palette.onSecondary, "secondary/onSecondary"],
-  [contract.palette.accent, contract.palette.onAccent, "accent/onAccent"],
-  [contract.palette.destructive, contract.palette.onDestructive, "destructive/onDestructive"],
-  [contract.palette.destructiveSoft, contract.palette.destructive, "destructiveSoft/destructive"],
-  [contract.palette.successSoft, contract.palette.success, "successSoft/success"],
-  [contract.palette.warningSoft, contract.palette.warning, "warningSoft/warning"],
-  [contract.palette.infoSoft, contract.palette.info, "infoSoft/info"],
-  [contract.palette.background, contract.palette.foreground, "background/foreground"],
-  [contract.palette.background, contract.palette.mutedForeground, "background/mutedForeground"],
-]) {
-  if (contrast(surface, foreground) < contract.accessibility.contrast.normalText) {
-    failures.push(`${label} 未达到普通文字对比度要求`);
+for (const [mode, palette] of themePalettes) {
+  for (const [surface, foreground, label] of [
+    [palette.primary, palette.onPrimary, "primary/onPrimary"],
+    [palette.actionPrimary, palette.onActionPrimary, "actionPrimary/onActionPrimary"],
+    [palette.secondary, palette.onSecondary, "secondary/onSecondary"],
+    [palette.accent, palette.onAccent, "accent/onAccent"],
+    [palette.destructive, palette.onDestructive, "destructive/onDestructive"],
+    [palette.destructiveSoft, palette.destructive, "destructiveSoft/destructive"],
+    [palette.successSoft, palette.success, "successSoft/success"],
+    [palette.warningSoft, palette.warning, "warningSoft/warning"],
+    [palette.infoSoft, palette.info, "infoSoft/info"],
+    [palette.background, palette.foreground, "background/foreground"],
+    [palette.background, palette.mutedForeground, "background/mutedForeground"],
+  ]) {
+    if (contrast(surface, foreground) < contract.accessibility.contrast.normalText) {
+      failures.push(`${mode} ${label} 未达到普通文字对比度要求`);
+    }
+  }
+  if (mode === "dark" && contrast(palette.surface, palette.input) < contract.accessibility.contrast.nonText) {
+    failures.push(`${mode} surface/input 未达到控件边界对比度要求`);
+  }
+  if (mode === "dark" && contrast(palette.surface, palette.actionPrimary) < contract.accessibility.contrast.nonText) {
+    failures.push("dark surface/actionPrimary 未达到强操作边界对比度要求");
   }
 }
 
 const expectedLevelRanges = [[1, 1], [2, 3], [4, 5], [6, 7], [8, 9]];
-for (const [index, tier] of elements.metadata.level.tiers.entries()) {
-  const [minimum, maximum] = expectedLevelRanges[index];
-  if (tier.minimum !== minimum || tier.maximum !== maximum) {
-    failures.push(`等级色阶 ${tier.id} 未覆盖审定范围 ${minimum}-${maximum}`);
-  }
-  if (contrast(tier.surface, tier.foreground) < contract.accessibility.contrast.normalText) {
-    failures.push(`等级色阶 ${tier.id} 未达到普通文字对比度要求`);
+for (const [mode, tiers] of [["light", elements.metadata.level.tiers], ["dark", contract.themes.dark.levelTiers]]) {
+  for (const [index, tier] of tiers.entries()) {
+    const [minimum, maximum] = expectedLevelRanges[index];
+    if (tier.minimum !== minimum || tier.maximum !== maximum) {
+      failures.push(`${mode} 等级色阶 ${tier.id} 未覆盖审定范围 ${minimum}-${maximum}`);
+    }
+    if (contrast(tier.surface, tier.foreground) < contract.accessibility.contrast.normalText) {
+      failures.push(`${mode} 等级色阶 ${tier.id} 未达到普通文字对比度要求`);
+    }
   }
 }
 if (
@@ -400,15 +446,17 @@ if (
   failures.push("骰子节点文案、明细、插入器、无障碍或服务端结果绑定偏离 v6.1 规范");
 }
 
-for (const surfaceToken of icons.controls.hostSurfaces) {
-  for (const [foregroundToken, label] of [
-    [icons.controls.selected.default.foreground, "default"],
-    [icons.controls.selected.like.foreground, "like"],
-    [icons.controls.selected.bookmark.foreground, "bookmark"],
-    [icons.controls.selected.subscription.foreground, "subscription"],
-  ]) {
-    if (contrast(contract.palette[surfaceToken], contract.palette[foregroundToken]) < contract.accessibility.contrast.nonText) {
-      failures.push(`${surfaceToken}/${label} 未达到透明图标控件状态对比度要求`);
+for (const [mode, palette] of themePalettes) {
+  for (const surfaceToken of icons.controls.hostSurfaces) {
+    for (const [foregroundToken, label] of [
+      [icons.controls.selected.default.foreground, "default"],
+      [icons.controls.selected.like.foreground, "like"],
+      [icons.controls.selected.bookmark.foreground, "bookmark"],
+      [icons.controls.selected.subscription.foreground, "subscription"],
+    ]) {
+      if (contrast(palette[surfaceToken], palette[foregroundToken]) < contract.accessibility.contrast.nonText) {
+        failures.push(`${mode} ${surfaceToken}/${label} 未达到透明图标控件状态对比度要求`);
+      }
     }
   }
 }
@@ -498,11 +546,13 @@ if (
 ) {
   failures.push("引用书签纸条与分隔线必须使用统一块级元素语义");
 }
-if (
-  contrast(contract.palette[elements.block.quote.surface], contract.palette[elements.block.quote.foreground]) < contract.accessibility.contrast.normalText
-  || contrast(contract.palette[elements.block.quote.surface], contract.palette[elements.block.quote.marker]) < contract.accessibility.contrast.nonText
-) {
-  failures.push("引用正文或书签线未达到对比度要求");
+for (const [mode, palette] of themePalettes) {
+  if (
+    contrast(palette[elements.block.quote.surface], palette[elements.block.quote.foreground]) < contract.accessibility.contrast.normalText
+    || contrast(palette[elements.block.quote.surface], palette[elements.block.quote.marker]) < contract.accessibility.contrast.nonText
+  ) {
+    failures.push(`${mode} 引用正文或书签线未达到对比度要求`);
+  }
 }
 if (elements.metadata.badge.sizes.join(",") !== "default,compact") {
   failures.push("Badge 只能使用 default 与 compact 两种尺寸");

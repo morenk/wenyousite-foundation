@@ -25,6 +25,6 @@ pnpm install --frozen-lockfile
 pnpm check
 ```
 
-Web 通过 Git tag 安装根 npm package；Flutter 通过同一 tag 安装 `packages/flutter`。发布遵循 SemVer：语义删除或改变为 Major，兼容新增为 Minor，文字修正为 Patch。
+Web 通过 Git tag 安装根 npm package；Flutter 通过同一 tag 安装 `packages/flutter`。主题消费者使用生成的 Web Token、`@wenyousite/foundation/theme` 或 Flutter 主题合同，不复制调色板。发布遵循 SemVer：语义删除或改变为 Major，兼容新增为 Minor，文字修正为 Patch。
 
 Codex 可将 `skills/wenyou-design` 以符号链接或技能安装器接入本地。Skill 只定义审美工作流，每次使用时读取本仓库契约和对应平台 profile，不复制 Token 数值。

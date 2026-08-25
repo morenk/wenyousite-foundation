@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.4.0';
+  static const String value = '6.5.0';
   static const int schema = 2;
 }
 
@@ -12,6 +12,8 @@ abstract final class WenyouFoundationPalette {
   static const Color surface = Color(0xFFFFFFFF);
   static const Color primary = Color(0xFFF3C6DD);
   static const Color onPrimary = Color(0xFF704C65);
+  static const Color actionPrimary = Color(0xFFF3C6DD);
+  static const Color onActionPrimary = Color(0xFF704C65);
   static const Color brandStrong = Color(0xFF704C65);
   static const Color secondary = Color(0xFFC7CCFF);
   static const Color onSecondary = Color(0xFF4B527C);
@@ -38,6 +40,59 @@ abstract final class WenyouFoundationPalette {
   static const Color categoryNationSoft = Color(0xFFDDE0FF);
   static const Color categoryRpg = Color(0xFF704C65);
   static const Color categoryRpgSoft = Color(0xFFF7DBEA);
+}
+
+abstract final class WenyouFoundationDarkPalette {
+  static const Color background = Color(0xFF17131C);
+  static const Color foreground = Color(0xFFF2EDF4);
+  static const Color surface = Color(0xFF211B27);
+  static const Color primary = Color(0xFF4D3141);
+  static const Color onPrimary = Color(0xFFFFD5E9);
+  static const Color actionPrimary = Color(0xFF935879);
+  static const Color onActionPrimary = Color(0xFFFFF0F6);
+  static const Color brandStrong = Color(0xFFE6A4C6);
+  static const Color secondary = Color(0xFF5C649B);
+  static const Color onSecondary = Color(0xFFF0F1FF);
+  static const Color muted = Color(0xFF2A232F);
+  static const Color mutedForeground = Color(0xFFB8AEBC);
+  static const Color accent = Color(0xFF3B2936);
+  static const Color onAccent = Color(0xFFF4C4DC);
+  static const Color like = Color(0xFFFF6FA9);
+  static const Color bookmark = Color(0xFFE9BE64);
+  static const Color border = Color(0xFF4A404F);
+  static const Color input = Color(0xFF706474);
+  static const Color destructive = Color(0xFFF28FA5);
+  static const Color onDestructive = Color(0xFF2A1018);
+  static const Color destructiveSoft = Color(0xFF43222C);
+  static const Color success = Color(0xFF8BCFA5);
+  static const Color successSoft = Color(0xFF20382B);
+  static const Color warning = Color(0xFFE7CB76);
+  static const Color warningSoft = Color(0xFF3B311B);
+  static const Color info = Color(0xFFB2BAFF);
+  static const Color infoSoft = Color(0xFF292D4B);
+  static const Color categoryDeduction = Color(0xFFE7CB76);
+  static const Color categoryDeductionSoft = Color(0xFF3B311B);
+  static const Color categoryNation = Color(0xFFB2BAFF);
+  static const Color categoryNationSoft = Color(0xFF292D4B);
+  static const Color categoryRpg = Color(0xFFE6A4C6);
+  static const Color categoryRpgSoft = Color(0xFF3B2936);
+}
+
+abstract final class WenyouFoundationTheme {
+  static const String defaultMode = 'light';
+  static const String defaultPreference = 'system';
+  static const List<String> modes = <String>['light', 'dark'];
+  static const List<String> preferences = <String>['system', 'light', 'dark'];
+  static const Map<String, String> labels = <String, String>{
+    'system': '跟随系统',
+    'light': '亮色',
+    'dark': '黑夜',
+  };
+  static const Map<String, String> icons = <String, String>{
+    'system': 'appearance.system',
+    'light': 'appearance.light',
+    'dark': 'appearance.dark',
+  };
 }
 
 abstract final class WenyouIconControlContract {
@@ -185,6 +240,23 @@ abstract final class WenyouLevelContract {
     WenyouLevelTier(id: 'rose', minimum: 4, maximum: 5, foreground: Color(0xFF784653), surface: Color(0xFFF8D9DF), border: Color(0xFFEEBBC5)),
     WenyouLevelTier(id: 'coral', minimum: 6, maximum: 7, foreground: Color(0xFF5F2935), surface: Color(0xFFEE9AAA), border: Color(0xFFD96F84)),
     WenyouLevelTier(id: 'berry', minimum: 8, maximum: 9, foreground: Color(0xFFFFFFFF), surface: Color(0xFF922F50), border: Color(0xFF7B2442)),
+  ];
+  static WenyouLevelTier? resolve(int level) {
+    if (level < 1) return null;
+    for (final tier in tiers) {
+      if (level <= tier.maximum) return tier;
+    }
+    return tiers.last;
+  }
+}
+
+abstract final class WenyouDarkLevelContract {
+  static const List<WenyouLevelTier> tiers = <WenyouLevelTier>[
+    WenyouLevelTier(id: 'mist', minimum: 1, maximum: 1, foreground: Color(0xFFB8AEBC), surface: Color(0xFF2A232F), border: Color(0xFF4A404F)),
+    WenyouLevelTier(id: 'peach', minimum: 2, maximum: 3, foreground: Color(0xFFE6B9A8), surface: Color(0xFF3A2926), border: Color(0xFF68483F)),
+    WenyouLevelTier(id: 'rose', minimum: 4, maximum: 5, foreground: Color(0xFFF0B0C0), surface: Color(0xFF43272F), border: Color(0xFF754151)),
+    WenyouLevelTier(id: 'coral', minimum: 6, maximum: 7, foreground: Color(0xFFFFD6DE), surface: Color(0xFF713847), border: Color(0xFFA95A6C)),
+    WenyouLevelTier(id: 'berry', minimum: 8, maximum: 9, foreground: Color(0xFFFFF0F6), surface: Color(0xFF8E3F62), border: Color(0xFFC7678F)),
   ];
   static WenyouLevelTier? resolve(int level) {
     if (level < 1) return null;

@@ -117,6 +117,9 @@
 | `action.unlock` | `lock-keyhole-open` | `6f1a6f7460c4244d28269ea05f5ade4c4213f972746d9a63f17edb85d61b3ef2` |
 | `action.reset-password` | `key-round` | `fb37758a4a3c23dc2de7c998170b072a99d165156cdbe2354622a68250044e7a` |
 | `action.devices` | `monitor-smartphone` | `1eedc1648a01bc1cb0e6f199ed87b3ea8d4b5b5407186d506ce1c7a828133a35` |
+| `appearance.system` | `monitor` | `f6e5a189a0bc7e2ac77af6e344ae4dd72d5748837c36285b9cb9859ec5fe4e40` |
+| `appearance.light` | `sun` | `0d7eb96e40f082030d1b7de435387466ab6ea59cd1a0d5b6654aa9ced11540d9` |
+| `appearance.dark` | `moon` | `889a9a484223b166d0659006327ac13e6fe769a84041a415e1edc6a19a25d8b6` |
 | `action.mark-read` | `mail-check` | `e68c9ad77ef2a5a98243957042a8dfdf5b4e9e759a7a6dd522c3cb746dab53fd` |
 | `action.mark-unread` | `mail-open` | `6aa1ca48c8b2bf26ca5b94a535afab9202dc93048075246f4296b17f75450a28` |
 | `action.update` | `cloud-download` | `11025e7f2f0c72208dddc3081e9e450f5b1f6d0b32f94a0e9d089e47e56d3f9f` |

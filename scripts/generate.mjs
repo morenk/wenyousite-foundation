@@ -79,6 +79,7 @@ const overlays = contract.experiences.overlays;
 const formatting = contract.experiences.formatting;
 const navigation = contract.experiences.navigation;
 const language = contract.experiences.language;
+const themes = contract.themes;
 const typeRoleIds = Object.keys(contract.profiles.web.typeScale);
 const kebab = (value) => value.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 const paletteCssNames = {
@@ -110,6 +111,29 @@ write("dist/brand.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止�
 export declare const BRAND: Readonly<${JSON.stringify(brand)}>;
 export declare const BRAND_NAME: ${JSON.stringify(brand.name)};
 export declare const BRAND_TAGLINE: ${JSON.stringify(brand.tagline)};`);
+
+write("dist/theme.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export const THEME_CONTRACT = Object.freeze(${js(themes)});
+export const THEME_PALETTES = Object.freeze(${js({ light: contract.palette, dark: themes.dark.palette })});
+export const THEME_MODES = Object.freeze(${js(themes.modes)});
+export const THEME_PREFERENCES = Object.freeze(${js(themes.preferences)});
+export const THEME_LABELS = Object.freeze(${js(themes.labels)});
+export const THEME_ICONS = Object.freeze(${js(themes.icons)});
+export const DEFAULT_THEME_MODE = ${JSON.stringify(themes.defaultMode)};
+export const DEFAULT_THEME_PREFERENCE = ${JSON.stringify(themes.defaultPreference)};`);
+write("dist/theme.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+export type ThemeMode = ${themes.modes.map((mode) => JSON.stringify(mode)).join(" | ")};
+export type ThemePreference = ${themes.preferences.map((preference) => JSON.stringify(preference)).join(" | ")};
+export type ThemePaletteToken = ${Object.keys(contract.palette).map((token) => JSON.stringify(token)).join(" | ")};
+export type ThemePalette = Readonly<Record<ThemePaletteToken, string>>;
+export declare const THEME_CONTRACT: Readonly<${JSON.stringify(themes)}>;
+export declare const THEME_PALETTES: Readonly<Record<ThemeMode, ThemePalette>>;
+export declare const THEME_MODES: readonly ThemeMode[];
+export declare const THEME_PREFERENCES: readonly ThemePreference[];
+export declare const THEME_LABELS: Readonly<Record<ThemePreference, string>>;
+export declare const THEME_ICONS: Readonly<Record<ThemePreference, string>>;
+export declare const DEFAULT_THEME_MODE: ${JSON.stringify(themes.defaultMode)};
+export declare const DEFAULT_THEME_PREFERENCE: ${JSON.stringify(themes.defaultPreference)};`);
 
 const iconSourceRoot = path.join(root, "node_modules", icons.source.package, "icons");
 const iconLicenseHeader = /^<!-- @license[^>]+-->\s*/;
@@ -672,45 +696,70 @@ export declare const ELEMENT_MOBILE_PROFILE: Readonly<${JSON.stringify(elements.
 export declare function levelTier(level: number): Readonly<(typeof METADATA_ELEMENT_STYLES)["level"]["tiers"][number]> | undefined;`);
 
 const p = contract.palette;
+const darkTheme = themes.dark;
 const web = contract.profiles.web;
 const motion = contract.motion;
+const paletteCssDeclarations = (palette) => [
+  `  --background: ${cssHex(palette.background)};`,
+  `  --foreground: ${cssHex(palette.foreground)};`,
+  `  --card: ${cssHex(palette.surface)};`,
+  `  --card-foreground: ${cssHex(palette.foreground)};`,
+  `  --popover: ${cssHex(palette.surface)};`,
+  `  --popover-foreground: ${cssHex(palette.foreground)};`,
+  `  --primary: ${cssHex(palette.primary)};`,
+  `  --primary-foreground: ${cssHex(palette.onPrimary)};`,
+  `  --action-primary: ${cssHex(palette.actionPrimary)};`,
+  `  --action-primary-foreground: ${cssHex(palette.onActionPrimary)};`,
+  `  --brand-strong: ${cssHex(palette.brandStrong)};`,
+  `  --secondary: ${cssHex(palette.secondary)};`,
+  `  --secondary-foreground: ${cssHex(palette.onSecondary)};`,
+  `  --muted: ${cssHex(palette.muted)};`,
+  `  --muted-foreground: ${cssHex(palette.mutedForeground)};`,
+  `  --accent: ${cssHex(palette.accent)};`,
+  `  --accent-foreground: ${cssHex(palette.onAccent)};`,
+  `  --like: ${cssHex(palette.like)};`,
+  `  --bookmark: ${cssHex(palette.bookmark)};`,
+  `  --destructive: ${cssHex(palette.destructive)};`,
+  `  --destructive-foreground: ${cssHex(palette.onDestructive)};`,
+  `  --destructive-soft: ${cssHex(palette.destructiveSoft)};`,
+  `  --success: ${cssHex(palette.success)};`,
+  `  --success-soft: ${cssHex(palette.successSoft)};`,
+  `  --warning: ${cssHex(palette.warning)};`,
+  `  --warning-soft: ${cssHex(palette.warningSoft)};`,
+  `  --info: ${cssHex(palette.info)};`,
+  `  --info-soft: ${cssHex(palette.infoSoft)};`,
+  `  --category-deduction: ${cssHex(palette.categoryDeduction)};`,
+  `  --category-deduction-soft: ${cssHex(palette.categoryDeductionSoft)};`,
+  `  --category-nation: ${cssHex(palette.categoryNation)};`,
+  `  --category-nation-soft: ${cssHex(palette.categoryNationSoft)};`,
+  `  --category-rpg: ${cssHex(palette.categoryRpg)};`,
+  `  --category-rpg-soft: ${cssHex(palette.categoryRpgSoft)};`,
+  `  --border: ${cssHex(palette.border)};`,
+  `  --input: ${cssHex(palette.input)};`,
+  `  --ring: ${cssHex(palette.brandStrong)};`,
+].join("\n");
+const levelTierCssDeclarations = (tiers) => tiers.flatMap((tier) => [
+  `  --element-level-${tier.id}-foreground: ${cssHex(tier.foreground)};`,
+  `  --element-level-${tier.id}-surface: ${cssHex(tier.surface)};`,
+  `  --element-level-${tier.id}-border: ${cssHex(tier.border)};`,
+]).join("\n");
+const overlayCssDeclarations = (theme) => [
+  `  --wenyou-shadow-popover: ${theme.shadows.popover};`,
+  `  --wenyou-shadow-dialog: ${theme.shadows.dialog};`,
+  `  --wenyou-shadow-floating: ${theme.shadows.floating};`,
+  `  --overlay-scrim: ${theme.scrim.color};`,
+  `  --overlay-scrim-blur: ${theme.scrim.blurPx}px;`,
+  `  --image-viewer-backdrop: ${theme.imageViewerBackdrop};`,
+].join("\n");
+const darkThemeCssDeclarations = [
+  paletteCssDeclarations(darkTheme.palette),
+  levelTierCssDeclarations(darkTheme.levelTiers),
+  overlayCssDeclarations(darkTheme.web),
+].join("\n");
 write("web/tokens.css", `/* 由 contracts/foundation.v1.json 生成，禁止手改。 */
 :root {
-  --background: ${cssHex(p.background)};
-  --foreground: ${cssHex(p.foreground)};
-  --card: ${cssHex(p.surface)};
-  --card-foreground: ${cssHex(p.foreground)};
-  --popover: ${cssHex(p.surface)};
-  --popover-foreground: ${cssHex(p.foreground)};
-  --primary: ${cssHex(p.primary)};
-  --primary-foreground: ${cssHex(p.onPrimary)};
-  --brand-strong: ${cssHex(p.brandStrong)};
-  --secondary: ${cssHex(p.secondary)};
-  --secondary-foreground: ${cssHex(p.onSecondary)};
-  --muted: ${cssHex(p.muted)};
-  --muted-foreground: ${cssHex(p.mutedForeground)};
-  --accent: ${cssHex(p.accent)};
-  --accent-foreground: ${cssHex(p.onAccent)};
-  --like: ${cssHex(p.like)};
-  --bookmark: ${cssHex(p.bookmark)};
-  --destructive: ${cssHex(p.destructive)};
-  --destructive-foreground: ${cssHex(p.onDestructive)};
-  --destructive-soft: ${cssHex(p.destructiveSoft)};
-  --success: ${cssHex(p.success)};
-  --success-soft: ${cssHex(p.successSoft)};
-  --warning: ${cssHex(p.warning)};
-  --warning-soft: ${cssHex(p.warningSoft)};
-  --info: ${cssHex(p.info)};
-  --info-soft: ${cssHex(p.infoSoft)};
-  --category-deduction: ${cssHex(p.categoryDeduction)};
-  --category-deduction-soft: ${cssHex(p.categoryDeductionSoft)};
-  --category-nation: ${cssHex(p.categoryNation)};
-  --category-nation-soft: ${cssHex(p.categoryNationSoft)};
-  --category-rpg: ${cssHex(p.categoryRpg)};
-  --category-rpg-soft: ${cssHex(p.categoryRpgSoft)};
-  --border: ${cssHex(p.border)};
-  --input: ${cssHex(p.input)};
-  --ring: ${cssHex(p.brandStrong)};
+  color-scheme: light;
+${paletteCssDeclarations(p)}
   --radius-compact: ${web.radii.compact / 16}rem;
   --radius-control: ${web.radii.control / 16}rem;
   --radius-panel: ${web.radii.panel / 16}rem;
@@ -739,11 +788,7 @@ ${typeRoleIds.flatMap((role) => {
   --editor-body-size: ${editor.web.layout.bodyPx}px;
   --editor-body-line-height: ${editor.web.layout.lineHeight};
   --sticker-display-max: ${images.web.stickerDisplayMaxRem}rem;
-  --wenyou-shadow-popover: ${overlays.web.shadows.popover};
-  --wenyou-shadow-dialog: ${overlays.web.shadows.dialog};
-  --wenyou-shadow-floating: ${overlays.web.shadows.floating};
-  --overlay-scrim: ${overlays.web.scrim.color};
-  --overlay-scrim-blur: ${overlays.web.scrim.blurPx}px;
+${overlayCssDeclarations(overlays.web)}
 ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id)}: ${value};`).join("\n")}
   --motion-fast: ${motion.fastMs}ms;
   --motion-standard: ${motion.standardMs}ms;
@@ -811,15 +856,28 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --element-topic-tag-min-height: ${elements.web.interactiveMinimumPx}px;
   --element-level-height: ${elements.metadata.level.heightPx}px;
   --element-level-font-size: ${elements.metadata.level.fontSizePx}px;
-${elements.metadata.level.tiers.flatMap((tier) => [
-  `  --element-level-${tier.id}-foreground: ${cssHex(tier.foreground)};`,
-  `  --element-level-${tier.id}-surface: ${cssHex(tier.surface)};`,
-  `  --element-level-${tier.id}-border: ${cssHex(tier.border)};`,
-]).join("\n")}
+${levelTierCssDeclarations(elements.metadata.level.tiers)}
   --element-unread-count-height: ${elements.metadata.unreadCount.heightPx}px;
   --element-unread-count-font-size: ${elements.metadata.unreadCount.fontSizePx}px;
   --element-category-marker-width: ${elements.web.categoryMarkerWidthPx}px;
   --element-category-marker-foreground: ${cssPaletteValue(elements.metadata.categoryMarker.foreground)};
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+${darkThemeCssDeclarations}
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    color-scheme: dark;
+${darkThemeCssDeclarations}
+  }
+}
 }`);
 
 write("web/fonts.css", `/* 字体版本与校验和以 contracts/foundation.v1.json 为准。 */
@@ -836,6 +894,9 @@ write("web/fonts.css", `/* 字体版本与校验和以 contracts/foundation.v1.j
 
 const mobile = contract.profiles.mobile;
 const paletteLines = Object.entries(p)
+  .map(([name, value]) => `  static const Color ${name} = ${dartColor(value)};`)
+  .join("\n");
+const darkPaletteLines = Object.entries(darkTheme.palette)
   .map(([name, value]) => `  static const Color ${name} = ${dartColor(value)};`)
   .join("\n");
 const labelEntries = Object.entries(editor.labels)
@@ -862,6 +923,9 @@ const mobileTypeNumberEntries = (property, suffix = "") => Object.entries(mobile
 const levelTierEntries = elements.metadata.level.tiers
   .map((tier) => `    WenyouLevelTier(id: ${dartString(tier.id)}, minimum: ${tier.minimum}, maximum: ${tier.maximum}, foreground: ${dartColor(tier.foreground)}, surface: ${dartColor(tier.surface)}, border: ${dartColor(tier.border)}),`)
   .join("\n");
+const darkLevelTierEntries = darkTheme.levelTiers
+  .map((tier) => `    WenyouLevelTier(id: ${dartString(tier.id)}, minimum: ${tier.minimum}, maximum: ${tier.maximum}, foreground: ${dartColor(tier.foreground)}, surface: ${dartColor(tier.surface)}, border: ${dartColor(tier.border)}),`)
+  .join("\n");
 write("packages/flutter/lib/src/foundation_tokens.dart", `// 由 contracts/foundation.v1.json 生成，禁止手改。
 import 'package:flutter/material.dart';
 
@@ -872,6 +936,23 @@ abstract final class WenyouFoundationVersion {
 
 abstract final class WenyouFoundationPalette {
 ${paletteLines}
+}
+
+abstract final class WenyouFoundationDarkPalette {
+${darkPaletteLines}
+}
+
+abstract final class WenyouFoundationTheme {
+  static const String defaultMode = ${dartString(themes.defaultMode)};
+  static const String defaultPreference = ${dartString(themes.defaultPreference)};
+  static const List<String> modes = <String>${dartList(themes.modes)};
+  static const List<String> preferences = <String>${dartList(themes.preferences)};
+  static const Map<String, String> labels = <String, String>{
+${Object.entries(themes.labels).map(([id, value]) => `    ${dartString(id)}: ${dartString(value)},`).join("\n")}
+  };
+  static const Map<String, String> icons = <String, String>{
+${Object.entries(themes.icons).map(([id, value]) => `    ${dartString(id)}: ${dartString(value)},`).join("\n")}
+  };
 }
 
 abstract final class WenyouIconControlContract {
@@ -1015,6 +1096,19 @@ class WenyouLevelTier {
 abstract final class WenyouLevelContract {
   static const List<WenyouLevelTier> tiers = <WenyouLevelTier>[
 ${levelTierEntries}
+  ];
+  static WenyouLevelTier? resolve(int level) {
+    if (level < 1) return null;
+    for (final tier in tiers) {
+      if (level <= tier.maximum) return tier;
+    }
+    return tiers.last;
+  }
+}
+
+abstract final class WenyouDarkLevelContract {
+  static const List<WenyouLevelTier> tiers = <WenyouLevelTier>[
+${darkLevelTierEntries}
   ];
   static WenyouLevelTier? resolve(int level) {
     if (level < 1) return null;
@@ -1420,7 +1514,7 @@ class WenyouIcon extends StatelessWidget {
 }`);
 
 const artifactPaths = [
-  ...["brand", "icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
+  ...["brand", "theme", "icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
     .flatMap((name) => [`dist/${name}.js`, `dist/${name}.d.ts`]),
   "web/tokens.css",
   "web/fonts.css",
@@ -1451,6 +1545,7 @@ const manifest = JSON.stringify({
     language: true,
     elements: true,
     brand: true,
+    themes: true,
   },
   artifactSha256,
   icons: {

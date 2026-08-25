@@ -3,7 +3,7 @@
   "$id": "https://wenyou.site/contracts/foundation-v1.schema.json",
   "title": "Wenyou Foundation Contract",
   "type": "object",
-  "required": ["$schema", "schemaVersion", "version", "identity", "palette", "typography", "motion", "accessibility", "profiles", "experiences", "fonts"],
+  "required": ["$schema", "schemaVersion", "version", "identity", "palette", "themes", "typography", "motion", "accessibility", "profiles", "experiences", "fonts"],
   "properties": {
     "$schema": { "const": "./foundation.schema.json" },
     "schemaVersion": { "const": 2 },
@@ -14,20 +14,22 @@
       "properties": {
         "subject": { "$ref": "#/$defs/nonEmptyString" },
         "keywords": { "$ref": "#/$defs/nonEmptyStringArray" },
-        "canvas": { "const": "pure-white" },
+        "canvas": { "const": "theme-aware-reading-canvas" },
         "signature": { "$ref": "#/$defs/nonEmptyString" }
       },
       "additionalProperties": false
     },
     "palette": {
       "type": "object",
-      "required": ["background", "foreground", "surface", "primary", "onPrimary", "brandStrong", "secondary", "onSecondary", "muted", "mutedForeground", "accent", "onAccent", "like", "bookmark", "border", "input", "destructive", "onDestructive", "destructiveSoft", "success", "successSoft", "warning", "warningSoft", "info", "infoSoft", "categoryDeduction", "categoryDeductionSoft", "categoryNation", "categoryNationSoft", "categoryRpg", "categoryRpgSoft"],
+      "required": ["background", "foreground", "surface", "primary", "onPrimary", "actionPrimary", "onActionPrimary", "brandStrong", "secondary", "onSecondary", "muted", "mutedForeground", "accent", "onAccent", "like", "bookmark", "border", "input", "destructive", "onDestructive", "destructiveSoft", "success", "successSoft", "warning", "warningSoft", "info", "infoSoft", "categoryDeduction", "categoryDeductionSoft", "categoryNation", "categoryNationSoft", "categoryRpg", "categoryRpgSoft"],
       "properties": {
         "background": { "$ref": "#/$defs/hexColor" },
         "foreground": { "$ref": "#/$defs/hexColor" },
         "surface": { "$ref": "#/$defs/hexColor" },
         "primary": { "$ref": "#/$defs/hexColor" },
         "onPrimary": { "$ref": "#/$defs/hexColor" },
+        "actionPrimary": { "$ref": "#/$defs/hexColor" },
+        "onActionPrimary": { "$ref": "#/$defs/hexColor" },
         "brandStrong": { "$ref": "#/$defs/hexColor" },
         "secondary": { "$ref": "#/$defs/hexColor" },
         "onSecondary": { "$ref": "#/$defs/hexColor" },
@@ -54,6 +56,48 @@
         "categoryNationSoft": { "$ref": "#/$defs/hexColor" },
         "categoryRpg": { "$ref": "#/$defs/hexColor" },
         "categoryRpgSoft": { "$ref": "#/$defs/hexColor" }
+      },
+      "additionalProperties": false
+    },
+    "themes": {
+      "type": "object",
+      "required": ["defaultMode", "defaultPreference", "modes", "preferences", "labels", "icons", "dark"],
+      "properties": {
+        "defaultMode": { "const": "light" },
+        "defaultPreference": { "const": "system" },
+        "modes": { "type": "array", "minItems": 2, "maxItems": 2, "prefixItems": [{ "const": "light" }, { "const": "dark" }], "items": false },
+        "preferences": { "type": "array", "minItems": 3, "maxItems": 3, "prefixItems": [{ "const": "system" }, { "const": "light" }, { "const": "dark" }], "items": false },
+        "labels": {
+          "type": "object",
+          "required": ["system", "light", "dark"],
+          "properties": { "system": { "const": "跟随系统" }, "light": { "const": "亮色" }, "dark": { "const": "黑夜" } },
+          "additionalProperties": false
+        },
+        "icons": {
+          "type": "object",
+          "required": ["system", "light", "dark"],
+          "properties": { "system": { "const": "appearance.system" }, "light": { "const": "appearance.light" }, "dark": { "const": "appearance.dark" } },
+          "additionalProperties": false
+        },
+        "dark": {
+          "type": "object",
+          "required": ["palette", "levelTiers", "web"],
+          "properties": {
+            "palette": { "$ref": "#/properties/palette" },
+            "levelTiers": { "type": "array", "minItems": 5, "maxItems": 5, "prefixItems": [{ "$ref": "#/$defs/levelTier" }, { "$ref": "#/$defs/levelTier" }, { "$ref": "#/$defs/levelTier" }, { "$ref": "#/$defs/levelTier" }, { "$ref": "#/$defs/levelTier" }], "items": false },
+            "web": {
+              "type": "object",
+              "required": ["shadows", "scrim", "imageViewerBackdrop"],
+              "properties": {
+                "shadows": { "type": "object", "required": ["popover", "dialog", "floating"], "properties": { "popover": { "$ref": "#/$defs/nonEmptyString" }, "dialog": { "$ref": "#/$defs/nonEmptyString" }, "floating": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
+                "scrim": { "type": "object", "required": ["color", "blurPx"], "properties": { "color": { "$ref": "#/$defs/nonEmptyString" }, "blurPx": { "$ref": "#/$defs/nonNegativeNumber" } }, "additionalProperties": false },
+                "imageViewerBackdrop": { "$ref": "#/$defs/nonEmptyString" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },
@@ -908,7 +952,7 @@
         "destructiveActions": { "type": "object", "required": ["lowRiskUndoable", "irreversibleOrAffectsOthers", "confirmationNamesAction", "pendingBlocksDismissal"], "properties": { "lowRiskUndoable": { "const": "execute-and-offer-undo" }, "irreversibleOrAffectsOthers": { "const": "explicit-confirmation" }, "confirmationNamesAction": { "const": true }, "pendingBlocksDismissal": { "const": true } }, "additionalProperties": false },
         "web": {
           "type": "object",
-          "required": ["layers", "shadows", "scrim", "dismiss"],
+          "required": ["layers", "shadows", "scrim", "imageViewerBackdrop", "dismiss"],
           "properties": {
             "layers": {
               "type": "object",
@@ -918,6 +962,7 @@
             },
             "shadows": { "type": "object", "required": ["popover", "dialog", "floating"], "properties": { "popover": { "$ref": "#/$defs/nonEmptyString" }, "dialog": { "$ref": "#/$defs/nonEmptyString" }, "floating": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
             "scrim": { "type": "object", "required": ["color", "blurPx"], "properties": { "color": { "$ref": "#/$defs/nonEmptyString" }, "blurPx": { "$ref": "#/$defs/nonNegativeNumber" } }, "additionalProperties": false },
+            "imageViewerBackdrop": { "$ref": "#/$defs/nonEmptyString" },
             "dismiss": { "type": "array", "minItems": 2, "maxItems": 2, "prefixItems": [{ "const": "explicit-control" }, { "const": "escape" }], "items": false }
           },
           "additionalProperties": false

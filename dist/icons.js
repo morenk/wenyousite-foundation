@@ -155,6 +155,9 @@ export const ICON_SEMANTICS = Object.freeze({
   "action.unlock": "lock-keyhole-open",
   "action.reset-password": "key-round",
   "action.devices": "monitor-smartphone",
+  "appearance.system": "monitor",
+  "appearance.light": "sun",
+  "appearance.dark": "moon",
   "action.mark-read": "mail-check",
   "action.mark-unread": "mail-open",
   "action.update": "cloud-download",
@@ -2303,6 +2306,36 @@ export const ICON_GLYPH_NODES = Object.freeze({
       }
     ]
   ],
+  "monitor": [
+    [
+      "rect",
+      {
+        "width": "20",
+        "height": "14",
+        "x": "2",
+        "y": "3",
+        "rx": "2"
+      }
+    ],
+    [
+      "line",
+      {
+        "x1": "8",
+        "x2": "16",
+        "y1": "21",
+        "y2": "21"
+      }
+    ],
+    [
+      "line",
+      {
+        "x1": "12",
+        "x2": "12",
+        "y1": "17",
+        "y2": "21"
+      }
+    ]
+  ],
   "monitor-smartphone": [
     [
       "path",
@@ -2330,6 +2363,14 @@ export const ICON_GLYPH_NODES = Object.freeze({
         "x": "16",
         "y": "12",
         "rx": "2"
+      }
+    ]
+  ],
+  "moon": [
+    [
+      "path",
+      {
+        "d": "M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
       }
     ]
   ],
@@ -2973,6 +3014,64 @@ export const ICON_GLYPH_NODES = Object.freeze({
       }
     ]
   ],
+  "sun": [
+    [
+      "circle",
+      {
+        "cx": "12",
+        "cy": "12",
+        "r": "4"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M12 2v2"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M12 20v2"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "m4.93 4.93 1.41 1.41"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "m17.66 17.66 1.41 1.41"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M2 12h2"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M20 12h2"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "m6.34 17.66-1.41 1.41"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "m19.07 4.93-1.41 1.41"
+      }
+    ]
+  ],
   "tag": [
     [
       "path",
@@ -3578,7 +3677,9 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "message-square-plus": "<svg class=\"lucide lucide-message-square-plus\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z\" /><path d=\"M12 8v6\" /><path d=\"M9 11h6\" /></svg>",
   "minimize": "<svg class=\"lucide lucide-minimize\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M8 3v3a2 2 0 0 1-2 2H3\" /><path d=\"M21 8h-3a2 2 0 0 1-2-2V3\" /><path d=\"M3 16h3a2 2 0 0 1 2 2v3\" /><path d=\"M16 21v-3a2 2 0 0 1 2-2h3\" /></svg>",
   "minus": "<svg class=\"lucide lucide-minus\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M5 12h14\" /></svg>",
+  "monitor": "<svg class=\"lucide lucide-monitor\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><rect width=\"20\" height=\"14\" x=\"2\" y=\"3\" rx=\"2\" /><line x1=\"8\" x2=\"16\" y1=\"21\" y2=\"21\" /><line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"21\" /></svg>",
   "monitor-smartphone": "<svg class=\"lucide lucide-monitor-smartphone\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8\" /><path d=\"M10 19v-3.96 3.15\" /><path d=\"M7 19h5\" /><rect width=\"6\" height=\"10\" x=\"16\" y=\"12\" rx=\"2\" /></svg>",
+  "moon": "<svg class=\"lucide lucide-moon\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\" /></svg>",
   "newspaper": "<svg class=\"lucide lucide-newspaper\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M15 18h-5\" /><path d=\"M18 14h-8\" /><path d=\"M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2\" /><rect width=\"8\" height=\"4\" x=\"10\" y=\"6\" rx=\"1\" /></svg>",
   "notebook-pen": "<svg class=\"lucide lucide-notebook-pen\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4\" /><path d=\"M2 6h4\" /><path d=\"M2 10h4\" /><path d=\"M2 14h4\" /><path d=\"M2 18h4\" /><path d=\"M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z\" /></svg>",
   "notebook-text": "<svg class=\"lucide lucide-notebook-text\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M2 6h4\" /><path d=\"M2 10h4\" /><path d=\"M2 14h4\" /><path d=\"M2 18h4\" /><rect width=\"16\" height=\"20\" x=\"4\" y=\"2\" rx=\"2\" /><path d=\"M9.5 8h5\" /><path d=\"M9.5 12H16\" /><path d=\"M9.5 16H14\" /></svg>",
@@ -3605,6 +3706,7 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "smile-plus": "<svg class=\"lucide lucide-smile-plus\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M22 11v1a10 10 0 1 1-9-10\" /><path d=\"M8 14s1.5 2 4 2 4-2 4-2\" /><line x1=\"9\" x2=\"9.01\" y1=\"9\" y2=\"9\" /><line x1=\"15\" x2=\"15.01\" y1=\"9\" y2=\"9\" /><path d=\"M16 5h6\" /><path d=\"M19 2v6\" /></svg>",
   "sparkles": "<svg class=\"lucide lucide-sparkles\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z\" /><path d=\"M20 2v4\" /><path d=\"M22 4h-4\" /><circle cx=\"4\" cy=\"20\" r=\"2\" /></svg>",
   "strikethrough": "<svg class=\"lucide lucide-strikethrough\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M16 4H9a3 3 0 0 0-2.83 4\" /><path d=\"M14 12a4 4 0 0 1 0 8H6\" /><line x1=\"4\" x2=\"20\" y1=\"12\" y2=\"12\" /></svg>",
+  "sun": "<svg class=\"lucide lucide-sun\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><circle cx=\"12\" cy=\"12\" r=\"4\" /><path d=\"M12 2v2\" /><path d=\"M12 20v2\" /><path d=\"m4.93 4.93 1.41 1.41\" /><path d=\"m17.66 17.66 1.41 1.41\" /><path d=\"M2 12h2\" /><path d=\"M20 12h2\" /><path d=\"m6.34 17.66-1.41 1.41\" /><path d=\"m19.07 4.93-1.41 1.41\" /></svg>",
   "tag": "<svg class=\"lucide lucide-tag\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z\" /><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /></svg>",
   "tag-plus": "<svg class=\"lucide lucide-tag-plus\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M16 13h6\" /><path d=\"m16.5 6.5-3.914-3.914A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l1.79-1.79\" /><path d=\"M19 10v6\" /><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /></svg>",
   "tag-x": "<svg class=\"lucide lucide-tag-x\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m16.5 6.5-3.914-3.914A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.43 2.43 0 0 0 3.42 0l1.79-1.79\" /><path d=\"m16.5 10.5 5 5\" /><path d=\"m21.5 10.5-5 5\" /><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /></svg>",
@@ -3721,7 +3823,9 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "message-square-plus": "f8058ae58b496d80beae5bd6fb3db3f7353bf215fe09b753ee93f2fc0acc96b2",
   "minimize": "1b3959aa83afdcd26e19f1c180df1ea9c8d9aeeee9922fc570bb1fd6535864af",
   "minus": "54a2700b8c11bfe3c4e8542b559aa5dfe14b464d23ded80b7a6ecddd39fc7e56",
+  "monitor": "f6e5a189a0bc7e2ac77af6e344ae4dd72d5748837c36285b9cb9859ec5fe4e40",
   "monitor-smartphone": "1eedc1648a01bc1cb0e6f199ed87b3ea8d4b5b5407186d506ce1c7a828133a35",
+  "moon": "889a9a484223b166d0659006327ac13e6fe769a84041a415e1edc6a19a25d8b6",
   "newspaper": "13e528c20bc837013bf83aee83d85adead6bf477a8747a4d2509428eb2d9612e",
   "notebook-pen": "a15095743e75a53d63c94d023b08ae9c5d7344b84134ee39b7c403a744d4cb8a",
   "notebook-text": "809cbd237584d92a094d9916815fc55ddb0d09f3c60e756493832804dc564002",
@@ -3748,6 +3852,7 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "smile-plus": "8e41610de1f2c686c000cc771f7a52893f5e4faecbfe0b1c503a555d41b6fba1",
   "sparkles": "667eb1a2a7853e7b6345c45e2343d4f48cbdcede9ce4f62c58bc8388ebbe90d0",
   "strikethrough": "912253c524af5503f619c06abe5125038c58c7e776454d6c7690efcc8f7e2327",
+  "sun": "0d7eb96e40f082030d1b7de435387466ab6ea59cd1a0d5b6654aa9ced11540d9",
   "tag": "6a53dac24e6728449f34b57bfce6315b8c1af8fcc6c2f96af3eb77768693f175",
   "tag-plus": "1c56314c29c63d959dd0bbb73ef6f9242d8f7b8df2144f31fd4140536ae91864",
   "tag-x": "eea9f5920fd64baa602c1eb02b8f754b512723471030773492526926df6f5739",

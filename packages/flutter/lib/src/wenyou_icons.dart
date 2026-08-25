@@ -83,6 +83,9 @@ abstract final class WenyouIconIds {
   static const String actionUnlock = 'action.unlock'; // lock-keyhole-open
   static const String actionResetPassword = 'action.reset-password'; // key-round
   static const String actionDevices = 'action.devices'; // monitor-smartphone
+  static const String appearanceSystem = 'appearance.system'; // monitor
+  static const String appearanceLight = 'appearance.light'; // sun
+  static const String appearanceDark = 'appearance.dark'; // moon
   static const String actionMarkRead = 'action.mark-read'; // mail-check
   static const String actionMarkUnread = 'action.mark-unread'; // mail-open
   static const String actionUpdate = 'action.update'; // cloud-download
@@ -267,6 +270,9 @@ abstract final class WenyouIconContract {
     'action.unlock': 'lock-keyhole-open',
     'action.reset-password': 'key-round',
     'action.devices': 'monitor-smartphone',
+    'appearance.system': 'monitor',
+    'appearance.light': 'sun',
+    'appearance.dark': 'moon',
     'action.mark-read': 'mail-check',
     'action.mark-unread': 'mail-open',
     'action.update': 'cloud-download',

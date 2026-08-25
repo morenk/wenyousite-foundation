@@ -1,5 +1,14 @@
 # Foundation Changelog
 
+## 6.5.0
+
+- `shared`：新增“跟随系统、亮色、黑夜”主题偏好契约与温暖墨紫黑夜色板；默认跟随系统，显式偏好由客户端本机持久化，图片与内容结构不随主题改变。
+- `color`：拆分柔和容器 `primary`、主要行动 `actionPrimary` 与结构强调 `brandStrong`，并为两种模式校验正文、色对、控件边界和等级层次的对比度。
+- `web`：生成显式主题选择器、系统偏好回退、`color-scheme`、黑夜阴影/遮罩和图片查看背景，并新增 `@wenyousite/foundation/theme` 供首屏解析与切换器消费。
+- `mobile`：生成 `WenyouFoundationDarkPalette`、`WenyouFoundationTheme` 与黑夜等级契约；实际 Flutter 客户端升级仍须在 Windows 环境完成。
+- `icons`：新增系统、亮色和黑夜三个外观语义图标，继续复用固定 Lucide 母版。
+- `compatibility`：亮色视觉与既有公开 Token 保持兼容；新主题能力和主要行动角色均为兼容新增。
+
 ## 6.4.0
 
 - `brand`：发布“文”与油管加油枪组合标识、应用图标和“最温油的文字共创社区”正式文案，资源按源稿、Android、Apple、Web 与 Flutter 运行时分层治理。

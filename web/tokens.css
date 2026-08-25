@@ -1,5 +1,6 @@
 /* 由 contracts/foundation.v1.json 生成，禁止手改。 */
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #342f3e;
   --card: #ffffff;
@@ -8,6 +9,8 @@
   --popover-foreground: #342f3e;
   --primary: #f3c6dd;
   --primary-foreground: #704c65;
+  --action-primary: #f3c6dd;
+  --action-primary-foreground: #704c65;
   --brand-strong: #704c65;
   --secondary: #c7ccff;
   --secondary-foreground: #4b527c;
@@ -83,6 +86,7 @@
   --wenyou-shadow-floating: 0 10px 28px rgb(52 47 62 / 14%);
   --overlay-scrim: rgb(52 47 62 / 40%);
   --overlay-scrim-blur: 1px;
+  --image-viewer-backdrop: rgb(52 47 62 / 88%);
   --layer-sticky: 30;
   --layer-chrome: 40;
   --layer-floating: 60;
@@ -177,4 +181,135 @@
   --element-unread-count-font-size: 10px;
   --element-category-marker-width: 4px;
   --element-category-marker-foreground: var(--muted-foreground);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #17131c;
+  --foreground: #f2edf4;
+  --card: #211b27;
+  --card-foreground: #f2edf4;
+  --popover: #211b27;
+  --popover-foreground: #f2edf4;
+  --primary: #4d3141;
+  --primary-foreground: #ffd5e9;
+  --action-primary: #935879;
+  --action-primary-foreground: #fff0f6;
+  --brand-strong: #e6a4c6;
+  --secondary: #5c649b;
+  --secondary-foreground: #f0f1ff;
+  --muted: #2a232f;
+  --muted-foreground: #b8aebc;
+  --accent: #3b2936;
+  --accent-foreground: #f4c4dc;
+  --like: #ff6fa9;
+  --bookmark: #e9be64;
+  --destructive: #f28fa5;
+  --destructive-foreground: #2a1018;
+  --destructive-soft: #43222c;
+  --success: #8bcfa5;
+  --success-soft: #20382b;
+  --warning: #e7cb76;
+  --warning-soft: #3b311b;
+  --info: #b2baff;
+  --info-soft: #292d4b;
+  --category-deduction: #e7cb76;
+  --category-deduction-soft: #3b311b;
+  --category-nation: #b2baff;
+  --category-nation-soft: #292d4b;
+  --category-rpg: #e6a4c6;
+  --category-rpg-soft: #3b2936;
+  --border: #4a404f;
+  --input: #706474;
+  --ring: #e6a4c6;
+  --element-level-mist-foreground: #b8aebc;
+  --element-level-mist-surface: #2a232f;
+  --element-level-mist-border: #4a404f;
+  --element-level-peach-foreground: #e6b9a8;
+  --element-level-peach-surface: #3a2926;
+  --element-level-peach-border: #68483f;
+  --element-level-rose-foreground: #f0b0c0;
+  --element-level-rose-surface: #43272f;
+  --element-level-rose-border: #754151;
+  --element-level-coral-foreground: #ffd6de;
+  --element-level-coral-surface: #713847;
+  --element-level-coral-border: #a95a6c;
+  --element-level-berry-foreground: #fff0f6;
+  --element-level-berry-surface: #8e3f62;
+  --element-level-berry-border: #c7678f;
+  --wenyou-shadow-popover: 0 16px 40px rgb(5 3 8 / 42%);
+  --wenyou-shadow-dialog: 0 28px 72px rgb(5 3 8 / 56%);
+  --wenyou-shadow-floating: 0 12px 32px rgb(5 3 8 / 46%);
+  --overlay-scrim: rgb(7 5 9 / 72%);
+  --overlay-scrim-blur: 1px;
+  --image-viewer-backdrop: rgb(7 5 9 / 92%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    color-scheme: dark;
+  --background: #17131c;
+  --foreground: #f2edf4;
+  --card: #211b27;
+  --card-foreground: #f2edf4;
+  --popover: #211b27;
+  --popover-foreground: #f2edf4;
+  --primary: #4d3141;
+  --primary-foreground: #ffd5e9;
+  --action-primary: #935879;
+  --action-primary-foreground: #fff0f6;
+  --brand-strong: #e6a4c6;
+  --secondary: #5c649b;
+  --secondary-foreground: #f0f1ff;
+  --muted: #2a232f;
+  --muted-foreground: #b8aebc;
+  --accent: #3b2936;
+  --accent-foreground: #f4c4dc;
+  --like: #ff6fa9;
+  --bookmark: #e9be64;
+  --destructive: #f28fa5;
+  --destructive-foreground: #2a1018;
+  --destructive-soft: #43222c;
+  --success: #8bcfa5;
+  --success-soft: #20382b;
+  --warning: #e7cb76;
+  --warning-soft: #3b311b;
+  --info: #b2baff;
+  --info-soft: #292d4b;
+  --category-deduction: #e7cb76;
+  --category-deduction-soft: #3b311b;
+  --category-nation: #b2baff;
+  --category-nation-soft: #292d4b;
+  --category-rpg: #e6a4c6;
+  --category-rpg-soft: #3b2936;
+  --border: #4a404f;
+  --input: #706474;
+  --ring: #e6a4c6;
+  --element-level-mist-foreground: #b8aebc;
+  --element-level-mist-surface: #2a232f;
+  --element-level-mist-border: #4a404f;
+  --element-level-peach-foreground: #e6b9a8;
+  --element-level-peach-surface: #3a2926;
+  --element-level-peach-border: #68483f;
+  --element-level-rose-foreground: #f0b0c0;
+  --element-level-rose-surface: #43272f;
+  --element-level-rose-border: #754151;
+  --element-level-coral-foreground: #ffd6de;
+  --element-level-coral-surface: #713847;
+  --element-level-coral-border: #a95a6c;
+  --element-level-berry-foreground: #fff0f6;
+  --element-level-berry-surface: #8e3f62;
+  --element-level-berry-border: #c7678f;
+  --wenyou-shadow-popover: 0 16px 40px rgb(5 3 8 / 42%);
+  --wenyou-shadow-dialog: 0 28px 72px rgb(5 3 8 / 56%);
+  --wenyou-shadow-floating: 0 12px 32px rgb(5 3 8 / 46%);
+  --overlay-scrim: rgb(7 5 9 / 72%);
+  --overlay-scrim-blur: 1px;
+  --image-viewer-backdrop: rgb(7 5 9 / 92%);
+  }
+}
 }
