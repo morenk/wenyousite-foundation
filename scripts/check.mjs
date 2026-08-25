@@ -13,6 +13,43 @@ const manifest = JSON.parse(read("foundation-manifest.json"));
 const packageJson = JSON.parse(read("package.json"));
 const failures = [];
 
+function hasBalancedCssBlocks(source) {
+  let depth = 0;
+  let quote = null;
+  let inComment = false;
+  for (let index = 0; index < source.length; index += 1) {
+    const character = source[index];
+    const next = source[index + 1];
+    if (inComment) {
+      if (character === "*" && next === "/") {
+        inComment = false;
+        index += 1;
+      }
+      continue;
+    }
+    if (quote) {
+      if (character === "\\") {
+        index += 1;
+      } else if (character === quote) {
+        quote = null;
+      }
+      continue;
+    }
+    if (character === "/" && next === "*") {
+      inComment = true;
+      index += 1;
+    } else if (character === '"' || character === "'") {
+      quote = character;
+    } else if (character === "{") {
+      depth += 1;
+    } else if (character === "}") {
+      depth -= 1;
+      if (depth < 0) return false;
+    }
+  }
+  return depth === 0 && !quote && !inComment;
+}
+
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 const validateContract = ajv.compile(schema);
 if (!validateContract(contract)) {
@@ -98,6 +135,12 @@ if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class Wen
 }
 if (!read("web/tokens.css").includes('[data-theme="dark"]') || !read("web/tokens.css").includes("prefers-color-scheme: dark")) {
   failures.push("Web Token 缺少显式黑夜选择器或系统偏好回退");
+}
+if (!hasBalancedCssBlocks(read("web/tokens.css"))) {
+  failures.push("Web Token CSS 块结构不平衡");
+}
+if (hasBalancedCssBlocks(`${read("web/tokens.css")}\n}`)) {
+  failures.push("Web Token CSS 块结构反向用例未拒绝多余闭合花括号");
 }
 if (!read("dist/theme.js").includes("THEME_PALETTES") || !read("dist/theme.d.ts").includes("ThemePreference")) {
   failures.push("Web 主题模块缺少调色板或偏好类型");

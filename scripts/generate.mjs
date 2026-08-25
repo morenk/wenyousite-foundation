@@ -878,7 +878,7 @@ ${darkThemeCssDeclarations}
 ${darkThemeCssDeclarations}
   }
 }
-}`);
+`);
 
 write("web/fonts.css", `/* 字体版本与校验和以 contracts/foundation.v1.json 为准。 */
 @import "@fontsource-variable/noto-sans-sc/wght.css";
