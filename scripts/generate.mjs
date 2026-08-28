@@ -846,7 +846,12 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --element-quote-font-weight: ${elements.block.quote.fontWeight};
   --element-quote-padding-block: ${elements.block.quote.paddingBlockEm}em;
   --element-quote-padding-inline: ${elements.block.quote.paddingInlineEm}em;
+  --element-divider-color: ${cssPaletteValue(elements.block.divider.color)};
   --element-divider-width: ${elements.block.divider.widthPx}px;
+  --element-divider-inline-size: ${elements.block.divider.inlineSizeEm}em;
+  --element-divider-marker: ${cssPaletteValue(elements.block.divider.marker)};
+  --element-divider-marker-size: ${elements.block.divider.markerDiameterPx}px;
+  --element-divider-spacing-block: ${elements.block.divider.outerSpacingEm}em;
   --element-badge-default-height: ${elements.metadata.badge.default.heightPx}px;
   --element-badge-default-font-size: ${elements.metadata.badge.default.fontSizePx}px;
   --element-badge-default-icon-size: ${elements.metadata.badge.default.iconSizePx}px;
@@ -1008,6 +1013,14 @@ abstract final class WenyouElementContract {
   static const String quoteContentSpacing = ${dartString(elements.block.quote.contentSpacing)};
   static const String quoteGeneratedAdornment = ${dartString(elements.block.quote.generatedAdornment)};
   static const String quoteShadow = ${dartString(elements.block.quote.shadow)};
+  static const String dividerLayout = ${dartString(elements.block.divider.layout)};
+  static const String dividerAlignment = ${dartString(elements.block.divider.alignment)};
+  static const Color dividerLineColor = WenyouFoundationPalette.${elements.block.divider.color};
+  static const double dividerLineThickness = ${elements.mobile.divider.widthDp}.0;
+  static const double dividerInlineSizeEm = ${elements.block.divider.inlineSizeEm}.0;
+  static const Color dividerMarkerColor = WenyouFoundationPalette.${elements.block.divider.marker};
+  static const double dividerMarkerDiameter = ${elements.mobile.divider.markerDiameterDp}.0;
+  static const double dividerOuterSpacingEm = ${elements.block.divider.outerSpacingEm};
   static const double diceLineHeight = ${elements.inline.dice.lineHeight};
   static const double dicePaddingBlock = ${elements.inline.dice.paddingBlockEm};
   static const double dicePaddingInline = ${elements.inline.dice.paddingInlineEm};

@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.5.1",
+  "version": "6.6.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -772,7 +772,16 @@
           "generatedAdornment": "none",
           "shadow": "none"
         },
-        "divider": { "color": "border", "widthPx": 1 }
+        "divider": {
+          "color": "border",
+          "widthPx": 1,
+          "layout": "centered-short-line-with-dot",
+          "alignment": "center",
+          "inlineSizeEm": 5,
+          "marker": "brandStrong",
+          "markerDiameterPx": 5,
+          "outerSpacingEm": 1.75
+        }
       },
       "metadata": {
         "badge": {
@@ -899,6 +908,10 @@
         "interactiveMinimumDp": 48,
         "quote": {
           "markerWidthDp": 2
+        },
+        "divider": {
+          "widthDp": 1,
+          "markerDiameterDp": 5
         },
         "internalReference": {
           "lineHeight": 1.5,

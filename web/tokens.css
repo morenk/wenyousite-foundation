@@ -152,7 +152,12 @@
   --element-quote-font-weight: 400;
   --element-quote-padding-block: 0.5em;
   --element-quote-padding-inline: 0.75em;
+  --element-divider-color: var(--border);
   --element-divider-width: 1px;
+  --element-divider-inline-size: 5em;
+  --element-divider-marker: var(--brand-strong);
+  --element-divider-marker-size: 5px;
+  --element-divider-spacing-block: 1.75em;
   --element-badge-default-height: 24px;
   --element-badge-default-font-size: 12px;
   --element-badge-default-icon-size: 14px;

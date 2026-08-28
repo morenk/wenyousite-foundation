@@ -822,7 +822,21 @@
               },
               "additionalProperties": false
             },
-            "divider": { "type": "object", "required": ["color", "widthPx"], "properties": { "color": { "const": "border" }, "widthPx": { "const": 1 } }, "additionalProperties": false }
+            "divider": {
+              "type": "object",
+              "required": ["color", "widthPx", "layout", "alignment", "inlineSizeEm", "marker", "markerDiameterPx", "outerSpacingEm"],
+              "properties": {
+                "color": { "const": "border" },
+                "widthPx": { "const": 1 },
+                "layout": { "const": "centered-short-line-with-dot" },
+                "alignment": { "const": "center" },
+                "inlineSizeEm": { "const": 5 },
+                "marker": { "const": "brandStrong" },
+                "markerDiameterPx": { "const": 5 },
+                "outerSpacingEm": { "const": 1.75 }
+              },
+              "additionalProperties": false
+            }
           },
           "additionalProperties": false
         },
@@ -881,10 +895,11 @@
         },
         "mobile": {
           "type": "object",
-          "required": ["interactiveMinimumDp", "quote", "internalReference", "dice", "categoryMarkerWidthDp"],
+          "required": ["interactiveMinimumDp", "quote", "divider", "internalReference", "dice", "categoryMarkerWidthDp"],
           "properties": {
             "interactiveMinimumDp": { "const": 48 },
             "quote": { "type": "object", "required": ["markerWidthDp"], "properties": { "markerWidthDp": { "const": 2 } }, "additionalProperties": false },
+            "divider": { "type": "object", "required": ["widthDp", "markerDiameterDp"], "properties": { "widthDp": { "const": 1 }, "markerDiameterDp": { "const": 5 } }, "additionalProperties": false },
             "internalReference": { "type": "object", "required": ["lineHeight", "paddingBlockEm", "paddingInlineEm", "gapEm", "radiusEm", "iconSizeEm", "pressedStateOpacity"], "properties": { "lineHeight": { "const": 1.5 }, "paddingBlockEm": { "const": 0.04 }, "paddingInlineEm": { "const": 0.38 }, "gapEm": { "const": 0.28 }, "radiusEm": { "const": 0.4 }, "iconSizeEm": { "const": 0.92 }, "pressedStateOpacity": { "const": 0.12 } }, "additionalProperties": false },
             "dice": { "type": "object", "required": ["pressedStateOpacity", "detailSurface", "detailMaximumHeightFraction", "detailOverflow", "safeArea", "explicitClose"], "properties": { "pressedStateOpacity": { "const": 0.12 }, "detailSurface": { "const": "bottom-sheet" }, "detailMaximumHeightFraction": { "const": 0.8 }, "detailOverflow": { "const": "internal-scroll" }, "safeArea": { "const": true }, "explicitClose": { "const": true } }, "additionalProperties": false },
             "categoryMarkerWidthDp": { "const": 4 }

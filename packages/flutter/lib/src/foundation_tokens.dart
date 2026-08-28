@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.5.1';
+  static const String value = '6.6.0';
   static const int schema = 2;
 }
 
@@ -148,6 +148,14 @@ abstract final class WenyouElementContract {
   static const String quoteContentSpacing = 'trim-outer-preserve-inner';
   static const String quoteGeneratedAdornment = 'none';
   static const String quoteShadow = 'none';
+  static const String dividerLayout = 'centered-short-line-with-dot';
+  static const String dividerAlignment = 'center';
+  static const Color dividerLineColor = WenyouFoundationPalette.border;
+  static const double dividerLineThickness = 1.0;
+  static const double dividerInlineSizeEm = 5.0;
+  static const Color dividerMarkerColor = WenyouFoundationPalette.brandStrong;
+  static const double dividerMarkerDiameter = 5.0;
+  static const double dividerOuterSpacingEm = 1.75;
   static const double diceLineHeight = 1.5;
   static const double dicePaddingBlock = 0.04;
   static const double dicePaddingInline = 0.3;

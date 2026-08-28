@@ -73,6 +73,8 @@ for (const [label, mutate] of [
   ["缺少元素契约", (value) => { delete value.experiences.elements; }],
   ["未知元素字段", (value) => { value.experiences.elements.unknown = true; }],
   ["缺少移动端引用宽度", (value) => { delete value.experiences.elements.mobile.quote; }],
+  ["缺少移动端分隔线尺寸", (value) => { delete value.experiences.elements.mobile.divider; }],
+  ["分隔线错误回退为满宽", (value) => { value.experiences.elements.block.divider.layout = "available"; }],
   ["缺少骰子明细契约", (value) => { delete value.experiences.elements.inline.dice.detail; }],
   ["骰子错误显示展开提示", (value) => { value.experiences.elements.inline.dice.layout.visibleAffordance = "icon"; }],
   ["骰子待掷态错误可操作", (value) => { value.experiences.elements.inline.dice.interaction.pendingActivation = "open-detail"; }],
@@ -586,8 +588,17 @@ if (
   || elements.block.quote.generatedAdornment !== "none"
   || elements.block.quote.shadow !== "none"
   || elements.block.divider.color !== "border"
+  || elements.block.divider.widthPx !== 1
+  || elements.block.divider.layout !== "centered-short-line-with-dot"
+  || elements.block.divider.alignment !== "center"
+  || elements.block.divider.inlineSizeEm !== 5
+  || elements.block.divider.marker !== "brandStrong"
+  || elements.block.divider.markerDiameterPx !== 5
+  || elements.block.divider.outerSpacingEm !== 1.75
+  || elements.mobile.divider.widthDp !== 1
+  || elements.mobile.divider.markerDiameterDp !== 5
 ) {
-  failures.push("引用书签纸条与分隔线必须使用统一块级元素语义");
+  failures.push("引用书签纸条与正文停顿分隔线必须使用统一块级元素语义");
 }
 for (const [mode, palette] of themePalettes) {
   if (
@@ -595,6 +606,14 @@ for (const [mode, palette] of themePalettes) {
     || contrast(palette[elements.block.quote.surface], palette[elements.block.quote.marker]) < contract.accessibility.contrast.nonText
   ) {
     failures.push(`${mode} 引用正文或书签线未达到对比度要求`);
+  }
+  for (const surface of ["background", "surface"]) {
+    if (
+      contrast(palette[surface], palette[elements.block.divider.marker])
+      < contract.accessibility.contrast.nonText
+    ) {
+      failures.push(`${mode} 分隔线中心圆点在 ${surface} 上未达到非文字对比度要求`);
+    }
   }
 }
 if (elements.metadata.badge.sizes.join(",") !== "default,compact") {

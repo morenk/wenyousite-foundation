@@ -208,7 +208,13 @@ export const BLOCK_ELEMENT_STYLES = Object.freeze({
   },
   "divider": {
     "color": "border",
-    "widthPx": 1
+    "widthPx": 1,
+    "layout": "centered-short-line-with-dot",
+    "alignment": "center",
+    "inlineSizeEm": 5,
+    "marker": "brandStrong",
+    "markerDiameterPx": 5,
+    "outerSpacingEm": 1.75
   }
 });
 export const METADATA_ELEMENT_STYLES = Object.freeze({
@@ -400,6 +406,10 @@ export const ELEMENT_MOBILE_PROFILE = Object.freeze({
   "interactiveMinimumDp": 48,
   "quote": {
     "markerWidthDp": 2
+  },
+  "divider": {
+    "widthDp": 1,
+    "markerDiameterDp": 5
   },
   "internalReference": {
     "lineHeight": 1.5,

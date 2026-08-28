@@ -1,5 +1,12 @@
 # Foundation Changelog
 
+## 6.6.0
+
+- `elements`：正文分隔线改为居中的 5em 短线与品牌圆点，以长度、位置和形状区别于楼层、卡片和列表项的满宽边界；Markdown thematic break 语义保持不变。
+- `web`：新增分隔线颜色、短线宽度、圆点与纵向节奏 Token，供阅读态和编辑态统一消费，并同时覆盖亮色与黑夜模式。
+- `mobile`：生成等价的线宽、短线宽度、圆点和间距常量；实际 Flutter 客户端升级仍须在 Windows 环境完成。
+- `compatibility`：保留既有 `divider.color` 与 `divider.widthPx` 字段，新布局字段为兼容新增。
+
 ## 6.5.1
 
 - `web`：修正黑夜系统偏好回退生成 CSS 末尾的多余闭合花括号，并新增 CSS 块结构门禁，避免无效 Token 样式进入消费者构建。
