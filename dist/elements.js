@@ -212,6 +212,8 @@ export const BLOCK_ELEMENT_STYLES = Object.freeze({
     "layout": "centered-short-line-with-dot",
     "alignment": "center",
     "inlineSizeEm": 5,
+    "inlineSizePercent": 50,
+    "inlineSizePreference": "available-content-percent",
     "marker": "brandStrong",
     "markerDiameterPx": 5,
     "outerSpacingEm": 1.75
@@ -264,13 +266,13 @@ export const METADATA_ELEMENT_STYLES = Object.freeze({
     }
   },
   "topicTag": {
-    "tone": "neutral",
+    "tone": "brand",
     "prefix": "#",
-    "foreground": "mutedForeground",
-    "surface": "transparent",
-    "border": "border",
-    "hoverSurface": "muted",
-    "weight": 500
+    "foreground": "onAccent",
+    "surface": "accent",
+    "border": "primary",
+    "hoverSurface": "primary",
+    "weight": 600
   },
   "level": {
     "format": "Lv.N",

@@ -1,5 +1,11 @@
 # Foundation Changelog
 
+## 6.6.1
+
+- `elements`：正文分隔线首选占正文可用宽度的 50%，继续以居中短线与圆点区别于楼层、卡片和列表项的满宽边界；5em 保留为旧渲染器兼容回退。
+- `elements`：可点击主题标签改用 `accent/onAccent` 粉色色对、`primary` 描边与悬停底色，以 `#`、颜色、命中区和焦点共同表达标签浏览入口，不借用点赞专色。
+- `generated`：Web 新增主题标签颜色与字重 Token，Flutter 新增分隔线宽度比例和主题标签颜色常量；实际 Flutter 客户端升级仍须在 Windows 环境完成。
+
 ## 6.6.0
 
 - `elements`：正文分隔线改为居中的 5em 短线与品牌圆点，以长度、位置和形状区别于楼层、卡片和列表项的满宽边界；Markdown thematic break 语义保持不变。

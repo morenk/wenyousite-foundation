@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.6.0';
+  static const String value = '6.6.1';
   static const int schema = 2;
 }
 
@@ -153,6 +153,7 @@ abstract final class WenyouElementContract {
   static const Color dividerLineColor = WenyouFoundationPalette.border;
   static const double dividerLineThickness = 1.0;
   static const double dividerInlineSizeEm = 5.0;
+  static const double dividerInlineSizeFraction = 0.5;
   static const Color dividerMarkerColor = WenyouFoundationPalette.brandStrong;
   static const double dividerMarkerDiameter = 5.0;
   static const double dividerOuterSpacingEm = 1.75;
@@ -220,6 +221,12 @@ abstract final class WenyouElementContract {
   static const double badgeCompactHeight = 20.0;
   static const double badgeDefaultFontSize = 12.0;
   static const double badgeCompactFontSize = 11.0;
+  static const String topicTagPrefix = '#';
+  static const Color topicTagForeground = WenyouFoundationPalette.onAccent;
+  static const Color topicTagSurface = WenyouFoundationPalette.accent;
+  static const Color topicTagBorder = WenyouFoundationPalette.primary;
+  static const Color topicTagHoverSurface = WenyouFoundationPalette.primary;
+  static const int topicTagFontWeight = 600;
   static const double levelHeight = 20.0;
   static const double levelFontSize = 11.0;
   static const double unreadCountHeight = 16.0;

@@ -75,6 +75,8 @@ for (const [label, mutate] of [
   ["缺少移动端引用宽度", (value) => { delete value.experiences.elements.mobile.quote; }],
   ["缺少移动端分隔线尺寸", (value) => { delete value.experiences.elements.mobile.divider; }],
   ["分隔线错误回退为满宽", (value) => { value.experiences.elements.block.divider.layout = "available"; }],
+  ["分隔线未占正文一半", (value) => { value.experiences.elements.block.divider.inlineSizePercent = 40; }],
+  ["主题标签错误回退为中性色", (value) => { value.experiences.elements.metadata.topicTag.tone = "neutral"; }],
   ["缺少骰子明细契约", (value) => { delete value.experiences.elements.inline.dice.detail; }],
   ["骰子错误显示展开提示", (value) => { value.experiences.elements.inline.dice.layout.visibleAffordance = "icon"; }],
   ["骰子待掷态错误可操作", (value) => { value.experiences.elements.inline.dice.interaction.pendingActivation = "open-detail"; }],
@@ -592,6 +594,8 @@ if (
   || elements.block.divider.layout !== "centered-short-line-with-dot"
   || elements.block.divider.alignment !== "center"
   || elements.block.divider.inlineSizeEm !== 5
+  || elements.block.divider.inlineSizePercent !== 50
+  || elements.block.divider.inlineSizePreference !== "available-content-percent"
   || elements.block.divider.marker !== "brandStrong"
   || elements.block.divider.markerDiameterPx !== 5
   || elements.block.divider.outerSpacingEm !== 1.75
@@ -626,11 +630,26 @@ if (
   elements.metadata.badge.default.heightPx !== 24
   || elements.metadata.badge.compact.heightPx !== 20
   || elements.metadata.topicTag.prefix !== "#"
+  || elements.metadata.topicTag.tone !== "brand"
+  || elements.metadata.topicTag.foreground !== "onAccent"
+  || elements.metadata.topicTag.surface !== "accent"
+  || elements.metadata.topicTag.border !== "primary"
+  || elements.metadata.topicTag.hoverSurface !== "primary"
+  || elements.metadata.topicTag.weight !== 600
   || elements.metadata.level.format !== "Lv.N"
   || elements.metadata.unreadCount.maximumDisplay !== "99+"
   || elements.metadata.unreadCount.zeroBehavior !== "hidden"
 ) {
   failures.push("元数据元素的尺寸、文本线索或计数降级规则发生漂移");
+}
+for (const [mode, palette] of themePalettes) {
+  const topicTag = elements.metadata.topicTag;
+  if (
+    contrast(palette[topicTag.surface], palette[topicTag.foreground]) < contract.accessibility.contrast.normalText
+    || contrast(palette[topicTag.hoverSurface], palette[topicTag.foreground]) < contract.accessibility.contrast.normalText
+  ) {
+    failures.push(`${mode} 主题标签静止态或悬停态文字未达到普通文字对比度`);
+  }
 }
 if (
   elements.web.interactiveMinimumPx !== contract.profiles.web.minimumCompactTarget

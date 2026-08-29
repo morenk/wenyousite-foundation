@@ -848,7 +848,8 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --element-quote-padding-inline: ${elements.block.quote.paddingInlineEm}em;
   --element-divider-color: ${cssPaletteValue(elements.block.divider.color)};
   --element-divider-width: ${elements.block.divider.widthPx}px;
-  --element-divider-inline-size: ${elements.block.divider.inlineSizeEm}em;
+  --element-divider-inline-size: ${elements.block.divider.inlineSizePercent}%;
+  --element-divider-fallback-inline-size: ${elements.block.divider.inlineSizeEm}em;
   --element-divider-marker: ${cssPaletteValue(elements.block.divider.marker)};
   --element-divider-marker-size: ${elements.block.divider.markerDiameterPx}px;
   --element-divider-spacing-block: ${elements.block.divider.outerSpacingEm}em;
@@ -859,6 +860,11 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --element-badge-compact-font-size: ${elements.metadata.badge.compact.fontSizePx}px;
   --element-badge-compact-icon-size: ${elements.metadata.badge.compact.iconSizePx}px;
   --element-topic-tag-min-height: ${elements.web.interactiveMinimumPx}px;
+  --element-topic-tag-foreground: ${cssPaletteValue(elements.metadata.topicTag.foreground)};
+  --element-topic-tag-surface: ${cssPaletteValue(elements.metadata.topicTag.surface)};
+  --element-topic-tag-border: ${cssPaletteValue(elements.metadata.topicTag.border)};
+  --element-topic-tag-hover-surface: ${cssPaletteValue(elements.metadata.topicTag.hoverSurface)};
+  --element-topic-tag-font-weight: ${elements.metadata.topicTag.weight};
   --element-level-height: ${elements.metadata.level.heightPx}px;
   --element-level-font-size: ${elements.metadata.level.fontSizePx}px;
 ${levelTierCssDeclarations(elements.metadata.level.tiers)}
@@ -1018,6 +1024,7 @@ abstract final class WenyouElementContract {
   static const Color dividerLineColor = WenyouFoundationPalette.${elements.block.divider.color};
   static const double dividerLineThickness = ${elements.mobile.divider.widthDp}.0;
   static const double dividerInlineSizeEm = ${elements.block.divider.inlineSizeEm}.0;
+  static const double dividerInlineSizeFraction = ${elements.block.divider.inlineSizePercent / 100};
   static const Color dividerMarkerColor = WenyouFoundationPalette.${elements.block.divider.marker};
   static const double dividerMarkerDiameter = ${elements.mobile.divider.markerDiameterDp}.0;
   static const double dividerOuterSpacingEm = ${elements.block.divider.outerSpacingEm};
@@ -1085,6 +1092,12 @@ abstract final class WenyouElementContract {
   static const double badgeCompactHeight = ${elements.metadata.badge.compact.heightPx}.0;
   static const double badgeDefaultFontSize = ${elements.metadata.badge.default.fontSizePx}.0;
   static const double badgeCompactFontSize = ${elements.metadata.badge.compact.fontSizePx}.0;
+  static const String topicTagPrefix = ${dartString(elements.metadata.topicTag.prefix)};
+  static const Color topicTagForeground = WenyouFoundationPalette.${elements.metadata.topicTag.foreground};
+  static const Color topicTagSurface = WenyouFoundationPalette.${elements.metadata.topicTag.surface};
+  static const Color topicTagBorder = WenyouFoundationPalette.${elements.metadata.topicTag.border};
+  static const Color topicTagHoverSurface = WenyouFoundationPalette.${elements.metadata.topicTag.hoverSurface};
+  static const int topicTagFontWeight = ${elements.metadata.topicTag.weight};
   static const double levelHeight = ${elements.metadata.level.heightPx}.0;
   static const double levelFontSize = ${elements.metadata.level.fontSizePx}.0;
   static const double unreadCountHeight = ${elements.metadata.unreadCount.heightPx}.0;

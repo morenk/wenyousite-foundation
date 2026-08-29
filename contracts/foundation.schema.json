@@ -824,13 +824,15 @@
             },
             "divider": {
               "type": "object",
-              "required": ["color", "widthPx", "layout", "alignment", "inlineSizeEm", "marker", "markerDiameterPx", "outerSpacingEm"],
+              "required": ["color", "widthPx", "layout", "alignment", "inlineSizeEm", "inlineSizePercent", "inlineSizePreference", "marker", "markerDiameterPx", "outerSpacingEm"],
               "properties": {
                 "color": { "const": "border" },
                 "widthPx": { "const": 1 },
                 "layout": { "const": "centered-short-line-with-dot" },
                 "alignment": { "const": "center" },
                 "inlineSizeEm": { "const": 5 },
+                "inlineSizePercent": { "const": 50 },
+                "inlineSizePreference": { "const": "available-content-percent" },
                 "marker": { "const": "brandStrong" },
                 "markerDiameterPx": { "const": 5 },
                 "outerSpacingEm": { "const": 1.75 }
@@ -855,7 +857,7 @@
               },
               "additionalProperties": false
             },
-            "topicTag": { "type": "object", "required": ["tone", "prefix", "foreground", "surface", "border", "hoverSurface", "weight"], "properties": { "tone": { "const": "neutral" }, "prefix": { "const": "#" }, "foreground": { "const": "mutedForeground" }, "surface": { "const": "transparent" }, "border": { "const": "border" }, "hoverSurface": { "const": "muted" }, "weight": { "const": 500 } }, "additionalProperties": false },
+            "topicTag": { "type": "object", "required": ["tone", "prefix", "foreground", "surface", "border", "hoverSurface", "weight"], "properties": { "tone": { "const": "brand" }, "prefix": { "const": "#" }, "foreground": { "const": "onAccent" }, "surface": { "const": "accent" }, "border": { "const": "primary" }, "hoverSurface": { "const": "primary" }, "weight": { "const": 600 } }, "additionalProperties": false },
             "level": {
               "type": "object",
               "required": ["format", "heightPx", "fontSizePx", "weight", "family", "numbers", "radius", "invalidBehavior", "futureLevelBehavior", "tiers"],
