@@ -166,10 +166,11 @@
   --element-badge-compact-font-size: 11px;
   --element-badge-compact-icon-size: 12px;
   --element-topic-tag-min-height: 32px;
-  --element-topic-tag-foreground: var(--accent-foreground);
-  --element-topic-tag-surface: var(--accent);
-  --element-topic-tag-border: var(--primary);
-  --element-topic-tag-hover-surface: var(--primary);
+  --element-topic-tag-foreground: var(--brand-strong);
+  --element-topic-tag-surface: transparent;
+  --element-topic-tag-border: transparent;
+  --element-topic-tag-hover-surface: transparent;
+  --element-topic-tag-focus-ring: var(--brand-strong);
   --element-topic-tag-font-weight: 600;
   --element-level-height: 20px;
   --element-level-font-size: 11px;

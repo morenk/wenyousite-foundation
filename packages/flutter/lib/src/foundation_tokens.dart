@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.6.1';
+  static const String value = '6.6.2';
   static const int schema = 2;
 }
 
@@ -222,10 +222,14 @@ abstract final class WenyouElementContract {
   static const double badgeDefaultFontSize = 12.0;
   static const double badgeCompactFontSize = 11.0;
   static const String topicTagPrefix = '#';
-  static const Color topicTagForeground = WenyouFoundationPalette.onAccent;
-  static const Color topicTagSurface = WenyouFoundationPalette.accent;
-  static const Color topicTagBorder = WenyouFoundationPalette.primary;
-  static const Color topicTagHoverSurface = WenyouFoundationPalette.primary;
+  static const String topicTagPresentation = 'text-only';
+  static const String topicTagShape = 'none';
+  static const Color topicTagForeground = WenyouFoundationPalette.brandStrong;
+  static const Color topicTagSurface = Colors.transparent;
+  static const Color topicTagBorder = Colors.transparent;
+  static const Color topicTagHoverSurface = Colors.transparent;
+  static const String topicTagHoverDecoration = 'underline';
+  static const Color topicTagFocusRing = WenyouFoundationPalette.brandStrong;
   static const int topicTagFontWeight = 600;
   static const double levelHeight = 20.0;
   static const double levelFontSize = 11.0;

@@ -268,10 +268,14 @@ export const METADATA_ELEMENT_STYLES = Object.freeze({
   "topicTag": {
     "tone": "brand",
     "prefix": "#",
-    "foreground": "onAccent",
-    "surface": "accent",
-    "border": "primary",
-    "hoverSurface": "primary",
+    "presentation": "text-only",
+    "shape": "none",
+    "foreground": "brandStrong",
+    "surface": "transparent",
+    "border": "transparent",
+    "hoverSurface": "transparent",
+    "hoverDecoration": "underline",
+    "focusRing": "brandStrong",
     "weight": 600
   },
   "level": {

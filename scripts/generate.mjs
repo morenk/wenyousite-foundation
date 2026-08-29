@@ -102,6 +102,9 @@ const paletteCssNames = {
   infoSoft: "--info-soft",
 };
 const cssPaletteValue = (token) => token === "transparent" ? "transparent" : `var(${paletteCssNames[token]})`;
+const dartPaletteValue = (token) => token === "transparent"
+  ? "Colors.transparent"
+  : `WenyouFoundationPalette.${token}`;
 
 write("dist/brand.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const BRAND = Object.freeze(${js(brand)});
@@ -864,6 +867,7 @@ ${Object.entries(overlays.web.layers).map(([id, value]) => `  --layer-${kebab(id
   --element-topic-tag-surface: ${cssPaletteValue(elements.metadata.topicTag.surface)};
   --element-topic-tag-border: ${cssPaletteValue(elements.metadata.topicTag.border)};
   --element-topic-tag-hover-surface: ${cssPaletteValue(elements.metadata.topicTag.hoverSurface)};
+  --element-topic-tag-focus-ring: ${cssPaletteValue(elements.metadata.topicTag.focusRing)};
   --element-topic-tag-font-weight: ${elements.metadata.topicTag.weight};
   --element-level-height: ${elements.metadata.level.heightPx}px;
   --element-level-font-size: ${elements.metadata.level.fontSizePx}px;
@@ -1093,10 +1097,14 @@ abstract final class WenyouElementContract {
   static const double badgeDefaultFontSize = ${elements.metadata.badge.default.fontSizePx}.0;
   static const double badgeCompactFontSize = ${elements.metadata.badge.compact.fontSizePx}.0;
   static const String topicTagPrefix = ${dartString(elements.metadata.topicTag.prefix)};
-  static const Color topicTagForeground = WenyouFoundationPalette.${elements.metadata.topicTag.foreground};
-  static const Color topicTagSurface = WenyouFoundationPalette.${elements.metadata.topicTag.surface};
-  static const Color topicTagBorder = WenyouFoundationPalette.${elements.metadata.topicTag.border};
-  static const Color topicTagHoverSurface = WenyouFoundationPalette.${elements.metadata.topicTag.hoverSurface};
+  static const String topicTagPresentation = ${dartString(elements.metadata.topicTag.presentation)};
+  static const String topicTagShape = ${dartString(elements.metadata.topicTag.shape)};
+  static const Color topicTagForeground = ${dartPaletteValue(elements.metadata.topicTag.foreground)};
+  static const Color topicTagSurface = ${dartPaletteValue(elements.metadata.topicTag.surface)};
+  static const Color topicTagBorder = ${dartPaletteValue(elements.metadata.topicTag.border)};
+  static const Color topicTagHoverSurface = ${dartPaletteValue(elements.metadata.topicTag.hoverSurface)};
+  static const String topicTagHoverDecoration = ${dartString(elements.metadata.topicTag.hoverDecoration)};
+  static const Color topicTagFocusRing = ${dartPaletteValue(elements.metadata.topicTag.focusRing)};
   static const int topicTagFontWeight = ${elements.metadata.topicTag.weight};
   static const double levelHeight = ${elements.metadata.level.heightPx}.0;
   static const double levelFontSize = ${elements.metadata.level.fontSizePx}.0;

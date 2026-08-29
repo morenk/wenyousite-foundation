@@ -77,6 +77,8 @@ for (const [label, mutate] of [
   ["分隔线错误回退为满宽", (value) => { value.experiences.elements.block.divider.layout = "available"; }],
   ["分隔线未占正文一半", (value) => { value.experiences.elements.block.divider.inlineSizePercent = 40; }],
   ["主题标签错误回退为中性色", (value) => { value.experiences.elements.metadata.topicTag.tone = "neutral"; }],
+  ["主题标签错误使用胶囊态", (value) => { value.experiences.elements.metadata.topicTag.presentation = "pill"; }],
+  ["主题标签错误恢复常驻底色", (value) => { value.experiences.elements.metadata.topicTag.surface = "accent"; }],
   ["缺少骰子明细契约", (value) => { delete value.experiences.elements.inline.dice.detail; }],
   ["骰子错误显示展开提示", (value) => { value.experiences.elements.inline.dice.layout.visibleAffordance = "icon"; }],
   ["骰子待掷态错误可操作", (value) => { value.experiences.elements.inline.dice.interaction.pendingActivation = "open-detail"; }],
@@ -631,10 +633,14 @@ if (
   || elements.metadata.badge.compact.heightPx !== 20
   || elements.metadata.topicTag.prefix !== "#"
   || elements.metadata.topicTag.tone !== "brand"
-  || elements.metadata.topicTag.foreground !== "onAccent"
-  || elements.metadata.topicTag.surface !== "accent"
-  || elements.metadata.topicTag.border !== "primary"
-  || elements.metadata.topicTag.hoverSurface !== "primary"
+  || elements.metadata.topicTag.presentation !== "text-only"
+  || elements.metadata.topicTag.shape !== "none"
+  || elements.metadata.topicTag.foreground !== "brandStrong"
+  || elements.metadata.topicTag.surface !== "transparent"
+  || elements.metadata.topicTag.border !== "transparent"
+  || elements.metadata.topicTag.hoverSurface !== "transparent"
+  || elements.metadata.topicTag.hoverDecoration !== "underline"
+  || elements.metadata.topicTag.focusRing !== "brandStrong"
   || elements.metadata.topicTag.weight !== 600
   || elements.metadata.level.format !== "Lv.N"
   || elements.metadata.unreadCount.maximumDisplay !== "99+"
@@ -644,11 +650,10 @@ if (
 }
 for (const [mode, palette] of themePalettes) {
   const topicTag = elements.metadata.topicTag;
-  if (
-    contrast(palette[topicTag.surface], palette[topicTag.foreground]) < contract.accessibility.contrast.normalText
-    || contrast(palette[topicTag.hoverSurface], palette[topicTag.foreground]) < contract.accessibility.contrast.normalText
-  ) {
-    failures.push(`${mode} 主题标签静止态或悬停态文字未达到普通文字对比度`);
+  for (const surface of ["background", "surface", "muted"]) {
+    if (contrast(palette[surface], palette[topicTag.foreground]) < contract.accessibility.contrast.normalText) {
+      failures.push(`${mode} 主题标签文字在 ${surface} 上未达到普通文字对比度`);
+    }
   }
 }
 if (

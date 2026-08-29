@@ -1,5 +1,10 @@
 # Foundation Changelog
 
+## 6.6.2
+
+- `elements`：修正可点击主题标签为仅保留 `#` 与 `brandStrong` 粉色文字的纯文字入口，移除常驻底色、描边和胶囊形状；悬停下划线、焦点环与平台最小命中区继续提供可点击反馈。
+- `compatibility`：Web 与 Flutter 继续生成原有主题标签 surface、border 与 hover surface 常量，但统一为透明值，避免消费者升级时发生符号级破坏。
+
 ## 6.6.1
 
 - `elements`：正文分隔线首选占正文可用宽度的 50%，继续以居中短线与圆点区别于楼层、卡片和列表项的满宽边界；5em 保留为旧渲染器兼容回退。

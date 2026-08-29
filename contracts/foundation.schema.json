@@ -857,7 +857,7 @@
               },
               "additionalProperties": false
             },
-            "topicTag": { "type": "object", "required": ["tone", "prefix", "foreground", "surface", "border", "hoverSurface", "weight"], "properties": { "tone": { "const": "brand" }, "prefix": { "const": "#" }, "foreground": { "const": "onAccent" }, "surface": { "const": "accent" }, "border": { "const": "primary" }, "hoverSurface": { "const": "primary" }, "weight": { "const": 600 } }, "additionalProperties": false },
+            "topicTag": { "type": "object", "required": ["tone", "prefix", "presentation", "shape", "foreground", "surface", "border", "hoverSurface", "hoverDecoration", "focusRing", "weight"], "properties": { "tone": { "const": "brand" }, "prefix": { "const": "#" }, "presentation": { "const": "text-only" }, "shape": { "const": "none" }, "foreground": { "const": "brandStrong" }, "surface": { "const": "transparent" }, "border": { "const": "transparent" }, "hoverSurface": { "const": "transparent" }, "hoverDecoration": { "const": "underline" }, "focusRing": { "const": "brandStrong" }, "weight": { "const": 600 } }, "additionalProperties": false },
             "level": {
               "type": "object",
               "required": ["format", "heightPx", "fontSizePx", "weight", "family", "numbers", "radius", "invalidBehavior", "futureLevelBehavior", "tiers"],
