@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.6.2';
+  static const String value = '6.7.0';
   static const int schema = 2;
 }
 
@@ -508,6 +508,7 @@ abstract final class WenyouNotificationContract {
 abstract final class WenyouEditorContract {
   static const Map<String, String> labels = <String, String>{
     'heading': '正文样式',
+    'alignment': '对齐',
     'bold': '粗体',
     'italic': '斜体',
     'strikethrough': '删除线',
@@ -534,9 +535,9 @@ abstract final class WenyouEditorContract {
   static const String primaryLayout = 'responsive-single-row';
   static const String horizontalOverflow = 'forbidden';
   static const String morePresentation = 'inline';
-  static const List<String> moreInline = <String>['link', 'inline-code', 'quote', 'bullet-list', 'ordered-list', 'hr', 'dice', 'sticker', 'draft', 'strikethrough'];
+  static const List<String> moreInline = <String>['link', 'inline-code', 'quote', 'bullet-list', 'ordered-list', 'alignment', 'hr', 'dice', 'sticker', 'draft', 'strikethrough'];
   static const List<String> contextual = <String>['mention', 'sticker'];
-  static const int markdownContractVersion = 3;
+  static const int markdownContractVersion = 4;
   static const String structuredCapabilitySource = 'toolbar';
   static const String unsupportedClientBehavior = 'literal-text-silent';
   static const String unsupportedApiBehavior = 'reject';
@@ -551,6 +552,7 @@ abstract final class WenyouEditorContract {
   static const bool respectsSystemTextScale = true;
   static const Map<String, Map<String, String>> capabilities = <String, Map<String, String>>{
     'heading': <String, String>{'creation': 'primary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
+    'alignment': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
     'bold': <String, String>{'creation': 'primary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
     'italic': <String, String>{'creation': 'primary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
     'strikethrough': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},

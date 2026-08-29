@@ -826,13 +826,13 @@ for (const platform of ["web", "mobile"]) {
   }
 }
 if (
-  editor.contentPolicy.markdownContractVersion !== 3 ||
+  editor.contentPolicy.markdownContractVersion !== 4 ||
   editor.contentPolicy.structuredCapabilitySource !== "toolbar" ||
   editor.contentPolicy.unsupportedClientBehavior !== "literal-text-silent" ||
   editor.contentPolicy.unsupportedApiBehavior !== "reject" ||
   editor.contentPolicy.maximumListDepth !== 3
 ) {
-  failures.push("编辑器必须绑定 Markdown v3 工具栏白名单策略");
+  failures.push("编辑器必须绑定 Markdown v4 工具栏白名单策略");
 }
 for (const id of ["task-list", "code-block", "table"]) {
   if (knownCapabilities.has(id) || editor.capabilities.web[id] || editor.capabilities.mobile[id]) {

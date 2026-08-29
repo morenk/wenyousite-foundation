@@ -199,6 +199,10 @@ export const ICON_SEMANTICS = Object.freeze({
   "editor.heading": "type",
   "editor.heading-2": "heading-2",
   "editor.heading-3": "heading-3",
+  "editor.alignment": "align-left",
+  "editor.align-left": "align-left",
+  "editor.align-center": "align-center",
+  "editor.align-right": "align-right",
   "editor.bold": "bold",
   "editor.italic": "italic",
   "editor.strikethrough": "strikethrough",
@@ -257,6 +261,66 @@ export const ICON_SEMANTICS = Object.freeze({
   "status.user-unavailable": "user-round-x"
 });
 export const ICON_GLYPH_NODES = Object.freeze({
+  "align-center": [
+    [
+      "path",
+      {
+        "d": "M21 5H3"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M17 12H7"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M19 19H5"
+      }
+    ]
+  ],
+  "align-left": [
+    [
+      "path",
+      {
+        "d": "M21 5H3"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M15 12H3"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M17 19H3"
+      }
+    ]
+  ],
+  "align-right": [
+    [
+      "path",
+      {
+        "d": "M21 5H3"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M21 12H9"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M21 19H7"
+      }
+    ]
+  ],
   "archive": [
     [
       "rect",
@@ -3582,6 +3646,9 @@ export const ICON_GLYPH_NODES = Object.freeze({
   ]
 });
 export const ICON_GLYPH_SVGS = Object.freeze({
+  "align-center": "<svg class=\"lucide lucide-align-center\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M21 5H3\" /><path d=\"M17 12H7\" /><path d=\"M19 19H5\" /></svg>",
+  "align-left": "<svg class=\"lucide lucide-align-left\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M21 5H3\" /><path d=\"M15 12H3\" /><path d=\"M17 19H3\" /></svg>",
+  "align-right": "<svg class=\"lucide lucide-align-right\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M21 5H3\" /><path d=\"M21 12H9\" /><path d=\"M21 19H7\" /></svg>",
   "archive": "<svg class=\"lucide lucide-archive\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><rect width=\"20\" height=\"5\" x=\"2\" y=\"3\" rx=\"1\" /><path d=\"M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8\" /><path d=\"M10 12h4\" /></svg>",
   "archive-restore": "<svg class=\"lucide lucide-archive-restore\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><rect width=\"20\" height=\"5\" x=\"2\" y=\"3\" rx=\"1\" /><path d=\"M4 8v11a2 2 0 0 0 2 2h2\" /><path d=\"M20 8v11a2 2 0 0 1-2 2h-2\" /><path d=\"m9 15 3-3 3 3\" /><path d=\"M12 12v9\" /></svg>",
   "arrow-down": "<svg class=\"lucide lucide-arrow-down\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M12 5v14\" /><path d=\"m19 12-7 7-7-7\" /></svg>",
@@ -3728,6 +3795,9 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "x": "<svg class=\"lucide lucide-x\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M18 6 6 18\" /><path d=\"m6 6 12 12\" /></svg>"
 });
 export const ICON_GLYPH_SHA256 = Object.freeze({
+  "align-center": "1405ec9090081f579957f04ff82e68964d610233287981c5a75a8cea833e0e01",
+  "align-left": "640ab375496e1b926e1b06c4b14d5dd86acea67cb1ace945623da4daef90cd35",
+  "align-right": "7e60f2084b6f99a7e8a9f594bd41baf3e7ba364d1bc7f0ec103e9c78687411be",
   "archive": "d7e333c7bf7ef2fcc99bad1f0fbe60a38064c02d2f08a3d19f0a27c2f3123939",
   "archive-restore": "9ee4cdc5033a7b50a7e5bb5709ce13510a7d1f8c3a9a32973b4d5a89f1bcd759",
   "arrow-down": "6220ca24251cdd5201ad5627ca2b354cb1ef7292dc4d0f8b09fdf86b55a84d2d",

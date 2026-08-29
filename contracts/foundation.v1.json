@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.6.2",
+  "version": "6.7.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -443,6 +443,10 @@
         "editor.heading": "type",
         "editor.heading-2": "heading-2",
         "editor.heading-3": "heading-3",
+        "editor.alignment": "align-left",
+        "editor.align-left": "align-left",
+        "editor.align-center": "align-center",
+        "editor.align-right": "align-right",
         "editor.bold": "bold",
         "editor.italic": "italic",
         "editor.strikethrough": "strikethrough",
@@ -1129,6 +1133,7 @@
     "editor": {
       "labels": {
         "heading": "正文样式",
+        "alignment": "对齐",
         "bold": "粗体",
         "italic": "斜体",
         "strikethrough": "删除线",
@@ -1153,29 +1158,29 @@
         "clipboardIdentityOwner": "backend-node-contract"
       },
       "contentPolicy": {
-        "markdownContractVersion": 3,
+        "markdownContractVersion": 4,
         "structuredCapabilitySource": "toolbar",
         "unsupportedClientBehavior": "literal-text-silent",
         "unsupportedApiBehavior": "reject",
         "maximumListDepth": 3
       },
       "web": {
-        "widePrimary": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "link", "image", "quote", "hr", "dice", "draft"],
+        "widePrimary": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "alignment", "link", "image", "quote", "hr", "dice", "draft"],
         "collapsedPrimary": ["heading", "bold", "italic", "image", "more"],
-        "moreFallback": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice"],
+        "moreFallback": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "alignment", "hr", "dice"],
         "progressiveCollapse": ["draft", "strikethrough"],
         "densityOrder": ["expanded", "with-more", "without-draft", "compact"],
         "primaryByDensity": {
-          "expanded": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "link", "image", "quote", "hr", "dice", "draft"],
+          "expanded": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "alignment", "link", "image", "quote", "hr", "dice", "draft"],
           "with-more": ["heading", "bold", "italic", "strikethrough", "link", "image", "quote", "hr", "dice", "draft", "more"],
           "without-draft": ["heading", "bold", "italic", "strikethrough", "link", "image", "quote", "hr", "dice", "more"],
           "compact": ["heading", "bold", "italic", "image", "more"]
         },
         "moreByDensity": {
           "expanded": [],
-          "with-more": ["inline-code", "bullet-list", "ordered-list"],
-          "without-draft": ["inline-code", "bullet-list", "ordered-list", "draft"],
-          "compact": ["strikethrough", "link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "draft"]
+          "with-more": ["inline-code", "bullet-list", "ordered-list", "alignment"],
+          "without-draft": ["inline-code", "bullet-list", "ordered-list", "alignment", "draft"],
+          "compact": ["strikethrough", "link", "inline-code", "quote", "bullet-list", "ordered-list", "alignment", "hr", "dice", "draft"]
         },
         "contextual": ["mention", "sticker"],
         "layout": {
@@ -1201,7 +1206,7 @@
         "wideAdditions": ["draft", "quote", "hr", "sticker"],
         "primaryCore": ["heading", "bold", "italic", "image", "more"],
         "primaryPromotionOrder": ["draft", "quote", "hr", "sticker"],
-        "moreInline": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "hr", "dice", "sticker", "draft", "strikethrough"],
+        "moreInline": ["link", "inline-code", "quote", "bullet-list", "ordered-list", "alignment", "hr", "dice", "sticker", "draft", "strikethrough"],
         "contextual": ["mention", "sticker"],
         "layout": {
           "compactContentInlinePaddingDp": 4,
@@ -1217,6 +1222,7 @@
       "capabilities": {
         "web": {
           "heading": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "alignment": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "bold": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "italic": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "strikethrough": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
@@ -1235,6 +1241,7 @@
         },
         "mobile": {
           "heading": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
+          "alignment": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "bold": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "italic": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "strikethrough": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },

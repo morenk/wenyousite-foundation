@@ -161,6 +161,10 @@
 | `editor.heading` | `type` | `40eece0115c92cbf8ea4c0e6f5561a32e8676e81b67c98a7d02f2c937a60753d` |
 | `editor.heading-2` | `heading-2` | `a99abf77b3c53f48f02c8003d71678714e7b229c220ee60b7169b28c98447c42` |
 | `editor.heading-3` | `heading-3` | `61f552bf9e770f6bb4c751240ac05ebb09601a9ecf886767f3537a34719ed1b3` |
+| `editor.alignment` | `align-left` | `640ab375496e1b926e1b06c4b14d5dd86acea67cb1ace945623da4daef90cd35` |
+| `editor.align-left` | `align-left` | `640ab375496e1b926e1b06c4b14d5dd86acea67cb1ace945623da4daef90cd35` |
+| `editor.align-center` | `align-center` | `1405ec9090081f579957f04ff82e68964d610233287981c5a75a8cea833e0e01` |
+| `editor.align-right` | `align-right` | `7e60f2084b6f99a7e8a9f594bd41baf3e7ba364d1bc7f0ec103e9c78687411be` |
 | `editor.bold` | `bold` | `d5a99970ec7a77236954348619a4d6cba7b7c209dce37bd6342c768598cb8ba8` |
 | `editor.italic` | `italic` | `4da9491e026b38e6c5549d870f696f26167571fecb0f001963f898c29ba55cd8` |
 | `editor.strikethrough` | `strikethrough` | `912253c524af5503f619c06abe5125038c58c7e776454d6c7690efcc8f7e2327` |

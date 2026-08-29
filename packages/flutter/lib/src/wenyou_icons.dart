@@ -127,6 +127,10 @@ abstract final class WenyouIconIds {
   static const String editorHeading = 'editor.heading'; // type
   static const String editorHeading2 = 'editor.heading-2'; // heading-2
   static const String editorHeading3 = 'editor.heading-3'; // heading-3
+  static const String editorAlignment = 'editor.alignment'; // align-left
+  static const String editorAlignLeft = 'editor.align-left'; // align-left
+  static const String editorAlignCenter = 'editor.align-center'; // align-center
+  static const String editorAlignRight = 'editor.align-right'; // align-right
   static const String editorBold = 'editor.bold'; // bold
   static const String editorItalic = 'editor.italic'; // italic
   static const String editorStrikethrough = 'editor.strikethrough'; // strikethrough
@@ -314,6 +318,10 @@ abstract final class WenyouIconContract {
     'editor.heading': 'type',
     'editor.heading-2': 'heading-2',
     'editor.heading-3': 'heading-3',
+    'editor.alignment': 'align-left',
+    'editor.align-left': 'align-left',
+    'editor.align-center': 'align-center',
+    'editor.align-right': 'align-right',
     'editor.bold': 'bold',
     'editor.italic': 'italic',
     'editor.strikethrough': 'strikethrough',

@@ -1,7 +1,8 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "6.6.2";
+export const FOUNDATION_VERSION = "6.7.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
+  "alignment": "对齐",
   "bold": "粗体",
   "italic": "斜体",
   "strikethrough": "删除线",
@@ -33,6 +34,7 @@ export const EDITOR_PRIMARY_WIDE = Object.freeze([
   "inline-code",
   "bullet-list",
   "ordered-list",
+  "alignment",
   "link",
   "image",
   "quote",
@@ -46,6 +48,7 @@ export const EDITOR_MORE_FALLBACK = Object.freeze([
   "quote",
   "bullet-list",
   "ordered-list",
+  "alignment",
   "hr",
   "dice"
 ]);
@@ -68,6 +71,7 @@ export const EDITOR_PRIMARY_BY_DENSITY = Object.freeze({
     "inline-code",
     "bullet-list",
     "ordered-list",
+    "alignment",
     "link",
     "image",
     "quote",
@@ -113,12 +117,14 @@ export const EDITOR_MORE_BY_DENSITY = Object.freeze({
   "with-more": [
     "inline-code",
     "bullet-list",
-    "ordered-list"
+    "ordered-list",
+    "alignment"
   ],
   "without-draft": [
     "inline-code",
     "bullet-list",
     "ordered-list",
+    "alignment",
     "draft"
   ],
   "compact": [
@@ -128,6 +134,7 @@ export const EDITOR_MORE_BY_DENSITY = Object.freeze({
     "quote",
     "bullet-list",
     "ordered-list",
+    "alignment",
     "hr",
     "dice",
     "draft"
@@ -149,7 +156,7 @@ export const EDITOR_INVARIANTS = Object.freeze({
   "clipboardIdentityOwner": "backend-node-contract"
 });
 export const EDITOR_CONTENT_POLICY = Object.freeze({
-  "markdownContractVersion": 3,
+  "markdownContractVersion": 4,
   "structuredCapabilitySource": "toolbar",
   "unsupportedClientBehavior": "literal-text-silent",
   "unsupportedApiBehavior": "reject",
@@ -193,6 +200,7 @@ export const EDITOR_MOBILE_MORE_INLINE = Object.freeze([
   "quote",
   "bullet-list",
   "ordered-list",
+  "alignment",
   "hr",
   "dice",
   "sticker",
@@ -201,6 +209,12 @@ export const EDITOR_MOBILE_MORE_INLINE = Object.freeze([
 ]);
 export const EDITOR_WEB_CAPABILITIES = Object.freeze({
   "heading": {
+    "creation": "primary",
+    "editing": "structured",
+    "rendering": "native",
+    "roundTrip": "structured"
+  },
+  "alignment": {
     "creation": "primary",
     "editing": "structured",
     "rendering": "native",
@@ -300,6 +314,12 @@ export const EDITOR_WEB_CAPABILITIES = Object.freeze({
 export const EDITOR_MOBILE_CAPABILITIES = Object.freeze({
   "heading": {
     "creation": "primary",
+    "editing": "structured",
+    "rendering": "native",
+    "roundTrip": "structured"
+  },
+  "alignment": {
+    "creation": "secondary",
     "editing": "structured",
     "rendering": "native",
     "roundTrip": "structured"

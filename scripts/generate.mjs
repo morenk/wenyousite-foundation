@@ -359,7 +359,7 @@ export declare const EDITOR_CONTEXTUAL_WEB: readonly EditorCapabilityId[];
 export declare const EDITOR_CONTEXTUAL_MOBILE: readonly EditorCapabilityId[];
 export declare const EDITOR_INVARIANTS: Readonly<Record<string, string>>;
 export declare const EDITOR_CONTENT_POLICY: Readonly<{
-  markdownContractVersion: 3;
+  markdownContractVersion: 4;
   structuredCapabilitySource: "toolbar";
   unsupportedClientBehavior: "literal-text-silent";
   unsupportedApiBehavior: "reject";
