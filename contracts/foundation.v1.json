@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.7.0",
+  "version": "6.8.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -1172,14 +1172,14 @@
         "densityOrder": ["expanded", "with-more", "without-draft", "compact"],
         "primaryByDensity": {
           "expanded": ["heading", "bold", "italic", "strikethrough", "inline-code", "bullet-list", "ordered-list", "alignment", "link", "image", "quote", "hr", "dice", "draft"],
-          "with-more": ["heading", "bold", "italic", "strikethrough", "link", "image", "quote", "hr", "dice", "draft", "more"],
-          "without-draft": ["heading", "bold", "italic", "strikethrough", "link", "image", "quote", "hr", "dice", "more"],
+          "with-more": ["heading", "bold", "italic", "strikethrough", "inline-code", "image", "quote", "hr", "dice", "draft", "more"],
+          "without-draft": ["heading", "bold", "italic", "strikethrough", "inline-code", "image", "quote", "hr", "dice", "more"],
           "compact": ["heading", "bold", "italic", "image", "more"]
         },
         "moreByDensity": {
           "expanded": [],
-          "with-more": ["inline-code", "bullet-list", "ordered-list", "alignment"],
-          "without-draft": ["inline-code", "bullet-list", "ordered-list", "alignment", "draft"],
+          "with-more": ["link", "bullet-list", "ordered-list", "alignment"],
+          "without-draft": ["link", "bullet-list", "ordered-list", "alignment", "draft"],
           "compact": ["strikethrough", "link", "inline-code", "quote", "bullet-list", "ordered-list", "alignment", "hr", "dice", "draft"]
         },
         "contextual": ["mention", "sticker"],

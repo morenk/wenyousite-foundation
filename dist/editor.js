@@ -1,5 +1,5 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "6.7.0";
+export const FOUNDATION_VERSION = "6.8.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
   "alignment": "对齐",
@@ -84,7 +84,7 @@ export const EDITOR_PRIMARY_BY_DENSITY = Object.freeze({
     "bold",
     "italic",
     "strikethrough",
-    "link",
+    "inline-code",
     "image",
     "quote",
     "hr",
@@ -97,7 +97,7 @@ export const EDITOR_PRIMARY_BY_DENSITY = Object.freeze({
     "bold",
     "italic",
     "strikethrough",
-    "link",
+    "inline-code",
     "image",
     "quote",
     "hr",
@@ -115,13 +115,13 @@ export const EDITOR_PRIMARY_BY_DENSITY = Object.freeze({
 export const EDITOR_MORE_BY_DENSITY = Object.freeze({
   "expanded": [],
   "with-more": [
-    "inline-code",
+    "link",
     "bullet-list",
     "ordered-list",
     "alignment"
   ],
   "without-draft": [
-    "inline-code",
+    "link",
     "bullet-list",
     "ordered-list",
     "alignment",
