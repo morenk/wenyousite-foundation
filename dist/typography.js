@@ -54,7 +54,10 @@ export const TYPOGRAPHY_USAGE = Object.freeze({
     "dialog-title",
     "sheet-title",
     "popover-title",
-    "state-title"
+    "state-title",
+    "functional-page-title",
+    "functional-section-title",
+    "functional-subsection-title"
   ],
   "bodyOnlyContexts": [
     "control",

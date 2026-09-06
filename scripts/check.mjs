@@ -437,6 +437,14 @@ if (
 ) {
   failures.push("文楷与黑体的使用语境偏离 v6 规范");
 }
+for (const context of ["functional-page-title", "functional-section-title", "functional-subsection-title"]) {
+  if (
+    !contract.typography.usage.bodySemiboldContexts.includes(context)
+    || contract.typography.usage.displayContexts.includes(context)
+  ) {
+    failures.push(`${context} 必须归入黑体半粗标题语境，不能使用文楷`);
+  }
+}
 if (
   contract.experiences.formatting.relativeTime.relativeWindowSeconds !== 72 * 60 * 60
   || contract.experiences.formatting.relativeTime.sameYearFallback !== "MM-dd HH:mm"

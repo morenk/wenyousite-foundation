@@ -121,7 +121,7 @@
     "utility": { "family": "Nunito Variable", "weights": [400, 600, 700], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] },
     "usage": {
       "displayContexts": ["brand", "page-title", "section-title", "detail-content-title", "text-cover-title"],
-      "bodySemiboldContexts": ["list-item-title", "dialog-title", "sheet-title", "popover-title", "state-title"],
+      "bodySemiboldContexts": ["list-item-title", "dialog-title", "sheet-title", "popover-title", "state-title", "functional-page-title", "functional-section-title", "functional-subsection-title"],
       "bodyOnlyContexts": ["control", "navigation", "username", "rich-text-heading"],
       "utilityContexts": ["numeric", "time", "counter"],
       "displayWeight": 500,
