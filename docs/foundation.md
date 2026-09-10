@@ -58,7 +58,7 @@
 
 ## 编辑器
 
-编辑器体验契约只规定跨端可观察体验，不复制 Markdown 语法。[后端 Markdown v5 契约](https://github.com/morenk/wenyousite-backend/blob/75daf5a66486b1e6c80bf904388bdfd664e14dd5/docs/modules/markdown-content.md)继续拥有存储、规范化、扩展节点和剪贴板身份规则；只有工具栏主栏、“更多”面板及上下文入口提供的能力可成为结构化正文。客户端把白名单外 Markdown 静默显示为字面普通文字，API 直接拒绝未转义结构，未知协议不得交给第三方解析器决定产品能力。
+编辑器体验契约只规定跨端可观察体验，不复制 Markdown 语法。[后端 Markdown v5 契约](https://github.com/morenk/wenyousite-backend/blob/a91cbb8b605223c596af299be22c5547f69e25b9/docs/modules/markdown-content.md)继续拥有存储、规范化、扩展节点和剪贴板身份规则；只有工具栏主栏、“更多”面板及上下文入口提供的能力可成为结构化正文。客户端把白名单外 Markdown 静默显示为字面普通文字，API 直接拒绝未转义结构，未知协议不得交给第三方解析器决定产品能力。
 
 编辑态和发布态共享正文大小、行高与块级层次。工具栏可以因平台和容器宽度改变入口位置，但同一能力的名称、可创建性、编辑方式、渲染结果和往返保障必须由中央能力生命周期说明。Web 额外固定正文首列与工具栏首项基线；Flutter 保留系统文字缩放、48dp 触控与原生底部面板。
 
@@ -70,7 +70,7 @@
 
 解析所需的内部块分隔不能增加或吞掉用户可见空白行。主帖、子帖、楼层、回复和共用正文入口遵循同一语义；纯文本摘要与阅读复制不泄漏合法隐藏协议，站内粘贴保留既定正文语义和身份规则，多轮编辑保存不增殖标记。非法结构和未知协议仍按既有拒绝或字面降级规则处理，不扩大 HTML 或 URL 白名单。
 
-跨端验收复用 Backend 已提交的[块边界组合用例 v1 revision 1](https://github.com/morenk/wenyousite-backend/blob/75daf5a66486b1e6c80bf904388bdfd664e14dd5/contracts/markdown-block-boundary-v1-fixtures.json)及其中的 `whitespaceCases`，同时比较可见文字、块类型、逐块对齐、可见空白行和原始错误位置，并执行真实编辑事务、复制粘贴及多轮保存重开。本文只补充可观察行为，不变更 Foundation 数值、机器契约版本或客户端固定版本消费方式。
+跨端验收复用 Backend 已提交的[块边界组合用例 v1 revision 2](https://github.com/morenk/wenyousite-backend/blob/a91cbb8b605223c596af299be22c5547f69e25b9/contracts/markdown-block-boundary-v1-fixtures.json)及其中的 `whitespaceCases`，同时比较可见文字、块类型、逐块对齐、可见空白行和原始错误位置，并执行真实编辑事务、复制粘贴及多轮保存重开。本文只补充可观察行为，不变更 Foundation 数值、机器契约版本或客户端固定版本消费方式。
 
 ## 变更规则
 
