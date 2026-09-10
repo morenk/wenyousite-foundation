@@ -103,6 +103,7 @@ export const ICON_SEMANTICS = Object.freeze({
   "action.save-all": "save-all",
   "action.send": "send",
   "action.search": "search",
+  "action.reading-quick-scroll": "move-vertical",
   "action.filter": "list-filter",
   "action.clear-filter": "list-x",
   "action.sort": "arrow-down-up",
@@ -2438,6 +2439,26 @@ export const ICON_GLYPH_NODES = Object.freeze({
       }
     ]
   ],
+  "move-vertical": [
+    [
+      "path",
+      {
+        "d": "M12 2v20"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "m8 18 4 4 4-4"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "m8 6 4-4 4 4"
+      }
+    ]
+  ],
   "newspaper": [
     [
       "path",
@@ -3747,6 +3768,7 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "monitor": "<svg class=\"lucide lucide-monitor\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><rect width=\"20\" height=\"14\" x=\"2\" y=\"3\" rx=\"2\" /><line x1=\"8\" x2=\"16\" y1=\"21\" y2=\"21\" /><line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"21\" /></svg>",
   "monitor-smartphone": "<svg class=\"lucide lucide-monitor-smartphone\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8\" /><path d=\"M10 19v-3.96 3.15\" /><path d=\"M7 19h5\" /><rect width=\"6\" height=\"10\" x=\"16\" y=\"12\" rx=\"2\" /></svg>",
   "moon": "<svg class=\"lucide lucide-moon\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\" /></svg>",
+  "move-vertical": "<svg class=\"lucide lucide-move-vertical\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M12 2v20\" /><path d=\"m8 18 4 4 4-4\" /><path d=\"m8 6 4-4 4 4\" /></svg>",
   "newspaper": "<svg class=\"lucide lucide-newspaper\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M15 18h-5\" /><path d=\"M18 14h-8\" /><path d=\"M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2\" /><rect width=\"8\" height=\"4\" x=\"10\" y=\"6\" rx=\"1\" /></svg>",
   "notebook-pen": "<svg class=\"lucide lucide-notebook-pen\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4\" /><path d=\"M2 6h4\" /><path d=\"M2 10h4\" /><path d=\"M2 14h4\" /><path d=\"M2 18h4\" /><path d=\"M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z\" /></svg>",
   "notebook-text": "<svg class=\"lucide lucide-notebook-text\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M2 6h4\" /><path d=\"M2 10h4\" /><path d=\"M2 14h4\" /><path d=\"M2 18h4\" /><rect width=\"16\" height=\"20\" x=\"4\" y=\"2\" rx=\"2\" /><path d=\"M9.5 8h5\" /><path d=\"M9.5 12H16\" /><path d=\"M9.5 16H14\" /></svg>",
@@ -3896,6 +3918,7 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "monitor": "f6e5a189a0bc7e2ac77af6e344ae4dd72d5748837c36285b9cb9859ec5fe4e40",
   "monitor-smartphone": "1eedc1648a01bc1cb0e6f199ed87b3ea8d4b5b5407186d506ce1c7a828133a35",
   "moon": "889a9a484223b166d0659006327ac13e6fe769a84041a415e1edc6a19a25d8b6",
+  "move-vertical": "d9f4b00a7f0e6d000772b05689d58efbb0f6cbbd702599112521774ed8a2b01d",
   "newspaper": "13e528c20bc837013bf83aee83d85adead6bf477a8747a4d2509428eb2d9612e",
   "notebook-pen": "a15095743e75a53d63c94d023b08ae9c5d7344b84134ee39b7c403a744d4cb8a",
   "notebook-text": "809cbd237584d92a094d9916815fc55ddb0d09f3c60e756493832804dc564002",

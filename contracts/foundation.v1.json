@@ -347,6 +347,7 @@
         "action.save-all": "save-all",
         "action.send": "send",
         "action.search": "search",
+        "action.reading-quick-scroll": "move-vertical",
         "action.filter": "list-filter",
         "action.clear-filter": "list-x",
         "action.sort": "arrow-down-up",

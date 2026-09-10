@@ -297,6 +297,13 @@ write("docs/icons.md", `# 图标目录与治理
 
 状态层颜色继承图标 currentColor，hover/focus 与 pressed 透明度分别为 ${icons.controls.stateLayer.hoverOpacity} 与 ${icons.controls.stateLayer.pressedOpacity}；禁用内容透明度为 ${icons.controls.disabledContentOpacity}。Pending 保持提交前 tone 并显示同色加载指示，不能回退成未选中态。
 
+## 阅读快翻
+
+- \`action.reading-quick-scroll\` 表示主动打开阅读位置快速调节工具，使用 \`${icons.semantics["action.reading-quick-scroll"]}\` 的上下箭头表达沿阅读轴移动；不用于过滤、排序、条目重排或直接定位最新回复。
+- 移动端主题详情与独立楼中楼的顶栏入口放在“定位最新回复”图标右侧，只显示图标，不显示常驻“快翻”文字；tooltip 与无障碍名称均为“快翻”，由按钮承担名称，内部图标隐藏语义。
+- 开启时底部工具栏必须可见，同时显示当前位置状态与“收起”操作文字，作为通用 Toggle 所要求的可见开启反馈；tooltip 本身不构成可见状态反馈。入口保持同一描边图形，不新增实心变体；按钮开启语义与工具栏实际显隐同步。
+- Flutter 消费 \`WenyouIconIds.actionReadingQuickScroll\`，保留移动 profile 规定的最小命中区及底部安全区。
+
 ## 语义目录
 
 | 语义 ID | SVG 图形 | SHA-256 |

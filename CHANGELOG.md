@@ -1,5 +1,11 @@
 # Foundation Changelog
 
+## Unreleased
+
+- `shared`：兼容新增 `action.reading-quick-scroll`，映射固定 Lucide 1.28.0 的 `move-vertical`；生成 Web SVG、类型、Flutter 常量与同源资产。
+- `mobile`：规定阅读快翻图标位于“定位最新回复”右侧，无常驻“快翻”文字；tooltip/无障碍名称为“快翻”，底部位置状态与“收起”提供可见开启反馈。
+- `compatibility`：既有语义和版本保持不变；本候选建议下次兼容新增发布为 `v6.10.0`，实际版本须由用户确认，消费者须等待正式 Tag。无 HTTP API 或存储协议变化，见 [兼容登记](docs/deprecation-register.md)。
+
 ## 6.9.0
 
 - `shared`：补充功能页面、区块与子区块标题语境；资料与账号设置、帖子管理和站务界面统一使用 Noto Sans SC 600，保留字号、行高及内容阅读标题的文楷。
