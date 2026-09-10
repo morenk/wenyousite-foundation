@@ -52,7 +52,7 @@
 
 多播性能按可见数量、素材大小及冷缓存／内存重入／磁盘重入分别验收，同时观察快速往返时的取消、重请求和资源释放。编码缓存容量不等于活动 codec、解码帧与在途响应的总内存上限；预览节省传输也不代表并播没有解码或绘制成本。
 
-组件级合成素材与受控网络测量不能替代完整业务页面、实际耗电或屏幕掉帧率验收；首帧绘制、进程内存采样、服务端写出字节和设备实际收到字节须区分。Web 减少几何测量次数只证明调度开销下降，不能据此认定长列表流畅。具体环境、样本和限制见 [Web 验收记录](https://github.com/morenk/wenyousite-frontend/pull/10)、[Web 测量边界](https://github.com/morenk/wenyousite-frontend/blob/68bbfa2e87956214b3de4cfbbd7b0b8ff5a73f28/docs/modules/home.md)及 [Mobile 验收记录](https://github.com/morenk/wenyousite-mobile/pull/14)，本共享说明不复制随候选变化的测量数值。
+组件级合成素材与受控网络测量不能替代完整业务页面、实际耗电或屏幕掉帧率验收；首帧绘制、进程内存采样、服务端写出字节和设备实际收到字节须区分。Web 减少几何测量次数只证明调度开销下降，不能据此认定长列表流畅。具体环境、样本和限制见 [Web 验收记录](https://github.com/morenk/wenyousite-frontend/pull/10)、[Web 测量边界](https://github.com/morenk/wenyousite-frontend/blob/68bbfa2e87956214b3de4cfbbd7b0b8ff5a73f28/docs/modules/home.md)、[Web 持久性能报告](https://github.com/morenk/wenyousite-frontend/blob/aef749d7c16789a3b388f275fe8d5c237e20a518/docs/cover-playback-performance.md)及 [Mobile 验收记录](https://github.com/morenk/wenyousite-mobile/pull/14)，本共享说明不复制随候选变化的测量数值。
 
 这属于既有 `cover` 角色、`neverDeriveVariantUrls`、`failureKeepsContext` 和减少动态效果原则的业务接入说明。机器角色与生成 API 保持不变；不要求消费者改为依赖未发布的 Foundation 提交。
 
