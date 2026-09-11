@@ -1125,13 +1125,111 @@
     },
     "images": {
       "type": "object",
-      "required": ["roles", "invariants", "states", "web", "mobile"],
+      "required": ["roles", "invariants", "states", "web", "mobile", "momentPlayback"],
       "properties": {
+        "momentPlayback": { "$ref": "#/$defs/momentPlayback" },
         "roles": { "type": "object", "required": ["avatar", "cover", "content", "galleryThumbnail", "sticker"], "properties": { "avatar": { "$ref": "#/$defs/imageRole" }, "cover": { "$ref": "#/$defs/imageRole" }, "content": { "$ref": "#/$defs/imageRole" }, "galleryThumbnail": { "$ref": "#/$defs/imageRole" }, "sticker": { "$ref": "#/$defs/imageRole" } }, "additionalProperties": false },
         "invariants": { "type": "object", "required": ["reserveSpaceWhenDimensionsKnown", "neverDeriveVariantUrls", "failureKeepsContext", "statusNeverColorOnly", "altText", "decorativeAlt", "contentCropping"], "properties": { "reserveSpaceWhenDimensionsKnown": { "const": true }, "neverDeriveVariantUrls": { "const": true }, "failureKeepsContext": { "const": true }, "statusNeverColorOnly": { "const": true }, "altText": { "const": "contextual-never-filename" }, "decorativeAlt": { "const": "empty" }, "contentCropping": { "const": "forbidden" } }, "additionalProperties": false },
         "states": { "$ref": "#/$defs/nonEmptyStringArray" },
         "web": { "type": "object", "required": ["viewer", "dismiss", "zoom", "stickerDisplayMaxRem"], "properties": { "viewer": { "const": "modal-lightbox" }, "dismiss": { "$ref": "#/$defs/nonEmptyStringArray" }, "zoom": { "$ref": "#/$defs/nonEmptyStringArray" }, "stickerDisplayMaxRem": { "$ref": "#/$defs/positiveNumber" } }, "additionalProperties": false },
         "mobile": { "type": "object", "required": ["viewer", "dismiss", "zoom", "stickerDisplayMaxDp"], "properties": { "viewer": { "const": "fullscreen-route" }, "dismiss": { "$ref": "#/$defs/nonEmptyStringArray" }, "zoom": { "$ref": "#/$defs/nonEmptyStringArray" }, "stickerDisplayMaxDp": { "$ref": "#/$defs/positiveNumber" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "momentPlayback": {
+      "type": "object",
+      "required": [
+        "scope",
+        "excluded",
+        "animationDetection",
+        "staticSource",
+        "gifStaticSourceField",
+        "animationSourceField",
+        "list",
+        "detail",
+        "fullscreen",
+        "lifecycle",
+        "failure",
+        "save"
+      ],
+      "properties": {
+        "scope": {
+          "const": [
+            "moment-media",
+            "moment-comment-media",
+            "moment-reply-media",
+            "moment-sticker"
+          ]
+        },
+        "excluded": {
+          "const": [
+            "thread",
+            "composer"
+          ]
+        },
+        "animationDetection": {
+          "const": "animated-or-contentType-never-extension"
+        },
+        "staticSource": {
+          "const": "server-static-derivative"
+        },
+        "gifStaticSourceField": {
+          "const": "thumbnailUrl"
+        },
+        "animationSourceField": {
+          "const": "url"
+        },
+        "list": {
+          "const": {
+            "entries": [
+              "discover",
+              "following",
+              "search",
+              "profile",
+              "favorites"
+            ],
+            "playback": "never",
+            "animationPrefetch": false,
+            "originalFallback": false,
+            "interaction": "open-detail"
+          }
+        },
+        "detail": {
+          "const": {
+            "carousel": "current-and-visible",
+            "comments": "all-visible",
+            "replies": "all-visible",
+            "stickers": "all-visible"
+          }
+        },
+        "fullscreen": {
+          "const": {
+            "playback": "current-and-visible",
+            "suspendUnderlyingDetail": true
+          }
+        },
+        "lifecycle": {
+          "const": {
+            "required": [
+              "playback-allowed",
+              "page-active",
+              "foreground",
+              "visible"
+            ],
+            "onIneligible": "unmount-animation-resource",
+            "resume": "restart-allowed"
+          }
+        },
+        "failure": {
+          "const": {
+            "staticMissingOrFailed": "placeholder",
+            "animationFailed": "static-or-placeholder-with-explicit-retry",
+            "automaticRetry": false
+          }
+        },
+        "save": {
+          "const": "original-preserving-animation"
+        }
       },
       "additionalProperties": false
     },

@@ -2,7 +2,7 @@
   "version": "6.9.0",
   "schemaVersion": 2,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "43d80158dd146acdf66834337ee1362279dceb9269cc52d87b0fddffd9cb5722",
+  "contractSha256": "63c71a982ff2320543d4516b455f6089c30eedb39dd2264c065fe972d8a6a1e5",
   "features": {
     "typography": true,
     "interaction": true,
