@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.9.0",
+  "version": "6.10.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -347,6 +347,7 @@
         "action.save-all": "save-all",
         "action.send": "send",
         "action.search": "search",
+        "action.reading-quick-scroll": "move-vertical",
         "action.filter": "list-filter",
         "action.clear-filter": "list-x",
         "action.sort": "arrow-down-up",

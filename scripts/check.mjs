@@ -288,6 +288,22 @@ if (icons.source.package !== "lucide-static" || icons.source.version !== package
 }
 if (!read("pnpm-lock.yaml").includes(icons.source.integrity)) failures.push("Lucide 来源完整性未锁定");
 if (!fs.existsSync(path.join(root, icons.source.license))) failures.push("Lucide 图标许可证不存在");
+// 阅读位置调节必须保持独立语义，并通过公开 Web API 提供跨端同源资产。
+const readingQuickScrollId = "action.reading-quick-scroll";
+const iconApi = await import("../dist/icons.js");
+if (icons.semantics[readingQuickScrollId] !== "move-vertical"
+  || iconApi.iconGlyphId(readingQuickScrollId) !== "move-vertical") {
+  failures.push("阅读快翻必须使用独立的 move-vertical 语义，不能借用过滤或排序");
+}
+const readingQuickScrollAsset = "packages/flutter/icons/move-vertical.svg";
+if (!fs.existsSync(path.join(root, readingQuickScrollAsset))
+  || iconApi.iconSvg(readingQuickScrollId) !== read(readingQuickScrollAsset).trimEnd()
+  || !iconApi.iconNode(readingQuickScrollId)?.length) {
+  failures.push("阅读快翻公开 Web SVG/节点与 Flutter 资产必须完整且同源");
+}
+if (iconApi.iconVariantSvg(readingQuickScrollId, "filled") !== undefined) {
+  failures.push("阅读快翻不提供实心变体，开启反馈由可见工具栏承担");
+}
 const semanticIds = Object.keys(icons.semantics);
 const glyphIds = [...new Set(Object.values(icons.semantics))];
 const filledGlyphIds = [...new Set(Object.values(icons.controls.selected)

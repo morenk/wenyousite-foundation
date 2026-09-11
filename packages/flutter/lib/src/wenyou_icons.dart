@@ -31,6 +31,7 @@ abstract final class WenyouIconIds {
   static const String actionSaveAll = 'action.save-all'; // save-all
   static const String actionSend = 'action.send'; // send
   static const String actionSearch = 'action.search'; // search
+  static const String actionReadingQuickScroll = 'action.reading-quick-scroll'; // move-vertical
   static const String actionFilter = 'action.filter'; // list-filter
   static const String actionClearFilter = 'action.clear-filter'; // list-x
   static const String actionSort = 'action.sort'; // arrow-down-up
@@ -222,6 +223,7 @@ abstract final class WenyouIconContract {
     'action.save-all': 'save-all',
     'action.send': 'send',
     'action.search': 'search',
+    'action.reading-quick-scroll': 'move-vertical',
     'action.filter': 'list-filter',
     'action.clear-filter': 'list-x',
     'action.sort': 'arrow-down-up',

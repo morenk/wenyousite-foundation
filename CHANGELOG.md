@@ -1,13 +1,19 @@
 # Foundation Changelog
 
-## Unreleased
+## 6.10.0
+
+- `shared`：兼容新增 `action.reading-quick-scroll`，映射固定 Lucide 1.28.0 的 `move-vertical`；生成 Web SVG、类型、Flutter 常量与同源资产。
+- `mobile`：规定阅读快翻图标位于“定位最新回复”右侧，无常驻“快翻”文字；tooltip/无障碍名称为“快翻”，底部位置状态与“收起”提供可见开启反馈。
+- `compatibility`：既有图标语义保持不变；根包、Flutter 包和契约同步至 `6.10.0`，消费者通过正式 Tag `v6.10.0` 独立升级。无 HTTP API 或存储协议变化，见 [兼容登记](docs/deprecation-register.md)。
 
 - `shared`：补充 Backend Markdown v5 既有对齐块的跨端可观察语义；合法顶层块不要求前置空行，阅读、编辑、草稿和复制保持逐块对齐、文字及可见空白行，不泄漏或增殖隐藏标记。
 - `web`：要求阅读与 Milkdown 编辑共享协议边界语义，覆盖紧接前文与连续对齐块。
 - `mobile`：以共享用例验证 Markdown↔Quill Delta、阅读与真实编辑往返，保留独立图片已有对齐语义。
 - `shared`：正文保留实际连续空格、行首和行尾空格及可见行；摘要保持紧凑，不把空格布局自动推断为竖排、表格或等宽字体，也不承诺不同字体与容器逐像素一致。
 - `shared`：当前编辑内容转换或校验失败时阻止旧正文提交，保留可编辑内容和明确错误；真实页面验收覆盖无写请求及修正后保存。
-- `docs`：语法事实源仍归 Backend；本次不修改数值、机器契约、包版本或生成产物，不代表发布新的 Foundation 版本。
+- `docs`：语法事实源仍归 Backend；该文档补充本身不修改数值或机器契约，随本次版本发布。
+
+- `shared`：包含 main 已合入的动态帖动态图播放契约及回归 fixtures，详见 [图片呈现契约](docs/images.md#动态帖动态图播放)。
 
 ## 6.9.0
 
