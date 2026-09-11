@@ -848,6 +848,39 @@ for (const id of ["task-list", "code-block", "table"]) {
   }
 }
 
+// 共享状态用例是消费者验收语料；此求值器只验证契约，不是客户端运行时实现。
+const momentCases = JSON.parse(read("contracts/fixtures/moment-playback.json")).cases;
+const momentCaseIds = new Set();
+for (const scenario of momentCases) {
+  if (momentCaseIds.has(scenario.id)) failures.push(`动态播放用例 ID 重复：${scenario.id}`);
+  momentCaseIds.add(scenario.id);
+  const state = scenario.input;
+  const inDetail = ["carousel", "comment", "reply", "sticker"].includes(state.surface);
+  const eligible = state.animated && state.playbackAllowed && state.pageActive &&
+    state.foreground && state.visible &&
+    (state.surface === "fullscreen" ? state.fullscreenOpen && state.current :
+      inDetail && !state.fullscreenOpen && (state.surface !== "carousel" || state.current));
+  const actual = {
+    source: eligible && !state.animationFailed ? "animation" :
+      state.staticAvailable ? "static" : "placeholder",
+    retry: Boolean(eligible && state.animationFailed),
+  };
+  if (JSON.stringify(actual) !== JSON.stringify(scenario.expected)) {
+    failures.push(`动态播放用例不符合契约：${scenario.id}`);
+  }
+}
+for (const entry of contract.experiences.images.momentPlayback.list.entries) {
+  if (!momentCaseIds.has(`list-${entry}`)) failures.push(`动态列表缺少播放用例：${entry}`);
+}
+for (const id of ["detail-current", "detail-other-slide", "detail-pageActive-false",
+  "detail-foreground-false", "detail-visible-false", "detail-playbackAllowed-false",
+  "detail-animation-failed", "detail-both-failed", "list-missing-static",
+  "list-failed-static", "comment-visible", "reply-visible", "sticker-visible",
+  "detail-under-fullscreen", "fullscreen-current", "fullscreen-other",
+  "fullscreen-background", "fullscreen-closed-resumes-detail", "static-image"]) {
+  if (!momentCaseIds.has(id)) failures.push(`动态播放缺少必要用例：${id}`);
+}
+
 const images = contract.experiences.images;
 const requiredImageRoles = ["avatar", "cover", "content", "galleryThumbnail", "sticker"];
 for (const role of requiredImageRoles) {
