@@ -70,7 +70,7 @@
 
 解析所需的内部块分隔不能增加或吞掉用户可见空白行。主帖、子帖、楼层、回复和共用正文入口遵循同一语义；纯文本摘要与阅读复制不泄漏合法隐藏协议，站内粘贴保留既定正文语义和身份规则，多轮编辑保存不增殖标记。非法结构和未知协议仍按既有拒绝或字面降级规则处理，不扩大 HTML 或 URL 白名单。
 
-跨端验收复用 Backend 已提交的[块边界组合用例 v1 revision 2](https://github.com/morenk/wenyousite-backend/blob/a91cbb8b605223c596af299be22c5547f69e25b9/contracts/markdown-block-boundary-v1-fixtures.json)及其中的 `whitespaceCases`，同时比较可见文字、块类型、逐块对齐、可见空白行和原始错误位置，并执行真实编辑事务、复制粘贴及多轮保存重开。本文只补充可观察行为，不变更 Foundation 数值、机器契约版本或客户端固定版本消费方式。
+跨端验收复用 Backend 已提交的[块边界组合用例 v1 revision 2](https://github.com/morenk/wenyousite-backend/blob/a91cbb8b605223c596af299be22c5547f69e25b9/contracts/markdown-block-boundary-v1-fixtures.json)及其中的 `whitespaceCases`，同时比较可见文字、块类型、逐块对齐、可见空白行和原始错误位置，并执行真实编辑事务、复制粘贴及多轮保存重开。当前编辑内容转换或校验失败时必须阻止提交旧正文，不显示保存成功，保留可编辑现场并明确提示错误；真实页面测试须断言失败时没有写请求，修正内容后可以保存。本文只补充可观察行为，不变更 Foundation 数值、机器契约版本或客户端固定版本消费方式。
 
 ## 变更规则
 
