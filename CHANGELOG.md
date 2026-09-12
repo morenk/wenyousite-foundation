@@ -2,6 +2,8 @@
 
 ## 6.11.0
 
+- `docs`：本版本包含 main 已通过 PR #4 合入的主题封面播放文档（`docs/images.md`）；这是既有合入内容，不属于本次纵向快翻新增实现。
+
 - `mobile`：新增右侧纵向阅读快翻的几何、颜色角色、局部底衬透明度、手势和无障碍机器契约，以悬浮滑块和局部操作卡替换底部工具栏开启反馈，保持正文视口不变。
 - `shared`：生成 `WenyouReadingQuickScrollContract` 与 `READING_QUICK_SCROLL_MOBILE_PROFILE`，图标语义与资产保持不变；新增 Schema 反向用例及主题后景对比、生成同源检查。
 - `compatibility`：旧消费者继续锁定已发布 Tag；移动端需独立升级后迁移布局和验收。无 HTTP API 或存储变化；根包、Flutter 包与契约同步至 6.11.0，消费者通过正式 Tag v6.11.0 独立升级。
