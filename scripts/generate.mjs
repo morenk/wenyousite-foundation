@@ -905,18 +905,6 @@ ${darkThemeCssDeclarations}
 }
 `);
 
-write("web/fonts.css", `/* 字体版本与校验和以 contracts/foundation.v1.json 为准。 */
-@import "@fontsource-variable/noto-sans-sc/wght.css";
-@import "@fontsource-variable/nunito/wght.css";
-
-@font-face {
-  font-family: "LXGW WenKai";
-  src: url("./fonts/LXGWWenKaiLite-Medium.woff2") format("woff2");
-  font-display: swap;
-  font-style: normal;
-  font-weight: 500;
-}`);
-
 const mobile = contract.profiles.mobile;
 const paletteLines = Object.entries(p)
   .map(([name, value]) => `  static const Color ${name} = ${dartColor(value)};`)
@@ -1218,10 +1206,7 @@ abstract final class WenyouControlContract {
 }
 
 abstract final class WenyouFoundationTypography {
-  static const String body = 'Wenyou Noto Sans SC';
-  static const String display = 'Wenyou LXGW WenKai';
-  static const String utility = 'Wenyou Nunito';
-  static const List<String> chineseFallback = <String>['Noto Sans SC', 'sans-serif'];
+  /// 排版家族语义；客户端继承平台默认字体，不作为 fontFamily 名称。
   static const Map<String, String> mobileFamilies = <String, String>{
 ${mobileTypeFamilyEntries}
   };
@@ -1623,7 +1608,6 @@ const artifactPaths = [
   ...["brand", "theme", "icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
     .flatMap((name) => [`dist/${name}.js`, `dist/${name}.d.ts`]),
   "web/tokens.css",
-  "web/fonts.css",
   "packages/flutter/lib/src/foundation_tokens.dart",
   "packages/flutter/lib/src/foundation_formatters.dart",
   "packages/flutter/lib/src/foundation_brand.dart",
@@ -1666,25 +1650,15 @@ const manifest = JSON.stringify({
     tagline: brand.tagline,
     assets: brandAssetSha256,
   },
-  fonts: contract.fonts.map(({ role, family, sha256, webSha256 }) => ({
-    role,
-    family,
-    sha256,
-    ...(webSha256 ? { webSha256 } : {}),
-  })),
+  fonts: contract.fonts,
 }, null, 2);
 write("foundation-manifest.json", manifest);
 write("packages/flutter/foundation-manifest.json", manifest);
 
-const flutterLicense = contract.fonts
-  .map((font) => [
-    `${font.family} (${font.role})`,
-    "=".repeat(font.family.length + font.role.length + 3),
-    "以下许可仅适用于该字体文件；基础仓库其余内容不因此自动获得相同许可。",
-    "",
-    readFile(font.license),
-  ].join("\n"))
-  .join("\n\n---\n\n");
-write("packages/flutter/LICENSE", `${flutterLicense}\n\n---\n\nLucide icons\n============\n${readFile(icons.source.license)}`);
+write("packages/flutter/LICENSE", `Lucide icons
+============
+以下许可仅适用于随包分发的图标；其余内容不因此自动获得相同许可。
+
+${readFile(icons.source.license)}`);
 
 if (!checkOnly) console.log(`Generated foundation ${contract.version} artifacts`);

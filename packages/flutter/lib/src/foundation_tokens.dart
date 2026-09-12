@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.11.0';
-  static const int schema = 2;
+  static const String value = '7.0.0';
+  static const int schema = 3;
 }
 
 abstract final class WenyouFoundationPalette {
@@ -345,10 +345,7 @@ abstract final class WenyouControlContract {
 }
 
 abstract final class WenyouFoundationTypography {
-  static const String body = 'Wenyou Noto Sans SC';
-  static const String display = 'Wenyou LXGW WenKai';
-  static const String utility = 'Wenyou Nunito';
-  static const List<String> chineseFallback = <String>['Noto Sans SC', 'sans-serif'];
+  /// 排版家族语义；客户端继承平台默认字体，不作为 fontFamily 名称。
   static const Map<String, String> mobileFamilies = <String, String>{
     'pageTitle': 'display',
     'sectionTitle': 'display',

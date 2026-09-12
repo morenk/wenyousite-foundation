@@ -2,6 +2,15 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 系统字体（v7.0.0 待发布）
+
+- 破坏性变化：Schema 3 要求 `fonts: []`；三个家族角色固定声明系统字体及通用无衬线 fallback。旧具体家族、资源清单、字体 CSS 导出、字体依赖与许可内容不进入 v7。品牌 `displayGlyphFont`/`fontLicense` 字段由 `displayTypographyRole: "display"` 替代。
+- Flutter 删除 `WenyouFoundationTypography.body/display/utility/chineseFallback`；`mobileFamilies` 保留语义映射，`mobileSizes/mobileLineHeights/mobileWeights` 保留尺度。TypeScript 保留 `TypographyFamilyRole`、`TYPOGRAPHY_FAMILIES`、`TYPOGRAPHY_USAGE`、`WEB_TYPE_SCALE` 与 `MOBILE_TYPE_SCALE`。
+- 旧 v6.x Tag 不可改写，继续保留原资产、许可证和 API，供未迁移消费者与回滚使用。此版本准备不是全体消费者已迁移的证据，也不授权清理其他仓库兼容实现。
+- 合并与正式 Tag 发布必须由负责人明确决定。Web 在 VPS、Mobile 在 Windows 各自通过独立提交锁定正式 v7 Tag，迁移字体导入、注册、预加载和家族引用，再完成平台构建与代表性页面验收；不得锁定 main 或未发布提交。
+- 验收：`pnpm generate`、`pnpm check` 覆盖 Schema、反向用例、语义角色与尺度同源、Manifest 及生成物；`pnpm check:package` 实际打包并检查完整归档，不接受字体文件、旧字体名称、字体依赖或失效导出。Flutter 真机与 Web 浏览器验收由消费任务完成。
+- 风险与回滚：系统字体会改变中文字形、数字宽度和换行；需检查品牌、列表、正文、编辑器、缩放与溢出。回滚必须同时恢复原 v6.x Tag、依赖锁及配套消费实现，不能只降包版本。无 HTTP API、持久化或数据迁移变化；数学字体、系统等宽字体、平台图标字体不在本次范围。
+
 ## 右侧纵向阅读快翻（v6.11.0）
 
 - 新增 `experiences.readingQuickScroll.mobile` 和生成的 Flutter/Web 读取常量；对已发布 Tag 无修改，不删除既有导出或图标资产。

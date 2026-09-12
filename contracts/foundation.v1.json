@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
-  "schemaVersion": 2,
-  "version": "6.11.0",
+  "schemaVersion": 3,
+  "version": "7.0.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -116,9 +116,9 @@
     }
   },
   "typography": {
-    "body": { "family": "Noto Sans SC Variable", "weights": [400, 500, 600, 700], "fallback": ["Noto Sans SC", "system-ui", "sans-serif"] },
-    "display": { "family": "LXGW WenKai", "weights": [500], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] },
-    "utility": { "family": "Nunito Variable", "weights": [400, 600, 700], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] },
+    "body": { "family": "system-ui", "weights": [400, 500, 600, 700], "fallback": ["sans-serif"] },
+    "display": { "family": "system-ui", "weights": [500], "fallback": ["sans-serif"] },
+    "utility": { "family": "system-ui", "weights": [400, 600, 700], "fallback": ["sans-serif"] },
     "usage": {
       "displayContexts": ["brand", "page-title", "section-title", "detail-content-title", "text-cover-title"],
       "bodySemiboldContexts": ["list-item-title", "dialog-title", "sheet-title", "popover-title", "state-title", "functional-page-title", "functional-section-title", "functional-subsection-title"],
@@ -266,8 +266,7 @@
       "tagline": "最温油的文字共创社区",
       "source": {
         "assetRoot": "brand",
-        "displayGlyphFont": "LXGW WenKai",
-        "fontLicense": "licenses/LXGWWenKaiLite-OFL.txt",
+        "displayTypographyRole": "display",
         "description": "文与油管加油枪组成的温油站品牌标识"
       },
       "colors": {
@@ -1402,35 +1401,5 @@
       }
     }
   },
-  "fonts": [
-    {
-      "role": "body",
-      "family": "Noto Sans SC Variable",
-      "source": "https://github.com/google/fonts/tree/2894aab31764f10f29c421bdfd2340d3b382d384/ofl/notosanssc",
-      "revision": "2894aab31764f10f29c421bdfd2340d3b382d384",
-      "flutterAsset": "packages/flutter/lib/fonts/NotoSansSC-Variable.ttf",
-      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
-      "license": "licenses/NotoSansSC-OFL.txt"
-    },
-    {
-      "role": "display",
-      "family": "LXGW WenKai",
-      "source": "https://github.com/lxgw/LxgwWenKai-Lite/tree/067a6d508532cc0f8bc79e899ec3b06ff4dee38a",
-      "revision": "067a6d508532cc0f8bc79e899ec3b06ff4dee38a",
-      "flutterAsset": "packages/flutter/lib/fonts/LXGWWenKaiLite-Medium.ttf",
-      "webAsset": "web/fonts/LXGWWenKaiLite-Medium.woff2",
-      "sha256": "02eb0f8deed11b00481393f5720630ae1a44424f37f4157ea160a69a1c72a0b6",
-      "webSha256": "9caf8fb2c04e248d54400393d4204faaefa09bbb6c9ec8c0730caab43db8b198",
-      "license": "licenses/LXGWWenKaiLite-OFL.txt"
-    },
-    {
-      "role": "utility",
-      "family": "Nunito Variable",
-      "source": "https://github.com/google/fonts/tree/604936664fd62c14271209b51f98e7f495dd1a3e/ofl/nunito",
-      "revision": "604936664fd62c14271209b51f98e7f495dd1a3e",
-      "flutterAsset": "packages/flutter/lib/fonts/Nunito-Variable.ttf",
-      "sha256": "bb55a5ca5c2042335b3991af27c4d0705d0ef41cac6164ac737fd8f2a1e85207",
-      "license": "licenses/Nunito-OFL.txt"
-    }
-  ]
+  "fonts": []
 }

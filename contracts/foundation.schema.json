@@ -6,7 +6,7 @@
   "required": ["$schema", "schemaVersion", "version", "identity", "palette", "themes", "typography", "motion", "accessibility", "profiles", "experiences", "fonts"],
   "properties": {
     "$schema": { "const": "./foundation.schema.json" },
-    "schemaVersion": { "const": 2 },
+    "schemaVersion": { "const": 3 },
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
     "identity": {
       "type": "object",
@@ -158,9 +158,8 @@
     },
     "fonts": {
       "type": "array",
-      "minItems": 3,
-      "maxItems": 3,
-      "items": { "$ref": "#/$defs/fontAsset" }
+      "maxItems": 0,
+      "items": false
     }
   },
   "additionalProperties": false,
@@ -354,9 +353,9 @@
       "type": "object",
       "required": ["family", "weights", "fallback"],
       "properties": {
-        "family": { "$ref": "#/$defs/nonEmptyString" },
+        "family": { "const": "system-ui" },
         "weights": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 100, "maximum": 900, "multipleOf": 100 } },
-        "fallback": { "$ref": "#/$defs/nonEmptyStringArray" }
+        "fallback": { "const": ["sans-serif"] }
       },
       "additionalProperties": false
     },
@@ -524,11 +523,10 @@
         "tagline": { "const": "最温油的文字共创社区" },
         "source": {
           "type": "object",
-          "required": ["assetRoot", "displayGlyphFont", "fontLicense", "description"],
+          "required": ["assetRoot", "displayTypographyRole", "description"],
           "properties": {
             "assetRoot": { "const": "brand" },
-            "displayGlyphFont": { "const": "LXGW WenKai" },
-            "fontLicense": { "$ref": "#/$defs/nonEmptyString" },
+            "displayTypographyRole": { "const": "display" },
             "description": { "$ref": "#/$defs/nonEmptyString" }
           },
           "additionalProperties": false
@@ -1413,15 +1411,6 @@
       "type": "object",
       "required": ["fit", "crop", "shape", "viewer"],
       "properties": { "fit": { "enum": ["cover", "contain"] }, "crop": { "enum": ["allowed", "forbidden"] }, "shape": { "enum": ["circle", "rounded", "content"] }, "viewer": { "enum": ["none", "full-source", "optional"] } },
-      "additionalProperties": false
-    },
-    "fontAsset": {
-      "type": "object",
-      "required": ["role", "family", "source", "revision", "flutterAsset", "sha256", "license"],
-      "properties": {
-        "role": { "enum": ["body", "display", "utility"] }, "family": { "$ref": "#/$defs/nonEmptyString" }, "source": { "$ref": "#/$defs/nonEmptyString" }, "revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" }, "flutterAsset": { "$ref": "#/$defs/nonEmptyString" }, "webAsset": { "$ref": "#/$defs/nonEmptyString" }, "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }, "webSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }, "license": { "$ref": "#/$defs/nonEmptyString" }
-      },
-      "dependentRequired": { "webAsset": ["webSha256"], "webSha256": ["webAsset"] },
       "additionalProperties": false
     }
   }
