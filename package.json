@@ -1,6 +1,6 @@
 {
   "name": "@wenyousite/foundation",
-  "version": "6.11.0",
+  "version": "7.0.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -62,8 +62,7 @@
       "types": "./dist/icons.d.ts",
       "default": "./dist/icons.js"
     },
-    "./web/tokens.css": "./web/tokens.css",
-    "./web/fonts.css": "./web/fonts.css"
+    "./web/tokens.css": "./web/tokens.css"
   },
   "files": [
     "contracts",
@@ -77,16 +76,14 @@
   ],
   "scripts": {
     "generate": "node scripts/generate.mjs",
-    "check": "node scripts/check.mjs && node scripts/generate.mjs --check && node scripts/check-fonts.mjs"
+    "check": "node scripts/check.mjs && node scripts/generate.mjs --check",
+    "check:package": "node scripts/check-package.mjs"
   },
   "dependencies": {
-    "@fontsource-variable/noto-sans-sc": "5.3.0",
-    "@fontsource-variable/nunito": "5.3.0",
     "lucide-static": "1.28.0"
   },
   "devDependencies": {
     "ajv": "8.17.1",
-    "fontkit": "2.0.4",
     "pngjs": "7.0.0"
   },
   "packageManager": "pnpm@11.17.0"

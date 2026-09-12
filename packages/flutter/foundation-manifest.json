@@ -1,8 +1,8 @@
 {
-  "version": "6.11.0",
-  "schemaVersion": 2,
+  "version": "7.0.0",
+  "schemaVersion": 3,
   "contract": "contracts/foundation.v1.json",
-  "contractSha256": "c12b236f2aec55e4110eafc0ae3844c9c46e3dc3cd392667e9ce45572c06fc27",
+  "contractSha256": "0f8a1564db88880d58024e4865009897fbf5120baff69e69cf4338b995da98cf",
   "features": {
     "typography": true,
     "interaction": true,
@@ -17,14 +17,14 @@
     "themes": true
   },
   "artifactSha256": {
-    "dist/brand.js": "a94d6c5175e2c0133eea98fffc27fb5553f95dfcc58443bedf704d4e720e654f",
-    "dist/brand.d.ts": "8bce2cb304be99a21a85b7b263e35074d72d515f8334db11ed022609dbb6040f",
+    "dist/brand.js": "ccf716aa94df1bfef6ba5c173de69ff3fff21caf05d8ecbdb2907c2f545fe49e",
+    "dist/brand.d.ts": "05589362b4e3322143a2bf9752a75eab09289ae296e7e4d9e8667a99f2d6dbbf",
     "dist/theme.js": "1488ef20fbc5b571c971824df9afe01d6e9996a51c359e531bbc63ec7f64866e",
     "dist/theme.d.ts": "ea52dede95b252cec123f59f75e45e49fc0e496d42862807cdb8647dfc358ee6",
     "dist/icons.js": "067a3de4b97e331f309e18b8f5b36aaa29ba44183f9da307226bbead815aa778",
     "dist/icons.d.ts": "4471a3a08b0b23c03428665e4688b4a18b768ca2553f9496f8135b539930178c",
-    "dist/editor.js": "a4428aaf3fda6055b964431d44327c40a4e0e26377601d235d2a9dea0fb08664",
-    "dist/editor.d.ts": "21837b4a1e8714646982a3aaef2602374e1db59d2363e96d5e550c228bace674",
+    "dist/editor.js": "87e63ea2f4fb980078e51a75f5539ebb515a3e235d775d7096f0149c14086264",
+    "dist/editor.d.ts": "cc48c51bbf1256c360075ab2a71678620b7b3bc146e60037a146e259a3946b3f",
     "dist/images.js": "48bda60db403d754b5c601d5f092beb0b4ea942bd4596b77aba1399d8aa5c3a4",
     "dist/images.d.ts": "de0d1b52f15967ab723c7b0de317db670e863c3381eb93c9c84cc9446b97da26",
     "dist/collections.js": "82d1808ef13bf6468490a38116408e4147da66a4997680f7c3402243c42eb647",
@@ -33,7 +33,7 @@
     "dist/controls.d.ts": "9d70d0d88dbb3aea030d9f55cdfbb24be18444207ceb1e83521315a7a3464f35",
     "dist/notifications.js": "2128ee774f2148388c0f35da35e189d51207d39475adace380ac28ab8ba6a51f",
     "dist/notifications.d.ts": "c229efa7d06321ee52547466418a854f756b6fd9eeeb05d5c28359d184ec653f",
-    "dist/typography.js": "c0186a53b869130d4f5577f9baed050edf8ca014f2aac3265932aa02fa12ada8",
+    "dist/typography.js": "8dfd40b4d028dc5e15378052f01135205d6661e84843e743e72888dc37a62703",
     "dist/typography.d.ts": "4c50b6951a75c66e15afc388f1105d4964efcff7f9dbed3eb34620bb619d92e5",
     "dist/interaction.js": "3200813ba22b685961b77f030dcf8ab8de6a02a0542202962843f864ab82d5bf",
     "dist/interaction.d.ts": "06d36d319d833e96c1df803bc2e32ded0eca0eae717c889d2290c1637cbf4837",
@@ -46,12 +46,11 @@
     "dist/elements.js": "94503210a0d7552baabe39097e8402b160d321aa748f0cde183bec5fd37792b6",
     "dist/elements.d.ts": "f2fa88ca64d88cd6508e10bb83d3872975a5af42ac6d31514382d45f604b2691",
     "web/tokens.css": "b60bb6aadac171395941048ce10f531495cdb314c20b153b2a6a160790b22851",
-    "web/fonts.css": "2064b6f73a60f670ce27ddeaa7dbc9590776fb3c31b5644c5ee0dd35c4f31ed7",
-    "packages/flutter/lib/src/foundation_tokens.dart": "2b835cae39e5fbdb39f8ae1105984c7bc720a28da1dcdf380a3456b896c8fe2c",
+    "packages/flutter/lib/src/foundation_tokens.dart": "2b36853a8f43f34ce0b0167204593f0a3a3faa2742a90f2726355a3a8cc9de59",
     "packages/flutter/lib/src/foundation_formatters.dart": "88ee5b22f6f287c29a71f899dfe982c843c3c4d7d2bba9bb32b5ee2ad4fc750f",
     "packages/flutter/lib/src/foundation_brand.dart": "f66d2ade03b0d2c168ea55621cc2076786613927067dd679684931307ef29314",
     "packages/flutter/lib/src/wenyou_icons.dart": "531f32319b59a36f0fbdc5f9661a97351b7dff7ec770396e95529fc27825deec",
-    "packages/flutter/brand_assets/manifest.json": "7657a8b3490fa168fdc073ab35f5be300983029cc81a9549b24a9f1c0903b9e7",
+    "packages/flutter/brand_assets/manifest.json": "bd0306ec281200a03a78315208494f8bbd38c77d1aaca229123c6c9dcd5be4eb",
     "packages/flutter/brand_assets/runtime/logo-symbol-transparent-1024.png": "9e9f63a05a430eda6756f8802b1beffe24725bc62794b00c1c193350a8faef0c",
     "packages/flutter/brand_assets/platform/android/adaptive/ic_launcher_background-432.png": "ede8b6bc25c30ee8d6d7740421b82e3d2fc15105c294a25899c7ea59bc69406b",
     "packages/flutter/brand_assets/platform/android/adaptive/ic_launcher_foreground-432.png": "881ed3bd3c1da85c1a958d8b7eb1622610482c008b2401267f8a749661db85e5",
@@ -242,7 +241,7 @@
     "name": "温油站",
     "tagline": "最温油的文字共创社区",
     "assets": {
-      "brand/README.md": "b7947382a2396863a05c3aa43ac383ae2a84f0e29711dc5adb1692a280b53470",
+      "brand/README.md": "824fdbfd34e37a547486878c8df03afadfa3d080cf1cb99ae6cbf356657cb849",
       "brand/app/android/adaptive/ic_launcher_background-432.png": "ede8b6bc25c30ee8d6d7740421b82e3d2fc15105c294a25899c7ea59bc69406b",
       "brand/app/android/adaptive/ic_launcher_foreground-432.png": "881ed3bd3c1da85c1a958d8b7eb1622610482c008b2401267f8a749661db85e5",
       "brand/app/android/mipmap-hdpi/ic_launcher.png": "c62c4f075f7f3b7198a9200df8d628ec7d51095a5af844d156e1b7cd0c9190b0",
@@ -289,22 +288,5 @@
       "brand/web/site.webmanifest": "2b97d000006b4d9e159b709ddfa4e5c8e6f15d808bd0e274aaa741fde641e6c6"
     }
   },
-  "fonts": [
-    {
-      "role": "body",
-      "family": "Noto Sans SC Variable",
-      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
-    },
-    {
-      "role": "display",
-      "family": "LXGW WenKai",
-      "sha256": "02eb0f8deed11b00481393f5720630ae1a44424f37f4157ea160a69a1c72a0b6",
-      "webSha256": "9caf8fb2c04e248d54400393d4204faaefa09bbb6c9ec8c0730caab43db8b198"
-    },
-    {
-      "role": "utility",
-      "family": "Nunito Variable",
-      "sha256": "bb55a5ca5c2042335b3991af27c4d0705d0ef41cac6164ac737fd8f2a1e85207"
-    }
-  ]
+  "fonts": []
 }

@@ -1,6 +1,6 @@
 name: wenyousite_foundation
-description: Shared Wenyou design tokens, experience contracts, and bundled fonts
-version: 6.11.0
+description: 温油站共享设计 Token、系统排版与跨端体验契约
+version: 7.0.0
 publish_to: none
 repository: https://github.com/morenk/wenyousite-foundation
 

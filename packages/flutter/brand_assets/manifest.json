@@ -1,8 +1,8 @@
 {
-  "version": "6.11.0",
+  "version": "7.0.0",
   "contract": "contracts/foundation.v1.json#experiences.brand",
   "assets": {
-    "brand/README.md": "b7947382a2396863a05c3aa43ac383ae2a84f0e29711dc5adb1692a280b53470",
+    "brand/README.md": "824fdbfd34e37a547486878c8df03afadfa3d080cf1cb99ae6cbf356657cb849",
     "brand/app/android/adaptive/ic_launcher_background-432.png": "ede8b6bc25c30ee8d6d7740421b82e3d2fc15105c294a25899c7ea59bc69406b",
     "brand/app/android/adaptive/ic_launcher_foreground-432.png": "881ed3bd3c1da85c1a958d8b7eb1622610482c008b2401267f8a749661db85e5",
     "brand/app/android/mipmap-hdpi/ic_launcher.png": "c62c4f075f7f3b7198a9200df8d628ec7d51095a5af844d156e1b7cd0c9190b0",

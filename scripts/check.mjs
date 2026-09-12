@@ -56,6 +56,19 @@ if (!validateContract(contract)) {
   failures.push(`Foundation JSON Schema 校验失败：${ajv.errorsText(validateContract.errors, { separator: "; " })}`);
 }
 for (const [label, mutate] of [
+  ["旧 Schema 版本", (value) => { value.schemaVersion = 2; }],
+  ["缺少空字体清单", (value) => { delete value.fonts; }],
+  ["重新捆绑字体", (value) => { value.fonts.push({ family: "Legacy Custom Font" }); }],
+  ...["body", "display", "utility"].flatMap((role) => [
+    [`${role} 绑定具体字体`, (value) => { value.typography[role].family = "Legacy Custom Font"; }],
+    [`${role} 恢复自定义 fallback`, (value) => { value.typography[role].fallback.unshift("Legacy Custom Font"); }],
+    [`${role} 缺少 fallback`, (value) => { value.typography[role].fallback = []; }],
+    [`${role} 缺少支持字重`, (value) => { value.typography[role].weights = []; }],
+  ]),
+  ["品牌缺少排版角色", (value) => { delete value.experiences.brand.source.displayTypographyRole; }],
+  ["品牌使用错误排版角色", (value) => { value.experiences.brand.source.displayTypographyRole = "body"; }],
+  ["品牌恢复字形绑定", (value) => { value.experiences.brand.source.displayGlyphFont = "Legacy Custom Font"; }],
+  ["品牌恢复字体许可", (value) => { value.experiences.brand.source.fontLicense = "legacy-license.txt"; }],
   ["缺少快翻契约", (value) => { delete value.experiences.readingQuickScroll; }],
   ["快翻命中区不足", (value) => { value.experiences.readingQuickScroll.mobile.minimumTarget = 32; }],
   ["快翻轨道拦截触摸", (value) => { value.experiences.readingQuickScroll.mobile.railInteractive = true; }],
@@ -99,8 +112,36 @@ for (const [label, mutate] of [
   if (validateContract(invalid)) failures.push(`JSON Schema 反向用例未拒绝：${label}`);
 }
 
-if (contract.schemaVersion !== 2) failures.push("foundation schemaVersion 必须为 2");
+if (contract.schemaVersion !== 3) failures.push("foundation schemaVersion 必须为 3");
 if (packageJson.version !== contract.version) failures.push("根 package 版本与契约不一致");
+if (manifest.version !== contract.version || manifest.schemaVersion !== contract.schemaVersion) {
+  failures.push("Manifest 版本与契约不一致");
+}
+if (JSON.stringify(manifest.fonts) !== "[]") failures.push("Manifest 不得包含捆绑字体");
+if (packageJson.exports?.["./web/fonts.css"]) failures.push("不得恢复字体 CSS 导出");
+const typographyApi = await import("../dist/typography.js");
+for (const role of ["body", "display", "utility"]) {
+  if (JSON.stringify(typographyApi.TYPOGRAPHY_FAMILIES[role]) !== JSON.stringify(contract.typography[role])) {
+    failures.push(`${role} 公开排版家族与契约不一致`);
+  }
+}
+for (const [platform, exported] of [["web", typographyApi.WEB_TYPE_SCALE], ["mobile", typographyApi.MOBILE_TYPE_SCALE]]) {
+  if (JSON.stringify(exported) !== JSON.stringify(contract.profiles[platform].typeScale)) {
+    failures.push(`${platform} 公开排版尺度与契约不一致`);
+  }
+  for (const [role, style] of Object.entries(contract.profiles[platform].typeScale)) {
+    if (!contract.typography[style.family]?.weights.includes(style.weight)) {
+      failures.push(`${platform}/${role} 使用了家族不支持的字重`);
+    }
+  }
+}
+if (JSON.stringify(typographyApi.TYPOGRAPHY_USAGE) !== JSON.stringify(contract.typography.usage)) {
+  failures.push("公开排版使用场景与契约不一致");
+}
+const typographyDart = read("packages/flutter/lib/src/foundation_tokens.dart");
+if (/static const (?:String (?:body|display|utility)\b|List<String> chineseFallback\b)/u.test(typographyDart)) {
+  failures.push("Flutter 不得恢复具体字体名称 API");
+}
 if (
   packageJson.exports?.["./brand"]?.types !== "./dist/brand.d.ts"
   || packageJson.exports?.["./brand"]?.default !== "./dist/brand.js"
@@ -112,7 +153,7 @@ if (
   || packageJson.exports?.["./controls"]?.types !== "./dist/controls.d.ts"
   || packageJson.exports?.["./formatting"]?.types !== "./dist/formatting.d.ts"
 ) {
-  failures.push("根 package 未导出 v6 设计契约模块");
+  failures.push("根 package 未导出共享设计契约模块");
 }
 const contractSha256 = crypto
   .createHash("sha256")
@@ -163,11 +204,6 @@ if (!read("packages/flutter/lib/src/foundation_formatters.dart").includes("forma
 if (!read("packages/flutter/lib/src/foundation_brand.dart").includes("class WenyouBrandMark")) {
   failures.push("Flutter 生成物缺少 WenyouBrandMark");
 }
-for (const font of contract.fonts) {
-  if (!read("packages/flutter/LICENSE").includes(font.family)) {
-    failures.push(`Flutter package LICENSE 缺少 ${font.family}`);
-  }
-}
 if (!read("packages/flutter/pubspec.yaml").includes(`version: ${contract.version}`)) {
   failures.push("Flutter package 版本与契约不一致");
 }
@@ -191,7 +227,7 @@ for (const relativePath of expectedBrandFiles) {
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
   if (manifest.brand?.assets?.[relativePath] !== hash) failures.push(`品牌资产校验和不一致 ${relativePath}`);
 }
-for (const relativePath of [brand.assets.appIconMaster, brand.assets.symbolMaster, brand.source.fontLicense]) {
+for (const relativePath of [brand.assets.appIconMaster, brand.assets.symbolMaster]) {
   if (!fs.existsSync(path.join(root, relativePath))) failures.push(`品牌契约引用了不存在的文件 ${relativePath}`);
 }
 if (manifest.brand?.name !== brand.name || manifest.brand?.tagline !== brand.tagline) {
@@ -457,14 +493,14 @@ if (
   || !contract.typography.usage.bodyOnlyContexts.includes("username")
   || !contract.typography.usage.bodySemiboldContexts.includes("dialog-title")
 ) {
-  failures.push("文楷与黑体的使用语境偏离 v6 规范");
+  failures.push("display 与 body 的使用语境偏离排版契约");
 }
 for (const context of ["functional-page-title", "functional-section-title", "functional-subsection-title"]) {
   if (
     !contract.typography.usage.bodySemiboldContexts.includes(context)
     || contract.typography.usage.displayContexts.includes(context)
   ) {
-    failures.push(`${context} 必须归入黑体半粗标题语境，不能使用文楷`);
+    failures.push(`${context} 必须归入 body 半粗标题语境，不能使用 display`);
   }
 }
 if (
@@ -958,24 +994,6 @@ if (JSON.stringify(notifications.groups) !== JSON.stringify(
 const groupedNotificationTypes = notifications.groups.flatMap(({ types }) => types);
 if (new Set(groupedNotificationTypes).size !== groupedNotificationTypes.length) {
   failures.push("同一通知事件不得属于多个筛选分组");
-}
-
-for (const font of contract.fonts) {
-  for (const property of ["flutterAsset", "license"]) {
-    if (!fs.existsSync(path.join(root, font[property]))) failures.push(`${font.family} 缺少 ${property}`);
-  }
-  const hash = crypto
-    .createHash("sha256")
-    .update(fs.readFileSync(path.join(root, font.flutterAsset)))
-    .digest("hex");
-  if (hash !== font.sha256) failures.push(`${font.family} Flutter 字体校验和不一致`);
-  if (font.webAsset) {
-    const webHash = crypto
-      .createHash("sha256")
-      .update(fs.readFileSync(path.join(root, font.webAsset)))
-      .digest("hex");
-    if (webHash !== font.webSha256) failures.push(`${font.family} Web 字体校验和不一致`);
-  }
 }
 
 const skill = read("skills/wenyou-design/SKILL.md");

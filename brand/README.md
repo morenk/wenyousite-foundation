@@ -5,7 +5,7 @@
 - 品牌底色与前景色分别消费 `palette.primary`、`palette.brandStrong`。
 - 标识由“文”字与油管加油枪构成，不得拆分、换色、加阴影或重新描摹。
 - 带相邻可见“温油站”文字时标识为装饰；单独出现时必须提供明确语义标签。
-- 字形使用 LXGW WenKai，许可证见 `licenses/LXGWWenKaiLite-OFL.txt`。
+- 品牌文字消费 `experiences.brand.source.displayTypographyRole` 指定的 `display` 角色，使用系统字体；品牌契约不绑定具体字形。既有图形资源继续作为标识事实源。
 - 平台资源必须由本目录同步，不从设计工具导出目录或客户端仓库反向回填。
 
 尺寸、透明度、安全区与校验和由 `pnpm check` 验证。
