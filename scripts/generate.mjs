@@ -71,6 +71,7 @@ const icons = contract.experiences.icons;
 const images = contract.experiences.images;
 const collections = contract.experiences.collections;
 const controls = contract.experiences.controls;
+const readingQuickScroll = contract.experiences.readingQuickScroll.mobile;
 const elements = contract.experiences.elements;
 const notifications = contract.experiences.notifications;
 const accessibility = contract.accessibility;
@@ -301,7 +302,7 @@ write("docs/icons.md", `# 图标目录与治理
 
 - \`action.reading-quick-scroll\` 表示主动打开阅读位置快速调节工具，使用 \`${icons.semantics["action.reading-quick-scroll"]}\` 的上下箭头表达沿阅读轴移动；不用于过滤、排序、条目重排或直接定位最新回复。
 - 移动端主题详情与独立楼中楼的顶栏入口放在“定位最新回复”图标右侧，只显示图标，不显示常驻“快翻”文字；tooltip 与无障碍名称均为“快翻”，由按钮承担名称，内部图标隐藏语义。
-- 开启时底部工具栏必须可见，同时显示当前位置状态与“收起”操作文字，作为通用 Toggle 所要求的可见开启反馈；tooltip 本身不构成可见状态反馈。入口保持同一描边图形，不新增实心变体；按钮开启语义与工具栏实际显隐同步。
+- 开启时右侧纵向轨道与滑块必须可见，作为该阅读工具的专用开启反馈；拖动显示实际阅读位置，点按滑块展开含“收起”的局部操作卡。此规则只替换阅读快翻的底部工具栏反馈，不放宽其他 Toggle 的可见状态文字要求。入口保持同一描边图形，不新增实心变体；按钮开启语义与悬浮工具实际显隐同步。
 - Flutter 消费 \`WenyouIconIds.actionReadingQuickScroll\`，保留移动 profile 规定的最小命中区及底部安全区。
 
 ## 语义目录
@@ -462,7 +463,8 @@ export const FIELD_CONTROL_CONTRACT = Object.freeze(${js(controls.fields)});
 export const SELECTION_CONTROL_CONTRACT = Object.freeze(${js(controls.selection)});
 export const PROGRESS_CONTROL_CONTRACT = Object.freeze(${js(controls.progress)});
 export const CONTROL_WEB_PROFILE = Object.freeze(${js(controls.web)});
-export const CONTROL_MOBILE_PROFILE = Object.freeze(${js(controls.mobile)});`);
+export const CONTROL_MOBILE_PROFILE = Object.freeze(${js(controls.mobile)});
+export const READING_QUICK_SCROLL_MOBILE_PROFILE = Object.freeze(${js(readingQuickScroll)});`);
 
 write("dist/controls.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export type ActionControlRole = ${controls.actions.roles.map((id) => JSON.stringify(id)).join(" | ")};
@@ -474,7 +476,8 @@ export declare const FIELD_CONTROL_CONTRACT: Readonly<${JSON.stringify(controls.
 export declare const SELECTION_CONTROL_CONTRACT: Readonly<${JSON.stringify(controls.selection)}>;
 export declare const PROGRESS_CONTROL_CONTRACT: Readonly<${JSON.stringify(controls.progress)}>;
 export declare const CONTROL_WEB_PROFILE: Readonly<${JSON.stringify(controls.web)}>;
-export declare const CONTROL_MOBILE_PROFILE: Readonly<${JSON.stringify(controls.mobile)}>;`);
+export declare const CONTROL_MOBILE_PROFILE: Readonly<${JSON.stringify(controls.mobile)}>;
+export declare const READING_QUICK_SCROLL_MOBILE_PROFILE: Readonly<${JSON.stringify(readingQuickScroll)}>;`);
 
 write("dist/notifications.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const NOTIFICATION_ALL_LABEL = ${JSON.stringify(notifications.allLabel)};
@@ -1171,6 +1174,41 @@ ${dartStringMapEntries(elements.identity.roleTones)}
   static const String emailVerificationRestrictedActionGuidance = ${dartString(elements.identity.emailVerification.restrictedActionGuidance)};
 }
 
+abstract final class WenyouReadingQuickScrollContract {
+  static const double minimumTarget = ${readingQuickScroll.minimumTarget}.0;
+  static const double railThickness = ${readingQuickScroll.railThickness}.0;
+  static const double railMaxLength = ${readingQuickScroll.railMaxLength}.0;
+  static const double thumbWidth = ${readingQuickScroll.thumbWidth}.0;
+  static const double thumbHeight = ${readingQuickScroll.thumbHeight}.0;
+  static const double backingWidth = ${readingQuickScroll.backingWidth}.0;
+  static const double backingHeight = ${readingQuickScroll.backingHeight}.0;
+  static const double backingOpacity = ${readingQuickScroll.backingOpacity};
+  static const double railOpacity = ${readingQuickScroll.railOpacity};
+  static const double edgeGap = ${readingQuickScroll.edgeGap}.0;
+  static const double labelGap = ${readingQuickScroll.labelGap}.0;
+  static const double cardMaxWidth = ${readingQuickScroll.cardMaxWidth}.0;
+  static const String thumbForeground = ${dartString(readingQuickScroll.thumbForeground)};
+  static const String backingSurface = ${dartString(readingQuickScroll.backingSurface)};
+  static const String labelSurface = ${dartString(readingQuickScroll.labelSurface)};
+  static const String labelForeground = ${dartString(readingQuickScroll.labelForeground)};
+  static const bool railInteractive = ${readingQuickScroll.railInteractive};
+  static const bool viewportResize = ${readingQuickScroll.viewportResize};
+  static const bool fullTrackBackdrop = ${readingQuickScroll.fullTrackBackdrop};
+  static const String activation = ${dartString(readingQuickScroll.activation)};
+  static const String placement = ${dartString(readingQuickScroll.placement)};
+  static const String dragMapping = ${dartString(readingQuickScroll.dragMapping)};
+  static const String dragLabel = ${dartString(readingQuickScroll.dragLabel)};
+  static const String releaseBehavior = ${dartString(readingQuickScroll.releaseBehavior)};
+  static const String cancelBehavior = ${dartString(readingQuickScroll.cancelBehavior)};
+  static const String tailHoldBehavior = ${dartString(readingQuickScroll.tailHoldBehavior)};
+  static const String tapBehavior = ${dartString(readingQuickScroll.tapBehavior)};
+  static const String outsidePointerBehavior = ${dartString(readingQuickScroll.outsidePointerBehavior)};
+  static const List<String> closeTriggers = <String>${dartList(readingQuickScroll.closeTriggers)};
+  static const List<String> actions = <String>${dartList(readingQuickScroll.actions)};
+  static const List<String> keyboard = <String>${dartList(readingQuickScroll.keyboard)};
+  static const String accessibility = ${dartString(readingQuickScroll.accessibility)};
+}
+
 abstract final class WenyouControlContract {
   static const List<String> actionRoles = <String>${dartList(controls.actions.roles)};
   static const List<String> fieldStates = <String>${dartList(controls.fields.states)};
@@ -1553,6 +1591,33 @@ class WenyouIcon extends StatelessWidget {
     );
   }
 }`);
+
+write("docs/reading-quick-scroll.md", `# 移动端阅读快翻
+
+本页由 experiences.readingQuickScroll.mobile 生成。仅面向移动端主动开启的当前阅读页快翻，不改变 Web 滚动器，不新增后端 API 或持久化。
+
+## 几何与视觉
+
+- 右侧悬浮轨道在扣除固定标题、底部操作、发表按钮和系统安全区后的正文区域垂直居中，最大长度 ${readingQuickScroll.railMaxLength}dp；正文宽、高和顶部阅读锚点不因显隐改变。
+- 轨道 ${readingQuickScroll.railThickness}dp、透明度 ${readingQuickScroll.railOpacity}，不接收触摸且没有整轨背景。滑块 ${readingQuickScroll.thumbWidth}×${readingQuickScroll.thumbHeight}dp，局部底衬 ${readingQuickScroll.backingWidth}×${readingQuickScroll.backingHeight}dp；命中区至少 ${readingQuickScroll.minimumTarget}×${readingQuickScroll.minimumTarget}dp，不随内容长度缩小。
+- 滑块与轨道使用主题 ${readingQuickScroll.thumbForeground}，局部底衬使用 ${readingQuickScroll.backingSurface}、透明度 ${readingQuickScroll.backingOpacity}，圆角复用 pill；标签和操作卡使用不透明 ${readingQuickScroll.labelSurface} 与 ${readingQuickScroll.labelForeground}，操作卡复用 panel 圆角和既有浮层 elevation。
+- 命中区外缘位于系统手势 inset 内侧再留 ${readingQuickScroll.edgeGap}dp，不排除整条系统返回区域；位置标签距命中区 ${readingQuickScroll.labelGap}dp，优先放手指左侧，操作卡最大宽 ${readingQuickScroll.cardMaxWidth}dp，按实际可用空间约束宽高并允许内部滚动。
+
+## 交互与状态
+
+- 使用既有 action.reading-quick-scroll 图标显式开启；主题入口位于定位最新回复右侧，tooltip 与无障碍名称为“快翻”。再次点击收起，按钮 toggled 与悬浮工具同步。
+- 只在滑块命中区接管拖动，轨道和其余正文触摸不拦截。点按滑块展开局部操作卡，包含开头、末尾或已加载末尾、收起、加载状态与失败重试；点击外部关闭卡片并继续原正文操作，不加全屏遮罩。普通正文滚动关闭卡片。
+- 按阅读距离纵向映射，抓取时保留手指相对滑块的位置。拖动期间显示实际可核验的位置，不用列表序号冒充真实楼层，不承诺精确百分比。松手隐藏位置提示并结束本次拖动，最后输入坐标允许在下一帧完成；不得因后续分页或高度变化继续移动，滑块继续保留。取消、关闭或切换作用域时清除待执行更新。
+- 按住下端时允许跟随新分页和图片高度，离开下端或松手后停止跟随新增内容；取消、关闭或切换作用域时同时清除待执行更新。加载未完成显示“已加载范围”，完整状态说明“正在加载更多，当前可快翻已加载内容”；失败保留现有阅读位置和重试。
+- 首尾操作复用真实边界定位与有限布局校正，不成功时保留当前位置并提供重试；切换内容范围时清除旧映射。打开编辑器、键盘弹出、切换子贴、筛选和排序时关闭。
+- 无障碍提供带当前位置的可调滑块及操作卡按钮；方向键按视口距离调整，Home／End 到首尾。大字号下提示和卡片可换行，保留全部操作。
+
+## 消费与验收
+
+Flutter 消费 WenyouReadingQuickScrollContract；Web controls 导出 READING_QUICK_SCROLL_MOBILE_PROFILE 仅用于共享工具读取，不要求 Web 使用移动布局。消费端只升级正式 Tag。
+
+覆盖 320／360／400／600dp、双倍字号、明暗主题、TalkBack、键盘、返回手势、正文链接与长按选字；验证新页和图片在拖动中不抢位置、首次懒布局与深链不拉回、取消不残留排队滚动、首尾可达、手指抓取无跳变。Foundation 自动校验尺寸、状态、导出同源与双主题极黑／极白后景下滑块对比，真实滚动和触摸由移动端验收。
+`);
 
 const artifactPaths = [
   ...["brand", "theme", "icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
