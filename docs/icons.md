@@ -35,6 +35,13 @@
 
 状态层颜色继承图标 currentColor，hover/focus 与 pressed 透明度分别为 0.1 与 0.15；禁用内容透明度为 0.38。Pending 保持提交前 tone 并显示同色加载指示，不能回退成未选中态。
 
+## 阅读快翻
+
+- `action.reading-quick-scroll` 表示主动打开阅读位置快速调节工具，使用 `move-vertical` 的上下箭头表达沿阅读轴移动；不用于过滤、排序、条目重排或直接定位最新回复。
+- 移动端主题详情与独立楼中楼的顶栏入口放在“定位最新回复”图标右侧，只显示图标，不显示常驻“快翻”文字；tooltip 与无障碍名称均为“快翻”，由按钮承担名称，内部图标隐藏语义。
+- 开启时右侧纵向轨道与滑块必须可见，作为该阅读工具的专用开启反馈；拖动显示实际阅读位置，点按滑块展开含“收起”的局部操作卡。此规则只替换阅读快翻的底部工具栏反馈，不放宽其他 Toggle 的可见状态文字要求。入口保持同一描边图形，不新增实心变体；按钮开启语义与悬浮工具实际显隐同步。
+- Flutter 消费 `WenyouIconIds.actionReadingQuickScroll`，保留移动 profile 规定的最小命中区及底部安全区。
+
 ## 语义目录
 
 | 语义 ID | SVG 图形 | SHA-256 |
@@ -65,6 +72,7 @@
 | `action.save-all` | `save-all` | `dcd41bae40570fbcc064b563c3b312364e89e3d7721992c90a55187accfe82c1` |
 | `action.send` | `send` | `e986f8a0eca1c7ba7227a375d55403979e81009d4e011ce11a85d945dba9d59b` |
 | `action.search` | `search` | `f36461346798a05ac92c5bdd477a99c5eebf17c72c851ab9ede0703de2a39637` |
+| `action.reading-quick-scroll` | `move-vertical` | `d9f4b00a7f0e6d000772b05689d58efbb0f6cbbd702599112521774ed8a2b01d` |
 | `action.filter` | `list-filter` | `f50604bf38baecdcbeef9a8fe1c6535584df7a8c17b46283fd74583e7b418a21` |
 | `action.clear-filter` | `list-x` | `5c75aa3ec19972c11b1ec91a16bd7e035e19ee9f603802833bc73961cd6ad149` |
 | `action.sort` | `arrow-down-up` | `007dd379897c391bd76f2bc519b90ebf0b3f49f2b11389cc143e01eed563fe3c` |

@@ -137,8 +137,9 @@
     },
     "experiences": {
       "type": "object",
-      "required": ["brand", "icons", "collections", "controls", "elements", "feedback", "overlays", "formatting", "navigation", "language", "notifications", "editor", "images"],
+      "required": ["brand", "icons", "collections", "controls", "elements", "feedback", "overlays", "formatting", "navigation", "language", "notifications", "editor", "images", "readingQuickScroll"],
       "properties": {
+        "readingQuickScroll": { "$ref": "#/$defs/readingQuickScroll" },
         "brand": { "$ref": "#/$defs/brand" },
         "icons": { "$ref": "#/$defs/icons" },
         "collections": { "$ref": "#/$defs/collections" },
@@ -164,6 +165,181 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "readingQuickScroll": {
+      "type": "object",
+      "required": [
+        "mobile"
+      ],
+      "properties": {
+        "mobile": {
+          "type": "object",
+          "required": [
+            "minimumTarget",
+            "railThickness",
+            "railMaxLength",
+            "thumbWidth",
+            "thumbHeight",
+            "backingWidth",
+            "backingHeight",
+            "backingOpacity",
+            "railOpacity",
+            "edgeGap",
+            "labelGap",
+            "cardMaxWidth",
+            "thumbForeground",
+            "backingSurface",
+            "labelSurface",
+            "labelForeground",
+            "railInteractive",
+            "viewportResize",
+            "fullTrackBackdrop",
+            "activation",
+            "placement",
+            "dragMapping",
+            "dragLabel",
+            "releaseBehavior",
+          "cancelBehavior",
+            "tailHoldBehavior",
+            "tapBehavior",
+            "outsidePointerBehavior",
+            "closeTriggers",
+            "actions",
+            "keyboard",
+            "accessibility"
+          ],
+          "properties": {
+            "minimumTarget": {
+              "type": "number",
+              "const": 48
+            },
+            "railThickness": {
+              "type": "number",
+              "const": 2
+            },
+            "railMaxLength": {
+              "type": "number",
+              "const": 360
+            },
+            "thumbWidth": {
+              "type": "number",
+              "const": 8
+            },
+            "thumbHeight": {
+              "type": "number",
+              "const": 40
+            },
+            "backingWidth": {
+              "type": "number",
+              "const": 24
+            },
+            "backingHeight": {
+              "type": "number",
+              "const": 48
+            },
+            "backingOpacity": {
+              "type": "number",
+              "const": 0.92
+            },
+            "railOpacity": {
+              "type": "number",
+              "const": 0.24
+            },
+            "edgeGap": {
+              "type": "number",
+              "const": 8
+            },
+            "labelGap": {
+              "type": "number",
+              "const": 8
+            },
+            "cardMaxWidth": {
+              "type": "number",
+              "const": 280
+            },
+            "thumbForeground": {
+              "const": "brandStrong"
+            },
+            "backingSurface": {
+              "const": "surface"
+            },
+            "labelSurface": {
+              "const": "surface"
+            },
+            "labelForeground": {
+              "const": "foreground"
+            },
+            "railInteractive": {
+              "const": false
+            },
+            "viewportResize": {
+              "const": false
+            },
+            "fullTrackBackdrop": {
+              "const": false
+            },
+            "activation": {
+              "const": "explicit-icon"
+            },
+            "placement": {
+              "const": "right-centered-reading-viewport"
+            },
+            "dragMapping": {
+              "const": "reading-distance"
+            },
+            "dragLabel": {
+              "const": "actual-visible-location"
+            },
+            "releaseBehavior": {
+              "const": "finish-last-input-stop-follow-and-hide-label"
+            },
+            "cancelBehavior": {
+            "const": "clear-pending-on-cancel-close-or-scope-change"
+          },
+          "tailHoldBehavior": {
+              "const": "follow-loaded-content-until-release-or-leave"
+            },
+            "tapBehavior": {
+              "const": "local-actions-card"
+            },
+            "outsidePointerBehavior": {
+              "const": "dismiss-card-and-pass-through"
+            },
+            "closeTriggers": {
+              "const": [
+                "toggle",
+                "collapse-action",
+                "editor",
+                "keyboard",
+                "subpost-change",
+                "filter-change",
+                "sort-change"
+              ]
+            },
+            "actions": {
+              "const": [
+                "start",
+                "loaded-end-or-end",
+                "collapse",
+                "retry"
+              ]
+            },
+            "keyboard": {
+              "const": [
+                "ArrowUp",
+                "ArrowDown",
+                "Home",
+                "End"
+              ]
+            },
+            "accessibility": {
+              "const": "adjustable-slider-with-current-location"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
     "nonEmptyString": { "type": "string", "minLength": 1 },
     "nonEmptyStringArray": {
       "type": "array",
@@ -1125,13 +1301,111 @@
     },
     "images": {
       "type": "object",
-      "required": ["roles", "invariants", "states", "web", "mobile"],
+      "required": ["roles", "invariants", "states", "web", "mobile", "momentPlayback"],
       "properties": {
+        "momentPlayback": { "$ref": "#/$defs/momentPlayback" },
         "roles": { "type": "object", "required": ["avatar", "cover", "content", "galleryThumbnail", "sticker"], "properties": { "avatar": { "$ref": "#/$defs/imageRole" }, "cover": { "$ref": "#/$defs/imageRole" }, "content": { "$ref": "#/$defs/imageRole" }, "galleryThumbnail": { "$ref": "#/$defs/imageRole" }, "sticker": { "$ref": "#/$defs/imageRole" } }, "additionalProperties": false },
         "invariants": { "type": "object", "required": ["reserveSpaceWhenDimensionsKnown", "neverDeriveVariantUrls", "failureKeepsContext", "statusNeverColorOnly", "altText", "decorativeAlt", "contentCropping"], "properties": { "reserveSpaceWhenDimensionsKnown": { "const": true }, "neverDeriveVariantUrls": { "const": true }, "failureKeepsContext": { "const": true }, "statusNeverColorOnly": { "const": true }, "altText": { "const": "contextual-never-filename" }, "decorativeAlt": { "const": "empty" }, "contentCropping": { "const": "forbidden" } }, "additionalProperties": false },
         "states": { "$ref": "#/$defs/nonEmptyStringArray" },
         "web": { "type": "object", "required": ["viewer", "dismiss", "zoom", "stickerDisplayMaxRem"], "properties": { "viewer": { "const": "modal-lightbox" }, "dismiss": { "$ref": "#/$defs/nonEmptyStringArray" }, "zoom": { "$ref": "#/$defs/nonEmptyStringArray" }, "stickerDisplayMaxRem": { "$ref": "#/$defs/positiveNumber" } }, "additionalProperties": false },
         "mobile": { "type": "object", "required": ["viewer", "dismiss", "zoom", "stickerDisplayMaxDp"], "properties": { "viewer": { "const": "fullscreen-route" }, "dismiss": { "$ref": "#/$defs/nonEmptyStringArray" }, "zoom": { "$ref": "#/$defs/nonEmptyStringArray" }, "stickerDisplayMaxDp": { "$ref": "#/$defs/positiveNumber" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "momentPlayback": {
+      "type": "object",
+      "required": [
+        "scope",
+        "excluded",
+        "animationDetection",
+        "staticSource",
+        "gifStaticSourceField",
+        "animationSourceField",
+        "list",
+        "detail",
+        "fullscreen",
+        "lifecycle",
+        "failure",
+        "save"
+      ],
+      "properties": {
+        "scope": {
+          "const": [
+            "moment-media",
+            "moment-comment-media",
+            "moment-reply-media",
+            "moment-sticker"
+          ]
+        },
+        "excluded": {
+          "const": [
+            "thread",
+            "composer"
+          ]
+        },
+        "animationDetection": {
+          "const": "animated-or-contentType-never-extension"
+        },
+        "staticSource": {
+          "const": "server-static-derivative"
+        },
+        "gifStaticSourceField": {
+          "const": "thumbnailUrl"
+        },
+        "animationSourceField": {
+          "const": "url"
+        },
+        "list": {
+          "const": {
+            "entries": [
+              "discover",
+              "following",
+              "search",
+              "profile",
+              "favorites"
+            ],
+            "playback": "never",
+            "animationPrefetch": false,
+            "originalFallback": false,
+            "interaction": "open-detail"
+          }
+        },
+        "detail": {
+          "const": {
+            "carousel": "current-and-visible",
+            "comments": "all-visible",
+            "replies": "all-visible",
+            "stickers": "all-visible"
+          }
+        },
+        "fullscreen": {
+          "const": {
+            "playback": "current-and-visible",
+            "suspendUnderlyingDetail": true
+          }
+        },
+        "lifecycle": {
+          "const": {
+            "required": [
+              "playback-allowed",
+              "page-active",
+              "foreground",
+              "visible"
+            ],
+            "onIneligible": "unmount-animation-resource",
+            "resume": "restart-allowed"
+          }
+        },
+        "failure": {
+          "const": {
+            "staticMissingOrFailed": "placeholder",
+            "animationFailed": "static-or-placeholder-with-explicit-retry",
+            "automaticRetry": false
+          }
+        },
+        "save": {
+          "const": "original-preserving-animation"
+        }
       },
       "additionalProperties": false
     },

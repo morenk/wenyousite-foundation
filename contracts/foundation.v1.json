@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.9.0",
+  "version": "6.11.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -207,6 +207,60 @@
     }
   },
   "experiences": {
+    "readingQuickScroll": {
+      "mobile": {
+        "minimumTarget": 48,
+        "railThickness": 2,
+        "railMaxLength": 360,
+        "thumbWidth": 8,
+        "thumbHeight": 40,
+        "backingWidth": 24,
+        "backingHeight": 48,
+        "backingOpacity": 0.92,
+        "railOpacity": 0.24,
+        "edgeGap": 8,
+        "labelGap": 8,
+        "cardMaxWidth": 280,
+        "thumbForeground": "brandStrong",
+        "backingSurface": "surface",
+        "labelSurface": "surface",
+        "labelForeground": "foreground",
+        "railInteractive": false,
+        "viewportResize": false,
+        "fullTrackBackdrop": false,
+        "activation": "explicit-icon",
+        "placement": "right-centered-reading-viewport",
+        "dragMapping": "reading-distance",
+        "dragLabel": "actual-visible-location",
+        "releaseBehavior": "finish-last-input-stop-follow-and-hide-label",
+      "cancelBehavior": "clear-pending-on-cancel-close-or-scope-change",
+        "tailHoldBehavior": "follow-loaded-content-until-release-or-leave",
+        "tapBehavior": "local-actions-card",
+        "outsidePointerBehavior": "dismiss-card-and-pass-through",
+        "closeTriggers": [
+          "toggle",
+          "collapse-action",
+          "editor",
+          "keyboard",
+          "subpost-change",
+          "filter-change",
+          "sort-change"
+        ],
+        "actions": [
+          "start",
+          "loaded-end-or-end",
+          "collapse",
+          "retry"
+        ],
+        "keyboard": [
+          "ArrowUp",
+          "ArrowDown",
+          "Home",
+          "End"
+        ],
+        "accessibility": "adjustable-slider-with-current-location"
+      }
+    },
     "brand": {
       "name": "温油站",
       "tagline": "最温油的文字共创社区",
@@ -347,6 +401,7 @@
         "action.save-all": "save-all",
         "action.send": "send",
         "action.search": "search",
+        "action.reading-quick-scroll": "move-vertical",
         "action.filter": "list-filter",
         "action.clear-filter": "list-x",
         "action.sort": "arrow-down-up",
@@ -1261,6 +1316,61 @@
       }
     },
     "images": {
+      "momentPlayback": {
+        "scope": [
+          "moment-media",
+          "moment-comment-media",
+          "moment-reply-media",
+          "moment-sticker"
+        ],
+        "excluded": [
+          "thread",
+          "composer"
+        ],
+        "animationDetection": "animated-or-contentType-never-extension",
+        "staticSource": "server-static-derivative",
+        "gifStaticSourceField": "thumbnailUrl",
+        "animationSourceField": "url",
+        "list": {
+          "entries": [
+            "discover",
+            "following",
+            "search",
+            "profile",
+            "favorites"
+          ],
+          "playback": "never",
+          "animationPrefetch": false,
+          "originalFallback": false,
+          "interaction": "open-detail"
+        },
+        "detail": {
+          "carousel": "current-and-visible",
+          "comments": "all-visible",
+          "replies": "all-visible",
+          "stickers": "all-visible"
+        },
+        "fullscreen": {
+          "playback": "current-and-visible",
+          "suspendUnderlyingDetail": true
+        },
+        "lifecycle": {
+          "required": [
+            "playback-allowed",
+            "page-active",
+            "foreground",
+            "visible"
+          ],
+          "onIneligible": "unmount-animation-resource",
+          "resume": "restart-allowed"
+        },
+        "failure": {
+          "staticMissingOrFailed": "placeholder",
+          "animationFailed": "static-or-placeholder-with-explicit-retry",
+          "automaticRetry": false
+        },
+        "save": "original-preserving-animation"
+      },
       "roles": {
         "avatar": { "fit": "cover", "crop": "allowed", "shape": "circle", "viewer": "none" },
         "cover": { "fit": "cover", "crop": "allowed", "shape": "rounded", "viewer": "full-source" },

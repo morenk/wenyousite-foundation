@@ -56,6 +56,12 @@ if (!validateContract(contract)) {
   failures.push(`Foundation JSON Schema 校验失败：${ajv.errorsText(validateContract.errors, { separator: "; " })}`);
 }
 for (const [label, mutate] of [
+  ["缺少快翻契约", (value) => { delete value.experiences.readingQuickScroll; }],
+  ["快翻命中区不足", (value) => { value.experiences.readingQuickScroll.mobile.minimumTarget = 32; }],
+  ["快翻轨道拦截触摸", (value) => { value.experiences.readingQuickScroll.mobile.railInteractive = true; }],
+  ["快翻改变正文视口", (value) => { value.experiences.readingQuickScroll.mobile.viewportResize = true; }],
+  ["快翻底衬透明度无效", (value) => { value.experiences.readingQuickScroll.mobile.backingOpacity = 0; }],
+  ["未知快翻字段", (value) => { value.experiences.readingQuickScroll.mobile.unknown = true; }],
   ["未知根字段", (value) => { value.unknown = true; }],
   ["缺少品牌契约", (value) => { delete value.experiences.brand; }],
   ["未知品牌字段", (value) => { value.experiences.brand.unknown = true; }],
@@ -288,6 +294,22 @@ if (icons.source.package !== "lucide-static" || icons.source.version !== package
 }
 if (!read("pnpm-lock.yaml").includes(icons.source.integrity)) failures.push("Lucide 来源完整性未锁定");
 if (!fs.existsSync(path.join(root, icons.source.license))) failures.push("Lucide 图标许可证不存在");
+// 阅读位置调节必须保持独立语义，并通过公开 Web API 提供跨端同源资产。
+const readingQuickScrollId = "action.reading-quick-scroll";
+const iconApi = await import("../dist/icons.js");
+if (icons.semantics[readingQuickScrollId] !== "move-vertical"
+  || iconApi.iconGlyphId(readingQuickScrollId) !== "move-vertical") {
+  failures.push("阅读快翻必须使用独立的 move-vertical 语义，不能借用过滤或排序");
+}
+const readingQuickScrollAsset = "packages/flutter/icons/move-vertical.svg";
+if (!fs.existsSync(path.join(root, readingQuickScrollAsset))
+  || iconApi.iconSvg(readingQuickScrollId) !== read(readingQuickScrollAsset).trimEnd()
+  || !iconApi.iconNode(readingQuickScrollId)?.length) {
+  failures.push("阅读快翻公开 Web SVG/节点与 Flutter 资产必须完整且同源");
+}
+if (iconApi.iconVariantSvg(readingQuickScrollId, "filled") !== undefined) {
+  failures.push("阅读快翻不提供实心变体，开启反馈由可见悬浮轨道和滑块承担");
+}
 const semanticIds = Object.keys(icons.semantics);
 const glyphIds = [...new Set(Object.values(icons.semantics))];
 const filledGlyphIds = [...new Set(Object.values(icons.controls.selected)
@@ -848,6 +870,39 @@ for (const id of ["task-list", "code-block", "table"]) {
   }
 }
 
+// 共享状态用例是消费者验收语料；此求值器只验证契约，不是客户端运行时实现。
+const momentCases = JSON.parse(read("contracts/fixtures/moment-playback.json")).cases;
+const momentCaseIds = new Set();
+for (const scenario of momentCases) {
+  if (momentCaseIds.has(scenario.id)) failures.push(`动态播放用例 ID 重复：${scenario.id}`);
+  momentCaseIds.add(scenario.id);
+  const state = scenario.input;
+  const inDetail = ["carousel", "comment", "reply", "sticker"].includes(state.surface);
+  const eligible = state.animated && state.playbackAllowed && state.pageActive &&
+    state.foreground && state.visible &&
+    (state.surface === "fullscreen" ? state.fullscreenOpen && state.current :
+      inDetail && !state.fullscreenOpen && (state.surface !== "carousel" || state.current));
+  const actual = {
+    source: eligible && !state.animationFailed ? "animation" :
+      state.staticAvailable ? "static" : "placeholder",
+    retry: Boolean(eligible && state.animationFailed),
+  };
+  if (JSON.stringify(actual) !== JSON.stringify(scenario.expected)) {
+    failures.push(`动态播放用例不符合契约：${scenario.id}`);
+  }
+}
+for (const entry of contract.experiences.images.momentPlayback.list.entries) {
+  if (!momentCaseIds.has(`list-${entry}`)) failures.push(`动态列表缺少播放用例：${entry}`);
+}
+for (const id of ["detail-current", "detail-other-slide", "detail-pageActive-false",
+  "detail-foreground-false", "detail-visible-false", "detail-playbackAllowed-false",
+  "detail-animation-failed", "detail-both-failed", "list-missing-static",
+  "list-failed-static", "comment-visible", "reply-visible", "sticker-visible",
+  "detail-under-fullscreen", "fullscreen-current", "fullscreen-other",
+  "fullscreen-background", "fullscreen-closed-resumes-detail", "static-image"]) {
+  if (!momentCaseIds.has(id)) failures.push(`动态播放缺少必要用例：${id}`);
+}
+
 const images = contract.experiences.images;
 const requiredImageRoles = ["avatar", "cover", "content", "galleryThumbnail", "sticker"];
 for (const role of requiredImageRoles) {
@@ -928,6 +983,36 @@ if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundat
   failures.push("wenyou-design Skill 未正确引用中央事实源");
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");
+
+const quickScroll = contract.experiences.readingQuickScroll.mobile;
+const quickScrollApi = await import("../dist/controls.js");
+if (JSON.stringify(quickScrollApi.READING_QUICK_SCROLL_MOBILE_PROFILE) !== JSON.stringify(quickScroll)) {
+  failures.push("阅读快翻公开常量必须与机器契约一致");
+}
+const quickScrollDart = read("packages/flutter/lib/src/foundation_tokens.dart");
+if (!quickScrollDart.includes("abstract final class WenyouReadingQuickScrollContract")) {
+  failures.push("阅读快翻缺少 Flutter 生成契约");
+}
+for (const [key, value] of Object.entries(quickScroll)) {
+  if (typeof value === "number" && !quickScrollDart.includes(`static const double ${key} = ${Number.isInteger(value) ? value.toFixed(1) : value};`)) {
+    failures.push(`阅读快翻 Flutter 数值漂移：${key}`);
+  }
+}
+function compositeOver(surface, background, opacity) {
+  const channel = (hex, index) => parseInt(hex.slice(index, index + 2), 16);
+  return "#" + [1, 3, 5].map((index) => Math.round(channel(surface, index) * opacity + channel(background, index) * (1 - opacity)).toString(16).padStart(2, "0")).join("");
+}
+for (const [mode, palette] of [["light", contract.palette], ["dark", contract.themes.dark.palette]]) {
+  for (const background of ["#000000", "#FFFFFF"]) {
+    const backing = compositeOver(palette[quickScroll.backingSurface], background, quickScroll.backingOpacity);
+    if (contrast(palette[quickScroll.thumbForeground], backing) < contract.accessibility.contrast.nonText) {
+      failures.push(`阅读快翻滑块在 ${mode}/${background} 后景对比不足`);
+    }
+  }
+  if (contrast(palette[quickScroll.labelForeground], palette[quickScroll.labelSurface]) < contract.accessibility.contrast.normalText) {
+    failures.push(`阅读快翻标签在 ${mode} 主题对比不足`);
+  }
+}
 
 if (failures.length > 0) {
   throw new Error(`Foundation 检查失败：\n- ${failures.join("\n- ")}`);
