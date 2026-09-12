@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 2,
-  "version": "6.10.0",
+  "version": "6.11.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -207,6 +207,59 @@
     }
   },
   "experiences": {
+    "readingQuickScroll": {
+      "mobile": {
+        "minimumTarget": 48,
+        "railThickness": 2,
+        "railMaxLength": 360,
+        "thumbWidth": 8,
+        "thumbHeight": 40,
+        "backingWidth": 24,
+        "backingHeight": 48,
+        "backingOpacity": 0.92,
+        "railOpacity": 0.24,
+        "edgeGap": 8,
+        "labelGap": 8,
+        "cardMaxWidth": 280,
+        "thumbForeground": "brandStrong",
+        "backingSurface": "surface",
+        "labelSurface": "surface",
+        "labelForeground": "foreground",
+        "railInteractive": false,
+        "viewportResize": false,
+        "fullTrackBackdrop": false,
+        "activation": "explicit-icon",
+        "placement": "right-centered-reading-viewport",
+        "dragMapping": "reading-distance",
+        "dragLabel": "actual-visible-location",
+        "releaseBehavior": "stop-and-hide-label",
+        "tailHoldBehavior": "follow-loaded-content-until-release-or-leave",
+        "tapBehavior": "local-actions-card",
+        "outsidePointerBehavior": "dismiss-card-and-pass-through",
+        "closeTriggers": [
+          "toggle",
+          "collapse-action",
+          "editor",
+          "keyboard",
+          "subpost-change",
+          "filter-change",
+          "sort-change"
+        ],
+        "actions": [
+          "start",
+          "loaded-end-or-end",
+          "collapse",
+          "retry"
+        ],
+        "keyboard": [
+          "ArrowUp",
+          "ArrowDown",
+          "Home",
+          "End"
+        ],
+        "accessibility": "adjustable-slider-with-current-location"
+      }
+    },
     "brand": {
       "name": "温油站",
       "tagline": "最温油的文字共创社区",

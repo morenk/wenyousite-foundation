@@ -137,8 +137,9 @@
     },
     "experiences": {
       "type": "object",
-      "required": ["brand", "icons", "collections", "controls", "elements", "feedback", "overlays", "formatting", "navigation", "language", "notifications", "editor", "images"],
+      "required": ["brand", "icons", "collections", "controls", "elements", "feedback", "overlays", "formatting", "navigation", "language", "notifications", "editor", "images", "readingQuickScroll"],
       "properties": {
+        "readingQuickScroll": { "$ref": "#/$defs/readingQuickScroll" },
         "brand": { "$ref": "#/$defs/brand" },
         "icons": { "$ref": "#/$defs/icons" },
         "collections": { "$ref": "#/$defs/collections" },
@@ -164,6 +165,177 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "readingQuickScroll": {
+      "type": "object",
+      "required": [
+        "mobile"
+      ],
+      "properties": {
+        "mobile": {
+          "type": "object",
+          "required": [
+            "minimumTarget",
+            "railThickness",
+            "railMaxLength",
+            "thumbWidth",
+            "thumbHeight",
+            "backingWidth",
+            "backingHeight",
+            "backingOpacity",
+            "railOpacity",
+            "edgeGap",
+            "labelGap",
+            "cardMaxWidth",
+            "thumbForeground",
+            "backingSurface",
+            "labelSurface",
+            "labelForeground",
+            "railInteractive",
+            "viewportResize",
+            "fullTrackBackdrop",
+            "activation",
+            "placement",
+            "dragMapping",
+            "dragLabel",
+            "releaseBehavior",
+            "tailHoldBehavior",
+            "tapBehavior",
+            "outsidePointerBehavior",
+            "closeTriggers",
+            "actions",
+            "keyboard",
+            "accessibility"
+          ],
+          "properties": {
+            "minimumTarget": {
+              "type": "number",
+              "const": 48
+            },
+            "railThickness": {
+              "type": "number",
+              "const": 2
+            },
+            "railMaxLength": {
+              "type": "number",
+              "const": 360
+            },
+            "thumbWidth": {
+              "type": "number",
+              "const": 8
+            },
+            "thumbHeight": {
+              "type": "number",
+              "const": 40
+            },
+            "backingWidth": {
+              "type": "number",
+              "const": 24
+            },
+            "backingHeight": {
+              "type": "number",
+              "const": 48
+            },
+            "backingOpacity": {
+              "type": "number",
+              "const": 0.92
+            },
+            "railOpacity": {
+              "type": "number",
+              "const": 0.24
+            },
+            "edgeGap": {
+              "type": "number",
+              "const": 8
+            },
+            "labelGap": {
+              "type": "number",
+              "const": 8
+            },
+            "cardMaxWidth": {
+              "type": "number",
+              "const": 280
+            },
+            "thumbForeground": {
+              "const": "brandStrong"
+            },
+            "backingSurface": {
+              "const": "surface"
+            },
+            "labelSurface": {
+              "const": "surface"
+            },
+            "labelForeground": {
+              "const": "foreground"
+            },
+            "railInteractive": {
+              "const": false
+            },
+            "viewportResize": {
+              "const": false
+            },
+            "fullTrackBackdrop": {
+              "const": false
+            },
+            "activation": {
+              "const": "explicit-icon"
+            },
+            "placement": {
+              "const": "right-centered-reading-viewport"
+            },
+            "dragMapping": {
+              "const": "reading-distance"
+            },
+            "dragLabel": {
+              "const": "actual-visible-location"
+            },
+            "releaseBehavior": {
+              "const": "stop-and-hide-label"
+            },
+            "tailHoldBehavior": {
+              "const": "follow-loaded-content-until-release-or-leave"
+            },
+            "tapBehavior": {
+              "const": "local-actions-card"
+            },
+            "outsidePointerBehavior": {
+              "const": "dismiss-card-and-pass-through"
+            },
+            "closeTriggers": {
+              "const": [
+                "toggle",
+                "collapse-action",
+                "editor",
+                "keyboard",
+                "subpost-change",
+                "filter-change",
+                "sort-change"
+              ]
+            },
+            "actions": {
+              "const": [
+                "start",
+                "loaded-end-or-end",
+                "collapse",
+                "retry"
+              ]
+            },
+            "keyboard": {
+              "const": [
+                "ArrowUp",
+                "ArrowDown",
+                "Home",
+                "End"
+              ]
+            },
+            "accessibility": {
+              "const": "adjustable-slider-with-current-location"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
     "nonEmptyString": { "type": "string", "minLength": 1 },
     "nonEmptyStringArray": {
       "type": "array",
