@@ -325,7 +325,8 @@ abstract final class WenyouReadingQuickScrollContract {
   static const String placement = 'right-centered-reading-viewport';
   static const String dragMapping = 'reading-distance';
   static const String dragLabel = 'actual-visible-location';
-  static const String releaseBehavior = 'stop-and-hide-label';
+  static const String releaseBehavior = 'finish-last-input-stop-follow-and-hide-label';
+  static const String cancelBehavior = 'clear-pending-on-cancel-close-or-scope-change';
   static const String tailHoldBehavior = 'follow-loaded-content-until-release-or-leave';
   static const String tapBehavior = 'local-actions-card';
   static const String outsidePointerBehavior = 'dismiss-card-and-pass-through';

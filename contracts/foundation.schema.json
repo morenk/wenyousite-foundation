@@ -198,6 +198,7 @@
             "dragMapping",
             "dragLabel",
             "releaseBehavior",
+          "cancelBehavior",
             "tailHoldBehavior",
             "tapBehavior",
             "outsidePointerBehavior",
@@ -289,9 +290,12 @@
               "const": "actual-visible-location"
             },
             "releaseBehavior": {
-              "const": "stop-and-hide-label"
+              "const": "finish-last-input-stop-follow-and-hide-label"
             },
-            "tailHoldBehavior": {
+            "cancelBehavior": {
+            "const": "clear-pending-on-cancel-close-or-scope-change"
+          },
+          "tailHoldBehavior": {
               "const": "follow-loaded-content-until-release-or-leave"
             },
             "tapBehavior": {
