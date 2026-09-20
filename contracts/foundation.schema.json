@@ -1173,13 +1173,28 @@
     },
     "formatting": {
       "type": "object",
-      "required": ["relativeTime", "counts"],
+      "required": ["relativeTime", "exactTime", "sourceTimestamp", "counts"],
       "properties": {
+        "sourceTimestamp": { "const": "preserve" },
+        "exactTime": {
+          "type": "object",
+          "required": ["contexts", "format", "timezone", "preserveExistingSeconds"],
+          "properties": {
+            "contexts": { "const": ["security", "audit", "wenyou-ledger", "appointment", "expiry"] },
+            "format": { "const": "yyyy-MM-dd HH:mm" },
+            "timezone": { "const": "user-local" },
+            "preserveExistingSeconds": { "const": true }
+          },
+          "additionalProperties": false
+        },
         "relativeTime": {
           "type": "object",
-          "required": ["relativeWindowSeconds", "justNowSeconds", "minutesUntilSeconds", "hoursUntilSeconds", "sameYearFallback", "crossYearFallback", "futureBehavior", "timezone", "exactValueExposure"],
+          "required": ["relativeWindowSeconds", "justNowSeconds", "minutesUntilSeconds", "hoursUntilSeconds", "sameYearFallback", "crossYearFallback", "futureBehavior", "timezone", "exactValueExposure", "exposureFormat", "exposurePrecision", "contexts"],
           "properties": {
-            "relativeWindowSeconds": { "const": 259200 }, "justNowSeconds": { "const": 60 }, "minutesUntilSeconds": { "const": 3600 }, "hoursUntilSeconds": { "const": 86400 }, "sameYearFallback": { "const": "MM-dd HH:mm" }, "crossYearFallback": { "const": "yyyy-MM-dd HH:mm" }, "futureBehavior": { "const": "absolute" }, "timezone": { "const": "user-local" }, "exactValueExposure": { "$ref": "#/$defs/nonEmptyStringArray" }
+            "relativeWindowSeconds": { "const": 259200 }, "justNowSeconds": { "const": 60 }, "minutesUntilSeconds": { "const": 3600 }, "hoursUntilSeconds": { "const": 86400 }, "sameYearFallback": { "const": "MM-dd" }, "crossYearFallback": { "const": "yyyy-MM-dd" }, "futureBehavior": { "const": "absolute" }, "timezone": { "const": "user-local" }, "exactValueExposure": { "const": ["web-title", "web-accessible-name", "mobile-semantics"] },
+            "exposureFormat": { "const": "yyyy-MM-dd" },
+            "exposurePrecision": { "const": "date-only" },
+            "contexts": { "const": ["post", "reply", "moment", "notification", "direct-message", "draft", "profile"] }
           },
           "additionalProperties": false
         },

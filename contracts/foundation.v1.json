@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 3,
-  "version": "7.0.0",
+  "version": "7.1.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -1076,16 +1076,26 @@
       }
     },
     "formatting": {
+      "sourceTimestamp": "preserve",
+      "exactTime": {
+        "contexts": ["security", "audit", "wenyou-ledger", "appointment", "expiry"],
+        "format": "yyyy-MM-dd HH:mm",
+        "timezone": "user-local",
+        "preserveExistingSeconds": true
+      },
       "relativeTime": {
         "relativeWindowSeconds": 259200,
         "justNowSeconds": 60,
         "minutesUntilSeconds": 3600,
         "hoursUntilSeconds": 86400,
-        "sameYearFallback": "MM-dd HH:mm",
-        "crossYearFallback": "yyyy-MM-dd HH:mm",
+        "sameYearFallback": "MM-dd",
+        "crossYearFallback": "yyyy-MM-dd",
         "futureBehavior": "absolute",
         "timezone": "user-local",
-        "exactValueExposure": ["web-title", "mobile-semantics"]
+        "exactValueExposure": ["web-title", "web-accessible-name", "mobile-semantics"],
+        "exposureFormat": "yyyy-MM-dd",
+        "exposurePrecision": "date-only",
+        "contexts": ["post", "reply", "moment", "notification", "direct-message", "draft", "profile"]
       },
       "counts": {
         "compactFrom": 10000,

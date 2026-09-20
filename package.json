@@ -1,6 +1,6 @@
 {
   "name": "@wenyousite/foundation",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -76,7 +76,8 @@
   ],
   "scripts": {
     "generate": "node scripts/generate.mjs",
-    "check": "node scripts/check.mjs && node scripts/generate.mjs --check",
+    "check": "node scripts/check.mjs && node scripts/generate.mjs --check && pnpm test:formatting",
+    "test:formatting": "node --test tests/formatting.test.mjs",
     "check:package": "node scripts/check-package.mjs"
   },
   "dependencies": {

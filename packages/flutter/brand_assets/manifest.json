@@ -1,5 +1,5 @@
 {
-  "version": "7.0.0",
+  "version": "7.1.0",
   "contract": "contracts/foundation.v1.json#experiences.brand",
   "assets": {
     "brand/README.md": "824fdbfd34e37a547486878c8df03afadfa3d080cf1cb99ae6cbf356657cb849",
