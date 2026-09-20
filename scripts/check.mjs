@@ -103,6 +103,11 @@ for (const [label, mutate] of [
   ["骰子待掷态错误可操作", (value) => { value.experiences.elements.inline.dice.interaction.pendingActivation = "open-detail"; }],
   ["缺少控件契约", (value) => { delete value.experiences.controls; }],
   ["缺少格式化契约", (value) => { delete value.experiences.formatting; }],
+  ["普通日期恢复时分", (value) => { value.experiences.formatting.relativeTime.sameYearFallback = "MM-dd HH:mm"; }],
+  ["普通读屏暴露时刻", (value) => { value.experiences.formatting.relativeTime.exposurePrecision = "minute"; }],
+  ["精确记录降低秒精度", (value) => { value.experiences.formatting.exactTime.preserveExistingSeconds = false; }],
+  ["温油账务漏出精确范围", (value) => { value.experiences.formatting.exactTime.contexts = ["security", "audit", "appointment", "expiry"]; }],
+  ["源时间戳被截断", (value) => { value.experiences.formatting.sourceTimestamp = "date-only"; }],
   ["非法等级色", (value) => { value.experiences.elements.metadata.level.tiers[0].foreground = "gray"; }],
   ["错误平台单位", (value) => { value.profiles.mobile.unit = "px"; }],
   ["非法浮层数值", (value) => { value.experiences.overlays.web.layers.popup = "70"; }],
@@ -505,10 +510,14 @@ for (const context of ["functional-page-title", "functional-section-title", "fun
 }
 if (
   contract.experiences.formatting.relativeTime.relativeWindowSeconds !== 72 * 60 * 60
-  || contract.experiences.formatting.relativeTime.sameYearFallback !== "MM-dd HH:mm"
-  || contract.experiences.formatting.relativeTime.crossYearFallback !== "yyyy-MM-dd HH:mm"
+  || contract.experiences.formatting.relativeTime.sameYearFallback !== "MM-dd"
+  || contract.experiences.formatting.relativeTime.crossYearFallback !== "yyyy-MM-dd"
+  || contract.experiences.formatting.relativeTime.exposureFormat !== "yyyy-MM-dd"
+  || contract.experiences.formatting.relativeTime.exposurePrecision !== "date-only"
+  || contract.experiences.formatting.exactTime.preserveExistingSeconds !== true
+  || contract.experiences.formatting.sourceTimestamp !== "preserve"
 ) {
-  failures.push("相对时间三天窗口或绝对时间回退格式发生漂移");
+  failures.push("普通内容日期、安全账务精度或原始时间戳保留规则发生漂移");
 }
 if (elements.identity.emailVerification.publicIdentity !== "hidden") {
   failures.push("邮箱验证不得进入公开身份呈现");

@@ -10,6 +10,11 @@ abstract final class WenyouFormattingContract {
 
 String _wenyouPad2(int value) => value.toString().padLeft(2, '0');
 
+String formatWenyouDate(DateTime value) {
+  final date = value.toLocal();
+  return date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day);
+}
+
 String formatWenyouExactTime(DateTime value) {
   final date = value.toLocal();
   return date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day)
@@ -33,7 +38,7 @@ String formatWenyouTime(DateTime value, {DateTime? reference}) {
   final datePart = date.year == now.year
       ? _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day)
       : date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day);
-  return datePart + ' ' + _wenyouPad2(date.hour) + ':' + _wenyouPad2(date.minute);
+  return datePart;
 }
 
 String _formatWenyouCompact(num value, num divisor, String suffix) {

@@ -1,5 +1,12 @@
 # Foundation Changelog
 
+## 未发布：普通内容日期展示
+
+- `formatting`：普通内容不足 72 小时保留相对时间，满 72 小时与未来时间按同年 `MM-dd`、跨年 `yyyy-MM-dd` 回退；悬停与读屏只暴露完整日期。
+- `api`：新增 JS/TypeScript 和 Dart 等价 `formatWenyouDate`；保留 `formatWenyouTime` 签名与 `formatWenyouExactTime` 完整日期及时分行为。安全、审计、温油账务、预约和到期时刻保留精确呈现，已有秒精度不降低。
+- `validation`：新增跨语言共享时间用例，覆盖相对阈值、未来、跨年、本地时区与 DST；JavaScript 测试纳入 `pnpm check`，Dart 验证命令见 `tests/README.md`。
+- `compatibility`：不改变当前版本，不发布 Tag 或 Release；原始 API/存储时间戳保持不变。消费者等待正式 Tag 后独立升级，既有发布与回滚路径保留。
+
 ## 7.0.0（待发布）
 
 - `breaking`：`schemaVersion` 升为 3，三个排版角色均使用系统字体，fallback 为通用无衬线；保留支持字重、字号、行高和使用场景。

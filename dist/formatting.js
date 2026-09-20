@@ -1,17 +1,42 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const FORMATTING_CONTRACT = Object.freeze({
+  "sourceTimestamp": "preserve",
+  "exactTime": {
+    "contexts": [
+      "security",
+      "audit",
+      "wenyou-ledger",
+      "appointment",
+      "expiry"
+    ],
+    "format": "yyyy-MM-dd HH:mm",
+    "timezone": "user-local",
+    "preserveExistingSeconds": true
+  },
   "relativeTime": {
     "relativeWindowSeconds": 259200,
     "justNowSeconds": 60,
     "minutesUntilSeconds": 3600,
     "hoursUntilSeconds": 86400,
-    "sameYearFallback": "MM-dd HH:mm",
-    "crossYearFallback": "yyyy-MM-dd HH:mm",
+    "sameYearFallback": "MM-dd",
+    "crossYearFallback": "yyyy-MM-dd",
     "futureBehavior": "absolute",
     "timezone": "user-local",
     "exactValueExposure": [
       "web-title",
+      "web-accessible-name",
       "mobile-semantics"
+    ],
+    "exposureFormat": "yyyy-MM-dd",
+    "exposurePrecision": "date-only",
+    "contexts": [
+      "post",
+      "reply",
+      "moment",
+      "notification",
+      "direct-message",
+      "draft",
+      "profile"
     ]
   },
   "counts": {
@@ -29,6 +54,12 @@ const validDate = (value) => {
   const date = value instanceof Date ? new Date(value.getTime()) : new Date(value);
   return Number.isNaN(date.getTime()) ? undefined : date;
 };
+
+export function formatWenyouDate(value) {
+  const date = validDate(value);
+  if (!date) return "—";
+  return [date.getFullYear(), pad2(date.getMonth() + 1), pad2(date.getDate())].join("-");
+}
 
 export function formatWenyouExactTime(value) {
   const date = validDate(value);
@@ -50,7 +81,7 @@ export function formatWenyouTime(value, reference = new Date()) {
   const datePart = date.getFullYear() === now.getFullYear()
     ? [pad2(date.getMonth() + 1), pad2(date.getDate())].join("-")
     : [date.getFullYear(), pad2(date.getMonth() + 1), pad2(date.getDate())].join("-");
-  return datePart + " " + [pad2(date.getHours()), pad2(date.getMinutes())].join(":");
+  return datePart;
 }
 
 const compact = (value, divisor, suffix) => {
