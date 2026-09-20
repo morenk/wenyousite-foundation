@@ -588,6 +588,12 @@ const validDate = (value) => {
   return Number.isNaN(date.getTime()) ? undefined : date;
 };
 
+export function formatWenyouDate(value) {
+  const date = validDate(value);
+  if (!date) return "—";
+  return [date.getFullYear(), pad2(date.getMonth() + 1), pad2(date.getDate())].join("-");
+}
+
 export function formatWenyouExactTime(value) {
   const date = validDate(value);
   if (!date) return "—";
@@ -608,7 +614,7 @@ export function formatWenyouTime(value, reference = new Date()) {
   const datePart = date.getFullYear() === now.getFullYear()
     ? [pad2(date.getMonth() + 1), pad2(date.getDate())].join("-")
     : [date.getFullYear(), pad2(date.getMonth() + 1), pad2(date.getDate())].join("-");
-  return datePart + " " + [pad2(date.getHours()), pad2(date.getMinutes())].join(":");
+  return datePart;
 }
 
 const compact = (value, divisor, suffix) => {
@@ -627,6 +633,7 @@ export function formatWenyouCompactCount(value) {
 write("dist/formatting.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export declare const FORMATTING_CONTRACT: Readonly<${JSON.stringify(formatting)}>;
 export type WenyouDateInput = Date | string | number;
+export declare function formatWenyouDate(value: WenyouDateInput): string;
 export declare function formatWenyouExactTime(value: WenyouDateInput): string;
 export declare function formatWenyouTime(value: WenyouDateInput, reference?: WenyouDateInput): string;
 export declare function formatWenyouCompactCount(value: number): string;`);
@@ -1383,6 +1390,11 @@ abstract final class WenyouFormattingContract {
 
 String _wenyouPad2(int value) => value.toString().padLeft(2, '0');
 
+String formatWenyouDate(DateTime value) {
+  final date = value.toLocal();
+  return date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day);
+}
+
 String formatWenyouExactTime(DateTime value) {
   final date = value.toLocal();
   return date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day)
@@ -1406,7 +1418,7 @@ String formatWenyouTime(DateTime value, {DateTime? reference}) {
   final datePart = date.year == now.year
       ? _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day)
       : date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day);
-  return datePart + ' ' + _wenyouPad2(date.hour) + ':' + _wenyouPad2(date.minute);
+  return datePart;
 }
 
 String _formatWenyouCompact(num value, num divisor, String suffix) {

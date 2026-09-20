@@ -4,16 +4,23 @@
 
 - `web`：补充综合管理后台的信息结构、PC 紧凑表格、精简文案、详情返回状态恢复及体验验收要求；只限定后台，不新增 Token、不修改机器契约或包版本，Backend 继续拥有接口和业务事实源。
 
-## 7.0.0（待发布）
+## 7.1.0
+
+- `formatting`：普通内容不足 72 小时保留相对时间，满 72 小时与未来时间按同年 `MM-dd`、跨年 `yyyy-MM-dd` 回退；悬停与读屏只暴露完整日期。
+- `api`：新增 JS/TypeScript 和 Dart 等价 `formatWenyouDate`；保留 `formatWenyouTime` 签名与 `formatWenyouExactTime` 完整日期及时分行为。安全、审计、温油账务、预约和到期时刻保留精确呈现，已有秒精度不降低。
+- `validation`：新增跨语言共享时间用例，覆盖相对阈值、未来、跨年、本地时区与 DST；JavaScript 测试纳入 `pnpm check`，Dart 验证命令见 `tests/README.md`。
+- `compatibility`：根包、Flutter 包、契约和 Manifest 同步为 7.1.0，`schemaVersion` 保持 3。原始 API/存储时间戳保持不变；消费者锁定正式 `v7.1.0` Tag，并配套迁移普通内容悬停与读屏、核验精确记录正文。既有发布与回滚路径保留。
+
+## 7.0.0
 
 - `breaking`：`schemaVersion` 升为 3，三个排版角色均使用系统字体，fallback 为通用无衬线；保留支持字重、字号、行高和使用场景。
 - `package`：`fonts` 为空，移除捆绑字体、字体加载 CSS 入口、字体依赖、字形校验脚本及字体许可证；保留图标及其许可证。
 - `brand`：品牌来源以 `displayTypographyRole: "display"` 替代具体字形与字体许可字段。
 - `api`：TypeScript 保留家族角色、家族定义、使用语境和类型尺度；Flutter 删除具体家族名与中文 fallback 常量，保留语义映射和尺寸、行高、字重 API。
 - `validation`：新增系统字体 Schema 反向用例与实际 tarball 内容检查，平台文档明确消费者迁移和验收要求。
-- `compatibility`：根包、Flutter 包、契约和 Manifest 同步为 7.0.0；尚未合并或发布，消费者仅在正式 Tag 发布后独立升级。旧 v6.x Tag 不可变，继续供未迁移消费者及回滚使用。下列历史记录保留原版本行为，具体旧家族与资产可从对应 Tag 追溯。
+- `compatibility`：根包、Flutter 包、契约和 Manifest 同步为 7.0.0；通过正式 `v7.0.0` Tag 发布，消费者独立升级。旧 v6.x Tag 不可变，继续供未迁移消费者及回滚使用。下列历史记录保留原版本行为，具体旧家族与资产可从对应 Tag 追溯。
 
-### 随本候选版本包含的既有未发布文档
+### 随本版本包含的既有文档
 
 - `shared`：补充发布后主贴发言权限的管理表单体验，关联 Backend `5.21.0-dev.20260911.1` 契约；复用现有权限用语与字段层级，说明主贴和子贴权限边界，不增加设计 Token 或提升版本。
 - `web`：主贴权限融入现有选择控件和统一保存表单，保留桌面密度、键盘操作与焦点。
