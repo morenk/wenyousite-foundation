@@ -2,6 +2,13 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 综合管理后台文档
+
+- [Web profile](platforms/web.md#管理后台) 补充后台专属的信息结构、密度、文案和交互验收边界；无 Foundation Token、公开导出、机器契约或版本变化，无需消费者依赖升级。
+- 后台继续使用既有 `/station` 入口和页面地址；原举报与申诉流程、独立管理会话及服务端安全规则保留。本次文档不授权删除旧接口或兼容协议。
+- 新增管理接口、统计字段、分类标签整理与审计迁移由 Backend 的 OpenAPI、Markdown 契约和弃用登记定义；Web 依已提交的兼容契约接入，Foundation 不定义第二套业务协议。
+- 交付顺序为兼容后端再到 Web；合并、部署及未来旧协议清理遵守治理门禁。本次不创建 Tag 或 Release，也不改变 Mobile 或社区前台体验。
+
 ## 系统字体（v7.0.0 待发布）
 
 - 破坏性变化：Schema 3 要求 `fonts: []`；三个家族角色固定声明系统字体及通用无衬线 fallback。旧具体家族、资源清单、字体 CSS 导出、字体依赖与许可内容不进入 v7。品牌 `displayGlyphFont`/`fontLicense` 字段由 `displayTypographyRole: "display"` 替代。
