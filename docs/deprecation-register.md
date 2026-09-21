@@ -2,6 +2,12 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 本人关注与粉丝管理文档
+
+- [本人关注与粉丝管理](interaction.md#本人关注与粉丝管理) 明确同级描边动作、关系方向、确认与异步反馈，以及 Web／Mobile 平台布局边界；复用已发布的 controls、collections、feedback、overlays 和 accessibility 语义。
+- 无 Foundation Token、机器契约、公开导出、版本或生成物变更，无需升级消费者 Foundation 依赖，也不创建 Tag 或 Release。本文档不替代 Backend 的 OpenAPI、Markdown 契约和关系权限规则。
+- 后端兼容接口先行，Web 与 Mobile 依据已提交契约接入并完成各自验收；保留既有列表深链与旧客户端接口，不在本次删除兼容协议。消费者需要回滚时恢复原关系管理页面实现，已发生的关系写入不通过界面回滚恢复。
+
 ## 综合管理后台文档
 
 - [Web profile](platforms/web.md#管理后台) 补充后台专属的信息结构、密度、文案和交互验收边界；无 Foundation Token、公开导出、机器契约或版本变化，无需消费者依赖升级。
