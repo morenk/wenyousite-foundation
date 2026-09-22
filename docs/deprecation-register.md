@@ -6,7 +6,7 @@
 
 - [图片呈现契约](images.md#全屏图集的业务接入) 补充五类图集分组、出现位置身份、双向加载会话、来源定位、当前图片操作与移动端缩放手势；[Flutter profile](platforms/mobile.md) 引用同一规则。
 - 本次仅文档变化，无 Foundation Token、机器契约、公开导出或版本变化；不创建 Tag / Release，不要求消费者依赖未发布提交。既有完整来源、失败保留上下文和动画生命周期继续有效。
-- Backend 新增兼容图集查询与正文图片出现索引，接口和迁移以其 [已提交契约](https://github.com/morenk/wenyousite-backend/blob/1f6a65e15dd66f88841bc80502f726804a07fa99/docs/image-gallery.md) 为准；正式 Markdown、上传 API 和 `COMPLETED` 不变，旧入口继续可用。
+- Backend 新增兼容图集查询与正文图片出现索引，接口和迁移以其 [已提交契约](https://github.com/morenk/wenyousite-backend/blob/92b030a81f8957386e324fed477bd1e46faf65ea/docs/image-gallery.md) 为准；正式 Markdown、上传 API 和 `COMPLETED` 不变，旧入口继续可用。
 - Web 本轮只同步新增 API 的固定 OpenAPI 与生成类型，现有界面保持原行为；Mobile 在兼容后端迁移、历史回填和校验完成后接入。此文档不代表消费者实现、真机或隔离 E2E 验收已完成。
 - 不删除旧查看入口或媒体引用协议；移动端回滚可恢复原消费者提交，新增索引和兼容查询不要求删除。线上回填、合并、部署与后续兼容清理仍遵守治理门禁。
 

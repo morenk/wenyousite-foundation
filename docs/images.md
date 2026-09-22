@@ -74,7 +74,7 @@
 - 继承打开时的排序与作者筛选，正文、置顶楼层和普通楼层的顺序由后端契约定义；同一内容内部按图片出现顺序。会话期间不混入新内容，不随底层筛选变动重排图集。
 - 普通正文图包括符合现有安全规则的外部 Markdown 图片。同一 URL 出现在不同位置时分别保留；头像、表情、代码中的伪图片语法和未发布本机附件不进入图集。客户端不得用 URL 去重或推断图片身份。
 - 后端返回稳定图片键、来源内容和版本、内容内位置及定位信息。正文编辑使图片锚点失效时要求重新加载会话，不能把相同位置的新图片静默当作原图。
-- 新增 `GET /api/v1/image-gallery` 的请求、双向不透明游标、排序、错误与索引边界以 [Backend 已提交图集契约](https://github.com/morenk/wenyousite-backend/blob/1f6a65e15dd66f88841bc80502f726804a07fa99/docs/image-gallery.md) 为准；本说明不定义第二套响应 Schema。每页重新核验原内容权限；索引记录或缓存不表示访问权限。
+- 新增 `GET /api/v1/image-gallery` 的请求、双向不透明游标、排序、错误与索引边界以 [Backend 已合并图集契约](https://github.com/morenk/wenyousite-backend/blob/92b030a81f8957386e324fed477bd1e46faf65ea/docs/image-gallery.md) 为准；本说明不定义第二套响应 Schema。每页重新核验原内容权限；索引记录或缓存不表示访问权限。
 
 ### 查看、操作与退出
 
