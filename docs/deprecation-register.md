@@ -2,6 +2,14 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 本人关注与粉丝管理文档
+
+- [本人关注与粉丝管理](interaction.md#本人关注与粉丝管理) 改为紧凑扁平行、关注／回关主按钮、已关注／互关浅底状态及共享菜单；明确 Mobile 同栏返回与计数页签、底部 Sheet，以及 Web 锚定 Dropdown、键盘和焦点边界。复用已发布的 controls、collections、feedback、overlays 和 accessibility 语义。
+- 原候选文档中的“全部中性描边”“Mobile 固定第二操作行”和独立重复关系文字已由本方案取代，不作为消费者实现要求；该替换只涉及未发布页面设计说明，不删除既有 Token、组件 API 或 HTTP 协议。
+- 菜单中的取消关注、移除粉丝按双向关系决定，互关时两个页签均可移除；私聊按能力、举报复用既有流程。拉黑与移除确认、共享行锁、结果不明只读核对和会话边界纳入验收；拉黑保持服务端既有关系与可见性语义，不新增自动取消双方关注。
+- 无 Foundation Token、机器契约、公开导出、版本或生成物变更，无需升级消费者 Foundation 依赖，也不创建 Tag 或 Release。本文档不替代 Backend 的 OpenAPI、Markdown 契约和关系权限规则。
+- 后端兼容接口先行，Web 与 Mobile 依据已提交契约接入并完成各自验收；保留既有列表深链与旧客户端接口，不在本次删除兼容协议。消费者需要回滚时恢复原关系管理页面实现，已发生的关系写入不通过界面回滚恢复。
+
 ## 全屏图片图集业务接入
 
 - [图片呈现契约](images.md#全屏图集的业务接入) 补充五类图集分组、出现位置身份、双向加载会话、来源定位、当前图片操作与移动端缩放手势；[Flutter profile](platforms/mobile.md) 引用同一规则。
