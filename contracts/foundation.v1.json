@@ -170,7 +170,7 @@
       "expandedChromeFrom": 1280,
       "minimumControlTarget": 40,
       "minimumCompactTarget": 32,
-      "radii": { "compact": 10, "control": 12, "panel": 16 },
+      "radii": { "compact": 10, "card": 10, "control": 12, "panel": 16 },
       "layoutRem": { "narrow": 30, "moment": 36, "feed": 42, "content": 48, "workspace": 72, "chromeWorkspace": 78, "wide": 80 },
       "reading": { "bodyPx": 17, "lineHeightPx": 32, "maxFullWidthCharacters": 40 },
       "typeScale": {
@@ -189,7 +189,7 @@
       "minimumViewport": 360,
       "minimumControlTarget": 48,
       "spacing": [4, 8, 12, 16, 20, 24, 32],
-      "radii": { "compact": 12, "control": 16, "panel": 20, "pill": 999 },
+      "radii": { "compact": 12, "card": 10, "control": 16, "panel": 20, "pill": 999 },
       "horizontalPadding": { "compact": 12, "regular": 24, "regularFrom": 401 },
       "pageContentMaxWidth": 520,
       "wideContainerMaxWidth": 600,
@@ -566,7 +566,9 @@
         "itemWidth": "available",
         "narrowContentDoesNotChangeItemWidth": true,
         "horizontalOverflow": "explicit-only",
-        "contentSizedExceptions": ["message-bubble", "chip", "badge", "compact-action"]
+        "contentSizedExceptions": ["message-bubble", "chip", "badge", "compact-action"],
+        "cardGapAppliesTo": "independent-content-cards",
+        "stackedListSeparation": "divider-only"
       },
       "content": {
         "slots": ["title", "identity", "time", "summary", "cover", "tags", "metrics", "status", "actions"],
@@ -593,11 +595,13 @@
       },
       "web": {
         "tabPanelWidth": "available",
-        "multiColumn": "explicit-grid-only"
+        "multiColumn": "explicit-grid-only",
+        "cardGap": 8
       },
       "mobile": {
         "layout": "single-column",
         "itemWidth": "available",
+        "cardGap": 8,
         "domainLayoutExceptions": {
           "moments-feed": "two-column-waterfall"
         }

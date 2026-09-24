@@ -39,9 +39,11 @@
   --input: #dcd5e0;
   --ring: #704c65;
   --radius-compact: 0.625rem;
+  --radius-card: 0.625rem;
   --radius-control: 0.75rem;
   --radius-panel: 1rem;
   --radius: var(--radius-control);
+  --collection-card-gap: 8px;
   --layout-narrow: 30rem;
   --layout-moment: 36rem;
   --layout-feed: 42rem;

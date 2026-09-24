@@ -451,9 +451,10 @@
     },
     "radii": {
       "type": "object",
-      "required": ["compact", "control", "panel"],
+      "required": ["compact", "card", "control", "panel"],
       "properties": {
         "compact": { "$ref": "#/$defs/positiveNumber" },
+        "card": { "const": 10 },
         "control": { "$ref": "#/$defs/positiveNumber" },
         "panel": { "$ref": "#/$defs/positiveNumber" },
         "pill": { "$ref": "#/$defs/positiveNumber" }
@@ -728,8 +729,8 @@
       "properties": {
         "invariants": {
           "type": "object",
-          "required": ["containerWidth", "itemWidth", "narrowContentDoesNotChangeItemWidth", "horizontalOverflow", "contentSizedExceptions"],
-          "properties": { "containerWidth": { "const": "available" }, "itemWidth": { "const": "available" }, "narrowContentDoesNotChangeItemWidth": { "const": true }, "horizontalOverflow": { "const": "explicit-only" }, "contentSizedExceptions": { "$ref": "#/$defs/nonEmptyStringArray" } },
+          "required": ["containerWidth", "itemWidth", "narrowContentDoesNotChangeItemWidth", "horizontalOverflow", "contentSizedExceptions", "cardGapAppliesTo", "stackedListSeparation"],
+          "properties": { "containerWidth": { "const": "available" }, "itemWidth": { "const": "available" }, "narrowContentDoesNotChangeItemWidth": { "const": true }, "horizontalOverflow": { "const": "explicit-only" }, "contentSizedExceptions": { "$ref": "#/$defs/nonEmptyStringArray" }, "cardGapAppliesTo": { "const": "independent-content-cards" }, "stackedListSeparation": { "const": "divider-only" } },
           "additionalProperties": false
         },
         "content": {
@@ -743,13 +744,14 @@
           },
           "additionalProperties": false
         },
-        "web": { "type": "object", "required": ["tabPanelWidth", "multiColumn"], "properties": { "tabPanelWidth": { "const": "available" }, "multiColumn": { "const": "explicit-grid-only" } }, "additionalProperties": false },
+        "web": { "type": "object", "required": ["tabPanelWidth", "multiColumn", "cardGap"], "properties": { "tabPanelWidth": { "const": "available" }, "multiColumn": { "const": "explicit-grid-only" }, "cardGap": { "const": 8 } }, "additionalProperties": false },
         "mobile": {
           "type": "object",
-          "required": ["layout", "itemWidth", "domainLayoutExceptions"],
+          "required": ["layout", "itemWidth", "cardGap", "domainLayoutExceptions"],
           "properties": {
             "layout": { "const": "single-column" },
             "itemWidth": { "const": "available" },
+            "cardGap": { "const": 8 },
             "domainLayoutExceptions": {
               "type": "object",
               "required": ["moments-feed"],

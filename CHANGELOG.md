@@ -1,5 +1,10 @@
 # Foundation Changelog
 
+## 未发布契约
+
+- `collections`：Web 与 Flutter 的独立内容卡片间距统一为 8px/8dp；连续列表行继续通过分隔线组织，不加行距。新增 Web CSS、JS/TypeScript 和 Flutter 生成常量。
+- `profiles`：两端内容卡片与列表外框圆角统一为 10px/10dp；新增 Web `--radius-card` 和 Flutter `radiusCard`，保留控件、面板圆角及通用 spacing。
+
 ## 未发布文档
 
 - `web`：补充综合管理后台的信息结构、PC 紧凑表格、精简文案、详情返回状态恢复及体验验收要求；只限定后台，不新增 Token、不修改机器契约或包版本，Backend 继续拥有接口和业务事实源。

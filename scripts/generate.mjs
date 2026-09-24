@@ -443,15 +443,19 @@ export declare const COLLECTION_INVARIANTS: Readonly<{
   narrowContentDoesNotChangeItemWidth: true;
   horizontalOverflow: "explicit-only";
   contentSizedExceptions: readonly ("message-bubble" | "chip" | "badge" | "compact-action")[];
+  cardGapAppliesTo: "independent-content-cards";
+  stackedListSeparation: "divider-only";
 }>;
 export declare const CONTENT_PRESENTATION: Readonly<${JSON.stringify(collections.content)}>;
 export declare const COLLECTION_WEB_PROFILE: Readonly<{
   tabPanelWidth: "available";
   multiColumn: "explicit-grid-only";
+  cardGap: ${collections.web.cardGap};
 }>;
 export declare const COLLECTION_MOBILE_PROFILE: Readonly<{
   layout: "single-column";
   itemWidth: "available";
+  cardGap: ${collections.mobile.cardGap};
   domainLayoutExceptions: Readonly<{
     "moments-feed": "two-column-waterfall";
   }>;
@@ -781,9 +785,11 @@ write("web/tokens.css", `/* 由 contracts/foundation.v1.json 生成，禁止手�
   color-scheme: light;
 ${paletteCssDeclarations(p)}
   --radius-compact: ${web.radii.compact / 16}rem;
+  --radius-card: ${web.radii.card / 16}rem;
   --radius-control: ${web.radii.control / 16}rem;
   --radius-panel: ${web.radii.panel / 16}rem;
   --radius: var(--radius-control);
+  --collection-card-gap: ${collections.web.cardGap}px;
   --layout-narrow: ${web.layoutRem.narrow}rem;
   --layout-moment: ${web.layoutRem.moment}rem;
   --layout-feed: ${web.layoutRem.feed}rem;
@@ -1239,6 +1245,7 @@ abstract final class WenyouFoundationMobile {
   static const List<double> spacing = <double>${dartList(mobile.spacing, (value) => `${value}.0`)};
 ${mobile.spacing.map((value) => `  static const double space${value} = ${value}.0;`).join("\n")}
   static const double radiusCompact = ${mobile.radii.compact}.0;
+  static const double radiusCard = ${mobile.radii.card}.0;
   static const double radiusControl = ${mobile.radii.control}.0;
   static const double radiusPanel = ${mobile.radii.panel}.0;
   static const double radiusPill = ${mobile.radii.pill}.0;
@@ -1317,6 +1324,7 @@ abstract final class WenyouCollectionContract {
   static const Set<String> contentSizedExceptions = <String>{${collections.invariants.contentSizedExceptions.map(dartString).join(", ")}};
   static const String mobileLayout = ${dartString(collections.mobile.layout)};
   static const String mobileItemWidth = ${dartString(collections.mobile.itemWidth)};
+  static const double cardGap = ${collections.mobile.cardGap}.0;
   static const Map<String, String> mobileDomainLayoutExceptions = <String, String>{
 ${dartStringMapEntries(collections.mobile.domainLayoutExceptions)}
   };

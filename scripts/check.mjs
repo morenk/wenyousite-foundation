@@ -182,7 +182,7 @@ if (!manifest.features?.brand || !manifest.features?.themes || !manifest.feature
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
-for (const claim of ["--action-primary", "--action-primary-foreground", "--image-viewer-backdrop", "--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
+for (const claim of ["--radius-card", "--collection-card-gap", "--action-primary", "--action-primary-foreground", "--image-viewer-backdrop", "--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
   if (!read("web/tokens.css").includes(`${claim}:`)) failures.push(`Web Token 缺少 ${claim}`);
 }
 if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouElementContract")) {
@@ -769,6 +769,8 @@ if (
   contract.profiles.mobile.horizontalPadding.regularFrom !== 401 ||
   contract.profiles.mobile.pageContentMaxWidth !== 520 ||
   contract.profiles.mobile.wideContainerMaxWidth !== 600 ||
+  contract.profiles.web.radii.card !== 10 ||
+  contract.profiles.mobile.radii.card !== 10 ||
   contract.profiles.mobile.radii.pill !== 999 ||
   "pill" in contract.profiles.web.radii
 ) {
@@ -979,6 +981,8 @@ for (const exception of ["message-bubble", "chip", "badge", "compact-action"]) {
     failures.push(`集合布局缺少按内容收缩例外 ${exception}`);
   }
 }
+if (collections.invariants.cardGapAppliesTo !== "independent-content-cards" || collections.invariants.stackedListSeparation !== "divider-only") failures.push("卡片间距只用于独立内容卡片，连续列表以分隔线区分");
+if (collections.web.cardGap !== 8 || collections.mobile.cardGap !== 8) failures.push("两端独立内容卡片间距必须为 8px/8dp");
 if (collections.web.tabPanelWidth !== "available") failures.push("Web Tabs 面板必须占满可用宽度");
 if (collections.mobile.itemWidth !== "available") failures.push("Flutter 列表项必须占满单列宽度");
 
