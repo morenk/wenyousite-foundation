@@ -18,6 +18,12 @@
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
 
+## v7.1.1 内容卡片
+
+根包、Flutter 包与契约版本为 `7.1.1`，`schemaVersion` 保持 `3`。浏览内容卡片与列表外框圆角为 10px/10dp，彼此独立的内容卡片间距为 8px/8dp；连续列表仍由分隔线组织，不改变卡片内部留白、页面边距、控件圆角或触控尺寸。Web 使用 `--radius-card`、`--collection-card-gap` 和 `COLLECTION_WEB_PROFILE.cardGap`，Flutter 使用 `WenyouFoundationMobile.radiusCard` 和 `WenyouCollectionContract.cardGap`。
+
+消费者在正式发布后锁定 `v7.1.1` Tag，并在各自环境完成亮色、黑夜、窄屏、骨架屏、封面裁切与瀑布流验收；回滚时恢复旧 Tag 及对应消费实现。
+
 ## v7.1.0 时间展示
 
 根包、Flutter 包与契约版本为 `7.1.0`，`schemaVersion` 保持 `3`。普通内容不足 72 小时显示相对时间，之后与未来时间显示同年 `MM-dd`、跨年 `yyyy-MM-dd`；新增 `formatWenyouDate` 提供完整日期用于悬停和读屏。安全、审计、温油账务、预约和到期时刻保留精确时间，已有秒精度不降低。
@@ -40,6 +46,6 @@ pnpm check
 pnpm check:package
 ```
 
-Web 通过 Git tag 安装根 npm package；Flutter 通过同一 tag 安装 `packages/flutter`。主题消费者使用生成的 Web Token、`@wenyousite/foundation/theme` 或 Flutter 主题合同，不复制调色板。发布遵循 SemVer：语义删除或改变为 Major，兼容新增为 Minor，文字修正为 Patch。
+Web 通过 Git tag 安装根 npm package；Flutter 通过同一 tag 安装 `packages/flutter`。主题消费者使用生成的 Web Token、`@wenyousite/foundation/theme` 或 Flutter 主题合同，不复制调色板。发布遵循 SemVer：语义删除或改变为 Major，兼容新增通常为 Minor，文字修正为 Patch；经负责人明确决定的兼容视觉 Token 调整可按 Patch 发布。
 
 Codex 可将 `skills/wenyou-design` 以符号链接或技能安装器接入本地。Skill 只定义审美工作流，每次使用时读取本仓库契约和对应平台 profile，不复制 Token 数值。

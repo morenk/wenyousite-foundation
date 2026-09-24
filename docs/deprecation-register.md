@@ -31,6 +31,12 @@
 - 新增管理接口、统计字段、分类标签整理与审计迁移由 Backend 的 OpenAPI、Markdown 契约和弃用登记定义；已提交接口边界见 [Backend 综合内容管理（bc3fd94）](https://github.com/morenk/wenyousite-backend/blob/bc3fd941dab13a985088d024a04d72f8bf484dd6/docs/modules/admin.md#综合内容管理)。该引用用于契约对齐，不代表完整检查或验收已完成；Web 依已提交的兼容契约接入，Foundation 不定义第二套业务协议。
 - 交付顺序为兼容后端再到 Web；合并、部署及未来旧协议清理遵守治理门禁。本次不创建 Tag 或 Release，也不改变 Mobile 或社区前台体验。
 
+## 内容卡片圆角与间距（v7.1.1）
+
+- 新增 `radii.card = 10` 与 `collections.cardGap = 8`，分别用于浏览内容卡片／列表外框和彼此独立的内容卡片间距；连续列表行仍靠分隔线区分。原有 compact/control/panel 圆角、全局 spacing、页面边距与内部留白不变。
+- Web 消费生成的 CSS 与 `COLLECTION_WEB_PROFILE.cardGap`，动态瀑布流的测量、定位和骨架间距须一致；Flutter 消费 `radiusCard` 与 `WenyouCollectionContract.cardGap`，保持 48dp 触控下限。
+- `schemaVersion` 保持 3，无字段删除、HTTP API、存储或数据迁移。两端在正式 `v7.1.1` Tag 发布后独立锁定依赖、验证并提交；回滚时恢复 `v7.1.0` Tag 及对应消费实现，不改写历史 Tag。
+
 ## 普通内容日期展示（v7.1.0）
 
 - `formatWenyouTime` 保留签名，但普通内容的绝对回退移除时分；新增 `formatWenyouDate` 用于完整日期悬停和读屏。`formatWenyouExactTime` 及安全、审计、温油账务、预约和到期的精确呈现保留，已有秒精度不能降低。
