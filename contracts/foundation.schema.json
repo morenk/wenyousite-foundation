@@ -128,8 +128,9 @@
     "accessibility": { "$ref": "#/$defs/accessibility" },
     "profiles": {
       "type": "object",
-      "required": ["web", "mobile"],
+      "required": ["radiusUsage", "web", "mobile"],
       "properties": {
+        "radiusUsage": { "$ref": "#/$defs/radiusUsage" },
         "web": { "$ref": "#/$defs/webProfile" },
         "mobile": { "$ref": "#/$defs/mobileProfile" }
       },
@@ -446,6 +447,32 @@
           "properties": { "systemTextScale": { "const": true }, "safeArea": { "const": true }, "systemBack": { "const": true } },
           "additionalProperties": false
         }
+      },
+      "additionalProperties": false
+    },
+    "radiusUsage": {
+      "type": "object",
+      "required": ["compactSurface", "standaloneImage", "button", "field", "selection", "contentCard", "listFrame", "accountSection", "dialog", "popover", "sheet", "menu", "attachedMedia", "cardSkeleton", "avatar", "iconStateLayer", "semanticBadge", "topicTag", "inlineElement"],
+      "properties": {
+        "compactSurface": { "const": "compact" },
+        "standaloneImage": { "const": "compact" },
+        "button": { "const": "control" },
+        "field": { "const": "control" },
+        "selection": { "const": "control" },
+        "contentCard": { "const": "card" },
+        "listFrame": { "const": "card" },
+        "accountSection": { "const": "card" },
+        "dialog": { "const": "panel" },
+        "popover": { "const": "panel" },
+        "sheet": { "const": "panel" },
+        "menu": { "const": "panel" },
+        "attachedMedia": { "const": "inherit-host" },
+        "cardSkeleton": { "const": "inherit-host" },
+        "avatar": { "const": "circle" },
+        "iconStateLayer": { "const": "circle" },
+        "semanticBadge": { "const": "pill" },
+        "topicTag": { "const": "none" },
+        "inlineElement": { "const": "own-em-scale" }
       },
       "additionalProperties": false
     },

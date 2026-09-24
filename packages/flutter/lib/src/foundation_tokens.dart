@@ -395,6 +395,27 @@ abstract final class WenyouFoundationMotion {
 }
 
 abstract final class WenyouFoundationMobile {
+  static const Map<String, String> radiusUsage = <String, String>{
+    'compactSurface': 'compact',
+    'standaloneImage': 'compact',
+    'button': 'control',
+    'field': 'control',
+    'selection': 'control',
+    'contentCard': 'card',
+    'listFrame': 'card',
+    'accountSection': 'card',
+    'dialog': 'panel',
+    'popover': 'panel',
+    'sheet': 'panel',
+    'menu': 'panel',
+    'attachedMedia': 'inherit-host',
+    'cardSkeleton': 'inherit-host',
+    'avatar': 'circle',
+    'iconStateLayer': 'circle',
+    'semanticBadge': 'pill',
+    'topicTag': 'none',
+    'inlineElement': 'own-em-scale',
+  };
   static const double minimumTouchTarget = 48.0;
   static const List<double> spacing = <double>[4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0];
   static const double space4 = 4.0;
@@ -404,10 +425,10 @@ abstract final class WenyouFoundationMobile {
   static const double space20 = 20.0;
   static const double space24 = 24.0;
   static const double space32 = 32.0;
-  static const double radiusCompact = 12.0;
+  static const double radiusCompact = 8.0;
   static const double radiusCard = 10.0;
-  static const double radiusControl = 16.0;
-  static const double radiusPanel = 20.0;
+  static const double radiusControl = 8.0;
+  static const double radiusPanel = 12.0;
   static const double radiusPill = 999.0;
   static const double compactHorizontalPadding = 12.0;
   static const double regularHorizontalPadding = 24.0;

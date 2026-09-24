@@ -1,5 +1,10 @@
 # Foundation Changelog
 
+## 未发布契约
+
+- `profiles`：统一圆角角色，Web compact/control/card/panel 为 6/8/10/12px，Flutter 为 8/8/10/12dp；增加 `radiusUsage` 映射，让按钮、表单、内容卡片、账户区块及浮层各用对应角色。
+- `generated`：同步 Web CSS、`RADIUS_USAGE` TypeScript 导出和 Flutter 常量；头像圆形、语义胶囊及行内 em 圆角保留。当前不提升版本，消费者等待正式 Tag。
+
 ## 7.1.1
 
 - `collections`：Web 与 Flutter 的独立内容卡片间距统一为 8px/8dp；连续列表行继续通过分隔线组织，不加行距。新增 Web CSS、JS/TypeScript 和 Flutter 生成常量。

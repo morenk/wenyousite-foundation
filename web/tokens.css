@@ -38,10 +38,10 @@
   --border: #e8e3eb;
   --input: #dcd5e0;
   --ring: #704c65;
-  --radius-compact: 0.625rem;
+  --radius-compact: 0.375rem;
   --radius-card: 0.625rem;
-  --radius-control: 0.75rem;
-  --radius-panel: 1rem;
+  --radius-control: 0.5rem;
+  --radius-panel: 0.75rem;
   --radius: var(--radius-control);
   --collection-card-gap: 8px;
   --layout-narrow: 30rem;
