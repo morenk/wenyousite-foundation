@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '7.1.0';
+  static const String value = '7.1.1';
   static const int schema = 3;
 }
 
@@ -405,6 +405,7 @@ abstract final class WenyouFoundationMobile {
   static const double space24 = 24.0;
   static const double space32 = 32.0;
   static const double radiusCompact = 12.0;
+  static const double radiusCard = 10.0;
   static const double radiusControl = 16.0;
   static const double radiusPanel = 20.0;
   static const double radiusPill = 999.0;
@@ -515,6 +516,7 @@ abstract final class WenyouCollectionContract {
   static const Set<String> contentSizedExceptions = <String>{'message-bubble', 'chip', 'badge', 'compact-action'};
   static const String mobileLayout = 'single-column';
   static const String mobileItemWidth = 'available';
+  static const double cardGap = 8.0;
   static const Map<String, String> mobileDomainLayoutExceptions = <String, String>{
     'moments-feed': 'two-column-waterfall',
   };
