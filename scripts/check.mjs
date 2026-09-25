@@ -79,6 +79,11 @@ for (const [label, mutate] of [
   ["缺少品牌契约", (value) => { delete value.experiences.brand; }],
   ["未知品牌字段", (value) => { value.experiences.brand.unknown = true; }],
   ["未知 profile 字段", (value) => { value.profiles.web.unknown = true; }],
+  ["缺少圆角用途", (value) => { delete value.profiles.radiusUsage.accountSection; }],
+  ["未知圆角用途", (value) => { value.profiles.radiusUsage.unknown = "control"; }],
+  ["按钮误用面板圆角", (value) => { value.profiles.radiusUsage.button = "panel"; }],
+  ["弹窗误用卡片圆角", (value) => { value.profiles.radiusUsage.dialog = "card"; }],
+  ["头像失去圆形", (value) => { value.profiles.radiusUsage.avatar = "control"; }],
   ["缺少无障碍契约", (value) => { delete value.accessibility; }],
   ["缺少互动控件契约", (value) => { delete value.experiences.icons.controls; }],
   ["未知互动控件字段", (value) => { value.experiences.icons.controls.unknown = true; }],
@@ -182,7 +187,7 @@ if (!manifest.features?.brand || !manifest.features?.themes || !manifest.feature
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
-for (const claim of ["--radius-card", "--collection-card-gap", "--action-primary", "--action-primary-foreground", "--image-viewer-backdrop", "--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
+for (const claim of ["--radius-compact", "--radius-control", "--radius-card", "--radius-panel", "--collection-card-gap", "--action-primary", "--action-primary-foreground", "--image-viewer-backdrop", "--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
   if (!read("web/tokens.css").includes(`${claim}:`)) failures.push(`Web Token 缺少 ${claim}`);
 }
 if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouElementContract")) {
@@ -202,6 +207,10 @@ if (hasBalancedCssBlocks(`${read("web/tokens.css")}\n}`)) {
 }
 if (!read("dist/theme.js").includes("THEME_PALETTES") || !read("dist/theme.d.ts").includes("ThemePreference")) {
   failures.push("Web 主题模块缺少调色板或偏好类型");
+}
+if (!read("dist/theme.js").includes("RADIUS_USAGE") || !read("dist/theme.d.ts").includes("RADIUS_USAGE")
+  || !read("packages/flutter/lib/src/foundation_tokens.dart").includes("radiusUsage =")) {
+  failures.push("生成产物缺少跨端圆角用途映射");
 }
 if (!read("packages/flutter/lib/src/foundation_formatters.dart").includes("formatWenyouTime")) {
   failures.push("Flutter 生成物缺少统一时间格式化能力");
@@ -769,12 +778,35 @@ if (
   contract.profiles.mobile.horizontalPadding.regularFrom !== 401 ||
   contract.profiles.mobile.pageContentMaxWidth !== 520 ||
   contract.profiles.mobile.wideContainerMaxWidth !== 600 ||
-  contract.profiles.web.radii.card !== 10 ||
-  contract.profiles.mobile.radii.card !== 10 ||
   contract.profiles.mobile.radii.pill !== 999 ||
   "pill" in contract.profiles.web.radii
 ) {
   failures.push("平台断点与内容宽度不符合 v2.2 profile");
+}
+
+const radiusUsage = contract.profiles.radiusUsage;
+const expectedRadiusUsage = {
+  compactSurface: "compact", standaloneImage: "compact",
+  button: "control", field: "control", selection: "control",
+  contentCard: "card", listFrame: "card", accountSection: "card",
+  dialog: "panel", popover: "panel", sheet: "panel", menu: "panel",
+  attachedMedia: "inherit-host", cardSkeleton: "inherit-host",
+  avatar: "circle", iconStateLayer: "circle", semanticBadge: "pill",
+  topicTag: "none", inlineElement: "own-em-scale",
+};
+if (Object.keys(radiusUsage).length !== Object.keys(expectedRadiusUsage).length
+  || Object.entries(expectedRadiusUsage).some(([context, role]) => radiusUsage[context] !== role)) {
+  failures.push("圆角用途必须按紧凑元素、控件、内容卡片、浮层面板与语义例外映射");
+}
+for (const [platform, expected] of [
+  ["web", { compact: 6, card: 10, control: 8, panel: 12 }],
+  ["mobile", { compact: 8, card: 10, control: 8, panel: 12, pill: 999 }],
+]) {
+  const actual = contract.profiles[platform].radii;
+  if (Object.keys(actual).length !== Object.keys(expected).length
+    || Object.entries(expected).some(([role, value]) => actual[role] !== value)) {
+    failures.push(`${platform} 圆角层级必须符合当前跨端规范`);
+  }
 }
 
 const feedback = contract.experiences.feedback;

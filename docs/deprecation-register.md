@@ -31,6 +31,11 @@
 - 新增管理接口、统计字段、分类标签整理与审计迁移由 Backend 的 OpenAPI、Markdown 契约和弃用登记定义；已提交接口边界见 [Backend 综合内容管理（bc3fd94）](https://github.com/morenk/wenyousite-backend/blob/bc3fd941dab13a985088d024a04d72f8bf484dd6/docs/modules/admin.md#综合内容管理)。该引用用于契约对齐，不代表完整检查或验收已完成；Web 依已提交的兼容契约接入，Foundation 不定义第二套业务协议。
 - 交付顺序为兼容后端再到 Web；合并、部署及未来旧协议清理遵守治理门禁。本次不创建 Tag 或 Release，也不改变 Mobile 或社区前台体验。
 
+## 全局圆角层级收敛（v7.1.2）
+
+- `profiles.radiusUsage` 新增用途映射，现有 compact/control/card/panel 圆角数值收敛；卡片间距仍为 8px/8dp，圆形头像、图标状态层及语义胶囊等明确例外不变。无 HTTP API、存储或数据迁移。
+- 根包、Flutter 包、契约与 Manifest 同步为 7.1.2，`schemaVersion` 保持 3；Web 与 Mobile 分别锁定正式 `v7.1.2` Tag，回归按钮、表单、菜单、弹窗、内容卡片、“我的温油”内部区块、骨架、封面和大小字。旧 `v7.1.1` Tag 保持不变，可作为回滚来源；本次不分发独立安装包或部署产品。
+
 ## 内容卡片圆角与间距（v7.1.1）
 
 - 新增 `radii.card = 10` 与 `collections.cardGap = 8`，分别用于浏览内容卡片／列表外框和彼此独立的内容卡片间距；连续列表行仍靠分隔线区分。原有 compact/control/panel 圆角、全局 spacing、页面边距与内部留白不变。

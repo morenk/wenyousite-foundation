@@ -118,6 +118,7 @@ export declare const BRAND_TAGLINE: ${JSON.stringify(brand.tagline)};`);
 
 write("dist/theme.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const THEME_CONTRACT = Object.freeze(${js(themes)});
+export const RADIUS_USAGE = Object.freeze(${js(contract.profiles.radiusUsage)});
 export const THEME_PALETTES = Object.freeze(${js({ light: contract.palette, dark: themes.dark.palette })});
 export const THEME_MODES = Object.freeze(${js(themes.modes)});
 export const THEME_PREFERENCES = Object.freeze(${js(themes.preferences)});
@@ -131,6 +132,7 @@ export type ThemePreference = ${themes.preferences.map((preference) => JSON.stri
 export type ThemePaletteToken = ${Object.keys(contract.palette).map((token) => JSON.stringify(token)).join(" | ")};
 export type ThemePalette = Readonly<Record<ThemePaletteToken, string>>;
 export declare const THEME_CONTRACT: Readonly<${JSON.stringify(themes)}>;
+export declare const RADIUS_USAGE: Readonly<${JSON.stringify(contract.profiles.radiusUsage)}>;
 export declare const THEME_PALETTES: Readonly<Record<ThemeMode, ThemePalette>>;
 export declare const THEME_MODES: readonly ThemeMode[];
 export declare const THEME_PREFERENCES: readonly ThemePreference[];
@@ -1241,6 +1243,9 @@ abstract final class WenyouFoundationMotion {
 }
 
 abstract final class WenyouFoundationMobile {
+  static const Map<String, String> radiusUsage = <String, String>{
+${dartStringMapEntries(contract.profiles.radiusUsage)}
+  };
   static const double minimumTouchTarget = ${mobile.minimumControlTarget}.0;
   static const List<double> spacing = <double>${dartList(mobile.spacing, (value) => `${value}.0`)};
 ${mobile.spacing.map((value) => `  static const double space${value} = ${value}.0;`).join("\n")}
