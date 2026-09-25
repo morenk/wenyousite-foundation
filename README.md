@@ -18,6 +18,12 @@
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
 
+## v7.1.2 全局圆角层级
+
+Web 的 `compact/control/card/panel` 为 6/8/10/12px，Flutter 为 8/8/10/12dp；按钮、表单、选择控件使用 `control`，内容卡片、列表外框和“我的温油”等独立区块使用 `card`，Dialog、Popover、Sheet 与菜单外框使用 `panel`。卡片间距保持 8px/8dp，头像圆形、语义胶囊与行内 em 圆角保留。用途由 `profiles.radiusUsage` 定义，Web 导出 `RADIUS_USAGE`，Flutter 导出 `WenyouFoundationMobile.radiusUsage`。
+
+根包、Flutter 包与契约版本均为 `7.1.2`，`schemaVersion` 保持 `3`。本仓库提供同一 Git Tag/Release 供 Web 和 Mobile 各自锁定依赖与验收；不发布独立安装包，也不触发产品部署。旧 `v7.1.1` Tag 不改写，可用于回滚。
+
 ## v7.1.1 内容卡片
 
 根包、Flutter 包与契约版本为 `7.1.1`，`schemaVersion` 保持 `3`。浏览内容卡片与列表外框圆角为 10px/10dp，彼此独立的内容卡片间距为 8px/8dp；连续列表仍由分隔线组织，不改变卡片内部留白、页面边距、控件圆角或触控尺寸。Web 使用 `--radius-card`、`--collection-card-gap` 和 `COLLECTION_WEB_PROFILE.cardGap`，Flutter 使用 `WenyouFoundationMobile.radiusCard` 和 `WenyouCollectionContract.cardGap`。
