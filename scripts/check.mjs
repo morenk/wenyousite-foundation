@@ -1150,9 +1150,9 @@ if (quickScroll.focusBehavior !== "keep-expanded-while-keyboard-or-talkback-acce
   || quickScroll.focusIndicatorBehavior !== "platform-visible-focus-indicator-without-backing") {
   failures.push("自适应阅读滑块必须保留展开态与平台可见焦点反馈");
 }
-if (quickScroll.sampleWindowMs !== 100 || quickScroll.minimumSampleDurationMs !== 50
-  || quickScroll.minimumSameDirectionDistance !== 48 || quickScroll.minimumAverageVelocity !== 650
-  || quickScroll.minimumViewportVelocityFactor !== 0.9
+if (quickScroll.sampleWindowMs !== 100 || quickScroll.minimumSampleDurationMs !== 40
+  || quickScroll.minimumSameDirectionDistance !== 40 || quickScroll.minimumAverageVelocity !== 550
+  || quickScroll.minimumViewportVelocityFactor !== 0.8
   || quickScroll.velocityThresholdRule !== "max-of-absolute-and-viewport-relative") {
   failures.push("自适应阅读滑块快滑采样阈值漂移");
 }

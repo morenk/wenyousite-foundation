@@ -4,7 +4,7 @@
 
 - `mobile`：细态视觉改为紧贴页面右侧安全边缘，不因 48dp 命中区居中而内缩；快滑展开时才向左应用既有 8dp `edgeGap`，命中区继续完整避开系统手势区域，纵向中心映射不变。
 - `visual`：adaptive 展开态移除白色局部底衬；为消费兼容保留 backing 尺寸与 surface 字段，`expandedBackingOpacity` 固定为 `0`。键盘与 TalkBack 可访问期间继续保持展开，并保留平台可见焦点指示器。
-- `interaction`：正文停稳后的展开保持由 1500ms 调整为 1000ms；普通慢读 `slowReadHoldMs` 保持 1500ms。显现使用 180ms `easeOutCubic`，消失使用 180ms `easeInOutCubic`；形变和透明度中途反向均从当前值继续，并按剩余归一化距离缩短本段时长。展开 180ms、收细 240ms、尺寸、无回弹、采样、拖动及清理参数不变。
+- `interaction`：正文停稳后的展开保持由 1500ms 调整为 1000ms；普通慢读 `slowReadHoldMs` 保持 1500ms。显现使用 180ms `easeOutCubic`，消失使用 180ms `easeInOutCubic`；形变和透明度中途反向均从当前值继续，并按剩余归一化距离缩短本段时长。展开 180ms、收细 240ms、尺寸与无回弹不变。100ms 采样窗口内的最短有效采样／同向距离／绝对速度／视口速度系数收敛为 40ms／40dp／550dp/s／0.8；三条件仍同时满足，输入来源及排除规则不变。
 - `compatibility`：v7.1.2 阅读快翻 profile/API 继续逐值兼容；根包、Flutter 包、契约与 Manifest 同步为 `7.2.1`，`schemaVersion` 保持 `3`。
 
 ## 7.2.0

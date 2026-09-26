@@ -333,10 +333,10 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String activation = 'adaptive-fast-user-scroll';
   static const String eligibleInput = 'primary-vertical-reading-list-touch';
   static const int sampleWindowMs = 100;
-  static const int minimumSampleDurationMs = 50;
-  static const double minimumSameDirectionDistance = 48.0;
-  static const double minimumAverageVelocity = 650.0;
-  static const double minimumViewportVelocityFactor = 0.9;
+  static const int minimumSampleDurationMs = 40;
+  static const double minimumSameDirectionDistance = 40.0;
+  static const double minimumAverageVelocity = 550.0;
+  static const double minimumViewportVelocityFactor = 0.8;
   static const String velocityThresholdRule = 'max-of-absolute-and-viewport-relative';
   static const String directionChangeBehavior = 'clear-samples';
   static const List<String> excludedActivationSources = <String>['programmatic-navigation', 'deep-link', 'layout-change', 'image-height-change', 'horizontal-carousel', 'overscroll-rebound'];
