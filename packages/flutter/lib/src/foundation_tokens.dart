@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '7.1.2';
+  static const String value = '7.2.0';
   static const int schema = 3;
 }
 
@@ -299,6 +299,82 @@ abstract final class WenyouIdentityContract {
   static const String emailVerificationPublicIdentity = 'hidden';
   static const String emailVerificationAccountSecurityEntry = 'when-unverified';
   static const String emailVerificationRestrictedActionGuidance = 'contextual';
+}
+
+abstract final class WenyouAdaptiveReadingScrollContract {
+  static const List<String> scope = <String>['topic-detail', 'standalone-subpost', 'moment-detail'];
+  static const List<String> excludedScope = <String>['moment-feed'];
+  static const double collapsedWidth = 2.0;
+  static const double collapsedHeight = 24.0;
+  static const double expandedWidth = 8.0;
+  static const double expandedHeight = 56.0;
+  static const double expandedBackingWidth = 24.0;
+  static const double expandedBackingHeight = 64.0;
+  static const double expandedBackingOpacity = 0.92;
+  static const double minimumTargetWidth = 48.0;
+  static const double minimumTargetHeight = 64.0;
+  static const double edgeGap = 8.0;
+  static const double labelGap = 8.0;
+  static const String indicatorForeground = 'brandStrong';
+  static const String expandedBackingSurface = 'surface';
+  static const String labelSurface = 'surface';
+  static const String labelForeground = 'foreground';
+  static const String cornerRadius = 'pill';
+  static const String geometryModel = 'single-indicator-shape-invariant-center';
+  static const String trackExtent = 'available-reading-height';
+  static const String trackVisual = 'none';
+  static const String backingBehavior = 'expanded-only-fade-with-expansion';
+  static const List<String> avoidInsets = <String>['sticky-header', 'composer-entry', 'system-safe-area', 'system-gesture-area'];
+  static const bool viewportResize = false;
+  static const String activation = 'adaptive-fast-user-scroll';
+  static const String eligibleInput = 'primary-vertical-reading-list-touch';
+  static const int sampleWindowMs = 100;
+  static const int minimumSampleDurationMs = 50;
+  static const double minimumSameDirectionDistance = 48.0;
+  static const double minimumAverageVelocity = 650.0;
+  static const double minimumViewportVelocityFactor = 0.9;
+  static const String velocityThresholdRule = 'max-of-absolute-and-viewport-relative';
+  static const String directionChangeBehavior = 'clear-samples';
+  static const List<String> excludedActivationSources = <String>['programmatic-navigation', 'deep-link', 'layout-change', 'image-height-change', 'horizontal-carousel', 'overscroll-rebound'];
+  static const String flingBehavior = 'continue-only-after-activation';
+  static const String activationLatchBehavior = 'stay-expanded-after-trigger';
+  static const String gestureHandoff = 'current-reading-gesture-remains-owned-next-pointer-can-drag';
+  static const int expandDurationMs = 180;
+  static const String expandCurve = 'easeOutCubic';
+  static const bool expandOvershoot = false;
+  static const bool resumeExpansionFromCurrentValue = true;
+  static const String dragStartBehavior = 'stop-inertia-map-current-position-with-grab-offset';
+  static const String dragMapping = 'loaded-reading-distance-over-frozen-track';
+  static const String dragScrollBehavior = 'direct-follow-no-easing';
+  static const String frameUpdateBehavior = 'coalesce-latest-per-frame';
+  static const String dragGeometryBehavior = 'freeze-until-release';
+  static const bool expandedDuringDrag = true;
+  static const String releaseBehavior = 'apply-final-input-then-clear-stale-queue-and-tail-follow-before-scroll-idle';
+  static const int expandedHoldMs = 1500;
+  static const int collapseDurationMs = 240;
+  static const String collapseCurve = 'easeInOutCubic';
+  static const int collapsedHoldMs = 600;
+  static const int fadeDurationMs = 180;
+  static const int slowReadHoldMs = 1500;
+  static const String slowReadBehavior = 'collapsed-wait-for-scroll-idle-hold-1500-then-fade-180';
+  static const String pointerCapture = 'expanded-indicator-only';
+  static const String trackTapBehavior = 'pass-through';
+  static const String tapBehavior = 'consume-without-menu-navigation-or-jump';
+  static const String dragLabel = 'drag-only-actual-visible-content-location';
+  static const String incompleteEndLabel = 'loaded-range-not-complete-end';
+  static const String tailHoldBehavior = 'follow-existing-content-growth-while-held-at-loaded-end';
+  static const String paginationBehavior = 'consumer-owned-unchanged';
+  static const List<String> clearTriggers = <String>['scope-change', 'account-change', 'filter-change', 'sort-change', 'subpost-change', 'editor', 'ime', 'route-leave', 'cancel', 'controller-dispose'];
+  static const String cancelBehavior = 'clear-pending-input-without-applying-unpainted-update';
+  static const String automaticVisibilityBehavior = 'never-navigate-or-move-content';
+  static const String reducedMotionBehavior = 'switch-shape-without-animation';
+  static const String focusBehavior = 'keep-expanded-while-keyboard-or-talkback-accessible';
+  static const List<String> keyboard = <String>['ArrowUp', 'ArrowDown', 'Home', 'End'];
+  static const String accessibility = 'persistent-adjustable-slider-with-current-location';
+  static const String accessibilityStep = 'one-viewport';
+  static const String emptyBehavior = 'hidden-when-not-scrollable';
+  static const String legacyEntryBehavior = 'removed-retain-icon-asset-only';
+  static const String legacyActionsCardBehavior = 'removed';
 }
 
 abstract final class WenyouReadingQuickScrollContract {

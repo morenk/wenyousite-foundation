@@ -7,6 +7,7 @@
 - [Web profile](docs/platforms/web.md)
 - [Flutter profile](docs/platforms/mobile.md)
 - [图片呈现契约](docs/images.md)
+- [自适应阅读滑块](docs/adaptive-reading-scroll.md)
 - [图标目录与治理](docs/icons.md)
 - [核心元素系统](docs/elements.md)
 - [通知分组契约](docs/notifications.md)
@@ -17,6 +18,12 @@
 - [Codex 审美指导 Skill](skills/wenyou-design/SKILL.md)
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
+
+## v7.2.0 自适应阅读滑块
+
+主题详情、独立楼中楼和动态详情可消费独立 `experiences.adaptiveReadingScroll.mobile`：右侧细条在明确快滑后展开并可拖动，动态信息流排除。TypeScript 使用 `ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`，Flutter 使用 `WenyouAdaptiveReadingScrollContract`。
+
+v7.1.2 的 `experiences.readingQuickScroll.mobile`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`WenyouReadingQuickScrollContract` 和图标资产完整保留原值与源码 API，新旧 profile 不互为别名。根包、Flutter 包与契约版本为 `7.2.0`，`schemaVersion` 保持 `3`；消费者只锁定正式 `v7.2.0` Tag。
 
 ## v7.1.2 全局圆角层级
 

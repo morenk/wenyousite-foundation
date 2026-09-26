@@ -65,6 +65,14 @@
 - 消费者必须等待正式 Tag，在独立依赖升级提交后迁移布局；Foundation 检查不代替移动端 Widget、真机交互和性能验收。旧消费者继续使用原 Tag；回滚时恢复旧 Tag 与配套底部工具栏实现。
 - 不新增后端契约、持久化或数据迁移；本次不清理其他兼容协议。
 
+### 自适应阅读滑块（v7.2.0）
+
+- 新增可选 `experiences.adaptiveReadingScroll.mobile`；主题详情、独立楼中楼和动态详情可接入明确快滑自动唤醒，动态信息流排除。新代码使用 `ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile` 和 `WenyouAdaptiveReadingScrollContract`。
+- 新页面不显示主题帖右上角快翻按钮，不使用居中 360dp 短轨或开头／末尾／重试／收起操作卡。展开滑块短点按由滑块消费但不动作，轨道点按继续透传。
+- v7.1.2 的 `experiences.readingQuickScroll.mobile`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`WenyouReadingQuickScrollContract` 与图标语义／资产完整保留原字段、数值和源码 API；旧组件可稳定升级，不添加 Dart 弃用注解，也不把旧名别名到新形状。
+- 普通 pointer-up 先应用最后输入并停止末端跟随，不作为取消清理；取消不应用尚未绘制输入，controller dispose 与其他作用域清理触发器清除排队动作和计时器。
+- 根包、Flutter 包与契约以 `7.2.0` 发布，`schemaVersion` 保持 `3`。旧消费者可直接升级并继续使用兼容组件；Mobile 新实现仅在锁定正式 `v7.2.0` 后迁移到自适应 profile。回滚时恢复 `v7.1.2` Tag 与配套消费实现。
+
 ## 阅读快翻图标（v6.10.0）
 
 - 兼容新增 `action.reading-quick-scroll`，既有图标语义、图形、公开常量与通用 Toggle 可见反馈规则保持不变；无弃用或删除项。
