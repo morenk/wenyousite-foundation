@@ -4,8 +4,7 @@ export const BRAND = Object.freeze({
   "tagline": "最温油的文字共创社区",
   "source": {
     "assetRoot": "brand",
-    "displayGlyphFont": "LXGW WenKai",
-    "fontLicense": "licenses/LXGWWenKaiLite-OFL.txt",
+    "displayTypographyRole": "display",
     "description": "文与油管加油枪组成的温油站品牌标识"
   },
   "colors": {

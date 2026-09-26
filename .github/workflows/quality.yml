@@ -17,10 +17,7 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: pip install fonttools brotli
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      - run: pnpm check:package
 

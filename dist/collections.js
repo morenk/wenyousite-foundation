@@ -9,7 +9,9 @@ export const COLLECTION_INVARIANTS = Object.freeze({
     "chip",
     "badge",
     "compact-action"
-  ]
+  ],
+  "cardGapAppliesTo": "independent-content-cards",
+  "stackedListSeparation": "divider-only"
 });
 export const CONTENT_PRESENTATION = Object.freeze({
   "slots": [
@@ -46,11 +48,13 @@ export const CONTENT_PRESENTATION = Object.freeze({
 });
 export const COLLECTION_WEB_PROFILE = Object.freeze({
   "tabPanelWidth": "available",
-  "multiColumn": "explicit-grid-only"
+  "multiColumn": "explicit-grid-only",
+  "cardGap": 8
 });
 export const COLLECTION_MOBILE_PROFILE = Object.freeze({
   "layout": "single-column",
   "itemWidth": "available",
+  "cardGap": 8,
   "domainLayoutExceptions": {
     "moments-feed": "two-column-waterfall"
   }

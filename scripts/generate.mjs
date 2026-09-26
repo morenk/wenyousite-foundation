@@ -117,6 +117,7 @@ export declare const BRAND_TAGLINE: ${JSON.stringify(brand.tagline)};`);
 
 write("dist/theme.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const THEME_CONTRACT = Object.freeze(${js(themes)});
+export const RADIUS_USAGE = Object.freeze(${js(contract.profiles.radiusUsage)});
 export const THEME_PALETTES = Object.freeze(${js({ light: contract.palette, dark: themes.dark.palette })});
 export const THEME_MODES = Object.freeze(${js(themes.modes)});
 export const THEME_PREFERENCES = Object.freeze(${js(themes.preferences)});
@@ -130,6 +131,7 @@ export type ThemePreference = ${themes.preferences.map((preference) => JSON.stri
 export type ThemePaletteToken = ${Object.keys(contract.palette).map((token) => JSON.stringify(token)).join(" | ")};
 export type ThemePalette = Readonly<Record<ThemePaletteToken, string>>;
 export declare const THEME_CONTRACT: Readonly<${JSON.stringify(themes)}>;
+export declare const RADIUS_USAGE: Readonly<${JSON.stringify(contract.profiles.radiusUsage)}>;
 export declare const THEME_PALETTES: Readonly<Record<ThemeMode, ThemePalette>>;
 export declare const THEME_MODES: readonly ThemeMode[];
 export declare const THEME_PREFERENCES: readonly ThemePreference[];
@@ -297,13 +299,6 @@ write("docs/icons.md", `# 图标目录与治理
 
 状态层颜色继承图标 currentColor，hover/focus 与 pressed 透明度分别为 ${icons.controls.stateLayer.hoverOpacity} 与 ${icons.controls.stateLayer.pressedOpacity}；禁用内容透明度为 ${icons.controls.disabledContentOpacity}。Pending 保持提交前 tone 并显示同色加载指示，不能回退成未选中态。
 
-## 阅读快翻
-
-- \`action.reading-quick-scroll\` 表示主动打开阅读位置快速调节工具，使用 \`${icons.semantics["action.reading-quick-scroll"]}\` 的上下箭头表达沿阅读轴移动；不用于过滤、排序、条目重排或直接定位最新回复。
-- 移动端主题详情与独立楼中楼的顶栏入口放在“定位最新回复”图标右侧，只显示图标，不显示常驻“快翻”文字；tooltip 与无障碍名称均为“快翻”，由按钮承担名称，内部图标隐藏语义。
-- 开启时底部工具栏必须可见，同时显示当前位置状态与“收起”操作文字，作为通用 Toggle 所要求的可见开启反馈；tooltip 本身不构成可见状态反馈。入口保持同一描边图形，不新增实心变体；按钮开启语义与工具栏实际显隐同步。
-- Flutter 消费 \`WenyouIconIds.actionReadingQuickScroll\`，保留移动 profile 规定的最小命中区及底部安全区。
-
 ## 语义目录
 
 | 语义 ID | SVG 图形 | SHA-256 |
@@ -442,15 +437,19 @@ export declare const COLLECTION_INVARIANTS: Readonly<{
   narrowContentDoesNotChangeItemWidth: true;
   horizontalOverflow: "explicit-only";
   contentSizedExceptions: readonly ("message-bubble" | "chip" | "badge" | "compact-action")[];
+  cardGapAppliesTo: "independent-content-cards";
+  stackedListSeparation: "divider-only";
 }>;
 export declare const CONTENT_PRESENTATION: Readonly<${JSON.stringify(collections.content)}>;
 export declare const COLLECTION_WEB_PROFILE: Readonly<{
   tabPanelWidth: "available";
   multiColumn: "explicit-grid-only";
+  cardGap: ${collections.web.cardGap};
 }>;
 export declare const COLLECTION_MOBILE_PROFILE: Readonly<{
   layout: "single-column";
   itemWidth: "available";
+  cardGap: ${collections.mobile.cardGap};
   domainLayoutExceptions: Readonly<{
     "moments-feed": "two-column-waterfall";
   }>;
@@ -585,6 +584,12 @@ const validDate = (value) => {
   return Number.isNaN(date.getTime()) ? undefined : date;
 };
 
+export function formatWenyouDate(value) {
+  const date = validDate(value);
+  if (!date) return "—";
+  return [date.getFullYear(), pad2(date.getMonth() + 1), pad2(date.getDate())].join("-");
+}
+
 export function formatWenyouExactTime(value) {
   const date = validDate(value);
   if (!date) return "—";
@@ -605,7 +610,7 @@ export function formatWenyouTime(value, reference = new Date()) {
   const datePart = date.getFullYear() === now.getFullYear()
     ? [pad2(date.getMonth() + 1), pad2(date.getDate())].join("-")
     : [date.getFullYear(), pad2(date.getMonth() + 1), pad2(date.getDate())].join("-");
-  return datePart + " " + [pad2(date.getHours()), pad2(date.getMinutes())].join(":");
+  return datePart;
 }
 
 const compact = (value, divisor, suffix) => {
@@ -624,6 +629,7 @@ export function formatWenyouCompactCount(value) {
 write("dist/formatting.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export declare const FORMATTING_CONTRACT: Readonly<${JSON.stringify(formatting)}>;
 export type WenyouDateInput = Date | string | number;
+export declare function formatWenyouDate(value: WenyouDateInput): string;
 export declare function formatWenyouExactTime(value: WenyouDateInput): string;
 export declare function formatWenyouTime(value: WenyouDateInput, reference?: WenyouDateInput): string;
 export declare function formatWenyouCompactCount(value: number): string;`);
@@ -771,9 +777,11 @@ write("web/tokens.css", `/* 由 contracts/foundation.v1.json 生成，禁止手�
   color-scheme: light;
 ${paletteCssDeclarations(p)}
   --radius-compact: ${web.radii.compact / 16}rem;
+  --radius-card: ${web.radii.card / 16}rem;
   --radius-control: ${web.radii.control / 16}rem;
   --radius-panel: ${web.radii.panel / 16}rem;
   --radius: var(--radius-control);
+  --collection-card-gap: ${collections.web.cardGap}px;
   --layout-narrow: ${web.layoutRem.narrow}rem;
   --layout-moment: ${web.layoutRem.moment}rem;
   --layout-feed: ${web.layoutRem.feed}rem;
@@ -901,18 +909,6 @@ ${darkThemeCssDeclarations}
   }
 }
 `);
-
-write("web/fonts.css", `/* 字体版本与校验和以 contracts/foundation.v1.json 为准。 */
-@import "@fontsource-variable/noto-sans-sc/wght.css";
-@import "@fontsource-variable/nunito/wght.css";
-
-@font-face {
-  font-family: "LXGW WenKai";
-  src: url("./fonts/LXGWWenKaiLite-Medium.woff2") format("woff2");
-  font-display: swap;
-  font-style: normal;
-  font-weight: 500;
-}`);
 
 const mobile = contract.profiles.mobile;
 const paletteLines = Object.entries(p)
@@ -1180,10 +1176,7 @@ abstract final class WenyouControlContract {
 }
 
 abstract final class WenyouFoundationTypography {
-  static const String body = 'Wenyou Noto Sans SC';
-  static const String display = 'Wenyou LXGW WenKai';
-  static const String utility = 'Wenyou Nunito';
-  static const List<String> chineseFallback = <String>['Noto Sans SC', 'sans-serif'];
+  /// 排版家族语义；客户端继承平台默认字体，不作为 fontFamily 名称。
   static const Map<String, String> mobileFamilies = <String, String>{
 ${mobileTypeFamilyEntries}
   };
@@ -1205,10 +1198,14 @@ abstract final class WenyouFoundationMotion {
 }
 
 abstract final class WenyouFoundationMobile {
+  static const Map<String, String> radiusUsage = <String, String>{
+${dartStringMapEntries(contract.profiles.radiusUsage)}
+  };
   static const double minimumTouchTarget = ${mobile.minimumControlTarget}.0;
   static const List<double> spacing = <double>${dartList(mobile.spacing, (value) => `${value}.0`)};
 ${mobile.spacing.map((value) => `  static const double space${value} = ${value}.0;`).join("\n")}
   static const double radiusCompact = ${mobile.radii.compact}.0;
+  static const double radiusCard = ${mobile.radii.card}.0;
   static const double radiusControl = ${mobile.radii.control}.0;
   static const double radiusPanel = ${mobile.radii.panel}.0;
   static const double radiusPill = ${mobile.radii.pill}.0;
@@ -1287,6 +1284,7 @@ abstract final class WenyouCollectionContract {
   static const Set<String> contentSizedExceptions = <String>{${collections.invariants.contentSizedExceptions.map(dartString).join(", ")}};
   static const String mobileLayout = ${dartString(collections.mobile.layout)};
   static const String mobileItemWidth = ${dartString(collections.mobile.itemWidth)};
+  static const double cardGap = ${collections.mobile.cardGap}.0;
   static const Map<String, String> mobileDomainLayoutExceptions = <String, String>{
 ${dartStringMapEntries(collections.mobile.domainLayoutExceptions)}
   };
@@ -1360,6 +1358,11 @@ abstract final class WenyouFormattingContract {
 
 String _wenyouPad2(int value) => value.toString().padLeft(2, '0');
 
+String formatWenyouDate(DateTime value) {
+  final date = value.toLocal();
+  return date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day);
+}
+
 String formatWenyouExactTime(DateTime value) {
   final date = value.toLocal();
   return date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day)
@@ -1383,7 +1386,7 @@ String formatWenyouTime(DateTime value, {DateTime? reference}) {
   final datePart = date.year == now.year
       ? _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day)
       : date.year.toString() + '-' + _wenyouPad2(date.month) + '-' + _wenyouPad2(date.day);
-  return datePart + ' ' + _wenyouPad2(date.hour) + ':' + _wenyouPad2(date.minute);
+  return datePart;
 }
 
 String _formatWenyouCompact(num value, num divisor, String suffix) {
@@ -1558,7 +1561,6 @@ const artifactPaths = [
   ...["brand", "theme", "icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
     .flatMap((name) => [`dist/${name}.js`, `dist/${name}.d.ts`]),
   "web/tokens.css",
-  "web/fonts.css",
   "packages/flutter/lib/src/foundation_tokens.dart",
   "packages/flutter/lib/src/foundation_formatters.dart",
   "packages/flutter/lib/src/foundation_brand.dart",
@@ -1601,25 +1603,15 @@ const manifest = JSON.stringify({
     tagline: brand.tagline,
     assets: brandAssetSha256,
   },
-  fonts: contract.fonts.map(({ role, family, sha256, webSha256 }) => ({
-    role,
-    family,
-    sha256,
-    ...(webSha256 ? { webSha256 } : {}),
-  })),
+  fonts: contract.fonts,
 }, null, 2);
 write("foundation-manifest.json", manifest);
 write("packages/flutter/foundation-manifest.json", manifest);
 
-const flutterLicense = contract.fonts
-  .map((font) => [
-    `${font.family} (${font.role})`,
-    "=".repeat(font.family.length + font.role.length + 3),
-    "以下许可仅适用于该字体文件；基础仓库其余内容不因此自动获得相同许可。",
-    "",
-    readFile(font.license),
-  ].join("\n"))
-  .join("\n\n---\n\n");
-write("packages/flutter/LICENSE", `${flutterLicense}\n\n---\n\nLucide icons\n============\n${readFile(icons.source.license)}`);
+write("packages/flutter/LICENSE", `Lucide icons
+============
+以下许可仅适用于随包分发的图标；其余内容不因此自动获得相同许可。
+
+${readFile(icons.source.license)}`);
 
 if (!checkOnly) console.log(`Generated foundation ${contract.version} artifacts`);

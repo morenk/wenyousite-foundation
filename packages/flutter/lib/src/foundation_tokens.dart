@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '6.10.0';
-  static const int schema = 2;
+  static const String value = '7.2.1';
+  static const int schema = 3;
 }
 
 abstract final class WenyouFoundationPalette {
@@ -310,10 +310,7 @@ abstract final class WenyouControlContract {
 }
 
 abstract final class WenyouFoundationTypography {
-  static const String body = 'Wenyou Noto Sans SC';
-  static const String display = 'Wenyou LXGW WenKai';
-  static const String utility = 'Wenyou Nunito';
-  static const List<String> chineseFallback = <String>['Noto Sans SC', 'sans-serif'];
+  /// 排版家族语义；客户端继承平台默认字体，不作为 fontFamily 名称。
   static const Map<String, String> mobileFamilies = <String, String>{
     'pageTitle': 'display',
     'sectionTitle': 'display',
@@ -363,6 +360,27 @@ abstract final class WenyouFoundationMotion {
 }
 
 abstract final class WenyouFoundationMobile {
+  static const Map<String, String> radiusUsage = <String, String>{
+    'compactSurface': 'compact',
+    'standaloneImage': 'compact',
+    'button': 'control',
+    'field': 'control',
+    'selection': 'control',
+    'contentCard': 'card',
+    'listFrame': 'card',
+    'accountSection': 'card',
+    'dialog': 'panel',
+    'popover': 'panel',
+    'sheet': 'panel',
+    'menu': 'panel',
+    'attachedMedia': 'inherit-host',
+    'cardSkeleton': 'inherit-host',
+    'avatar': 'circle',
+    'iconStateLayer': 'circle',
+    'semanticBadge': 'pill',
+    'topicTag': 'none',
+    'inlineElement': 'own-em-scale',
+  };
   static const double minimumTouchTarget = 48.0;
   static const List<double> spacing = <double>[4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0];
   static const double space4 = 4.0;
@@ -372,9 +390,10 @@ abstract final class WenyouFoundationMobile {
   static const double space20 = 20.0;
   static const double space24 = 24.0;
   static const double space32 = 32.0;
-  static const double radiusCompact = 12.0;
-  static const double radiusControl = 16.0;
-  static const double radiusPanel = 20.0;
+  static const double radiusCompact = 8.0;
+  static const double radiusCard = 10.0;
+  static const double radiusControl = 8.0;
+  static const double radiusPanel = 12.0;
   static const double radiusPill = 999.0;
   static const double compactHorizontalPadding = 12.0;
   static const double regularHorizontalPadding = 24.0;
@@ -483,6 +502,7 @@ abstract final class WenyouCollectionContract {
   static const Set<String> contentSizedExceptions = <String>{'message-bubble', 'chip', 'badge', 'compact-action'};
   static const String mobileLayout = 'single-column';
   static const String mobileItemWidth = 'available';
+  static const double cardGap = 8.0;
   static const Map<String, String> mobileDomainLayoutExceptions = <String, String>{
     'moments-feed': 'two-column-waterfall',
   };

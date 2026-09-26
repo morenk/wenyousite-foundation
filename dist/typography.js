@@ -1,7 +1,7 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const TYPOGRAPHY_FAMILIES = Object.freeze({
   "body": {
-    "family": "Noto Sans SC Variable",
+    "family": "system-ui",
     "weights": [
       400,
       500,
@@ -9,34 +9,26 @@ export const TYPOGRAPHY_FAMILIES = Object.freeze({
       700
     ],
     "fallback": [
-      "Noto Sans SC",
-      "system-ui",
       "sans-serif"
     ]
   },
   "display": {
-    "family": "LXGW WenKai",
+    "family": "system-ui",
     "weights": [
       500
     ],
     "fallback": [
-      "Noto Sans SC Variable",
-      "Noto Sans SC",
-      "system-ui",
       "sans-serif"
     ]
   },
   "utility": {
-    "family": "Nunito Variable",
+    "family": "system-ui",
     "weights": [
       400,
       600,
       700
     ],
     "fallback": [
-      "Noto Sans SC Variable",
-      "Noto Sans SC",
-      "system-ui",
       "sans-serif"
     ]
   }

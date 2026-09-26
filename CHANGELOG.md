@@ -1,5 +1,63 @@
 # Foundation Changelog
 
+## 7.2.1
+
+- `breaking`：移动端阅读进度、手动快翻和自适应阅读滑块迁回 Mobile `ReadingScrollSpec`；移除 `experiences.readingQuickScroll`、`experiences.adaptiveReadingScroll`、对应 TypeScript／Flutter 公开常量、专属 `action.reading-quick-scroll` 语义与现行规范文档。通用主题、动效、普通表单滑块和无障碍基础保持不变。
+- `release`：负责人明确决定将本次破坏性职责清理作为小版本 `7.2.1` 发布，`schemaVersion` 保持 `3`。Mobile `origin/dev` 仍固定 `v7.2.0` 并引用旧 API，因此新 Tag 不会自动影响当前消费者；Mobile 后续必须先清除引用，再通过独立 chore 固定新正式 Tag。旧消费者须继续锁定 `v7.2.0`，不得直接升级。
+
+## 7.2.0
+
+- `mobile`：主题详情、独立楼中楼和动态详情以右侧自适应细条替代主题帖右上角快翻按钮；动态信息流排除。细态 2×24dp、展开态 8×56dp、展开命中区至少 48×64dp；展开态保留 24×64dp、surface 0.92 的局部底衬，细态无底衬且不增加整轨背景。滑块沿全部可用阅读高度映射且不改变正文视口。
+- `interaction`：机器化快滑采样、排除唤醒源、手势归属、180ms 展开、直接跟手、冻结拖动几何、松手最后输入、1500/240/600/180ms 收细淡出时序、慢读 1500/180ms 时序、动画中续展开和 reduced motion。
+- `accessibility`：TalkBack 持续提供 adjustable slider、每次移动一个视口；键盘焦点保持展开并支持方向键及 Home/End。无可滚动内容隐藏。
+- `compatibility`：新增独立 `experiences.adaptiveReadingScroll.mobile`、`ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile` 与 `WenyouAdaptiveReadingScrollContract`；v7.1.2 的 `experiences.readingQuickScroll.mobile`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`WenyouReadingQuickScrollContract` 及 `action.reading-quick-scroll` 完整保留字段、数值和源码 API，不添加 Dart 弃用注解，也不别名到新形状。
+- `release`：根包、Flutter 包、契约与 Manifest 同步为 `7.2.0`，`schemaVersion` 保持 `3`；新增能力为可选机器字段，旧消费者可稳定升级。Mobile 仅在正式 `v7.2.0` Tag 发布后通过独立提交接入自适应能力。
+
+## 7.1.2
+
+- `profiles`：统一圆角角色，Web compact/control/card/panel 为 6/8/10/12px，Flutter 为 8/8/10/12dp；增加 `radiusUsage` 映射，让按钮、表单、内容卡片、账户区块及浮层各用对应角色。
+- `generated`：同步 Web CSS、`RADIUS_USAGE` TypeScript 导出和 Flutter 常量；头像圆形、语义胶囊及行内 em 圆角保留。根包、Flutter 包、契约与 Manifest 同步为 7.1.2，`schemaVersion` 保持 3；客户端锁定正式 `v7.1.2` Tag。
+
+## 7.1.1
+
+- `collections`：Web 与 Flutter 的独立内容卡片间距统一为 8px/8dp；连续列表行继续通过分隔线组织，不加行距。新增 Web CSS、JS/TypeScript 和 Flutter 生成常量。
+- `profiles`：两端内容卡片与列表外框圆角统一为 10px/10dp；新增 Web `--radius-card` 和 Flutter `radiusCard`，保留控件、面板圆角及通用 spacing。
+- `compatibility`：按负责人明确决定以补丁版本发布；根包、Flutter 包、契约与 Manifest 同步为 7.1.1，`schemaVersion` 保持 3。消费者仅锁定正式 `v7.1.1` Tag，旧 `v7.1.0` Tag 保持不变；无 HTTP API、存储或数据迁移。
+
+## 未发布文档
+
+- `web`：补充综合管理后台的信息结构、PC 紧凑表格、精简文案、详情返回状态恢复及体验验收要求；只限定后台，不新增 Token、不修改机器契约或包版本，Backend 继续拥有接口和业务事实源。
+
+## 7.1.0
+
+- `formatting`：普通内容不足 72 小时保留相对时间，满 72 小时与未来时间按同年 `MM-dd`、跨年 `yyyy-MM-dd` 回退；悬停与读屏只暴露完整日期。
+- `api`：新增 JS/TypeScript 和 Dart 等价 `formatWenyouDate`；保留 `formatWenyouTime` 签名与 `formatWenyouExactTime` 完整日期及时分行为。安全、审计、温油账务、预约和到期时刻保留精确呈现，已有秒精度不降低。
+- `validation`：新增跨语言共享时间用例，覆盖相对阈值、未来、跨年、本地时区与 DST；JavaScript 测试纳入 `pnpm check`，Dart 验证命令见 `tests/README.md`。
+- `compatibility`：根包、Flutter 包、契约和 Manifest 同步为 7.1.0，`schemaVersion` 保持 3。原始 API/存储时间戳保持不变；消费者锁定正式 `v7.1.0` Tag，并配套迁移普通内容悬停与读屏、核验精确记录正文。既有发布与回滚路径保留。
+
+## 7.0.0
+
+- `breaking`：`schemaVersion` 升为 3，三个排版角色均使用系统字体，fallback 为通用无衬线；保留支持字重、字号、行高和使用场景。
+- `package`：`fonts` 为空，移除捆绑字体、字体加载 CSS 入口、字体依赖、字形校验脚本及字体许可证；保留图标及其许可证。
+- `brand`：品牌来源以 `displayTypographyRole: "display"` 替代具体字形与字体许可字段。
+- `api`：TypeScript 保留家族角色、家族定义、使用语境和类型尺度；Flutter 删除具体家族名与中文 fallback 常量，保留语义映射和尺寸、行高、字重 API。
+- `validation`：新增系统字体 Schema 反向用例与实际 tarball 内容检查，平台文档明确消费者迁移和验收要求。
+- `compatibility`：根包、Flutter 包、契约和 Manifest 同步为 7.0.0；通过正式 `v7.0.0` Tag 发布，消费者独立升级。旧 v6.x Tag 不可变，继续供未迁移消费者及回滚使用。下列历史记录保留原版本行为，具体旧家族与资产可从对应 Tag 追溯。
+
+### 随本版本包含的既有文档
+
+- `shared`：补充发布后主贴发言权限的管理表单体验，关联 Backend `5.21.0-dev.20260911.1` 契约；复用现有权限用语与字段层级，说明主贴和子贴权限边界，不增加设计 Token 或提升版本。
+- `web`：主贴权限融入现有选择控件和统一保存表单，保留桌面密度、键盘操作与焦点。
+- `mobile`：主贴权限融入既有设置行、通用选项 Sheet、自动保存和离开等待，保留小屏、字体缩放与触控体验。
+
+## 6.11.0
+
+- `docs`：本版本包含 main 已通过 PR #4 合入的主题封面播放文档（`docs/images.md`）；这是既有合入内容，不属于本次纵向快翻新增实现。
+
+- `mobile`：新增右侧纵向阅读快翻的几何、颜色角色、局部底衬透明度、手势和无障碍机器契约，以悬浮滑块和局部操作卡替换底部工具栏开启反馈，保持正文视口不变；松手允许最后输入在下一帧完成，但不继续跟随新增内容，取消、关闭和作用域切换清除待执行更新。
+- `shared`：生成 `WenyouReadingQuickScrollContract` 与 `READING_QUICK_SCROLL_MOBILE_PROFILE`，图标语义与资产保持不变；新增 Schema 反向用例及主题后景对比、生成同源检查。
+- `compatibility`：旧消费者继续锁定已发布 Tag；移动端需独立升级后迁移布局和验收。无 HTTP API 或存储变化；根包、Flutter 包与契约同步至 6.11.0，消费者通过正式 Tag v6.11.0 独立升级。
+
 ## 6.10.0
 
 - `shared`：兼容新增 `action.reading-quick-scroll`，映射固定 Lucide 1.28.0 的 `move-vertical`；生成 Web SVG、类型、Flutter 常量与同源资产。
@@ -17,7 +75,7 @@
 
 ## 6.9.0
 
-- `shared`：补充功能页面、区块与子区块标题语境；资料与账号设置、帖子管理和站务界面统一使用 Noto Sans SC 600，保留字号、行高及内容阅读标题的文楷。
+- `shared`：补充功能页面、区块与子区块标题语境；资料与账号设置、帖子管理和站务界面统一使用当时捆绑的 body 字体 600，保留字号、行高及内容阅读标题的当时捆绑的 display 字体。
 - `web`：功能标题覆盖站务登录、邀请接受、管理中的帖子名称与操作弹窗；不改变普通认证、创建/草稿续写及内容浏览界面。
 - `mobile`：记录 Windows 消费端接入要求；保留既有全局排版角色，本次不升级移动端客户端。
 
@@ -95,7 +153,7 @@
 
 ## 6.0.0
 
-- `typography`：文楷收敛到品牌、结构标题、详情内容标题和文字封面，并统一使用真实 500 字重；列表项、弹层、状态、用户名、控件和富文本标题使用 Noto Sans SC。
+- `typography`：当时捆绑的 display 字体收敛到品牌、结构标题、详情内容标题和文字封面，并统一使用真实 500 字重；列表项、弹层、状态、用户名、控件和富文本标题使用当时捆绑的 body 字体。
 - `content`：新增列表/详情语义槽位与内容优先表面规则，详情正文保持连续阅读流，禁止无意义嵌套卡片。
 - `controls`：新增操作层级、字段骨架、选择模式、进度与跨端命中区合同。
 - `interaction`：固定 Skeleton/Spinner 分工、刷新保留内容、浮层任务重量、风险分级确认与克制功能型动效。

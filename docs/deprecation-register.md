@@ -2,6 +2,85 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 移动端阅读滑块职责迁出（v7.2.1）
+
+- 职责边界：移动端阅读进度、手动快翻和自适应阅读滑块改由 Mobile `ReadingScrollSpec` 独立拥有。Foundation `v7.2.1` 移除 `experiences.readingQuickScroll`、`experiences.adaptiveReadingScroll`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile`、`WenyouReadingQuickScrollContract`、`WenyouAdaptiveReadingScrollContract`、专属 `action.reading-quick-scroll` 语义／资产及两份现行规范文档；通用主题、动效、普通表单滑块和无障碍基础不受影响。
+- 兼容事实：Mobile 当前 `origin/dev` 的 `pubspec.yaml` 仍精确固定 Foundation `v7.2.0`，`reading_quick_scroll.dart` 与 `reading_quick_scroll_overlay.dart` 仍引用 `actionReadingQuickScroll`／`WenyouReadingQuickScrollContract`；PR #66 的后续反馈尚未全部合入。发布 `v7.2.1` 不会自动升级或破坏这个固定消费者，也不代表迁移已完成。
+- 交付顺序：Foundation 可按本次负责人明确授权先发布 `v7.2.1`；旧 Mobile 继续固定 `v7.2.0`。Mobile 后续先合入 `ReadingScrollSpec` 并清除两套 Foundation 阅读滑块引用，完成回归与回滚核验后，再通过独立 chore 固定正式 `v7.2.1`。存在旧引用的消费者不得直接升级。
+- 版本取舍：公开 API 删除通常应提升主版本；负责人本次明确选择小版本 `7.2.1` 作为职责清理例外，根包、Flutter 包、契约与 Manifest 同步为 `7.2.1`，`schemaVersion` 保持 `3`。此决策不把破坏性删除描述为兼容变化，也不建立未来删除 API 可默认使用 Patch 的先例。
+- 回滚与历史：既有 `v6.10.0`、`v6.11.0`、`v7.1.2`、`v7.2.0` Tag 及下方历史登记保持不变，可供旧消费者固定与回滚；已关闭 PR #21 的分支历史仅供追溯，不并入本清理。无 HTTP API、数据库或持久化迁移。
+
+## 本人关注与粉丝管理文档
+
+- [本人关注与粉丝管理](interaction.md#本人关注与粉丝管理) 改为紧凑扁平行、关注／回关主按钮、已关注／互关浅底状态及共享菜单；明确 Mobile 同栏返回与计数页签、底部 Sheet，以及 Web 锚定 Dropdown、键盘和焦点边界。复用已发布的 controls、collections、feedback、overlays 和 accessibility 语义。
+- 原候选文档中的“全部中性描边”“Mobile 固定第二操作行”和独立重复关系文字已由本方案取代，不作为消费者实现要求；该替换只涉及未发布页面设计说明，不删除既有 Token、组件 API 或 HTTP 协议。
+- 菜单中的取消关注、移除粉丝按双向关系决定，互关时两个页签均可移除；私聊按能力、举报复用既有流程。拉黑与移除确认、共享行锁、结果不明只读核对和会话边界纳入验收；拉黑保持服务端既有关系与可见性语义，不新增自动取消双方关注。
+- 无 Foundation Token、机器契约、公开导出、版本或生成物变更，无需升级消费者 Foundation 依赖，也不创建 Tag 或 Release。本文档不替代 Backend 的 OpenAPI、Markdown 契约和关系权限规则。
+- 后端兼容接口先行，Web 与 Mobile 依据已提交契约接入并完成各自验收；保留既有列表深链与旧客户端接口，不在本次删除兼容协议。消费者需要回滚时恢复原关系管理页面实现，已发生的关系写入不通过界面回滚恢复。
+
+## 全屏图片图集业务接入
+
+- [图片呈现契约](images.md#全屏图集的业务接入) 补充五类图集分组、出现位置身份、双向加载会话、来源定位、当前图片操作与移动端缩放手势；[Flutter profile](platforms/mobile.md) 引用同一规则。
+- 本次仅文档变化，无 Foundation Token、机器契约、公开导出或版本变化；不创建 Tag / Release，不要求消费者依赖未发布提交。既有完整来源、失败保留上下文和动画生命周期继续有效。
+- Backend 新增兼容图集查询与正文图片出现索引，接口和迁移以其 [已提交契约](https://github.com/morenk/wenyousite-backend/blob/92b030a81f8957386e324fed477bd1e46faf65ea/docs/image-gallery.md) 为准；正式 Markdown、上传 API 和 `COMPLETED` 不变，旧入口继续可用。
+- Web 本轮只同步新增 API 的固定 OpenAPI 与生成类型，现有界面保持原行为；Mobile 在兼容后端迁移、历史回填和校验完成后接入。此文档不代表消费者实现、真机或隔离 E2E 验收已完成。
+- 不删除旧查看入口或媒体引用协议；移动端回滚可恢复原消费者提交，新增索引和兼容查询不要求删除。线上回填、合并、部署与后续兼容清理仍遵守治理门禁。
+
+## 后台登录会话与记住设备文档
+
+- [Web 后台登录与会话](platforms/web.md#后台登录与会话) 补充默认未勾选的七天登录选项、统一失效处理、临时故障重试、安全返回和跨标签页核验；仅更新体验文档，不新增 Foundation Token、公开导出、机器契约或包版本，无需消费者依赖升级。
+- 接口和安全策略以 [Backend 5.25.0-dev.20260922.2 的账号与安全边界](https://github.com/morenk/wenyousite-backend/blob/1776156ef8234bbc6c6cf362558773cf555e4d8f/docs/modules/admin.md#账号与安全边界) 为准。登录验证省略或不启用记住设备时保持原短会话规则；既有数据库会话迁移为未启用，不延长原期限。固定七天模式不滚动续期，也不改变单会话、角色和账号状态校验、CSRF 或独立的高风险确认边界。
+- 先交付兼容后端，再接入 Web；此契约引用不代表完整检查、界面验收、合并或部署已完成。本次不修改普通社区或 Mobile 登录体验，不创建 Tag 或 Release，不删除既有兼容协议。
+
+## 综合管理后台文档
+
+- [Web profile](platforms/web.md#管理后台) 补充后台专属的信息结构、密度、文案和交互验收边界；无 Foundation Token、公开导出、机器契约或版本变化，无需消费者依赖升级。
+- 后台继续使用既有 `/station` 入口和页面地址；原举报与申诉流程、独立管理会话及服务端安全规则保留。本次文档不授权删除旧接口或兼容协议。
+- 新增管理接口、统计字段、分类标签整理与审计迁移由 Backend 的 OpenAPI、Markdown 契约和弃用登记定义；已提交接口边界见 [Backend 综合内容管理（bc3fd94）](https://github.com/morenk/wenyousite-backend/blob/bc3fd941dab13a985088d024a04d72f8bf484dd6/docs/modules/admin.md#综合内容管理)。该引用用于契约对齐，不代表完整检查或验收已完成；Web 依已提交的兼容契约接入，Foundation 不定义第二套业务协议。
+- 交付顺序为兼容后端再到 Web；合并、部署及未来旧协议清理遵守治理门禁。本次不创建 Tag 或 Release，也不改变 Mobile 或社区前台体验。
+
+## 全局圆角层级收敛（v7.1.2）
+
+- `profiles.radiusUsage` 新增用途映射，现有 compact/control/card/panel 圆角数值收敛；卡片间距仍为 8px/8dp，圆形头像、图标状态层及语义胶囊等明确例外不变。无 HTTP API、存储或数据迁移。
+- 根包、Flutter 包、契约与 Manifest 同步为 7.1.2，`schemaVersion` 保持 3；Web 与 Mobile 分别锁定正式 `v7.1.2` Tag，回归按钮、表单、菜单、弹窗、内容卡片、“我的温油”内部区块、骨架、封面和大小字。旧 `v7.1.1` Tag 保持不变，可作为回滚来源；本次不分发独立安装包或部署产品。
+
+## 内容卡片圆角与间距（v7.1.1）
+
+- 新增 `radii.card = 10` 与 `collections.cardGap = 8`，分别用于浏览内容卡片／列表外框和彼此独立的内容卡片间距；连续列表行仍靠分隔线区分。原有 compact/control/panel 圆角、全局 spacing、页面边距与内部留白不变。
+- Web 消费生成的 CSS 与 `COLLECTION_WEB_PROFILE.cardGap`，动态瀑布流的测量、定位和骨架间距须一致；Flutter 消费 `radiusCard` 与 `WenyouCollectionContract.cardGap`，保持 48dp 触控下限。
+- `schemaVersion` 保持 3，无字段删除、HTTP API、存储或数据迁移。两端在正式 `v7.1.1` Tag 发布后独立锁定依赖、验证并提交；回滚时恢复 `v7.1.0` Tag 及对应消费实现，不改写历史 Tag。
+
+## 普通内容日期展示（v7.1.0）
+
+- `formatWenyouTime` 保留签名，但普通内容的绝对回退移除时分；新增 `formatWenyouDate` 用于完整日期悬停和读屏。`formatWenyouExactTime` 及安全、审计、温油账务、预约和到期的精确呈现保留，已有秒精度不能降低。
+- 消费者升级时必须将普通内容的悬停和 Semantics 从精确时间迁移到完整日期，逐项核对精确记录正文；Foundation 共享用例不替代消费者界面验收。本任务不改 Mobile 或 Web 仓库。
+- 无 HTTP API、OpenAPI、数据库或持久化变化；不删除或截断原始时间戳，无数据迁移。不清理旧兼容协议，本条不构成全体消费者迁移证据。
+- 根包、Flutter 包、契约和 Manifest 同步至 7.1.0，`schemaVersion` 保持 3；客户端通过独立升级提交锁定正式 `v7.1.0` Tag，不消费 main 或未发布提交。回滚时恢复先前正式 Tag 与配套调用。
+
+## 系统字体（v7.0.0）
+
+- 破坏性变化：Schema 3 要求 `fonts: []`；三个家族角色固定声明系统字体及通用无衬线 fallback。旧具体家族、资源清单、字体 CSS 导出、字体依赖与许可内容不进入 v7。品牌 `displayGlyphFont`/`fontLicense` 字段由 `displayTypographyRole: "display"` 替代。
+- Flutter 删除 `WenyouFoundationTypography.body/display/utility/chineseFallback`；`mobileFamilies` 保留语义映射，`mobileSizes/mobileLineHeights/mobileWeights` 保留尺度。TypeScript 保留 `TypographyFamilyRole`、`TYPOGRAPHY_FAMILIES`、`TYPOGRAPHY_USAGE`、`WEB_TYPE_SCALE` 与 `MOBILE_TYPE_SCALE`。
+- 旧 v6.x Tag 不可改写，继续保留原资产、许可证和 API，供未迁移消费者与回滚使用。此版本准备不是全体消费者已迁移的证据，也不授权清理其他仓库兼容实现。
+- 合并与正式 Tag 发布必须由负责人明确决定。Web 在 VPS、Mobile 在 Windows 各自通过独立提交锁定正式 v7 Tag，迁移字体导入、注册、预加载和家族引用，再完成平台构建与代表性页面验收；不得锁定 main 或未发布提交。
+- 验收：`pnpm generate`、`pnpm check` 覆盖 Schema、反向用例、语义角色与尺度同源、Manifest 及生成物；`pnpm check:package` 实际打包并检查完整归档，不接受字体文件、旧字体名称、字体依赖或失效导出。Flutter 真机与 Web 浏览器验收由消费任务完成。
+- 风险与回滚：系统字体会改变中文字形、数字宽度和换行；需检查品牌、列表、正文、编辑器、缩放与溢出。回滚必须同时恢复原 v6.x Tag、依赖锁及配套消费实现，不能只降包版本。无 HTTP API、持久化或数据迁移变化；数学字体、系统等宽字体、平台图标字体不在本次范围。
+
+## 右侧纵向阅读快翻（v6.11.0）
+
+- 新增 `experiences.readingQuickScroll.mobile` 和生成的 Flutter/Web 读取常量；对已发布 Tag 无修改，不删除既有导出或图标资产。
+- 新版移动快翻以右侧轨道与滑块提供开启反馈，替代 v6.10.0 的底部位置状态与收起反馈。该例外只限本阅读工具，不改变普通 Toggle 规则。
+- 消费者必须等待正式 Tag，在独立依赖升级提交后迁移布局；Foundation 检查不代替移动端 Widget、真机交互和性能验收。旧消费者继续使用原 Tag；回滚时恢复旧 Tag 与配套底部工具栏实现。
+- 不新增后端契约、持久化或数据迁移；本次不清理其他兼容协议。
+
+### 自适应阅读滑块（v7.2.0）
+
+- 新增可选 `experiences.adaptiveReadingScroll.mobile`；主题详情、独立楼中楼和动态详情可接入明确快滑自动唤醒，动态信息流排除。新代码使用 `ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile` 和 `WenyouAdaptiveReadingScrollContract`。
+- 新页面不显示主题帖右上角快翻按钮，不使用居中 360dp 短轨或开头／末尾／重试／收起操作卡。展开滑块短点按由滑块消费但不动作，轨道点按继续透传。
+- v7.1.2 的 `experiences.readingQuickScroll.mobile`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`WenyouReadingQuickScrollContract` 与图标语义／资产完整保留原字段、数值和源码 API；旧组件可稳定升级，不添加 Dart 弃用注解，也不把旧名别名到新形状。
+- 普通 pointer-up 先应用最后输入并停止末端跟随，不作为取消清理；取消不应用尚未绘制输入，controller dispose 与其他作用域清理触发器清除排队动作和计时器。
+- 根包、Flutter 包与契约以 `7.2.0` 发布，`schemaVersion` 保持 `3`。旧消费者可直接升级并继续使用兼容组件；Mobile 新实现仅在锁定正式 `v7.2.0` 后迁移到自适应 profile。回滚时恢复 `v7.1.2` Tag 与配套消费实现。
+
 ## 阅读快翻图标（v6.10.0）
 
 - 兼容新增 `action.reading-quick-scroll`，既有图标语义、图形、公开常量与通用 Toggle 可见反馈规则保持不变；无弃用或删除项。

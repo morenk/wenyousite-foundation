@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
-  "schemaVersion": 2,
-  "version": "6.10.0",
+  "schemaVersion": 3,
+  "version": "7.2.1",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -116,9 +116,9 @@
     }
   },
   "typography": {
-    "body": { "family": "Noto Sans SC Variable", "weights": [400, 500, 600, 700], "fallback": ["Noto Sans SC", "system-ui", "sans-serif"] },
-    "display": { "family": "LXGW WenKai", "weights": [500], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] },
-    "utility": { "family": "Nunito Variable", "weights": [400, 600, 700], "fallback": ["Noto Sans SC Variable", "Noto Sans SC", "system-ui", "sans-serif"] },
+    "body": { "family": "system-ui", "weights": [400, 500, 600, 700], "fallback": ["sans-serif"] },
+    "display": { "family": "system-ui", "weights": [500], "fallback": ["sans-serif"] },
+    "utility": { "family": "system-ui", "weights": [400, 600, 700], "fallback": ["sans-serif"] },
     "usage": {
       "displayContexts": ["brand", "page-title", "section-title", "detail-content-title", "text-cover-title"],
       "bodySemiboldContexts": ["list-item-title", "dialog-title", "sheet-title", "popover-title", "state-title", "functional-page-title", "functional-section-title", "functional-subsection-title"],
@@ -164,13 +164,34 @@
     }
   },
   "profiles": {
+    "radiusUsage": {
+      "compactSurface": "compact",
+      "standaloneImage": "compact",
+      "button": "control",
+      "field": "control",
+      "selection": "control",
+      "contentCard": "card",
+      "listFrame": "card",
+      "accountSection": "card",
+      "dialog": "panel",
+      "popover": "panel",
+      "sheet": "panel",
+      "menu": "panel",
+      "attachedMedia": "inherit-host",
+      "cardSkeleton": "inherit-host",
+      "avatar": "circle",
+      "iconStateLayer": "circle",
+      "semanticBadge": "pill",
+      "topicTag": "none",
+      "inlineElement": "own-em-scale"
+    },
     "web": {
       "unit": "px",
       "minimumViewport": 1024,
       "expandedChromeFrom": 1280,
       "minimumControlTarget": 40,
       "minimumCompactTarget": 32,
-      "radii": { "compact": 10, "control": 12, "panel": 16 },
+      "radii": { "compact": 6, "card": 10, "control": 8, "panel": 12 },
       "layoutRem": { "narrow": 30, "moment": 36, "feed": 42, "content": 48, "workspace": 72, "chromeWorkspace": 78, "wide": 80 },
       "reading": { "bodyPx": 17, "lineHeightPx": 32, "maxFullWidthCharacters": 40 },
       "typeScale": {
@@ -189,7 +210,7 @@
       "minimumViewport": 360,
       "minimumControlTarget": 48,
       "spacing": [4, 8, 12, 16, 20, 24, 32],
-      "radii": { "compact": 12, "control": 16, "panel": 20, "pill": 999 },
+      "radii": { "compact": 8, "card": 10, "control": 8, "panel": 12, "pill": 999 },
       "horizontalPadding": { "compact": 12, "regular": 24, "regularFrom": 401 },
       "pageContentMaxWidth": 520,
       "wideContainerMaxWidth": 600,
@@ -212,8 +233,7 @@
       "tagline": "最温油的文字共创社区",
       "source": {
         "assetRoot": "brand",
-        "displayGlyphFont": "LXGW WenKai",
-        "fontLicense": "licenses/LXGWWenKaiLite-OFL.txt",
+        "displayTypographyRole": "display",
         "description": "文与油管加油枪组成的温油站品牌标识"
       },
       "colors": {
@@ -347,7 +367,6 @@
         "action.save-all": "save-all",
         "action.send": "send",
         "action.search": "search",
-        "action.reading-quick-scroll": "move-vertical",
         "action.filter": "list-filter",
         "action.clear-filter": "list-x",
         "action.sort": "arrow-down-up",
@@ -513,7 +532,9 @@
         "itemWidth": "available",
         "narrowContentDoesNotChangeItemWidth": true,
         "horizontalOverflow": "explicit-only",
-        "contentSizedExceptions": ["message-bubble", "chip", "badge", "compact-action"]
+        "contentSizedExceptions": ["message-bubble", "chip", "badge", "compact-action"],
+        "cardGapAppliesTo": "independent-content-cards",
+        "stackedListSeparation": "divider-only"
       },
       "content": {
         "slots": ["title", "identity", "time", "summary", "cover", "tags", "metrics", "status", "actions"],
@@ -540,11 +561,13 @@
       },
       "web": {
         "tabPanelWidth": "available",
-        "multiColumn": "explicit-grid-only"
+        "multiColumn": "explicit-grid-only",
+        "cardGap": 8
       },
       "mobile": {
         "layout": "single-column",
         "itemWidth": "available",
+        "cardGap": 8,
         "domainLayoutExceptions": {
           "moments-feed": "two-column-waterfall"
         }
@@ -1023,16 +1046,26 @@
       }
     },
     "formatting": {
+      "sourceTimestamp": "preserve",
+      "exactTime": {
+        "contexts": ["security", "audit", "wenyou-ledger", "appointment", "expiry"],
+        "format": "yyyy-MM-dd HH:mm",
+        "timezone": "user-local",
+        "preserveExistingSeconds": true
+      },
       "relativeTime": {
         "relativeWindowSeconds": 259200,
         "justNowSeconds": 60,
         "minutesUntilSeconds": 3600,
         "hoursUntilSeconds": 86400,
-        "sameYearFallback": "MM-dd HH:mm",
-        "crossYearFallback": "yyyy-MM-dd HH:mm",
+        "sameYearFallback": "MM-dd",
+        "crossYearFallback": "yyyy-MM-dd",
         "futureBehavior": "absolute",
         "timezone": "user-local",
-        "exactValueExposure": ["web-title", "mobile-semantics"]
+        "exactValueExposure": ["web-title", "web-accessible-name", "mobile-semantics"],
+        "exposureFormat": "yyyy-MM-dd",
+        "exposurePrecision": "date-only",
+        "contexts": ["post", "reply", "moment", "notification", "direct-message", "draft", "profile"]
       },
       "counts": {
         "compactFrom": 10000,
@@ -1348,35 +1381,5 @@
       }
     }
   },
-  "fonts": [
-    {
-      "role": "body",
-      "family": "Noto Sans SC Variable",
-      "source": "https://github.com/google/fonts/tree/2894aab31764f10f29c421bdfd2340d3b382d384/ofl/notosanssc",
-      "revision": "2894aab31764f10f29c421bdfd2340d3b382d384",
-      "flutterAsset": "packages/flutter/lib/fonts/NotoSansSC-Variable.ttf",
-      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
-      "license": "licenses/NotoSansSC-OFL.txt"
-    },
-    {
-      "role": "display",
-      "family": "LXGW WenKai",
-      "source": "https://github.com/lxgw/LxgwWenKai-Lite/tree/067a6d508532cc0f8bc79e899ec3b06ff4dee38a",
-      "revision": "067a6d508532cc0f8bc79e899ec3b06ff4dee38a",
-      "flutterAsset": "packages/flutter/lib/fonts/LXGWWenKaiLite-Medium.ttf",
-      "webAsset": "web/fonts/LXGWWenKaiLite-Medium.woff2",
-      "sha256": "02eb0f8deed11b00481393f5720630ae1a44424f37f4157ea160a69a1c72a0b6",
-      "webSha256": "9caf8fb2c04e248d54400393d4204faaefa09bbb6c9ec8c0730caab43db8b198",
-      "license": "licenses/LXGWWenKaiLite-OFL.txt"
-    },
-    {
-      "role": "utility",
-      "family": "Nunito Variable",
-      "source": "https://github.com/google/fonts/tree/604936664fd62c14271209b51f98e7f495dd1a3e/ofl/nunito",
-      "revision": "604936664fd62c14271209b51f98e7f495dd1a3e",
-      "flutterAsset": "packages/flutter/lib/fonts/Nunito-Variable.ttf",
-      "sha256": "bb55a5ca5c2042335b3991af27c4d0705d0ef41cac6164ac737fd8f2a1e85207",
-      "license": "licenses/Nunito-OFL.txt"
-    }
-  ]
+  "fonts": []
 }

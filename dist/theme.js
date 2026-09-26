@@ -113,6 +113,27 @@ export const THEME_CONTRACT = Object.freeze({
     }
   }
 });
+export const RADIUS_USAGE = Object.freeze({
+  "compactSurface": "compact",
+  "standaloneImage": "compact",
+  "button": "control",
+  "field": "control",
+  "selection": "control",
+  "contentCard": "card",
+  "listFrame": "card",
+  "accountSection": "card",
+  "dialog": "panel",
+  "popover": "panel",
+  "sheet": "panel",
+  "menu": "panel",
+  "attachedMedia": "inherit-host",
+  "cardSkeleton": "inherit-host",
+  "avatar": "circle",
+  "iconStateLayer": "circle",
+  "semanticBadge": "pill",
+  "topicTag": "none",
+  "inlineElement": "own-em-scale"
+});
 export const THEME_PALETTES = Object.freeze({
   "light": {
     "background": "#FFFFFF",

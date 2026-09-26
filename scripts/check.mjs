@@ -56,10 +56,28 @@ if (!validateContract(contract)) {
   failures.push(`Foundation JSON Schema 校验失败：${ajv.errorsText(validateContract.errors, { separator: "; " })}`);
 }
 for (const [label, mutate] of [
+  ["旧 Schema 版本", (value) => { value.schemaVersion = 2; }],
+  ["缺少空字体清单", (value) => { delete value.fonts; }],
+  ["重新捆绑字体", (value) => { value.fonts.push({ family: "Legacy Custom Font" }); }],
+  ...["body", "display", "utility"].flatMap((role) => [
+    [`${role} 绑定具体字体`, (value) => { value.typography[role].family = "Legacy Custom Font"; }],
+    [`${role} 恢复自定义 fallback`, (value) => { value.typography[role].fallback.unshift("Legacy Custom Font"); }],
+    [`${role} 缺少 fallback`, (value) => { value.typography[role].fallback = []; }],
+    [`${role} 缺少支持字重`, (value) => { value.typography[role].weights = []; }],
+  ]),
+  ["品牌缺少排版角色", (value) => { delete value.experiences.brand.source.displayTypographyRole; }],
+  ["品牌使用错误排版角色", (value) => { value.experiences.brand.source.displayTypographyRole = "body"; }],
+  ["品牌恢复字形绑定", (value) => { value.experiences.brand.source.displayGlyphFont = "Legacy Custom Font"; }],
+  ["品牌恢复字体许可", (value) => { value.experiences.brand.source.fontLicense = "legacy-license.txt"; }],
   ["未知根字段", (value) => { value.unknown = true; }],
   ["缺少品牌契约", (value) => { delete value.experiences.brand; }],
   ["未知品牌字段", (value) => { value.experiences.brand.unknown = true; }],
   ["未知 profile 字段", (value) => { value.profiles.web.unknown = true; }],
+  ["缺少圆角用途", (value) => { delete value.profiles.radiusUsage.accountSection; }],
+  ["未知圆角用途", (value) => { value.profiles.radiusUsage.unknown = "control"; }],
+  ["按钮误用面板圆角", (value) => { value.profiles.radiusUsage.button = "panel"; }],
+  ["弹窗误用卡片圆角", (value) => { value.profiles.radiusUsage.dialog = "card"; }],
+  ["头像失去圆形", (value) => { value.profiles.radiusUsage.avatar = "control"; }],
   ["缺少无障碍契约", (value) => { delete value.accessibility; }],
   ["缺少互动控件契约", (value) => { delete value.experiences.icons.controls; }],
   ["未知互动控件字段", (value) => { value.experiences.icons.controls.unknown = true; }],
@@ -84,6 +102,11 @@ for (const [label, mutate] of [
   ["骰子待掷态错误可操作", (value) => { value.experiences.elements.inline.dice.interaction.pendingActivation = "open-detail"; }],
   ["缺少控件契约", (value) => { delete value.experiences.controls; }],
   ["缺少格式化契约", (value) => { delete value.experiences.formatting; }],
+  ["普通日期恢复时分", (value) => { value.experiences.formatting.relativeTime.sameYearFallback = "MM-dd HH:mm"; }],
+  ["普通读屏暴露时刻", (value) => { value.experiences.formatting.relativeTime.exposurePrecision = "minute"; }],
+  ["精确记录降低秒精度", (value) => { value.experiences.formatting.exactTime.preserveExistingSeconds = false; }],
+  ["温油账务漏出精确范围", (value) => { value.experiences.formatting.exactTime.contexts = ["security", "audit", "appointment", "expiry"]; }],
+  ["源时间戳被截断", (value) => { value.experiences.formatting.sourceTimestamp = "date-only"; }],
   ["非法等级色", (value) => { value.experiences.elements.metadata.level.tiers[0].foreground = "gray"; }],
   ["错误平台单位", (value) => { value.profiles.mobile.unit = "px"; }],
   ["非法浮层数值", (value) => { value.experiences.overlays.web.layers.popup = "70"; }],
@@ -93,8 +116,36 @@ for (const [label, mutate] of [
   if (validateContract(invalid)) failures.push(`JSON Schema 反向用例未拒绝：${label}`);
 }
 
-if (contract.schemaVersion !== 2) failures.push("foundation schemaVersion 必须为 2");
+if (contract.schemaVersion !== 3) failures.push("foundation schemaVersion 必须为 3");
 if (packageJson.version !== contract.version) failures.push("根 package 版本与契约不一致");
+if (manifest.version !== contract.version || manifest.schemaVersion !== contract.schemaVersion) {
+  failures.push("Manifest 版本与契约不一致");
+}
+if (JSON.stringify(manifest.fonts) !== "[]") failures.push("Manifest 不得包含捆绑字体");
+if (packageJson.exports?.["./web/fonts.css"]) failures.push("不得恢复字体 CSS 导出");
+const typographyApi = await import("../dist/typography.js");
+for (const role of ["body", "display", "utility"]) {
+  if (JSON.stringify(typographyApi.TYPOGRAPHY_FAMILIES[role]) !== JSON.stringify(contract.typography[role])) {
+    failures.push(`${role} 公开排版家族与契约不一致`);
+  }
+}
+for (const [platform, exported] of [["web", typographyApi.WEB_TYPE_SCALE], ["mobile", typographyApi.MOBILE_TYPE_SCALE]]) {
+  if (JSON.stringify(exported) !== JSON.stringify(contract.profiles[platform].typeScale)) {
+    failures.push(`${platform} 公开排版尺度与契约不一致`);
+  }
+  for (const [role, style] of Object.entries(contract.profiles[platform].typeScale)) {
+    if (!contract.typography[style.family]?.weights.includes(style.weight)) {
+      failures.push(`${platform}/${role} 使用了家族不支持的字重`);
+    }
+  }
+}
+if (JSON.stringify(typographyApi.TYPOGRAPHY_USAGE) !== JSON.stringify(contract.typography.usage)) {
+  failures.push("公开排版使用场景与契约不一致");
+}
+const typographyDart = read("packages/flutter/lib/src/foundation_tokens.dart");
+if (/static const (?:String (?:body|display|utility)\b|List<String> chineseFallback\b)/u.test(typographyDart)) {
+  failures.push("Flutter 不得恢复具体字体名称 API");
+}
 if (
   packageJson.exports?.["./brand"]?.types !== "./dist/brand.d.ts"
   || packageJson.exports?.["./brand"]?.default !== "./dist/brand.js"
@@ -106,7 +157,7 @@ if (
   || packageJson.exports?.["./controls"]?.types !== "./dist/controls.d.ts"
   || packageJson.exports?.["./formatting"]?.types !== "./dist/formatting.d.ts"
 ) {
-  failures.push("根 package 未导出 v6 设计契约模块");
+  failures.push("根 package 未导出共享设计契约模块");
 }
 const contractSha256 = crypto
   .createHash("sha256")
@@ -127,10 +178,13 @@ for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha25
 if (!manifest.features?.brand || !manifest.features?.themes || !manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.controls || !manifest.features?.formatting || !manifest.features?.contentPresentation || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
   failures.push("发布清单缺少共享语义能力清单");
 }
+if ("adaptiveReadingScroll" in (manifest.features ?? {})) {
+  failures.push("发布清单不得继续声明由 Mobile 独立拥有的阅读滑块能力");
+}
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
   failures.push("Flutter package 清单与根清单不一致");
 }
-for (const claim of ["--action-primary", "--action-primary-foreground", "--image-viewer-backdrop", "--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
+for (const claim of ["--radius-compact", "--radius-control", "--radius-card", "--radius-panel", "--collection-card-gap", "--action-primary", "--action-primary-foreground", "--image-viewer-backdrop", "--element-internal-reference-surface", "--element-internal-reference-line-height", "--element-dice-line-height", "--element-dice-detail-cell-surface", "--element-quote-foreground", "--element-quote-surface", "--element-quote-marker", "--element-quote-radius", "--element-badge-default-height", "--element-category-marker-width", "--element-level-mist-surface", "--element-level-berry-surface"]) {
   if (!read("web/tokens.css").includes(`${claim}:`)) failures.push(`Web Token 缺少 ${claim}`);
 }
 if (!read("packages/flutter/lib/src/foundation_tokens.dart").includes("class WenyouElementContract")) {
@@ -151,16 +205,15 @@ if (hasBalancedCssBlocks(`${read("web/tokens.css")}\n}`)) {
 if (!read("dist/theme.js").includes("THEME_PALETTES") || !read("dist/theme.d.ts").includes("ThemePreference")) {
   failures.push("Web 主题模块缺少调色板或偏好类型");
 }
+if (!read("dist/theme.js").includes("RADIUS_USAGE") || !read("dist/theme.d.ts").includes("RADIUS_USAGE")
+  || !read("packages/flutter/lib/src/foundation_tokens.dart").includes("radiusUsage =")) {
+  failures.push("生成产物缺少跨端圆角用途映射");
+}
 if (!read("packages/flutter/lib/src/foundation_formatters.dart").includes("formatWenyouTime")) {
   failures.push("Flutter 生成物缺少统一时间格式化能力");
 }
 if (!read("packages/flutter/lib/src/foundation_brand.dart").includes("class WenyouBrandMark")) {
   failures.push("Flutter 生成物缺少 WenyouBrandMark");
-}
-for (const font of contract.fonts) {
-  if (!read("packages/flutter/LICENSE").includes(font.family)) {
-    failures.push(`Flutter package LICENSE 缺少 ${font.family}`);
-  }
 }
 if (!read("packages/flutter/pubspec.yaml").includes(`version: ${contract.version}`)) {
   failures.push("Flutter package 版本与契约不一致");
@@ -185,7 +238,7 @@ for (const relativePath of expectedBrandFiles) {
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
   if (manifest.brand?.assets?.[relativePath] !== hash) failures.push(`品牌资产校验和不一致 ${relativePath}`);
 }
-for (const relativePath of [brand.assets.appIconMaster, brand.assets.symbolMaster, brand.source.fontLicense]) {
+for (const relativePath of [brand.assets.appIconMaster, brand.assets.symbolMaster]) {
   if (!fs.existsSync(path.join(root, relativePath))) failures.push(`品牌契约引用了不存在的文件 ${relativePath}`);
 }
 if (manifest.brand?.name !== brand.name || manifest.brand?.tagline !== brand.tagline) {
@@ -288,22 +341,6 @@ if (icons.source.package !== "lucide-static" || icons.source.version !== package
 }
 if (!read("pnpm-lock.yaml").includes(icons.source.integrity)) failures.push("Lucide 来源完整性未锁定");
 if (!fs.existsSync(path.join(root, icons.source.license))) failures.push("Lucide 图标许可证不存在");
-// 阅读位置调节必须保持独立语义，并通过公开 Web API 提供跨端同源资产。
-const readingQuickScrollId = "action.reading-quick-scroll";
-const iconApi = await import("../dist/icons.js");
-if (icons.semantics[readingQuickScrollId] !== "move-vertical"
-  || iconApi.iconGlyphId(readingQuickScrollId) !== "move-vertical") {
-  failures.push("阅读快翻必须使用独立的 move-vertical 语义，不能借用过滤或排序");
-}
-const readingQuickScrollAsset = "packages/flutter/icons/move-vertical.svg";
-if (!fs.existsSync(path.join(root, readingQuickScrollAsset))
-  || iconApi.iconSvg(readingQuickScrollId) !== read(readingQuickScrollAsset).trimEnd()
-  || !iconApi.iconNode(readingQuickScrollId)?.length) {
-  failures.push("阅读快翻公开 Web SVG/节点与 Flutter 资产必须完整且同源");
-}
-if (iconApi.iconVariantSvg(readingQuickScrollId, "filled") !== undefined) {
-  failures.push("阅读快翻不提供实心变体，开启反馈由可见工具栏承担");
-}
 const semanticIds = Object.keys(icons.semantics);
 const glyphIds = [...new Set(Object.values(icons.semantics))];
 const filledGlyphIds = [...new Set(Object.values(icons.controls.selected)
@@ -451,22 +488,26 @@ if (
   || !contract.typography.usage.bodyOnlyContexts.includes("username")
   || !contract.typography.usage.bodySemiboldContexts.includes("dialog-title")
 ) {
-  failures.push("文楷与黑体的使用语境偏离 v6 规范");
+  failures.push("display 与 body 的使用语境偏离排版契约");
 }
 for (const context of ["functional-page-title", "functional-section-title", "functional-subsection-title"]) {
   if (
     !contract.typography.usage.bodySemiboldContexts.includes(context)
     || contract.typography.usage.displayContexts.includes(context)
   ) {
-    failures.push(`${context} 必须归入黑体半粗标题语境，不能使用文楷`);
+    failures.push(`${context} 必须归入 body 半粗标题语境，不能使用 display`);
   }
 }
 if (
   contract.experiences.formatting.relativeTime.relativeWindowSeconds !== 72 * 60 * 60
-  || contract.experiences.formatting.relativeTime.sameYearFallback !== "MM-dd HH:mm"
-  || contract.experiences.formatting.relativeTime.crossYearFallback !== "yyyy-MM-dd HH:mm"
+  || contract.experiences.formatting.relativeTime.sameYearFallback !== "MM-dd"
+  || contract.experiences.formatting.relativeTime.crossYearFallback !== "yyyy-MM-dd"
+  || contract.experiences.formatting.relativeTime.exposureFormat !== "yyyy-MM-dd"
+  || contract.experiences.formatting.relativeTime.exposurePrecision !== "date-only"
+  || contract.experiences.formatting.exactTime.preserveExistingSeconds !== true
+  || contract.experiences.formatting.sourceTimestamp !== "preserve"
 ) {
-  failures.push("相对时间三天窗口或绝对时间回退格式发生漂移");
+  failures.push("普通内容日期、安全账务精度或原始时间戳保留规则发生漂移");
 }
 if (elements.identity.emailVerification.publicIdentity !== "hidden") {
   failures.push("邮箱验证不得进入公开身份呈现");
@@ -724,6 +765,31 @@ if (
   failures.push("平台断点与内容宽度不符合 v2.2 profile");
 }
 
+const radiusUsage = contract.profiles.radiusUsage;
+const expectedRadiusUsage = {
+  compactSurface: "compact", standaloneImage: "compact",
+  button: "control", field: "control", selection: "control",
+  contentCard: "card", listFrame: "card", accountSection: "card",
+  dialog: "panel", popover: "panel", sheet: "panel", menu: "panel",
+  attachedMedia: "inherit-host", cardSkeleton: "inherit-host",
+  avatar: "circle", iconStateLayer: "circle", semanticBadge: "pill",
+  topicTag: "none", inlineElement: "own-em-scale",
+};
+if (Object.keys(radiusUsage).length !== Object.keys(expectedRadiusUsage).length
+  || Object.entries(expectedRadiusUsage).some(([context, role]) => radiusUsage[context] !== role)) {
+  failures.push("圆角用途必须按紧凑元素、控件、内容卡片、浮层面板与语义例外映射");
+}
+for (const [platform, expected] of [
+  ["web", { compact: 6, card: 10, control: 8, panel: 12 }],
+  ["mobile", { compact: 8, card: 10, control: 8, panel: 12, pill: 999 }],
+]) {
+  const actual = contract.profiles[platform].radii;
+  if (Object.keys(actual).length !== Object.keys(expected).length
+    || Object.entries(expected).some(([role, value]) => actual[role] !== value)) {
+    failures.push(`${platform} 圆角层级必须符合当前跨端规范`);
+  }
+}
+
 const feedback = contract.experiences.feedback;
 if (feedback.resourceStates.join(",") !== "loading,refreshing,loading-more,empty,no-results,error,offline,restricted") {
   failures.push("资源反馈状态必须使用 v2.2 固定集合");
@@ -928,6 +994,8 @@ for (const exception of ["message-bubble", "chip", "badge", "compact-action"]) {
     failures.push(`集合布局缺少按内容收缩例外 ${exception}`);
   }
 }
+if (collections.invariants.cardGapAppliesTo !== "independent-content-cards" || collections.invariants.stackedListSeparation !== "divider-only") failures.push("卡片间距只用于独立内容卡片，连续列表以分隔线区分");
+if (collections.web.cardGap !== 8 || collections.mobile.cardGap !== 8) failures.push("两端独立内容卡片间距必须为 8px/8dp");
 if (collections.web.tabPanelWidth !== "available") failures.push("Web Tabs 面板必须占满可用宽度");
 if (collections.mobile.itemWidth !== "available") failures.push("Flutter 列表项必须占满单列宽度");
 
@@ -954,29 +1022,37 @@ if (new Set(groupedNotificationTypes).size !== groupedNotificationTypes.length) 
   failures.push("同一通知事件不得属于多个筛选分组");
 }
 
-for (const font of contract.fonts) {
-  for (const property of ["flutterAsset", "license"]) {
-    if (!fs.existsSync(path.join(root, font[property]))) failures.push(`${font.family} 缺少 ${property}`);
-  }
-  const hash = crypto
-    .createHash("sha256")
-    .update(fs.readFileSync(path.join(root, font.flutterAsset)))
-    .digest("hex");
-  if (hash !== font.sha256) failures.push(`${font.family} Flutter 字体校验和不一致`);
-  if (font.webAsset) {
-    const webHash = crypto
-      .createHash("sha256")
-      .update(fs.readFileSync(path.join(root, font.webAsset)))
-      .digest("hex");
-    if (webHash !== font.webSha256) failures.push(`${font.family} Web 字体校验和不一致`);
-  }
-}
-
 const skill = read("skills/wenyou-design/SKILL.md");
 if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundation.v1.json") || !skill.includes("docs/images.md") || !skill.includes("docs/icons.md") || !skill.includes("docs/elements.md") || !skill.includes("docs/interaction.md") || !skill.includes("docs/presentation.md") || !skill.includes("docs/navigation-language.md") || !skill.includes("experiences.collections") || !skill.includes("experiences.controls") || !skill.includes("experiences.formatting") || !skill.includes("experiences.elements") || !skill.includes("experiences.icons") || !skill.includes("experiences.feedback") || !skill.includes("experiences.navigation")) {
   failures.push("wenyou-design Skill 未正确引用中央事实源");
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");
+
+for (const removedExperience of ["readingQuickScroll", "adaptiveReadingScroll"]) {
+  if (removedExperience in contract.experiences) {
+    failures.push(`Foundation 不得重新声明 Mobile 独有体验 ${removedExperience}`);
+  }
+}
+for (const [relativePath, marker] of [
+  ["dist/controls.js", "READING_QUICK_SCROLL_MOBILE_PROFILE"],
+  ["dist/controls.js", "ADAPTIVE_READING_SCROLL_MOBILE_PROFILE"],
+  ["dist/controls.d.ts", "AdaptiveReadingScrollMobileProfile"],
+  ["dist/icons.js", "action.reading-quick-scroll"],
+  ["dist/icons.d.ts", "action.reading-quick-scroll"],
+  ["packages/flutter/lib/src/foundation_tokens.dart", "WenyouReadingQuickScrollContract"],
+  ["packages/flutter/lib/src/foundation_tokens.dart", "WenyouAdaptiveReadingScrollContract"],
+  ["packages/flutter/lib/src/wenyou_icons.dart", "actionReadingQuickScroll"],
+]) {
+  if (read(relativePath).includes(marker)) failures.push(`已迁出 Mobile 的阅读滑块公开面仍存在：${relativePath} / ${marker}`);
+}
+for (const removedPath of [
+  "contracts/fixtures/reading-quick-scroll-v7.1.2.json",
+  "docs/reading-quick-scroll.md",
+  "docs/adaptive-reading-scroll.md",
+  "packages/flutter/icons/move-vertical.svg",
+]) {
+  if (fs.existsSync(path.join(root, removedPath))) failures.push(`已迁出的阅读滑块专属文件仍存在：${removedPath}`);
+}
 
 if (failures.length > 0) {
   throw new Error(`Foundation 检查失败：\n- ${failures.join("\n- ")}`);
