@@ -2,6 +2,15 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 后台预览与移动端更新说明文档
+
+- [共享更新说明规范](mobile-releases.md)补充人工纯文本摘要与条目、平台／版本名／构建号对应、草稿与已确认快照隔离、推荐横幅、完整详情、强制更新及主动版本历史；[Web](platforms/web.md#移动端更新说明管理与预览)与 [Mobile](platforms/mobile.md#更新说明与版本历史)仅补充平台呈现差异。
+- 此项按兼容新增接入，保留既有 `/meta` 字段与推荐／强制升级策略。旧客户端不能展示新说明或新历史入口，仍按原升级流程工作；不将旧客户端无法显示说明误报为新功能已覆盖全部用户。
+- 公开历史只收录晋级成功的已发布记录；后台草稿、待发布记录和未确认修正不对用户公开，编辑期间继续展示已确认旧快照。旧历史缺失使用明确空态，不编造文案、发布日期或迁移完成记录；读取失败不能伪装为空态或绕过强制更新。
+- 无 Foundation Token、机器契约、公开导出、生成物或版本变更，不创建 Tag／Release，不要求消费者升级 Foundation 依赖。Backend 负责 API、存储、权限与发布事务；本登记不复制其 Schema，也不声明数据库迁移或线上晋级已完成。
+- 先交付兼容后端，Web 与 Mobile 依据治理交付的 Backend 精确提交接入、检查并完成负责人验收；此文档可独立评审，不代表消费者、真实画面或发版流程验收已完成。无升级后自动弹窗、无新 FCM／系统推送事件，本次不新增 iOS 发版。
+- 无旧协议删除项，不废弃旧下载与升级流程。消费者可回滚到原界面实现，Backend 的新增记录与已确认内容按其回滚方案保留；界面回滚不撤销已发布安装包。合并、正式发布、晋级与部署仍须另行明确授权，未来清理兼容协议另开 PR 并满足治理证据门禁。
+
 ## 移动端阅读滑块职责迁出（v7.2.1）
 
 - 职责边界：移动端阅读进度、手动快翻和自适应阅读滑块改由 Mobile `ReadingScrollSpec` 独立拥有。Foundation `v7.2.1` 移除 `experiences.readingQuickScroll`、`experiences.adaptiveReadingScroll`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile`、`WenyouReadingQuickScrollContract`、`WenyouAdaptiveReadingScrollContract`、专属 `action.reading-quick-scroll` 语义／资产及两份现行规范文档；通用主题、动效、普通表单滑块和无障碍基础不受影响。
