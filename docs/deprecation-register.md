@@ -2,6 +2,14 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 移动端阅读滑块职责迁出（未发布候选）
+
+- 职责边界：移动端阅读进度、手动快翻和自适应阅读滑块改由 Mobile `ReadingScrollSpec` 独立拥有。Foundation 候选移除 `experiences.readingQuickScroll`、`experiences.adaptiveReadingScroll`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile`、`WenyouReadingQuickScrollContract`、`WenyouAdaptiveReadingScrollContract`、专属 `action.reading-quick-scroll` 语义／资产及两份现行规范文档；通用主题、动效、普通表单滑块和无障碍基础不受影响。
+- 兼容事实：Mobile 当前 `origin/dev` 仍有 `WenyouReadingQuickScrollContract` 引用，PR #66 的后续反馈尚未全部合入，因此“无消费者”门禁尚未满足。本候选只供评审，不能据此合并后直接发布，也不能让消费者跟随 Foundation `main`。
+- 交付顺序：先由 Mobile 合入 `ReadingScrollSpec` 并清除两套 Foundation 阅读滑块引用，同时继续固定现有正式 `v7.2.0`；再核验 Mobile `origin/dev` 无引用、回归覆盖与回滚路径；随后由负责人明确 Foundation 的破坏性版本并发布新 Tag；最后由 Mobile 通过独立 chore 锁定该正式 Tag。不得在旧引用仍存在时提前发布移除 API 的 Foundation。
+- 版本取舍：本 PR 不擅自把根包、Flutter 包、契约或 Schema 提升到新主版本，候选仍显示基线 `7.2.0`／Schema 3，但不得作为同版本产物发布。公开 API 删除按 SemVer 应在负责人授权时选择新的主版本，并同步四处版本与 Tag。
+- 回滚与历史：既有 `v6.10.0`、`v6.11.0`、`v7.1.2`、`v7.2.0` Tag 及下方历史登记保持不变，可供旧消费者固定与回滚；已关闭 PR #21 的分支历史仅供追溯，不并入本清理。无 HTTP API、数据库或持久化迁移。
+
 ## 本人关注与粉丝管理文档
 
 - [本人关注与粉丝管理](interaction.md#本人关注与粉丝管理) 改为紧凑扁平行、关注／回关主按钮、已关注／互关浅底状态及共享菜单；明确 Mobile 同栏返回与计数页签、底部 Sheet，以及 Web 锚定 Dropdown、键盘和焦点边界。复用已发布的 controls、collections、feedback、overlays 和 accessibility 语义。

@@ -35,12 +35,6 @@
 
 状态层颜色继承图标 currentColor，hover/focus 与 pressed 透明度分别为 0.1 与 0.15；禁用内容透明度为 0.38。Pending 保持提交前 tone 并显示同色加载指示，不能回退成未选中态。
 
-## 阅读位置调节图标
-
-- `action.reading-quick-scroll` 与 `WenyouIconIds.actionReadingQuickScroll` 完整保留 v7.1.2 兼容语义、同源资产和公开符号，供既有阅读快翻组件稳定升级。
-- 新自适应阅读滑块不显示主题帖右上角快翻按钮，也不以该图标作为启用入口；它由真实主纵向阅读列表中的明确快速手指滚动自动唤醒。
-- 旧组件与新能力使用独立机器 profile 和导出，不能把兼容图标的保留解释为新页面恢复按钮或操作卡。
-
 ## 语义目录
 
 | 语义 ID | SVG 图形 | SHA-256 |
@@ -71,7 +65,6 @@
 | `action.save-all` | `save-all` | `dcd41bae40570fbcc064b563c3b312364e89e3d7721992c90a55187accfe82c1` |
 | `action.send` | `send` | `e986f8a0eca1c7ba7227a375d55403979e81009d4e011ce11a85d945dba9d59b` |
 | `action.search` | `search` | `f36461346798a05ac92c5bdd477a99c5eebf17c72c851ab9ede0703de2a39637` |
-| `action.reading-quick-scroll` | `move-vertical` | `d9f4b00a7f0e6d000772b05689d58efbb0f6cbbd702599112521774ed8a2b01d` |
 | `action.filter` | `list-filter` | `f50604bf38baecdcbeef9a8fe1c6535584df7a8c17b46283fd74583e7b418a21` |
 | `action.clear-filter` | `list-x` | `5c75aa3ec19972c11b1ec91a16bd7e035e19ee9f603802833bc73961cd6ad149` |
 | `action.sort` | `arrow-down-up` | `007dd379897c391bd76f2bc519b90ebf0b3f49f2b11389cc143e01eed563fe3c` |

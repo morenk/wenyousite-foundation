@@ -7,7 +7,6 @@
 - [Web profile](docs/platforms/web.md)
 - [Flutter profile](docs/platforms/mobile.md)
 - [图片呈现契约](docs/images.md)
-- [自适应阅读滑块](docs/adaptive-reading-scroll.md)
 - [图标目录与治理](docs/icons.md)
 - [核心元素系统](docs/elements.md)
 - [通知分组契约](docs/notifications.md)
@@ -19,11 +18,11 @@
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
 
-## v7.2.0 自适应阅读滑块
+## 移动端阅读滑块职责边界清理候选
 
-主题详情、独立楼中楼和动态详情可消费独立 `experiences.adaptiveReadingScroll.mobile`：右侧细条在明确快滑后展开并可拖动，动态信息流排除。TypeScript 使用 `ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`，Flutter 使用 `WenyouAdaptiveReadingScrollContract`。
+移动端阅读进度、手动快翻和自适应阅读滑块由 Mobile 的 `ReadingScrollSpec` 独立拥有；Foundation 只继续提供通用主题 Token、动效尺度、普通表单滑块和无障碍基础。本候选从当前事实源、Schema、生成 API、专属图标语义与现行规范中移除两套阅读滑块定义，不改写已经发布的 `v7.2.0` Tag。
 
-v7.1.2 的 `experiences.readingQuickScroll.mobile`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`WenyouReadingQuickScrollContract` 和图标资产完整保留原值与源码 API，新旧 profile 不互为别名。根包、Flutter 包与契约版本为 `7.2.0`，`schemaVersion` 保持 `3`；消费者只锁定正式 `v7.2.0` Tag。
+这会移除已发布过的公开符号，属于破坏性变化。当前包版本和 `schemaVersion` 暂不提升，候选不可按 `7.2.0` 发布；须先由 Mobile 合入独立实现并移除旧 Foundation 引用，再由负责人明确决定语义化主版本和正式 Tag，最后由 Mobile 通过独立 chore 锁定该正式 Tag。详细门禁见[兼容登记](docs/deprecation-register.md#移动端阅读滑块职责迁出未发布候选)。
 
 ## v7.1.2 全局圆角层级
 
