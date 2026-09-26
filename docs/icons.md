@@ -35,11 +35,11 @@
 
 状态层颜色继承图标 currentColor，hover/focus 与 pressed 透明度分别为 0.1 与 0.15；禁用内容透明度为 0.38。Pending 保持提交前 tone 并显示同色加载指示，不能回退成未选中态。
 
-## 历史阅读快翻图标兼容
+## 阅读位置调节图标
 
-- `action.reading-quick-scroll` 与 `WenyouIconIds.actionReadingQuickScroll` 仅为已发布消费者保留同源资产和符号兼容；新自适应阅读滑块不显示主题帖右上角快翻按钮，也不以该图标作为启用入口。
-- 新交互由真实主纵向阅读列表中的明确快速手指滚动自动唤醒；旧图标不再承载 toggled、开启反馈、首尾定位、重试或收起动作。
-- 旧 Tag 不改写。升级到建议的下一主版本时删除消费端按钮和局部操作卡调用，但 Foundation 暂不删除图标语义与 SVG，以降低源码迁移阻力。
+- `action.reading-quick-scroll` 与 `WenyouIconIds.actionReadingQuickScroll` 完整保留 v7.1.2 兼容语义、同源资产和公开符号，供既有阅读快翻组件稳定升级。
+- 新自适应阅读滑块不显示主题帖右上角快翻按钮，也不以该图标作为启用入口；它由真实主纵向阅读列表中的明确快速手指滚动自动唤醒。
+- 旧组件与新能力使用独立机器 profile 和导出，不能把兼容图标的保留解释为新页面恢复按钮或操作卡。
 
 ## 语义目录
 

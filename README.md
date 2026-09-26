@@ -19,6 +19,12 @@
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
 
+## v7.2.0 自适应阅读滑块
+
+主题详情、独立楼中楼和动态详情可消费独立 `experiences.adaptiveReadingScroll.mobile`：右侧细条在明确快滑后展开并可拖动，动态信息流排除。TypeScript 使用 `ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`，Flutter 使用 `WenyouAdaptiveReadingScrollContract`。
+
+v7.1.2 的 `experiences.readingQuickScroll.mobile`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`WenyouReadingQuickScrollContract` 和图标资产完整保留原值与源码 API，新旧 profile 不互为别名。根包、Flutter 包与契约版本为 `7.2.0`，`schemaVersion` 保持 `3`；消费者只锁定正式 `v7.2.0` Tag。
+
 ## v7.1.2 全局圆角层级
 
 Web 的 `compact/control/card/panel` 为 6/8/10/12px，Flutter 为 8/8/10/12dp；按钮、表单、选择控件使用 `control`，内容卡片、列表外框和“我的温油”等独立区块使用 `card`，Dialog、Popover、Sheet 与菜单外框使用 `panel`。卡片间距保持 8px/8dp，头像圆形、语义胶囊与行内 em 圆角保留。用途由 `profiles.radiusUsage` 定义，Web 导出 `RADIUS_USAGE`，Flutter 导出 `WenyouFoundationMobile.radiusUsage`。

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '7.1.2';
+  static const String value = '7.2.0';
   static const int schema = 3;
 }
 
@@ -377,8 +377,40 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String legacyActionsCardBehavior = 'removed';
 }
 
-@Deprecated('Use WenyouAdaptiveReadingScrollContract.')
-typedef WenyouReadingQuickScrollContract = WenyouAdaptiveReadingScrollContract;
+abstract final class WenyouReadingQuickScrollContract {
+  static const double minimumTarget = 48.0;
+  static const double railThickness = 2.0;
+  static const double railMaxLength = 360.0;
+  static const double thumbWidth = 8.0;
+  static const double thumbHeight = 40.0;
+  static const double backingWidth = 24.0;
+  static const double backingHeight = 48.0;
+  static const double backingOpacity = 0.92;
+  static const double railOpacity = 0.24;
+  static const double edgeGap = 8.0;
+  static const double labelGap = 8.0;
+  static const double cardMaxWidth = 280.0;
+  static const String thumbForeground = 'brandStrong';
+  static const String backingSurface = 'surface';
+  static const String labelSurface = 'surface';
+  static const String labelForeground = 'foreground';
+  static const bool railInteractive = false;
+  static const bool viewportResize = false;
+  static const bool fullTrackBackdrop = false;
+  static const String activation = 'explicit-icon';
+  static const String placement = 'right-centered-reading-viewport';
+  static const String dragMapping = 'reading-distance';
+  static const String dragLabel = 'actual-visible-location';
+  static const String releaseBehavior = 'finish-last-input-stop-follow-and-hide-label';
+  static const String cancelBehavior = 'clear-pending-on-cancel-close-or-scope-change';
+  static const String tailHoldBehavior = 'follow-loaded-content-until-release-or-leave';
+  static const String tapBehavior = 'local-actions-card';
+  static const String outsidePointerBehavior = 'dismiss-card-and-pass-through';
+  static const List<String> closeTriggers = <String>['toggle', 'collapse-action', 'editor', 'keyboard', 'subpost-change', 'filter-change', 'sort-change'];
+  static const List<String> actions = <String>['start', 'loaded-end-or-end', 'collapse', 'retry'];
+  static const List<String> keyboard = <String>['ArrowUp', 'ArrowDown', 'Home', 'End'];
+  static const String accessibility = 'adjustable-slider-with-current-location';
+}
 
 abstract final class WenyouControlContract {
   static const List<String> actionRoles = <String>['primary', 'secondary', 'quiet', 'destructive', 'link'];

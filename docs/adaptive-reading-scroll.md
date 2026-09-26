@@ -1,6 +1,6 @@
 # 移动端自适应阅读滑块
 
-本页由 experiences.readingQuickScroll.mobile 生成；历史机器路径暂时保留以减少导出破坏。能力只用于主题详情、独立楼中楼和动态详情，不进入动态信息流，不改变 Web 滚动器、正文视口、后端 API、持久化或消费者分页策略。
+本页由 experiences.adaptiveReadingScroll.mobile 生成。能力只用于主题详情、独立楼中楼和动态详情，不进入动态信息流，不改变 Web 滚动器、正文视口、后端 API、持久化或消费者分页策略。
 
 ## 几何与可见状态
 
@@ -29,7 +29,7 @@
 
 ## 兼容与消费
 
-Flutter 首选 WenyouAdaptiveReadingScrollContract；TypeScript 首选 ADAPTIVE_READING_SCROLL_MOBILE_PROFILE 和 AdaptiveReadingScrollMobileProfile。历史 WenyouReadingQuickScrollContract 类型别名与 READING_QUICK_SCROLL_MOBILE_PROFILE 导出只保留名称，不保留已删除的旧几何字段或旧行为；升级必须迁移字段调用，不能把别名视为源码完全兼容。
+Flutter 使用 WenyouAdaptiveReadingScrollContract；TypeScript 使用 ADAPTIVE_READING_SCROLL_MOBILE_PROFILE 和 AdaptiveReadingScrollMobileProfile。v7.1.2 的 WenyouReadingQuickScrollContract 与 READING_QUICK_SCROLL_MOBILE_PROFILE 完整保留原字段和值，是独立兼容组件，不是指向新形状的别名。
 
 升级消费者时移除主题帖右上角快翻按钮、按钮 toggled 状态以及开头／末尾／重试／收起操作卡；action.reading-quick-scroll 图标资产仅为旧源码兼容保留。真实滚动、触摸竞争、TalkBack、键盘和性能仍由 Mobile 在 Windows 真机环境验收，且只消费负责人批准后发布的正式 Tag。
 

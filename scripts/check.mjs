@@ -70,23 +70,24 @@ for (const [label, mutate] of [
   ["品牌恢复字形绑定", (value) => { value.experiences.brand.source.displayGlyphFont = "Legacy Custom Font"; }],
   ["品牌恢复字体许可", (value) => { value.experiences.brand.source.fontLicense = "legacy-license.txt"; }],
   ["缺少快翻契约", (value) => { delete value.experiences.readingQuickScroll; }],
-  ["自适应滑块宽度命中区不足", (value) => { value.experiences.readingQuickScroll.mobile.minimumTargetWidth = 32; }],
-  ["自适应滑块高度命中区不足", (value) => { value.experiences.readingQuickScroll.mobile.minimumTargetHeight = 48; }],
-  ["自适应滑块误入动态信息流", (value) => { value.experiences.readingQuickScroll.mobile.scope.push("moment-feed"); }],
-  ["自适应滑块恢复居中短轨", (value) => { value.experiences.readingQuickScroll.mobile.trackExtent = "centered-360dp"; }],
-  ["自适应滑块展开底衬高度不足", (value) => { value.experiences.readingQuickScroll.mobile.expandedBackingHeight = 48; }],
-  ["自适应滑块展开底衬透明度无效", (value) => { value.experiences.readingQuickScroll.mobile.expandedBackingOpacity = 0; }],
-  ["自适应滑块恢复显式按钮", (value) => { value.experiences.readingQuickScroll.mobile.activation = "explicit-icon"; }],
-  ["自适应滑块放宽快滑位移", (value) => { value.experiences.readingQuickScroll.mobile.minimumSameDirectionDistance = 24; }],
-  ["自适应滑块放宽快滑速度", (value) => { value.experiences.readingQuickScroll.mobile.minimumAverageVelocity = 400; }],
-  ["自适应滑块恢复回弹动画", (value) => { value.experiences.readingQuickScroll.mobile.expandOvershoot = true; }],
-  ["自适应滑块轨道点按跳位", (value) => { value.experiences.readingQuickScroll.mobile.trackTapBehavior = "jump"; }],
-  ["自适应滑块短点按透传正文", (value) => { value.experiences.readingQuickScroll.mobile.tapBehavior = "pass-through"; }],
-  ["自适应滑块混淆松手与取消", (value) => { value.experiences.readingQuickScroll.mobile.clearTriggers.push("release"); }],
-  ["自适应滑块恢复操作卡", (value) => { value.experiences.readingQuickScroll.mobile.legacyActionsCardBehavior = "enabled"; }],
-  ["快翻改变正文视口", (value) => { value.experiences.readingQuickScroll.mobile.viewportResize = true; }],
-  ["自适应滑块慢读等待漂移", (value) => { value.experiences.readingQuickScroll.mobile.slowReadHoldMs = 1000; }],
-  ["自适应滑块 reduced motion 仍动画", (value) => { value.experiences.readingQuickScroll.mobile.reducedMotionBehavior = "animate"; }],
+  ["自适应滑块宽度命中区不足", (value) => { value.experiences.adaptiveReadingScroll.mobile.minimumTargetWidth = 32; }],
+  ["自适应滑块高度命中区不足", (value) => { value.experiences.adaptiveReadingScroll.mobile.minimumTargetHeight = 48; }],
+  ["自适应滑块误入动态信息流", (value) => { value.experiences.adaptiveReadingScroll.mobile.scope.push("moment-feed"); }],
+  ["自适应滑块恢复居中短轨", (value) => { value.experiences.adaptiveReadingScroll.mobile.trackExtent = "centered-360dp"; }],
+  ["自适应滑块展开底衬高度不足", (value) => { value.experiences.adaptiveReadingScroll.mobile.expandedBackingHeight = 48; }],
+  ["自适应滑块展开底衬透明度无效", (value) => { value.experiences.adaptiveReadingScroll.mobile.expandedBackingOpacity = 0; }],
+  ["自适应滑块恢复显式按钮", (value) => { value.experiences.adaptiveReadingScroll.mobile.activation = "explicit-icon"; }],
+  ["自适应滑块放宽快滑位移", (value) => { value.experiences.adaptiveReadingScroll.mobile.minimumSameDirectionDistance = 24; }],
+  ["自适应滑块放宽快滑速度", (value) => { value.experiences.adaptiveReadingScroll.mobile.minimumAverageVelocity = 400; }],
+  ["自适应滑块恢复回弹动画", (value) => { value.experiences.adaptiveReadingScroll.mobile.expandOvershoot = true; }],
+  ["自适应滑块轨道点按跳位", (value) => { value.experiences.adaptiveReadingScroll.mobile.trackTapBehavior = "jump"; }],
+  ["自适应滑块短点按透传正文", (value) => { value.experiences.adaptiveReadingScroll.mobile.tapBehavior = "pass-through"; }],
+  ["自适应滑块混淆松手与取消", (value) => { value.experiences.adaptiveReadingScroll.mobile.clearTriggers.push("release"); }],
+  ["自适应滑块恢复操作卡", (value) => { value.experiences.adaptiveReadingScroll.mobile.legacyActionsCardBehavior = "enabled"; }],
+  ["自适应滑块改变正文视口", (value) => { value.experiences.adaptiveReadingScroll.mobile.viewportResize = true; }],
+  ["自适应滑块慢读等待漂移", (value) => { value.experiences.adaptiveReadingScroll.mobile.slowReadHoldMs = 1000; }],
+  ["自适应滑块 reduced motion 仍动画", (value) => { value.experiences.adaptiveReadingScroll.mobile.reducedMotionBehavior = "animate"; }],
+  ["未知自适应滑块字段", (value) => { value.experiences.adaptiveReadingScroll.mobile.unknown = true; }],
   ["未知快翻字段", (value) => { value.experiences.readingQuickScroll.mobile.unknown = true; }],
   ["未知根字段", (value) => { value.unknown = true; }],
   ["缺少品牌契约", (value) => { delete value.experiences.brand; }],
@@ -1060,41 +1061,66 @@ if (!skill.includes("name: wenyou-design") || !skill.includes("contracts/foundat
 }
 if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色值");
 
-const quickScroll = contract.experiences.readingQuickScroll.mobile;
+const legacyQuickScroll = contract.experiences.readingQuickScroll.mobile;
+const quickScroll = contract.experiences.adaptiveReadingScroll?.mobile;
+const legacyQuickScrollFixture = JSON.parse(read("contracts/fixtures/reading-quick-scroll-v7.1.2.json"));
+const legacyQuickScrollFixtureSha256 = crypto
+  .createHash("sha256")
+  .update(fs.readFileSync(path.join(root, "contracts/fixtures/reading-quick-scroll-v7.1.2.json")))
+  .digest("hex");
+if (legacyQuickScrollFixtureSha256 !== "35a62fcdf69d23206c63449415ec44fb9db07de989529d74d56322270b11b9e3") {
+  failures.push("v7.1.2 阅读快翻兼容 fixture 哈希漂移");
+}
+if (JSON.stringify(legacyQuickScroll) !== JSON.stringify(legacyQuickScrollFixture)) {
+  failures.push("阅读快翻兼容 profile 必须与 v7.1.2 逐值一致");
+}
+if (!quickScroll) failures.push("发布契约缺少独立自适应阅读滑块 profile");
 const quickScrollApi = await import("../dist/controls.js");
-if (JSON.stringify(quickScrollApi.ADAPTIVE_READING_SCROLL_MOBILE_PROFILE) !== JSON.stringify(quickScroll)
-  || quickScrollApi.READING_QUICK_SCROLL_MOBILE_PROFILE !== quickScrollApi.ADAPTIVE_READING_SCROLL_MOBILE_PROFILE) {
-  failures.push("自适应阅读滑块公开常量、历史别名与机器契约不一致");
+if (JSON.stringify(quickScrollApi.ADAPTIVE_READING_SCROLL_MOBILE_PROFILE) !== JSON.stringify(quickScroll)) {
+  failures.push("自适应阅读滑块公开常量必须与机器契约一致");
+}
+if (JSON.stringify(quickScrollApi.READING_QUICK_SCROLL_MOBILE_PROFILE) !== JSON.stringify(legacyQuickScrollFixture)
+  || quickScrollApi.READING_QUICK_SCROLL_MOBILE_PROFILE === quickScrollApi.ADAPTIVE_READING_SCROLL_MOBILE_PROFILE) {
+  failures.push("阅读快翻旧导出必须保持 v7.1.2 原值且独立于新 profile");
 }
 const quickScrollDart = read("packages/flutter/lib/src/foundation_tokens.dart");
-if (!quickScrollDart.includes("abstract final class WenyouAdaptiveReadingScrollContract")
-  || !quickScrollDart.includes("typedef WenyouReadingQuickScrollContract = WenyouAdaptiveReadingScrollContract;")) {
-  failures.push("自适应阅读滑块缺少 Flutter 契约或历史类型别名");
+const dartContractSource = (className) => quickScrollDart.match(new RegExp(`abstract final class ${className} \\{[\\s\\S]*?\\n\\}`, "u"))?.[0] ?? "";
+const adaptiveQuickScrollDart = dartContractSource("WenyouAdaptiveReadingScrollContract");
+const legacyQuickScrollDart = dartContractSource("WenyouReadingQuickScrollContract");
+if (!adaptiveQuickScrollDart || !legacyQuickScrollDart) {
+  failures.push("Flutter 生成物缺少独立的新旧阅读滑块契约");
+}
+if (quickScrollDart.includes("@Deprecated('Use WenyouAdaptiveReadingScrollContract.')")) {
+  failures.push("阅读快翻兼容 API 不得添加会触发 fatal-infos 的弃用注解");
 }
 const quickScrollDartIntKeys = new Set([
   "sampleWindowMs", "minimumSampleDurationMs", "expandDurationMs", "expandedHoldMs",
   "collapseDurationMs", "collapsedHoldMs", "fadeDurationMs", "slowReadHoldMs",
 ]);
-for (const [key, value] of Object.entries(quickScroll)) {
-  if (typeof value === "number") {
-    const declaration = quickScrollDartIntKeys.has(key)
-      ? `static const int ${key} = ${value};`
-      : `static const double ${key} = ${Number.isInteger(value) ? value.toFixed(1) : value};`;
-    if (!quickScrollDart.includes(declaration)) failures.push(`自适应阅读滑块 Flutter 数值漂移：${key}`);
-  } else if (typeof value === "string") {
-    if (!quickScrollDart.includes(`static const String ${key} = '${value}';`)) {
-      failures.push(`自适应阅读滑块 Flutter 字符串漂移：${key}`);
-    }
-  } else if (typeof value === "boolean") {
-    if (!quickScrollDart.includes(`static const bool ${key} = ${value};`)) {
-      failures.push(`自适应阅读滑块 Flutter 布尔值漂移：${key}`);
-    }
-  } else if (Array.isArray(value)) {
-    if (!quickScrollDart.includes(`static const List<String> ${key} = <String>`)) {
-      failures.push(`自适应阅读滑块 Flutter 清单缺失：${key}`);
+const dartStringLiteral = (value) => `'${value.replaceAll("'", "\\'")}'`;
+function verifyDartProfile(profile, source, integerKeys, label) {
+  for (const [key, value] of Object.entries(profile)) {
+    if (typeof value === "number") {
+      const declaration = integerKeys.has(key)
+        ? `static const int ${key} = ${value};`
+        : `static const double ${key} = ${Number.isInteger(value) ? value.toFixed(1) : value};`;
+      if (!source.includes(declaration)) failures.push(`${label} Flutter 数值漂移：${key}`);
+    } else if (typeof value === "string") {
+      if (!source.includes(`static const String ${key} = ${dartStringLiteral(value)};`)) {
+        failures.push(`${label} Flutter 字符串漂移：${key}`);
+      }
+    } else if (typeof value === "boolean") {
+      if (!source.includes(`static const bool ${key} = ${value};`)) {
+        failures.push(`${label} Flutter 布尔值漂移：${key}`);
+      }
+    } else if (Array.isArray(value)) {
+      const declaration = `static const List<String> ${key} = <String>[${value.map(dartStringLiteral).join(", ")}];`;
+      if (!source.includes(declaration)) failures.push(`${label} Flutter 清单漂移：${key}`);
     }
   }
 }
+verifyDartProfile(quickScroll, adaptiveQuickScrollDart, quickScrollDartIntKeys, "自适应阅读滑块");
+verifyDartProfile(legacyQuickScrollFixture, legacyQuickScrollDart, new Set(), "阅读快翻兼容 profile");
 if (quickScroll.scope.join(",") !== "topic-detail,standalone-subpost,moment-detail"
   || quickScroll.excludedScope.join(",") !== "moment-feed") {
   failures.push("自适应阅读滑块作用域必须排除动态信息流");

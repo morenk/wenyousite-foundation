@@ -71,7 +71,8 @@ const icons = contract.experiences.icons;
 const images = contract.experiences.images;
 const collections = contract.experiences.collections;
 const controls = contract.experiences.controls;
-const readingQuickScroll = contract.experiences.readingQuickScroll.mobile;
+const legacyReadingQuickScroll = contract.experiences.readingQuickScroll.mobile;
+const readingQuickScroll = contract.experiences.adaptiveReadingScroll.mobile;
 const elements = contract.experiences.elements;
 const notifications = contract.experiences.notifications;
 const accessibility = contract.accessibility;
@@ -300,11 +301,11 @@ write("docs/icons.md", `# 图标目录与治理
 
 状态层颜色继承图标 currentColor，hover/focus 与 pressed 透明度分别为 ${icons.controls.stateLayer.hoverOpacity} 与 ${icons.controls.stateLayer.pressedOpacity}；禁用内容透明度为 ${icons.controls.disabledContentOpacity}。Pending 保持提交前 tone 并显示同色加载指示，不能回退成未选中态。
 
-## 历史阅读快翻图标兼容
+## 阅读位置调节图标
 
-- \`action.reading-quick-scroll\` 与 \`WenyouIconIds.actionReadingQuickScroll\` 仅为已发布消费者保留同源资产和符号兼容；新自适应阅读滑块不显示主题帖右上角快翻按钮，也不以该图标作为启用入口。
-- 新交互由真实主纵向阅读列表中的明确快速手指滚动自动唤醒；旧图标不再承载 toggled、开启反馈、首尾定位、重试或收起动作。
-- 旧 Tag 不改写。升级到建议的下一主版本时删除消费端按钮和局部操作卡调用，但 Foundation 暂不删除图标语义与 SVG，以降低源码迁移阻力。
+- \`action.reading-quick-scroll\` 与 \`WenyouIconIds.actionReadingQuickScroll\` 完整保留 v7.1.2 兼容语义、同源资产和公开符号，供既有阅读快翻组件稳定升级。
+- 新自适应阅读滑块不显示主题帖右上角快翻按钮，也不以该图标作为启用入口；它由真实主纵向阅读列表中的明确快速手指滚动自动唤醒。
+- 旧组件与新能力使用独立机器 profile 和导出，不能把兼容图标的保留解释为新页面恢复按钮或操作卡。
 
 ## 语义目录
 
@@ -470,8 +471,7 @@ export const PROGRESS_CONTROL_CONTRACT = Object.freeze(${js(controls.progress)})
 export const CONTROL_WEB_PROFILE = Object.freeze(${js(controls.web)});
 export const CONTROL_MOBILE_PROFILE = Object.freeze(${js(controls.mobile)});
 export const ADAPTIVE_READING_SCROLL_MOBILE_PROFILE = Object.freeze(${js(readingQuickScroll)});
-/** @deprecated 使用 ADAPTIVE_READING_SCROLL_MOBILE_PROFILE。 */
-export const READING_QUICK_SCROLL_MOBILE_PROFILE = ADAPTIVE_READING_SCROLL_MOBILE_PROFILE;`);
+export const READING_QUICK_SCROLL_MOBILE_PROFILE = Object.freeze(${js(legacyReadingQuickScroll)});`);
 
 write("dist/controls.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export type ActionControlRole = ${controls.actions.roles.map((id) => JSON.stringify(id)).join(" | ")};
@@ -486,8 +486,7 @@ export declare const CONTROL_WEB_PROFILE: Readonly<${JSON.stringify(controls.web
 export declare const CONTROL_MOBILE_PROFILE: Readonly<${JSON.stringify(controls.mobile)}>;
 export type AdaptiveReadingScrollMobileProfile = Readonly<${JSON.stringify(readingQuickScroll)}>;
 export declare const ADAPTIVE_READING_SCROLL_MOBILE_PROFILE: AdaptiveReadingScrollMobileProfile;
-/** @deprecated 使用 ADAPTIVE_READING_SCROLL_MOBILE_PROFILE。 */
-export declare const READING_QUICK_SCROLL_MOBILE_PROFILE: AdaptiveReadingScrollMobileProfile;`);
+export declare const READING_QUICK_SCROLL_MOBILE_PROFILE: Readonly<${JSON.stringify(legacyReadingQuickScroll)}>;`);
 
 write("dist/notifications.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const NOTIFICATION_ALL_LABEL = ${JSON.stringify(notifications.allLabel)};
@@ -1257,8 +1256,40 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String legacyActionsCardBehavior = ${dartString(readingQuickScroll.legacyActionsCardBehavior)};
 }
 
-@Deprecated('Use WenyouAdaptiveReadingScrollContract.')
-typedef WenyouReadingQuickScrollContract = WenyouAdaptiveReadingScrollContract;
+abstract final class WenyouReadingQuickScrollContract {
+  static const double minimumTarget = ${legacyReadingQuickScroll.minimumTarget}.0;
+  static const double railThickness = ${legacyReadingQuickScroll.railThickness}.0;
+  static const double railMaxLength = ${legacyReadingQuickScroll.railMaxLength}.0;
+  static const double thumbWidth = ${legacyReadingQuickScroll.thumbWidth}.0;
+  static const double thumbHeight = ${legacyReadingQuickScroll.thumbHeight}.0;
+  static const double backingWidth = ${legacyReadingQuickScroll.backingWidth}.0;
+  static const double backingHeight = ${legacyReadingQuickScroll.backingHeight}.0;
+  static const double backingOpacity = ${legacyReadingQuickScroll.backingOpacity};
+  static const double railOpacity = ${legacyReadingQuickScroll.railOpacity};
+  static const double edgeGap = ${legacyReadingQuickScroll.edgeGap}.0;
+  static const double labelGap = ${legacyReadingQuickScroll.labelGap}.0;
+  static const double cardMaxWidth = ${legacyReadingQuickScroll.cardMaxWidth}.0;
+  static const String thumbForeground = ${dartString(legacyReadingQuickScroll.thumbForeground)};
+  static const String backingSurface = ${dartString(legacyReadingQuickScroll.backingSurface)};
+  static const String labelSurface = ${dartString(legacyReadingQuickScroll.labelSurface)};
+  static const String labelForeground = ${dartString(legacyReadingQuickScroll.labelForeground)};
+  static const bool railInteractive = ${legacyReadingQuickScroll.railInteractive};
+  static const bool viewportResize = ${legacyReadingQuickScroll.viewportResize};
+  static const bool fullTrackBackdrop = ${legacyReadingQuickScroll.fullTrackBackdrop};
+  static const String activation = ${dartString(legacyReadingQuickScroll.activation)};
+  static const String placement = ${dartString(legacyReadingQuickScroll.placement)};
+  static const String dragMapping = ${dartString(legacyReadingQuickScroll.dragMapping)};
+  static const String dragLabel = ${dartString(legacyReadingQuickScroll.dragLabel)};
+  static const String releaseBehavior = ${dartString(legacyReadingQuickScroll.releaseBehavior)};
+  static const String cancelBehavior = ${dartString(legacyReadingQuickScroll.cancelBehavior)};
+  static const String tailHoldBehavior = ${dartString(legacyReadingQuickScroll.tailHoldBehavior)};
+  static const String tapBehavior = ${dartString(legacyReadingQuickScroll.tapBehavior)};
+  static const String outsidePointerBehavior = ${dartString(legacyReadingQuickScroll.outsidePointerBehavior)};
+  static const List<String> closeTriggers = <String>${dartList(legacyReadingQuickScroll.closeTriggers)};
+  static const List<String> actions = <String>${dartList(legacyReadingQuickScroll.actions)};
+  static const List<String> keyboard = <String>${dartList(legacyReadingQuickScroll.keyboard)};
+  static const String accessibility = ${dartString(legacyReadingQuickScroll.accessibility)};
+}
 
 abstract final class WenyouControlContract {
   static const List<String> actionRoles = <String>${dartList(controls.actions.roles)};
@@ -1652,7 +1683,7 @@ class WenyouIcon extends StatelessWidget {
 
 write("docs/adaptive-reading-scroll.md", `# 移动端自适应阅读滑块
 
-本页由 experiences.readingQuickScroll.mobile 生成；历史机器路径暂时保留以减少导出破坏。能力只用于主题详情、独立楼中楼和动态详情，不进入动态信息流，不改变 Web 滚动器、正文视口、后端 API、持久化或消费者分页策略。
+本页由 experiences.adaptiveReadingScroll.mobile 生成。能力只用于主题详情、独立楼中楼和动态详情，不进入动态信息流，不改变 Web 滚动器、正文视口、后端 API、持久化或消费者分页策略。
 
 ## 几何与可见状态
 
@@ -1681,16 +1712,28 @@ write("docs/adaptive-reading-scroll.md", `# 移动端自适应阅读滑块
 
 ## 兼容与消费
 
-Flutter 首选 WenyouAdaptiveReadingScrollContract；TypeScript 首选 ADAPTIVE_READING_SCROLL_MOBILE_PROFILE 和 AdaptiveReadingScrollMobileProfile。历史 WenyouReadingQuickScrollContract 类型别名与 READING_QUICK_SCROLL_MOBILE_PROFILE 导出只保留名称，不保留已删除的旧几何字段或旧行为；升级必须迁移字段调用，不能把别名视为源码完全兼容。
+Flutter 使用 WenyouAdaptiveReadingScrollContract；TypeScript 使用 ADAPTIVE_READING_SCROLL_MOBILE_PROFILE 和 AdaptiveReadingScrollMobileProfile。v7.1.2 的 WenyouReadingQuickScrollContract 与 READING_QUICK_SCROLL_MOBILE_PROFILE 完整保留原字段和值，是独立兼容组件，不是指向新形状的别名。
 
 升级消费者时移除主题帖右上角快翻按钮、按钮 toggled 状态以及开头／末尾／重试／收起操作卡；action.reading-quick-scroll 图标资产仅为旧源码兼容保留。真实滚动、触摸竞争、TalkBack、键盘和性能仍由 Mobile 在 Windows 真机环境验收，且只消费负责人批准后发布的正式 Tag。
 
 验收覆盖 320／360／400／600dp、双倍字号、明暗主题、reduced motion、TalkBack、键盘、返回手势、正文链接和长按选字；正例覆盖双向快滑、下一触摸抓取、直接跟手、末端增长与动画中重新展开，反例覆盖所有排除唤醒源、慢读、反向采样、轨道点按、取消未绘制输入、无滚动内容和作用域切换。
 `);
 
-write("docs/reading-quick-scroll.md", `# 移动端阅读快翻（历史迁移入口）
+write("docs/reading-quick-scroll.md", `# 移动端阅读快翻（兼容组件）
 
-主动快翻按钮和局部操作卡已由[自适应阅读滑块](adaptive-reading-scroll.md)替代。本文件名仅为旧链接兼容保留；新实现不得恢复右上角入口、首尾／重试／收起卡片或 360dp 居中短轨道。
+本页由 experiences.readingQuickScroll.mobile 生成，完整保留 v7.1.2 已发布字段、数值与主动开启行为，供已有消费者稳定升级；新页面使用[自适应阅读滑块](adaptive-reading-scroll.md)，不复用本兼容组件。
+
+## 几何与视觉
+
+- 右侧悬浮轨道在扣除固定标题、底部操作、发表按钮和系统安全区后的正文区域垂直居中，最大长度 ${legacyReadingQuickScroll.railMaxLength}dp；正文宽、高和顶部阅读锚点不因显隐改变。
+- 轨道 ${legacyReadingQuickScroll.railThickness}dp、透明度 ${legacyReadingQuickScroll.railOpacity}，不接收触摸且没有整轨背景。滑块 ${legacyReadingQuickScroll.thumbWidth}×${legacyReadingQuickScroll.thumbHeight}dp，局部底衬 ${legacyReadingQuickScroll.backingWidth}×${legacyReadingQuickScroll.backingHeight}dp；命中区至少 ${legacyReadingQuickScroll.minimumTarget}×${legacyReadingQuickScroll.minimumTarget}dp，不随内容长度缩小。
+- 滑块与轨道使用主题 ${legacyReadingQuickScroll.thumbForeground}，局部底衬使用 ${legacyReadingQuickScroll.backingSurface}、透明度 ${legacyReadingQuickScroll.backingOpacity}，圆角复用 pill；标签和操作卡使用不透明 ${legacyReadingQuickScroll.labelSurface} 与 ${legacyReadingQuickScroll.labelForeground}。
+
+## 兼容边界
+
+- READING_QUICK_SCROLL_MOBILE_PROFILE 与 WenyouReadingQuickScrollContract 保持 v7.1.2 完整源码 API，不添加弃用注解，不指向新形状。
+- 既有消费者仍可使用 action.reading-quick-scroll 显式入口、局部操作卡与原始映射；这不代表新页面可以恢复该入口。
+- 新能力独立消费 experiences.adaptiveReadingScroll.mobile、ADAPTIVE_READING_SCROLL_MOBILE_PROFILE 与 WenyouAdaptiveReadingScrollContract。
 `);
 
 const artifactPaths = [
