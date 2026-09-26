@@ -2,6 +2,14 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 移动端阅读滑块职责迁出（v7.2.1）
+
+- 职责边界：移动端阅读进度、手动快翻和自适应阅读滑块改由 Mobile `ReadingScrollSpec` 独立拥有。Foundation `v7.2.1` 移除 `experiences.readingQuickScroll`、`experiences.adaptiveReadingScroll`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile`、`WenyouReadingQuickScrollContract`、`WenyouAdaptiveReadingScrollContract`、专属 `action.reading-quick-scroll` 语义／资产及两份现行规范文档；通用主题、动效、普通表单滑块和无障碍基础不受影响。
+- 兼容事实：Mobile 当前 `origin/dev` 的 `pubspec.yaml` 仍精确固定 Foundation `v7.2.0`，`reading_quick_scroll.dart` 与 `reading_quick_scroll_overlay.dart` 仍引用 `actionReadingQuickScroll`／`WenyouReadingQuickScrollContract`；PR #66 的后续反馈尚未全部合入。发布 `v7.2.1` 不会自动升级或破坏这个固定消费者，也不代表迁移已完成。
+- 交付顺序：Foundation 可按本次负责人明确授权先发布 `v7.2.1`；旧 Mobile 继续固定 `v7.2.0`。Mobile 后续先合入 `ReadingScrollSpec` 并清除两套 Foundation 阅读滑块引用，完成回归与回滚核验后，再通过独立 chore 固定正式 `v7.2.1`。存在旧引用的消费者不得直接升级。
+- 版本取舍：公开 API 删除通常应提升主版本；负责人本次明确选择小版本 `7.2.1` 作为职责清理例外，根包、Flutter 包、契约与 Manifest 同步为 `7.2.1`，`schemaVersion` 保持 `3`。此决策不把破坏性删除描述为兼容变化，也不建立未来删除 API 可默认使用 Patch 的先例。
+- 回滚与历史：既有 `v6.10.0`、`v6.11.0`、`v7.1.2`、`v7.2.0` Tag 及下方历史登记保持不变，可供旧消费者固定与回滚；已关闭 PR #21 的分支历史仅供追溯，不并入本清理。无 HTTP API、数据库或持久化迁移。
+
 ## 本人关注与粉丝管理文档
 
 - [本人关注与粉丝管理](interaction.md#本人关注与粉丝管理) 改为紧凑扁平行、关注／回关主按钮、已关注／互关浅底状态及共享菜单；明确 Mobile 同栏返回与计数页签、底部 Sheet，以及 Web 锚定 Dropdown、键盘和焦点边界。复用已发布的 controls、collections、feedback、overlays 和 accessibility 语义。
