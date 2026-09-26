@@ -1,9 +1,9 @@
 # Foundation Changelog
 
-## Unreleased
+## 7.2.1
 
-- `breaking candidate`：移动端阅读进度、手动快翻和自适应阅读滑块迁回 Mobile `ReadingScrollSpec`；移除 `experiences.readingQuickScroll`、`experiences.adaptiveReadingScroll`、对应 TypeScript／Flutter 公开常量、专属 `action.reading-quick-scroll` 语义与现行规范文档。通用主题、动效、普通表单滑块和无障碍基础保持不变。
-- `release boundary`：本候选不改写 `v7.2.0`，也不提升或发布版本。Mobile `origin/dev` 尚有旧公开符号引用，必须先完成独立实现迁移和无消费者核验，再由负责人决定破坏性版本，最后由 Mobile 独立提交锁定新的正式 Tag。
+- `breaking`：移动端阅读进度、手动快翻和自适应阅读滑块迁回 Mobile `ReadingScrollSpec`；移除 `experiences.readingQuickScroll`、`experiences.adaptiveReadingScroll`、对应 TypeScript／Flutter 公开常量、专属 `action.reading-quick-scroll` 语义与现行规范文档。通用主题、动效、普通表单滑块和无障碍基础保持不变。
+- `release`：负责人明确决定将本次破坏性职责清理作为小版本 `7.2.1` 发布，`schemaVersion` 保持 `3`。Mobile `origin/dev` 仍固定 `v7.2.0` 并引用旧 API，因此新 Tag 不会自动影响当前消费者；Mobile 后续必须先清除引用，再通过独立 chore 固定新正式 Tag。旧消费者须继续锁定 `v7.2.0`，不得直接升级。
 
 ## 7.2.0
 

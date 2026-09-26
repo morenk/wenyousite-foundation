@@ -18,11 +18,11 @@
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
 
-## 移动端阅读滑块职责边界清理候选
+## v7.2.1 移动端阅读滑块职责边界清理
 
-移动端阅读进度、手动快翻和自适应阅读滑块由 Mobile 的 `ReadingScrollSpec` 独立拥有；Foundation 只继续提供通用主题 Token、动效尺度、普通表单滑块和无障碍基础。本候选从当前事实源、Schema、生成 API、专属图标语义与现行规范中移除两套阅读滑块定义，不改写已经发布的 `v7.2.0` Tag。
+移动端阅读进度、手动快翻和自适应阅读滑块由 Mobile 的 `ReadingScrollSpec` 独立拥有；Foundation 只继续提供通用主题 Token、动效尺度、普通表单滑块和无障碍基础。`v7.2.1` 从当前事实源、Schema、生成 API、专属图标语义与现行规范中移除两套阅读滑块定义，不改写已经发布的 `v7.2.0` Tag。
 
-这会移除已发布过的公开符号，属于破坏性变化。当前包版本和 `schemaVersion` 暂不提升，候选不可按 `7.2.0` 发布；须先由 Mobile 合入独立实现并移除旧 Foundation 引用，再由负责人明确决定语义化主版本和正式 Tag，最后由 Mobile 通过独立 chore 锁定该正式 Tag。详细门禁见[兼容登记](docs/deprecation-register.md#移动端阅读滑块职责迁出未发布候选)。
+这会移除已发布过的公开符号，属于破坏性变化；负责人明确决定本次以 Patch `7.2.1` 发布，此例外不表示 API 兼容。Mobile 当前仍固定 `v7.2.0` 并引用旧 API，新 Tag 不会自动升级消费者；旧实现必须继续锁定 `v7.2.0`，后续先迁移到 `ReadingScrollSpec` 并清除引用，再通过独立 chore 固定 `v7.2.1`。详细边界见[兼容登记](docs/deprecation-register.md#移动端阅读滑块职责迁出v721)。
 
 ## v7.1.2 全局圆角层级
 
