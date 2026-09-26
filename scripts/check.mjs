@@ -77,7 +77,10 @@ for (const [label, mutate] of [
   ["自适应滑块细态错误内缩", (value) => { value.experiences.adaptiveReadingScroll.mobile.collapsedEdgePlacement = "inset-by-edge-gap"; }],
   ["自适应滑块命中区错误改变视觉位置", (value) => { value.experiences.adaptiveReadingScroll.mobile.hitTargetAffectsVisualPlacement = true; }],
   ["自适应滑块展开底衬高度不足", (value) => { value.experiences.adaptiveReadingScroll.mobile.expandedBackingHeight = 48; }],
-  ["自适应滑块展开底衬透明度无效", (value) => { value.experiences.adaptiveReadingScroll.mobile.expandedBackingOpacity = 0; }],
+  ["自适应滑块恢复可见展开底衬", (value) => { value.experiences.adaptiveReadingScroll.mobile.expandedBackingOpacity = 0.92; }],
+  ["自适应滑块移除可见焦点反馈", (value) => { value.experiences.adaptiveReadingScroll.mobile.focusIndicatorBehavior = "none"; }],
+  ["自适应滑块显现时长漂移", (value) => { value.experiences.adaptiveReadingScroll.mobile.appearDurationMs = 240; }],
+  ["自适应滑块中断后重启动画", (value) => { value.experiences.adaptiveReadingScroll.mobile.interruptedTransitionBehavior = "restart-full-duration"; }],
   ["自适应滑块恢复显式按钮", (value) => { value.experiences.adaptiveReadingScroll.mobile.activation = "explicit-icon"; }],
   ["自适应滑块放宽快滑位移", (value) => { value.experiences.adaptiveReadingScroll.mobile.minimumSameDirectionDistance = 24; }],
   ["自适应滑块放宽快滑速度", (value) => { value.experiences.adaptiveReadingScroll.mobile.minimumAverageVelocity = 400; }],
@@ -1096,7 +1099,7 @@ if (quickScrollDart.includes("@Deprecated('Use WenyouAdaptiveReadingScrollContra
   failures.push("阅读快翻兼容 API 不得添加会触发 fatal-infos 的弃用注解");
 }
 const quickScrollDartIntKeys = new Set([
-  "sampleWindowMs", "minimumSampleDurationMs", "expandDurationMs", "expandedHoldMs",
+  "sampleWindowMs", "minimumSampleDurationMs", "expandDurationMs", "appearDurationMs", "expandedHoldMs",
   "collapseDurationMs", "collapsedHoldMs", "fadeDurationMs", "slowReadHoldMs",
 ]);
 const dartStringLiteral = (value) => `'${value.replaceAll("'", "\\'")}'`;
@@ -1139,9 +1142,13 @@ if (quickScroll.minimumTargetWidth < 48 || quickScroll.minimumTargetHeight < 64
   || quickScroll.collapsedWidth !== 2 || quickScroll.collapsedHeight !== 24
   || quickScroll.expandedWidth !== 8 || quickScroll.expandedHeight !== 56
   || quickScroll.expandedBackingWidth !== 24 || quickScroll.expandedBackingHeight !== 64
-  || quickScroll.expandedBackingOpacity !== 0.92
-  || quickScroll.backingBehavior !== "expanded-only-fade-with-expansion") {
+  || quickScroll.expandedBackingOpacity !== 0
+  || quickScroll.backingBehavior !== "none-retain-fields-for-compatibility") {
   failures.push("自适应阅读滑块几何或命中区漂移");
+}
+if (quickScroll.focusBehavior !== "keep-expanded-while-keyboard-or-talkback-accessible"
+  || quickScroll.focusIndicatorBehavior !== "platform-visible-focus-indicator-without-backing") {
+  failures.push("自适应阅读滑块必须保留展开态与平台可见焦点反馈");
 }
 if (quickScroll.sampleWindowMs !== 100 || quickScroll.minimumSampleDurationMs !== 50
   || quickScroll.minimumSameDirectionDistance !== 48 || quickScroll.minimumAverageVelocity !== 650
@@ -1158,23 +1165,17 @@ if (quickScroll.trackTapBehavior !== "pass-through"
 if (quickScroll.expandDurationMs !== 180 || quickScroll.expandCurve !== "easeOutCubic"
   || quickScroll.collapseDurationMs !== 240 || quickScroll.collapseCurve !== "easeInOutCubic"
   || quickScroll.expandedHoldMs !== 1000 || quickScroll.collapsedHoldMs !== 600
-  || quickScroll.fadeDurationMs !== 180 || quickScroll.slowReadHoldMs !== 1500) {
+  || quickScroll.appearDurationMs !== 180 || quickScroll.appearCurve !== "easeOutCubic"
+  || quickScroll.fadeDurationMs !== 180 || quickScroll.fadeCurve !== "easeInOutCubic"
+  || quickScroll.interruptedTransitionBehavior !== "continue-from-current-value"
+  || quickScroll.remainingDurationRule !== "full-duration-times-absolute-target-minus-current"
+  || quickScroll.slowReadHoldMs !== 1500) {
   failures.push("自适应阅读滑块状态时序漂移");
-}
-function compositeOver(surface, background, opacity) {
-  const channel = (hex, index) => parseInt(hex.slice(index, index + 2), 16);
-  return "#" + [1, 3, 5].map((index) => Math.round(channel(surface, index) * opacity + channel(background, index) * (1 - opacity)).toString(16).padStart(2, "0")).join("");
 }
 for (const [mode, palette] of [["light", contract.palette], ["dark", contract.themes.dark.palette]]) {
   for (const backgroundRole of ["background", "surface"]) {
     if (contrast(palette[quickScroll.indicatorForeground], palette[backgroundRole]) < contract.accessibility.contrast.nonText) {
       failures.push(`自适应阅读滑块在 ${mode}/${backgroundRole} 后景对比不足`);
-    }
-  }
-  for (const background of ["#000000", "#FFFFFF"]) {
-    const backing = compositeOver(palette[quickScroll.expandedBackingSurface], background, quickScroll.expandedBackingOpacity);
-    if (contrast(palette[quickScroll.indicatorForeground], backing) < contract.accessibility.contrast.nonText) {
-      failures.push(`自适应阅读滑块展开态在 ${mode}/${background} 图片后景对比不足`);
     }
   }
   if (contrast(palette[quickScroll.labelForeground], palette[quickScroll.labelSurface]) < contract.accessibility.contrast.normalText) {

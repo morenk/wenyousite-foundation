@@ -72,7 +72,7 @@
 - v7.1.2 的 `experiences.readingQuickScroll.mobile`、`READING_QUICK_SCROLL_MOBILE_PROFILE`、`WenyouReadingQuickScrollContract` 与图标语义／资产完整保留原字段、数值和源码 API；旧组件可稳定升级，不添加 Dart 弃用注解，也不把旧名别名到新形状。
 - 普通 pointer-up 先应用最后输入并停止末端跟随，不作为取消清理；取消不应用尚未绘制输入，controller dispose 与其他作用域清理触发器清除排队动作和计时器。
 - 根包、Flutter 包与契约以 `7.2.0` 发布，`schemaVersion` 保持 `3`。旧消费者可直接升级并继续使用兼容组件；Mobile 新实现仅在锁定正式 `v7.2.0` 后迁移到自适应 profile。回滚时恢复 `v7.1.2` Tag 与配套消费实现。
-- v7.2.1 仅收紧新 adaptive profile：细态紧贴页面右侧安全边缘、展开态才应用既有 `edgeGap`，展开停稳保持改为 1000ms；慢读 1500ms 与旧阅读快翻 profile/API 不变。Mobile 在正式 Tag 前继续锁定 `v7.2.0`。
+- v7.2.1 仅收紧新 adaptive profile：细态紧贴页面右侧安全边缘、展开态才应用既有 `edgeGap`，展开停稳保持改为 1000ms；展开白色局部底衬移除，backing 兼容字段保留且 opacity 为 0，平台可见焦点反馈继续保留。显现／消失与中途反向补充连续、按剩余距离缩时的机器语义；慢读 1500ms 与旧阅读快翻 profile/API 不变。Mobile 在正式 Tag 前继续锁定 `v7.2.0`。
 
 ## 阅读快翻图标（v6.10.0）
 

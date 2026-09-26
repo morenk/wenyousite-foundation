@@ -58,6 +58,7 @@ const js = (value) => JSON.stringify(value, null, 2);
 const cssHex = (value) => value.toLowerCase();
 const dartColor = (value) => `Color(0xFF${value.slice(1)})`;
 const dartString = (value) => `'${value.replaceAll("'", "\\'")}'`;
+const dartDouble = (value) => Number.isInteger(value) ? value.toFixed(1) : String(value);
 const dartList = (values, mapper = dartString) =>
   `[${values.map(mapper).join(", ")}]`;
 const dartIdentifier = (value) => value
@@ -1189,7 +1190,7 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const double expandedHeight = ${readingQuickScroll.expandedHeight}.0;
   static const double expandedBackingWidth = ${readingQuickScroll.expandedBackingWidth}.0;
   static const double expandedBackingHeight = ${readingQuickScroll.expandedBackingHeight}.0;
-  static const double expandedBackingOpacity = ${readingQuickScroll.expandedBackingOpacity};
+  static const double expandedBackingOpacity = ${dartDouble(readingQuickScroll.expandedBackingOpacity)};
   static const double minimumTargetWidth = ${readingQuickScroll.minimumTargetWidth}.0;
   static const double minimumTargetHeight = ${readingQuickScroll.minimumTargetHeight}.0;
   static const double edgeGap = ${readingQuickScroll.edgeGap}.0;
@@ -1226,6 +1227,10 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String expandCurve = ${dartString(readingQuickScroll.expandCurve)};
   static const bool expandOvershoot = ${readingQuickScroll.expandOvershoot};
   static const bool resumeExpansionFromCurrentValue = ${readingQuickScroll.resumeExpansionFromCurrentValue};
+  static const int appearDurationMs = ${readingQuickScroll.appearDurationMs};
+  static const String appearCurve = ${dartString(readingQuickScroll.appearCurve)};
+  static const String interruptedTransitionBehavior = ${dartString(readingQuickScroll.interruptedTransitionBehavior)};
+  static const String remainingDurationRule = ${dartString(readingQuickScroll.remainingDurationRule)};
   static const String dragStartBehavior = ${dartString(readingQuickScroll.dragStartBehavior)};
   static const String dragMapping = ${dartString(readingQuickScroll.dragMapping)};
   static const String dragScrollBehavior = ${dartString(readingQuickScroll.dragScrollBehavior)};
@@ -1238,6 +1243,7 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String collapseCurve = ${dartString(readingQuickScroll.collapseCurve)};
   static const int collapsedHoldMs = ${readingQuickScroll.collapsedHoldMs};
   static const int fadeDurationMs = ${readingQuickScroll.fadeDurationMs};
+  static const String fadeCurve = ${dartString(readingQuickScroll.fadeCurve)};
   static const int slowReadHoldMs = ${readingQuickScroll.slowReadHoldMs};
   static const String slowReadBehavior = ${dartString(readingQuickScroll.slowReadBehavior)};
   static const String pointerCapture = ${dartString(readingQuickScroll.pointerCapture)};
@@ -1252,6 +1258,7 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String automaticVisibilityBehavior = ${dartString(readingQuickScroll.automaticVisibilityBehavior)};
   static const String reducedMotionBehavior = ${dartString(readingQuickScroll.reducedMotionBehavior)};
   static const String focusBehavior = ${dartString(readingQuickScroll.focusBehavior)};
+  static const String focusIndicatorBehavior = ${dartString(readingQuickScroll.focusIndicatorBehavior)};
   static const List<String> keyboard = <String>${dartList(readingQuickScroll.keyboard)};
   static const String accessibility = ${dartString(readingQuickScroll.accessibility)};
   static const String accessibilityStep = ${dartString(readingQuickScroll.accessibilityStep)};
@@ -1692,26 +1699,26 @@ write("docs/adaptive-reading-scroll.md", `# 移动端自适应阅读滑块
 ## 几何与可见状态
 
 - 细态为 ${readingQuickScroll.collapsedWidth}×${readingQuickScroll.collapsedHeight}dp，展开态为 ${readingQuickScroll.expandedWidth}×${readingQuickScroll.expandedHeight}dp，展开滑块命中区至少 ${readingQuickScroll.minimumTargetWidth}×${readingQuickScroll.minimumTargetHeight}dp。两态由同一指示器几何连续插值，纵向中心映射不变，使用共享 ${readingQuickScroll.indicatorForeground} 与 ${readingQuickScroll.cornerRadius} 语义。
-- 展开态在滑块下方使用 ${readingQuickScroll.expandedBackingWidth}×${readingQuickScroll.expandedBackingHeight}dp、${readingQuickScroll.expandedBackingOpacity} 透明度的 ${readingQuickScroll.expandedBackingSurface} 局部底衬；底衬与展开进度同步渐显并保持同一纵向中心，细态不显示。它只保护图片等极端后景上的非文字对比，不是整轨背景。
+- 展开态不显示白色或其他局部底衬。为兼容既有消费代码，仍保留 ${readingQuickScroll.expandedBackingWidth}×${readingQuickScroll.expandedBackingHeight}dp 与 ${readingQuickScroll.expandedBackingSurface} 字段，但透明度固定为 ${readingQuickScroll.expandedBackingOpacity}，不得绘制可见底衬，也不增加整轨背景。
 - 移动路径覆盖扣除吸顶栏、发表入口、系统安全区和系统手势区后的全部可用阅读高度。细态视觉紧贴页面右侧安全边缘，不能因为 ${readingQuickScroll.minimumTargetWidth}dp 命中区居中而向内缩；展开视觉才向左应用 ${readingQuickScroll.edgeGap}dp，命中区始终完整避开系统手势区域。两态纵向中心映射不变，没有另一个居中 360dp 短轨道，没有整轨视觉背景，也不改变正文宽高或阅读锚点。
-- 无可滚动内容不显示。普通慢读沿用细条：正文停稳后保持 ${readingQuickScroll.slowReadHoldMs}ms，再用 ${readingQuickScroll.fadeDurationMs}ms 淡出。
+- 无可滚动内容不显示。显现从当前透明度以 ${readingQuickScroll.appearDurationMs}ms ${readingQuickScroll.appearCurve} 渐入；普通慢读沿用细条：正文停稳后保持 ${readingQuickScroll.slowReadHoldMs}ms，再用 ${readingQuickScroll.fadeDurationMs}ms ${readingQuickScroll.fadeCurve} 淡出。
 
 ## 快滑识别与展开
 
 - 只有真实主纵向阅读列表的手指滚动参与唤醒。最近 ${readingQuickScroll.sampleWindowMs}ms 内须有至少 ${readingQuickScroll.minimumSampleDurationMs}ms 有效采样、同向位移不小于 ${readingQuickScroll.minimumSameDirectionDistance}dp，且平均速度达到 max(${readingQuickScroll.minimumAverageVelocity}dp/s, ${readingQuickScroll.minimumViewportVelocityFactor} × viewportHeight/s)；反向立即清空采样。
 - 程序导航、深链、布局变化、图片撑高、横向轮播和 overscroll 回弹不唤醒；惯性只能延续已经唤醒的展开态。触发后保持展开，不随瞬时速度反复呼吸，原正文手势不被中途接管，下一次触摸才可抓取滑块。
-- 展开使用 ${readingQuickScroll.expandDurationMs}ms ${readingQuickScroll.expandCurve}，无回弹；再次快滑从动画当前值继续展开。reduced motion 直接切换形态。
+- 展开使用 ${readingQuickScroll.expandDurationMs}ms ${readingQuickScroll.expandCurve}，收细保持 ${readingQuickScroll.collapseDurationMs}ms ${readingQuickScroll.collapseCurve}，无回弹。形变或透明度中途反向时都从当前值继续，不重启动画、不硬跳；本段时长按 fullDuration × abs(target - current) 缩短。reduced motion 直接切换形态。
 
 ## 拖动、释放与收细
 
 - 仅展开滑块接管局部触摸；轨道点按透传，展开滑块短点按由滑块消费但无菜单、无导航、无跳位，也不得误触下方回复、图片或链接。抓住后立即停止正文惯性，按当下实际位置与抓取偏移建立映射；正文直接跟手，不缓动追赶，每帧只合并最新输入，拖动期间冻结轨道几何并保持展开。
 - 仅拖动时显示距命中区 ${readingQuickScroll.labelGap}dp 的实际可见正文／楼层／回复附近位置；不推算精确百分比。未加载完成只称“已加载范围”，不能误称完整末尾。映射保持在已加载范围，按住已加载末端时跟随既有内容增长，离开末端或释放即停止；分页策略仍归消费者。
-- 普通 pointer-up 应用最后输入并停止末端跟随，正文停稳后保持展开 ${readingQuickScroll.expandedHoldMs}ms，再以 ${readingQuickScroll.collapseDurationMs}ms ${readingQuickScroll.collapseCurve} 收细；细态保持 ${readingQuickScroll.collapsedHoldMs}ms，最后以 ${readingQuickScroll.fadeDurationMs}ms 淡出。pointer-up 不等同取消或 controller dispose。
+- 普通 pointer-up 应用最后输入并停止末端跟随，正文停稳后保持展开 ${readingQuickScroll.expandedHoldMs}ms，再以 ${readingQuickScroll.collapseDurationMs}ms ${readingQuickScroll.collapseCurve} 收细；细态保持 ${readingQuickScroll.collapsedHoldMs}ms，最后以 ${readingQuickScroll.fadeDurationMs}ms ${readingQuickScroll.fadeCurve} 淡出。pointer-up 不等同取消或 controller dispose。
 - scope、账号、筛选、排序、子贴、编辑器、IME、路由离开、取消和 controller dispose 均清除旧排队动作与计时器；取消不应用尚未绘制的输入。普通自动显隐自身不得触发导航或移动正文。
 
 ## 无障碍与键盘
 
-- TalkBack 持续提供带当前位置的 adjustable slider，每次增减一个视口；键盘焦点和 TalkBack 可访问期间保持展开。方向键按视口导航，Home／End 到已知首尾。
+- TalkBack 持续提供带当前位置的 adjustable slider，每次增减一个视口；键盘焦点和 TalkBack 可访问期间保持展开。移除底衬不移除焦点反馈，键盘焦点必须使用平台可见焦点指示器。方向键按视口导航，Home／End 到已知首尾。
 - 大字号下位置标签允许换行但不遮断滑块命中区。实现仍须保留系统返回、正文链接、选择文字和横向轮播的原手势归属。
 
 ## 兼容与消费

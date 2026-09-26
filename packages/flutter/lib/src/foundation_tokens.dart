@@ -310,7 +310,7 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const double expandedHeight = 56.0;
   static const double expandedBackingWidth = 24.0;
   static const double expandedBackingHeight = 64.0;
-  static const double expandedBackingOpacity = 0.92;
+  static const double expandedBackingOpacity = 0.0;
   static const double minimumTargetWidth = 48.0;
   static const double minimumTargetHeight = 64.0;
   static const double edgeGap = 8.0;
@@ -323,7 +323,7 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String geometryModel = 'single-indicator-shape-invariant-center';
   static const String trackExtent = 'available-reading-height';
   static const String trackVisual = 'none';
-  static const String backingBehavior = 'expanded-only-fade-with-expansion';
+  static const String backingBehavior = 'none-retain-fields-for-compatibility';
   static const String collapsedEdgePlacement = 'flush-to-page-right-safe-edge';
   static const String expandedEdgePlacement = 'inset-by-edge-gap';
   static const String hitTargetPlacement = 'inside-system-gesture-inset';
@@ -347,6 +347,10 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String expandCurve = 'easeOutCubic';
   static const bool expandOvershoot = false;
   static const bool resumeExpansionFromCurrentValue = true;
+  static const int appearDurationMs = 180;
+  static const String appearCurve = 'easeOutCubic';
+  static const String interruptedTransitionBehavior = 'continue-from-current-value';
+  static const String remainingDurationRule = 'full-duration-times-absolute-target-minus-current';
   static const String dragStartBehavior = 'stop-inertia-map-current-position-with-grab-offset';
   static const String dragMapping = 'loaded-reading-distance-over-frozen-track';
   static const String dragScrollBehavior = 'direct-follow-no-easing';
@@ -359,6 +363,7 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String collapseCurve = 'easeInOutCubic';
   static const int collapsedHoldMs = 600;
   static const int fadeDurationMs = 180;
+  static const String fadeCurve = 'easeInOutCubic';
   static const int slowReadHoldMs = 1500;
   static const String slowReadBehavior = 'collapsed-wait-for-scroll-idle-hold-1500-then-fade-180';
   static const String pointerCapture = 'expanded-indicator-only';
@@ -373,6 +378,7 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String automaticVisibilityBehavior = 'never-navigate-or-move-content';
   static const String reducedMotionBehavior = 'switch-shape-without-animation';
   static const String focusBehavior = 'keep-expanded-while-keyboard-or-talkback-accessible';
+  static const String focusIndicatorBehavior = 'platform-visible-focus-indicator-without-backing';
   static const List<String> keyboard = <String>['ArrowUp', 'ArrowDown', 'Home', 'End'];
   static const String accessibility = 'persistent-adjustable-slider-with-current-location';
   static const String accessibilityStep = 'one-viewport';
