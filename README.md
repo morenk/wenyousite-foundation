@@ -7,6 +7,7 @@
 - [Web profile](docs/platforms/web.md)
 - [Flutter profile](docs/platforms/mobile.md)
 - [图片呈现契约](docs/images.md)
+- [自适应阅读滑块](docs/adaptive-reading-scroll.md)
 - [图标目录与治理](docs/icons.md)
 - [核心元素系统](docs/elements.md)
 - [通知分组契约](docs/notifications.md)

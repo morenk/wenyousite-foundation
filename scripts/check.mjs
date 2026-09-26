@@ -70,10 +70,23 @@ for (const [label, mutate] of [
   ["品牌恢复字形绑定", (value) => { value.experiences.brand.source.displayGlyphFont = "Legacy Custom Font"; }],
   ["品牌恢复字体许可", (value) => { value.experiences.brand.source.fontLicense = "legacy-license.txt"; }],
   ["缺少快翻契约", (value) => { delete value.experiences.readingQuickScroll; }],
-  ["快翻命中区不足", (value) => { value.experiences.readingQuickScroll.mobile.minimumTarget = 32; }],
-  ["快翻轨道拦截触摸", (value) => { value.experiences.readingQuickScroll.mobile.railInteractive = true; }],
+  ["自适应滑块宽度命中区不足", (value) => { value.experiences.readingQuickScroll.mobile.minimumTargetWidth = 32; }],
+  ["自适应滑块高度命中区不足", (value) => { value.experiences.readingQuickScroll.mobile.minimumTargetHeight = 48; }],
+  ["自适应滑块误入动态信息流", (value) => { value.experiences.readingQuickScroll.mobile.scope.push("moment-feed"); }],
+  ["自适应滑块恢复居中短轨", (value) => { value.experiences.readingQuickScroll.mobile.trackExtent = "centered-360dp"; }],
+  ["自适应滑块展开底衬高度不足", (value) => { value.experiences.readingQuickScroll.mobile.expandedBackingHeight = 48; }],
+  ["自适应滑块展开底衬透明度无效", (value) => { value.experiences.readingQuickScroll.mobile.expandedBackingOpacity = 0; }],
+  ["自适应滑块恢复显式按钮", (value) => { value.experiences.readingQuickScroll.mobile.activation = "explicit-icon"; }],
+  ["自适应滑块放宽快滑位移", (value) => { value.experiences.readingQuickScroll.mobile.minimumSameDirectionDistance = 24; }],
+  ["自适应滑块放宽快滑速度", (value) => { value.experiences.readingQuickScroll.mobile.minimumAverageVelocity = 400; }],
+  ["自适应滑块恢复回弹动画", (value) => { value.experiences.readingQuickScroll.mobile.expandOvershoot = true; }],
+  ["自适应滑块轨道点按跳位", (value) => { value.experiences.readingQuickScroll.mobile.trackTapBehavior = "jump"; }],
+  ["自适应滑块短点按透传正文", (value) => { value.experiences.readingQuickScroll.mobile.tapBehavior = "pass-through"; }],
+  ["自适应滑块混淆松手与取消", (value) => { value.experiences.readingQuickScroll.mobile.clearTriggers.push("release"); }],
+  ["自适应滑块恢复操作卡", (value) => { value.experiences.readingQuickScroll.mobile.legacyActionsCardBehavior = "enabled"; }],
   ["快翻改变正文视口", (value) => { value.experiences.readingQuickScroll.mobile.viewportResize = true; }],
-  ["快翻底衬透明度无效", (value) => { value.experiences.readingQuickScroll.mobile.backingOpacity = 0; }],
+  ["自适应滑块慢读等待漂移", (value) => { value.experiences.readingQuickScroll.mobile.slowReadHoldMs = 1000; }],
+  ["自适应滑块 reduced motion 仍动画", (value) => { value.experiences.readingQuickScroll.mobile.reducedMotionBehavior = "animate"; }],
   ["未知快翻字段", (value) => { value.experiences.readingQuickScroll.mobile.unknown = true; }],
   ["未知根字段", (value) => { value.unknown = true; }],
   ["缺少品牌契约", (value) => { delete value.experiences.brand; }],
@@ -181,7 +194,7 @@ for (const [relativePath, expectedHash] of Object.entries(manifest.artifactSha25
   const hash = crypto.createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex");
   if (hash !== expectedHash) failures.push(`生成产物校验和不一致 ${relativePath}`);
 }
-if (!manifest.features?.brand || !manifest.features?.themes || !manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.controls || !manifest.features?.formatting || !manifest.features?.contentPresentation || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
+if (!manifest.features?.brand || !manifest.features?.themes || !manifest.features?.typography || !manifest.features?.interaction || !manifest.features?.controls || !manifest.features?.adaptiveReadingScroll || !manifest.features?.formatting || !manifest.features?.contentPresentation || !manifest.features?.iconControls || !manifest.features?.navigation || !manifest.features?.language || !manifest.features?.elements) {
   failures.push("发布清单缺少共享语义能力清单");
 }
 if (read("packages/flutter/foundation-manifest.json") !== read("foundation-manifest.json")) {
@@ -358,7 +371,7 @@ if (!fs.existsSync(path.join(root, readingQuickScrollAsset))
   failures.push("阅读快翻公开 Web SVG/节点与 Flutter 资产必须完整且同源");
 }
 if (iconApi.iconVariantSvg(readingQuickScrollId, "filled") !== undefined) {
-  failures.push("阅读快翻不提供实心变体，开启反馈由可见悬浮轨道和滑块承担");
+  failures.push("历史阅读快翻兼容图标不得新增实心变体");
 }
 const semanticIds = Object.keys(icons.semantics);
 const glyphIds = [...new Set(Object.values(icons.semantics))];
@@ -1049,31 +1062,91 @@ if (/#[0-9a-f]{6}\b/iu.test(skill)) failures.push("Skill 不得复制具体色�
 
 const quickScroll = contract.experiences.readingQuickScroll.mobile;
 const quickScrollApi = await import("../dist/controls.js");
-if (JSON.stringify(quickScrollApi.READING_QUICK_SCROLL_MOBILE_PROFILE) !== JSON.stringify(quickScroll)) {
-  failures.push("阅读快翻公开常量必须与机器契约一致");
+if (JSON.stringify(quickScrollApi.ADAPTIVE_READING_SCROLL_MOBILE_PROFILE) !== JSON.stringify(quickScroll)
+  || quickScrollApi.READING_QUICK_SCROLL_MOBILE_PROFILE !== quickScrollApi.ADAPTIVE_READING_SCROLL_MOBILE_PROFILE) {
+  failures.push("自适应阅读滑块公开常量、历史别名与机器契约不一致");
 }
 const quickScrollDart = read("packages/flutter/lib/src/foundation_tokens.dart");
-if (!quickScrollDart.includes("abstract final class WenyouReadingQuickScrollContract")) {
-  failures.push("阅读快翻缺少 Flutter 生成契约");
+if (!quickScrollDart.includes("abstract final class WenyouAdaptiveReadingScrollContract")
+  || !quickScrollDart.includes("typedef WenyouReadingQuickScrollContract = WenyouAdaptiveReadingScrollContract;")) {
+  failures.push("自适应阅读滑块缺少 Flutter 契约或历史类型别名");
 }
+const quickScrollDartIntKeys = new Set([
+  "sampleWindowMs", "minimumSampleDurationMs", "expandDurationMs", "expandedHoldMs",
+  "collapseDurationMs", "collapsedHoldMs", "fadeDurationMs", "slowReadHoldMs",
+]);
 for (const [key, value] of Object.entries(quickScroll)) {
-  if (typeof value === "number" && !quickScrollDart.includes(`static const double ${key} = ${Number.isInteger(value) ? value.toFixed(1) : value};`)) {
-    failures.push(`阅读快翻 Flutter 数值漂移：${key}`);
+  if (typeof value === "number") {
+    const declaration = quickScrollDartIntKeys.has(key)
+      ? `static const int ${key} = ${value};`
+      : `static const double ${key} = ${Number.isInteger(value) ? value.toFixed(1) : value};`;
+    if (!quickScrollDart.includes(declaration)) failures.push(`自适应阅读滑块 Flutter 数值漂移：${key}`);
+  } else if (typeof value === "string") {
+    if (!quickScrollDart.includes(`static const String ${key} = '${value}';`)) {
+      failures.push(`自适应阅读滑块 Flutter 字符串漂移：${key}`);
+    }
+  } else if (typeof value === "boolean") {
+    if (!quickScrollDart.includes(`static const bool ${key} = ${value};`)) {
+      failures.push(`自适应阅读滑块 Flutter 布尔值漂移：${key}`);
+    }
+  } else if (Array.isArray(value)) {
+    if (!quickScrollDart.includes(`static const List<String> ${key} = <String>`)) {
+      failures.push(`自适应阅读滑块 Flutter 清单缺失：${key}`);
+    }
   }
+}
+if (quickScroll.scope.join(",") !== "topic-detail,standalone-subpost,moment-detail"
+  || quickScroll.excludedScope.join(",") !== "moment-feed") {
+  failures.push("自适应阅读滑块作用域必须排除动态信息流");
+}
+if (quickScroll.trackExtent !== "available-reading-height" || quickScroll.trackVisual !== "none"
+  || quickScroll.geometryModel !== "single-indicator-shape-invariant-center" || quickScroll.viewportResize) {
+  failures.push("自适应阅读滑块必须使用同一中心映射和完整可用阅读高度，且不得改变视口");
+}
+if (quickScroll.minimumTargetWidth < 48 || quickScroll.minimumTargetHeight < 64
+  || quickScroll.collapsedWidth !== 2 || quickScroll.collapsedHeight !== 24
+  || quickScroll.expandedWidth !== 8 || quickScroll.expandedHeight !== 56
+  || quickScroll.expandedBackingWidth !== 24 || quickScroll.expandedBackingHeight !== 64
+  || quickScroll.expandedBackingOpacity !== 0.92
+  || quickScroll.backingBehavior !== "expanded-only-fade-with-expansion") {
+  failures.push("自适应阅读滑块几何或命中区漂移");
+}
+if (quickScroll.sampleWindowMs !== 100 || quickScroll.minimumSampleDurationMs !== 50
+  || quickScroll.minimumSameDirectionDistance !== 48 || quickScroll.minimumAverageVelocity !== 650
+  || quickScroll.minimumViewportVelocityFactor !== 0.9
+  || quickScroll.velocityThresholdRule !== "max-of-absolute-and-viewport-relative") {
+  failures.push("自适应阅读滑块快滑采样阈值漂移");
+}
+if (quickScroll.trackTapBehavior !== "pass-through"
+  || quickScroll.tapBehavior !== "consume-without-menu-navigation-or-jump"
+  || quickScroll.clearTriggers.includes("release")
+  || !quickScroll.releaseBehavior.startsWith("apply-final-input-then-clear-stale-queue")) {
+  failures.push("自适应阅读滑块点按或 release/cancel 语义漂移");
+}
+if (quickScroll.expandDurationMs !== 180 || quickScroll.expandCurve !== "easeOutCubic"
+  || quickScroll.collapseDurationMs !== 240 || quickScroll.collapseCurve !== "easeInOutCubic"
+  || quickScroll.expandedHoldMs !== 1500 || quickScroll.collapsedHoldMs !== 600
+  || quickScroll.fadeDurationMs !== 180 || quickScroll.slowReadHoldMs !== 1500) {
+  failures.push("自适应阅读滑块状态时序漂移");
 }
 function compositeOver(surface, background, opacity) {
   const channel = (hex, index) => parseInt(hex.slice(index, index + 2), 16);
   return "#" + [1, 3, 5].map((index) => Math.round(channel(surface, index) * opacity + channel(background, index) * (1 - opacity)).toString(16).padStart(2, "0")).join("");
 }
 for (const [mode, palette] of [["light", contract.palette], ["dark", contract.themes.dark.palette]]) {
+  for (const backgroundRole of ["background", "surface"]) {
+    if (contrast(palette[quickScroll.indicatorForeground], palette[backgroundRole]) < contract.accessibility.contrast.nonText) {
+      failures.push(`自适应阅读滑块在 ${mode}/${backgroundRole} 后景对比不足`);
+    }
+  }
   for (const background of ["#000000", "#FFFFFF"]) {
-    const backing = compositeOver(palette[quickScroll.backingSurface], background, quickScroll.backingOpacity);
-    if (contrast(palette[quickScroll.thumbForeground], backing) < contract.accessibility.contrast.nonText) {
-      failures.push(`阅读快翻滑块在 ${mode}/${background} 后景对比不足`);
+    const backing = compositeOver(palette[quickScroll.expandedBackingSurface], background, quickScroll.expandedBackingOpacity);
+    if (contrast(palette[quickScroll.indicatorForeground], backing) < contract.accessibility.contrast.nonText) {
+      failures.push(`自适应阅读滑块展开态在 ${mode}/${background} 图片后景对比不足`);
     }
   }
   if (contrast(palette[quickScroll.labelForeground], palette[quickScroll.labelSurface]) < contract.accessibility.contrast.normalText) {
-    failures.push(`阅读快翻标签在 ${mode} 主题对比不足`);
+    failures.push(`自适应阅读滑块标签在 ${mode} 主题对比不足`);
   }
 }
 

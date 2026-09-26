@@ -29,7 +29,7 @@
 - 核心导航、操作、编辑器能力与常见状态使用 Foundation 同源 Lucide SVG；品牌标识消费 Foundation 品牌资源，分类标记、插画和操作系统专属动作可以保留平台资产。
 - 图标 Toggle 的静止容器透明；点赞、收藏与主题帖订阅保持同一 Lucide 路径，选中后分别使用实心鲜粉、实心金色与实心品牌深紫。图标命中区的按压状态层使用 15% 当前图标色，不能扩展到辅助文字或计数；图标按钮由控件提供稳定名称和 toggled 语义，装饰图标不重复朗读。
 - 主贴管理的发言权限复用相邻设置行和现有通用选项 Sheet，纳入既有自动保存、离开等待及失败/冲突反馈；不新增权限专属面板或保存按钮。长选项与说明允许自然换行，在小屏和较大字体下保留完整内容、单列布局、48dp 命中区、安全区与系统返回，行为边界见 [共享主贴管理设置](../foundation.md#主贴管理设置)。
-- 主题详情与独立楼中楼的阅读快翻入口遵循 [图标契约](../icons.md#阅读快翻)：顶栏位于“定位最新回复”右侧，使用 `WenyouIconIds.actionReadingQuickScroll`，不显示常驻“快翻”文字；tooltip 与无障碍名称为“快翻”，开启反馈由右侧可见轨道和滑块承担，拖动显示位置，点按打开局部操作卡；正文视口不变，保留 48dp 命中区和系统手势避让，详见[阅读快翻](../reading-quick-scroll.md)。
+- 主题详情、独立楼中楼和动态详情使用[自适应阅读滑块](../adaptive-reading-scroll.md)：不显示右上角快翻按钮，不保留首尾／重试／收起操作卡；右侧细条只在真实主纵向列表的明确快速手指滚动后展开并允许下一次触摸拖动。动态信息流不接入。完整可用阅读高度、48×64dp 展开命中区、仅展开态局部底衬、安全／手势区避让、停留收细、TalkBack 与键盘要求均消费 Foundation 常量，不在客户端复制数值。
 - Snackbar 只承载短暂确认；加载失败、权限受限和需要重试的结果保留在原任务上下文。浮层使用 Foundation elevation 角色，并保留安全区与系统返回。
 
 v7 接入只在 Windows 完成：等待正式 Tag 后独立升级依赖，移除旧捆绑字体注册、资产声明和家族名常量引用；`WenyouFoundationTypography.mobileFamilies` 只返回 body/display/utility 语义角色，结合 sizes、lineHeights、weights 映射到继承平台默认字体的 TextStyle，不设置自定义 fontFamily/fontFamilyFallback，也不把 `system-ui` 当作 Flutter 字体名。设置与管理标题仍选择 body 600，保留 pageTitle 等角色映射。验证中文与中英混排、数字、长标题换行、编辑与阅读、品牌文字、双倍文字缩放、单列布局、48dp 触控和安全区；本 Foundation 任务不代表已完成消费者升级或 Flutter 真机验收。

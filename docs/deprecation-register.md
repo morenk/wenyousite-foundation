@@ -65,6 +65,14 @@
 - 消费者必须等待正式 Tag，在独立依赖升级提交后迁移布局；Foundation 检查不代替移动端 Widget、真机交互和性能验收。旧消费者继续使用原 Tag；回滚时恢复旧 Tag 与配套底部工具栏实现。
 - 不新增后端契约、持久化或数据迁移；本次不清理其他兼容协议。
 
+### 未发布替代：自适应阅读滑块（建议 8.0.0）
+
+- `experiences.readingQuickScroll.mobile` 的历史机器路径暂时保留，但字段与行为改为自适应阅读滑块；主题详情、独立楼中楼和动态详情自动响应明确快滑，动态信息流排除。
+- 旧主题帖右上角快翻按钮、按钮 toggled 状态、居中 360dp 短轨，以及开头／末尾／重试／收起操作卡不进入新契约。展开滑块短点按由滑块消费但不动作，轨道点按继续透传。
+- TypeScript 的 `READING_QUICK_SCROLL_MOBILE_PROFILE` 与 Dart 的 `WenyouReadingQuickScrollContract` 只保留弃用名称，不保留已删除的旧几何字段，升级消费者必须迁移字段调用，不能把别名视为源码完全兼容。新代码改用 `ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile` 和 `WenyouAdaptiveReadingScrollContract`。图标语义和资产暂不删除，只用于旧源码兼容。
+- 普通 pointer-up 先应用最后输入并停止末端跟随，不作为取消清理；取消不应用尚未绘制输入，controller dispose 与其他作用域清理触发器清除排队动作和计时器。
+- 此候选属于破坏性语义替换，建议 `8.0.0`，并在获批发布提交中把 `schemaVersion` 提升到 `4`。正式版本、Tag、Release、消费者升级和旧实现清理均须独立授权；旧消费者继续锁定原正式 Tag，回滚时同时恢复旧 Tag 与配套实现。
+
 ## 阅读快翻图标（v6.10.0）
 
 - 兼容新增 `action.reading-quick-scroll`，既有图标语义、图形、公开常量与通用 Toggle 可见反馈规则保持不变；无弃用或删除项。

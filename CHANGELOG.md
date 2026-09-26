@@ -1,5 +1,13 @@
 # Foundation Changelog
 
+## 未发布：自适应阅读滑块（建议 8.0.0）
+
+- `mobile`：主题详情、独立楼中楼和动态详情以右侧自适应细条替代主题帖右上角快翻按钮；动态信息流排除。细态 2×24dp、展开态 8×56dp、展开命中区至少 48×64dp；展开态保留 24×64dp、surface 0.92 的局部底衬，细态无底衬且不增加整轨背景。滑块沿全部可用阅读高度映射且不改变正文视口。
+- `interaction`：机器化快滑采样、排除唤醒源、手势归属、180ms 展开、直接跟手、冻结拖动几何、松手最后输入、1500/240/600/180ms 收细淡出时序、慢读 1500/180ms 时序、动画中续展开和 reduced motion。
+- `accessibility`：TalkBack 持续提供 adjustable slider、每次移动一个视口；键盘焦点保持展开并支持方向键及 Home/End。无可滚动内容隐藏。
+- `compatibility`：新增 `ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`、`AdaptiveReadingScrollMobileProfile` 与 `WenyouAdaptiveReadingScrollContract`；旧 `READING_QUICK_SCROLL_MOBILE_PROFILE` 和 `WenyouReadingQuickScrollContract` 仅保留名称，已删除的旧几何字段不保留，消费者必须迁移调用；右上角入口及首尾／重试／收起卡片语义移除。`action.reading-quick-scroll` 资产仅为旧源码兼容保留。
+- `release`：这是既有交互和字段语义替换，建议正式版本 `8.0.0` 并在获批发布提交中把 `schemaVersion` 提升到 `4`。本候选不提升根包、Flutter 包或契约版本，不创建 Tag/Release；合并与发布仍需负责人针对本 PR 明确授权。
+
 ## 7.1.2
 
 - `profiles`：统一圆角角色，Web compact/control/card/panel 为 6/8/10/12px，Flutter 为 8/8/10/12dp；增加 `radiusUsage` 映射，让按钮、表单、内容卡片、账户区块及浮层各用对应角色。
