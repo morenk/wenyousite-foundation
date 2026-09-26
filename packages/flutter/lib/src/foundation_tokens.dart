@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class WenyouFoundationVersion {
-  static const String value = '7.2.0';
+  static const String value = '7.2.1';
   static const int schema = 3;
 }
 
@@ -324,6 +324,10 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String trackExtent = 'available-reading-height';
   static const String trackVisual = 'none';
   static const String backingBehavior = 'expanded-only-fade-with-expansion';
+  static const String collapsedEdgePlacement = 'flush-to-page-right-safe-edge';
+  static const String expandedEdgePlacement = 'inset-by-edge-gap';
+  static const String hitTargetPlacement = 'inside-system-gesture-inset';
+  static const bool hitTargetAffectsVisualPlacement = false;
   static const List<String> avoidInsets = <String>['sticky-header', 'composer-entry', 'system-safe-area', 'system-gesture-area'];
   static const bool viewportResize = false;
   static const String activation = 'adaptive-fast-user-scroll';
@@ -350,7 +354,7 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String dragGeometryBehavior = 'freeze-until-release';
   static const bool expandedDuringDrag = true;
   static const String releaseBehavior = 'apply-final-input-then-clear-stale-queue-and-tail-follow-before-scroll-idle';
-  static const int expandedHoldMs = 1500;
+  static const int expandedHoldMs = 1000;
   static const int collapseDurationMs = 240;
   static const String collapseCurve = 'easeInOutCubic';
   static const int collapsedHoldMs = 600;

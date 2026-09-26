@@ -19,6 +19,10 @@
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
 
+## v7.2.1 自适应阅读滑块边缘与停留时间
+
+细态视觉以页面右侧安全边缘为基准，不因 48dp 命中区居中而内缩；展开视觉才向左应用既有 edge gap，命中区继续避开系统手势区。正文停稳后的展开保持为 1000ms，慢读细条仍保持 1500ms 后淡出。根包、Flutter 包与契约版本为 `7.2.1`，`schemaVersion` 保持 `3`；消费者仅在正式 `v7.2.1` Tag 发布后升级。
+
 ## v7.2.0 自适应阅读滑块
 
 主题详情、独立楼中楼和动态详情可消费独立 `experiences.adaptiveReadingScroll.mobile`：右侧细条在明确快滑后展开并可拖动，动态信息流排除。TypeScript 使用 `ADAPTIVE_READING_SCROLL_MOBILE_PROFILE`，Flutter 使用 `WenyouAdaptiveReadingScrollContract`。

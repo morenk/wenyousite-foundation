@@ -1203,6 +1203,10 @@ abstract final class WenyouAdaptiveReadingScrollContract {
   static const String trackExtent = ${dartString(readingQuickScroll.trackExtent)};
   static const String trackVisual = ${dartString(readingQuickScroll.trackVisual)};
   static const String backingBehavior = ${dartString(readingQuickScroll.backingBehavior)};
+  static const String collapsedEdgePlacement = ${dartString(readingQuickScroll.collapsedEdgePlacement)};
+  static const String expandedEdgePlacement = ${dartString(readingQuickScroll.expandedEdgePlacement)};
+  static const String hitTargetPlacement = ${dartString(readingQuickScroll.hitTargetPlacement)};
+  static const bool hitTargetAffectsVisualPlacement = ${readingQuickScroll.hitTargetAffectsVisualPlacement};
   static const List<String> avoidInsets = <String>${dartList(readingQuickScroll.avoidInsets)};
   static const bool viewportResize = ${readingQuickScroll.viewportResize};
   static const String activation = ${dartString(readingQuickScroll.activation)};
@@ -1689,7 +1693,7 @@ write("docs/adaptive-reading-scroll.md", `# 移动端自适应阅读滑块
 
 - 细态为 ${readingQuickScroll.collapsedWidth}×${readingQuickScroll.collapsedHeight}dp，展开态为 ${readingQuickScroll.expandedWidth}×${readingQuickScroll.expandedHeight}dp，展开滑块命中区至少 ${readingQuickScroll.minimumTargetWidth}×${readingQuickScroll.minimumTargetHeight}dp。两态由同一指示器几何连续插值，纵向中心映射不变，使用共享 ${readingQuickScroll.indicatorForeground} 与 ${readingQuickScroll.cornerRadius} 语义。
 - 展开态在滑块下方使用 ${readingQuickScroll.expandedBackingWidth}×${readingQuickScroll.expandedBackingHeight}dp、${readingQuickScroll.expandedBackingOpacity} 透明度的 ${readingQuickScroll.expandedBackingSurface} 局部底衬；底衬与展开进度同步渐显并保持同一纵向中心，细态不显示。它只保护图片等极端后景上的非文字对比，不是整轨背景。
-- 移动路径覆盖扣除吸顶栏、发表入口、系统安全区和系统手势区后的全部可用阅读高度；右缘在系统手势 inset 内侧再留 ${readingQuickScroll.edgeGap}dp。没有另一个居中 360dp 短轨道，没有整轨视觉背景，也不改变正文宽高或阅读锚点。
+- 移动路径覆盖扣除吸顶栏、发表入口、系统安全区和系统手势区后的全部可用阅读高度。细态视觉紧贴页面右侧安全边缘，不能因为 ${readingQuickScroll.minimumTargetWidth}dp 命中区居中而向内缩；展开视觉才向左应用 ${readingQuickScroll.edgeGap}dp，命中区始终完整避开系统手势区域。两态纵向中心映射不变，没有另一个居中 360dp 短轨道，没有整轨视觉背景，也不改变正文宽高或阅读锚点。
 - 无可滚动内容不显示。普通慢读沿用细条：正文停稳后保持 ${readingQuickScroll.slowReadHoldMs}ms，再用 ${readingQuickScroll.fadeDurationMs}ms 淡出。
 
 ## 快滑识别与展开

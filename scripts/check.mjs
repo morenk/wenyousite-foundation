@@ -74,6 +74,8 @@ for (const [label, mutate] of [
   ["自适应滑块高度命中区不足", (value) => { value.experiences.adaptiveReadingScroll.mobile.minimumTargetHeight = 48; }],
   ["自适应滑块误入动态信息流", (value) => { value.experiences.adaptiveReadingScroll.mobile.scope.push("moment-feed"); }],
   ["自适应滑块恢复居中短轨", (value) => { value.experiences.adaptiveReadingScroll.mobile.trackExtent = "centered-360dp"; }],
+  ["自适应滑块细态错误内缩", (value) => { value.experiences.adaptiveReadingScroll.mobile.collapsedEdgePlacement = "inset-by-edge-gap"; }],
+  ["自适应滑块命中区错误改变视觉位置", (value) => { value.experiences.adaptiveReadingScroll.mobile.hitTargetAffectsVisualPlacement = true; }],
   ["自适应滑块展开底衬高度不足", (value) => { value.experiences.adaptiveReadingScroll.mobile.expandedBackingHeight = 48; }],
   ["自适应滑块展开底衬透明度无效", (value) => { value.experiences.adaptiveReadingScroll.mobile.expandedBackingOpacity = 0; }],
   ["自适应滑块恢复显式按钮", (value) => { value.experiences.adaptiveReadingScroll.mobile.activation = "explicit-icon"; }],
@@ -1126,7 +1128,11 @@ if (quickScroll.scope.join(",") !== "topic-detail,standalone-subpost,moment-deta
   failures.push("自适应阅读滑块作用域必须排除动态信息流");
 }
 if (quickScroll.trackExtent !== "available-reading-height" || quickScroll.trackVisual !== "none"
-  || quickScroll.geometryModel !== "single-indicator-shape-invariant-center" || quickScroll.viewportResize) {
+  || quickScroll.geometryModel !== "single-indicator-shape-invariant-center" || quickScroll.viewportResize
+  || quickScroll.collapsedEdgePlacement !== "flush-to-page-right-safe-edge"
+  || quickScroll.expandedEdgePlacement !== "inset-by-edge-gap"
+  || quickScroll.hitTargetPlacement !== "inside-system-gesture-inset"
+  || quickScroll.hitTargetAffectsVisualPlacement) {
   failures.push("自适应阅读滑块必须使用同一中心映射和完整可用阅读高度，且不得改变视口");
 }
 if (quickScroll.minimumTargetWidth < 48 || quickScroll.minimumTargetHeight < 64
@@ -1151,7 +1157,7 @@ if (quickScroll.trackTapBehavior !== "pass-through"
 }
 if (quickScroll.expandDurationMs !== 180 || quickScroll.expandCurve !== "easeOutCubic"
   || quickScroll.collapseDurationMs !== 240 || quickScroll.collapseCurve !== "easeInOutCubic"
-  || quickScroll.expandedHoldMs !== 1500 || quickScroll.collapsedHoldMs !== 600
+  || quickScroll.expandedHoldMs !== 1000 || quickScroll.collapsedHoldMs !== 600
   || quickScroll.fadeDurationMs !== 180 || quickScroll.slowReadHoldMs !== 1500) {
   failures.push("自适应阅读滑块状态时序漂移");
 }
