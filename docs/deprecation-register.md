@@ -2,9 +2,20 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 更新前与升级后一次性提醒
+
+- [共享更新说明规范](mobile-releases.md)与 [Mobile profile](platforms/mobile.md#更新前与升级后提醒)改为更新前直接显示目标版本完整说明、升级后在合适启动显示实际安装版本说明。App 移除独立“查看更新”按钮、说明／历史页面及设置／游客历史入口；下节原方案记录保留，原“主动历史、升级后不弹窗”的约定由本节替代。
+- 推荐按平台与目标构建号一次且可关闭，既有忽略记录继续有效；升级后依据可信安装基线识别升级，无记录的首次迁移也可用有效 Android 安装／更新时间确认覆盖安装并提示当前安装版，不声称知道旧构建。同构建重装可能触发这一次迁移提示；建立记录后按平台与构建号去重，冷启动、重建、登录切换、重装和 revision 修订不重复，跨多版只提示本次安装版。首次安装时间相同或证据不可用时不弹，失败不误记已展示。
+- 强制更新先行并持续阻断，应用可用后优先升级后提醒，推荐择后且不叠窗；任何一次性记录或说明失败均不能解除强制策略。旧页面安全回退与旧忽略迁移纳入 Mobile 回归，不以删除本机提示记录来实现界面回滚。
+- 此次是 App 交互替换，不是 Backend 协议弃用。保留已部署公开历史／详情 HTTP、历史数据、`/meta` 字段、后台草稿／确认快照、维护入口和发布门禁，旧消费者仍可调用既有接口；不据此宣称“无消费者”或授权清理兼容协议。
+- 无 Foundation Token、机器契约、公开导出、生成物、包版本或 HTTP Schema 变化，不创建 Tag／Release，不要求消费者升级 Foundation 依赖。本次新增交互先交付文档提交与 PR 供 Mobile 实现，需另经负责人决定合并及发包；原任务上线授权不自动覆盖本修订。
+- 消费者可回滚到旧界面实现并继续使用保留接口与已发布说明；保留可迁移的旧忽略及本机展示记录，不能借回滚改写发布历史或撤回已发布安装包。无新的系统通知／FCM 事件，不新增 iOS 发版。
+
 ## 后台预览与移动端更新说明文档
 
-- [共享更新说明规范](mobile-releases.md)补充人工纯文本摘要与条目、平台／版本名／构建号对应、草稿与已确认快照隔离、推荐横幅、完整详情、强制更新及主动版本历史；[Web](platforms/web.md#移动端更新说明管理与预览)与 [Mobile](platforms/mobile.md#更新说明与版本历史)仅补充平台呈现差异。
+本节保留 [PR #23](https://github.com/morenk/wenyousite-foundation/pull/23) 合入时的原方案；其中主动历史入口与“无升级后自动弹窗”仅作历史记录，现行 App 行为以上节为准。
+
+- [原共享更新说明规范](https://github.com/morenk/wenyousite-foundation/blob/d9001265030a52d5255c7cd52dc841833cc7afbb/docs/mobile-releases.md)补充人工纯文本摘要与条目、平台／版本名／构建号对应、草稿与已确认快照隔离、推荐横幅、完整详情、强制更新及主动版本历史；原 [Web](https://github.com/morenk/wenyousite-foundation/blob/d9001265030a52d5255c7cd52dc841833cc7afbb/docs/platforms/web.md#移动端更新说明管理与预览)与 [Mobile](https://github.com/morenk/wenyousite-foundation/blob/d9001265030a52d5255c7cd52dc841833cc7afbb/docs/platforms/mobile.md#更新说明与版本历史)仅补充平台呈现差异。
 - 此项按兼容新增接入，保留既有 `/meta` 字段与推荐／强制升级策略。旧客户端不能展示新说明或新历史入口，仍按原升级流程工作；不将旧客户端无法显示说明误报为新功能已覆盖全部用户。
 - 公开历史只收录晋级成功的已发布记录；后台草稿、待发布记录和未确认修正不对用户公开，编辑期间继续展示已确认旧快照。旧历史缺失使用明确空态，不编造文案、发布日期或迁移完成记录；读取失败不能伪装为空态或绕过强制更新。
 - 无 Foundation Token、机器契约、公开导出、生成物或版本变更，不创建 Tag／Release，不要求消费者升级 Foundation 依赖。Backend 负责 API、存储、权限与发布事务；本登记不复制其 Schema，也不声明数据库迁移或线上晋级已完成。
