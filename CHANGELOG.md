@@ -1,5 +1,9 @@
 # Foundation Changelog
 
+## 未发布文档
+
+- `shared`：补充后台预览与移动端更新说明的共享展示语义，覆盖人工纯文本摘要与条目、版本身份、已确认快照、推荐与强制更新、已发布历史及读取失败。Web 与 Mobile 复用现有平台样式和无障碍规则；不变更机器契约、生成物或包版本，不代表消费者已实现或上线。
+
 ## 7.2.1
 
 - `breaking`：移动端阅读进度、手动快翻和自适应阅读滑块迁回 Mobile `ReadingScrollSpec`；移除 `experiences.readingQuickScroll`、`experiences.adaptiveReadingScroll`、对应 TypeScript／Flutter 公开常量、专属 `action.reading-quick-scroll` 语义与现行规范文档。通用主题、动效、普通表单滑块和无障碍基础保持不变。

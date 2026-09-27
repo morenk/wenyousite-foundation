@@ -10,6 +10,7 @@
 - [图标目录与治理](docs/icons.md)
 - [核心元素系统](docs/elements.md)
 - [通知分组契约](docs/notifications.md)
+- [后台预览与移动端更新说明](docs/mobile-releases.md)
 - [反馈、无障碍与浮层契约](docs/interaction.md)
 - [控件、内容与格式化呈现](docs/presentation.md)
 - [导航与界面语言契约](docs/navigation-language.md)
