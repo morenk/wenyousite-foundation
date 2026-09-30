@@ -2,6 +2,13 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## 私密主题邀请重复分享
+
+- [私密主题邀请重复分享](interaction.md#私密主题邀请重复分享) 区分“复制邀请链接”与明确确认的“重置邀请链接”。日常分享复用当前邀请；主动重置仍使旧链接对所有访问者失效，已加入成员权限保留。
+- [Backend 5.29.0-dev.20261001.1 的私帖邀请契约](https://github.com/morenk/wenyousite-backend/blob/cfe9621c39f9d9c8c7f764bf45293be43bab1af7/docs/api-contract.md#私帖邀请链接重复分享) 兼容新增幂等获取或创建入口，原重置入口和旧客户端行为保留；新客户端只在确认重置后使用旧入口。没有数据库迁移、历史链接恢复或成员清理，本次不删除兼容协议。
+- Foundation 仅同步共享体验文档，无 Token、机器契约、公开导出、包版本或生成物变化，无需升级依赖、不创建 Tag 或 Release。后端接口和成员准入仍由 Backend 契约定义。
+- 交付顺序为兼容后端，再接入 Web／Mobile。消费者回滚恢复旧操作入口；已发生的重置不会因客户端回滚而撤销。旧链接和历史成员不做自动回填或恢复，合并、部署与负责人验收分别遵循治理门禁。
+
 ## 更新前与升级后一次性提醒
 
 - [共享更新说明规范](mobile-releases.md)与 [Mobile profile](platforms/mobile.md#更新前与升级后提醒)改为更新前直接显示目标版本完整说明、升级后在合适启动显示实际安装版本说明。App 移除独立“查看更新”按钮、说明／历史页面及设置／游客历史入口；下节原方案记录保留，原“主动历史、升级后不弹窗”的约定由本节替代。
