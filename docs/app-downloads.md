@@ -4,11 +4,11 @@
 
 本规范描述匿名下载入口、信息状态、传输触发和既有 Android 更新校验的共享语义。当前只提供 Android；Web 实现页面，Mobile 实现更新与发布工具，Backend 拥有下载 HTTP、发布身份、缓存和额度。Foundation 不实现网关、业务 DTO 或消费者界面。
 
-HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI（3bd4633e1f647783030eb3db872442c8a64d6f07）](https://github.com/morenk/wenyousite-backend/blob/3bd4633e1f647783030eb3db872442c8a64d6f07/contracts/openapi.json)定义，配套流程见[同提交下载网关说明](https://github.com/morenk/wenyousite-backend/blob/3bd4633e1f647783030eb3db872442c8a64d6f07/docs/app-download-gateway.md)。匿名信息为 `GET /api/v1/app-downloads/android`（`appDownloadsInfo`），固定文件为 `GET/HEAD /api/v1/app-downloads/android/{buildNumber}/file`（`appDownloadsFile`／`appDownloadsHead`）。消费者从该提交生成类型，不复制一套 Foundation DTO；此引用是契约交接，不代表独立网关实现、部署或旧 APP 验收已完成。
+HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.31.0-dev.20261003.1（1857d60fe3af309149eb5c1846be221d3a45fb86）](https://github.com/morenk/wenyousite-backend/blob/1857d60fe3af309149eb5c1846be221d3a45fb86/contracts/openapi.json)定义，配套流程见[同提交下载网关说明](https://github.com/morenk/wenyousite-backend/blob/1857d60fe3af309149eb5c1846be221d3a45fb86/docs/app-download-gateway.md)。匿名信息为 `GET /api/v1/app-downloads/android`（`appDownloadsInfo`），固定文件为 `GET/HEAD /api/v1/app-downloads/android/{buildNumber}/file`（`appDownloadsFile`／`appDownloadsHead`）。消费者从该提交生成类型，不复制一套 Foundation DTO；此引用用于契约交接，不代替消费者联验、部署或旧 APP 验收。
 
-部署顺序、可信代理、隔离身份、缓存与预算参数见[治理分发规范（22f129c）](https://github.com/morenk/wenyousite-workspace/blob/22f129cd83074904a6d84d18ebe7b5797a08bce0/docs/app-download-distribution.md)。这些是运维参数，不进入 Foundation 设计 Token 或生成常量。字体、明暗、布局和触控继续消费[机器契约](../contracts/foundation.v1.json)及平台 profile；本次文档与验收用例无需提升包版本或发布 Tag，Web／Mobile 继续固定各自现有正式 Foundation 依赖。
+部署顺序、可信代理、隔离身份、缓存与预算参数见[治理分发规范（57b8dd1）](https://github.com/morenk/wenyousite-workspace/blob/57b8dd13c9399551c9f925b8f8152653dd44e16c/docs/app-download-distribution.md)。这些是运维参数，不进入 Foundation 设计 Token 或生成常量。字体、明暗、布局和触控继续消费[机器契约](../contracts/foundation.v1.json)及平台 profile；本次文档与验收用例无需提升包版本或发布 Tag，Web／Mobile 继续固定各自现有正式 Foundation 依赖。
 
-上述固定提交保留 HTTP 与迁移顺序的交接基线；其中要求新建独立只读凭据的部分由下文[回源凭据边界](#回源凭据边界)替代，不再作为部署前置条件。
+上述 Backend 与治理提交均允许显式预热／修复复用已有存储凭据；新建独立只读凭据不再作为部署前置条件，公开网关隔离与权限事实见[回源凭据边界](#回源凭据边界)。
 
 ## 入口、页面与触发
 
@@ -28,21 +28,25 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI（3bd4
 | 可下载 | 同时显示对应版本、大小和下载动作；这表示信息有效，文件请求仍可能遇到之后发生的限流或故障 |
 | 没有推荐发布 | 明确显示暂无可下载版本，可重新读取信息；不提供猜测地址或历史包替代 |
 | 已撤回 | 明确显示版本已撤回，撤下下载动作；旧页面和二维码不能绕过撤回 |
-| 暂停服务 | 明确显示下载暂时关闭，可稍后重新读取信息；不伪装成没有发布 |
+| 暂停服务 | 明确显示下载暂时暂停，可由运维暂停或完整 APK 剩余额度不足触发；遵守服务端建议等待时间，不推测恢复时刻，也不伪装成没有发布 |
 | 暂不可用 | 显示暂时无法下载及重试入口，不把缓存或服务异常归因为用户设备不支持 |
 | 信息读取失败 | 显示加载失败及原地重试，不显示“暂无版本”或虚构版本、大小与下载地址 |
 | 已有信息刷新失败 | 可以保留同一制品的上次信息，但标明未能刷新；本轮不能确认可用时暂停下载动作，等待重新读取成功 |
 
 推荐目标变化时，版本、构建号、大小、摘要校验依据和下载地址作为同一身份整体更新。过期响应不得覆盖新状态；新目标不可继承旧目标的可用性或下载动作。已发出的固定构建下载不自动改指另一个制品。
 
-限流 `429` 应呈现稍后重试；可读取响应时遵守 `Retry-After`，等待期间不循环探测 HEAD／GET。文件 `503` 表示本次暂不可用，不自动回退、自动刷新下载地址或尝试桶地址。页面信息重试只重取信息，不能顺带重新下载。浏览器原生下载无法向页面回传 HTTP 结果时，不伪造成功、进度或倒计时；恢复提示以实际可观察结果为限，消费者分别验证原生交接与可捕获错误的分支。
+限流 `429` 应呈现稍后重试；可读取响应时遵守 `Retry-After`，等待期间不循环探测 HEAD／GET。文件 `503` 表示本次暂不可用，不自动回退、自动刷新下载地址或尝试桶地址。
+
+预算或瞬时带宽不足时，`429`／`503` 可以只有状态与响应头、没有 JSON 正文；可读取响应的消费者按 HTTP 状态兜底，不把解析空正文失败覆盖成未知发布状态。代理未连上网关时的 `502` 同样作为请求失败处理，不触发任何回退下载。
+
+页面信息重试只重取信息，不能顺带重新下载。浏览器原生下载无法向页面回传 HTTP 结果时，不伪造成功、进度或倒计时；恢复提示以实际可观察结果为限，消费者分别验证原生交接与可捕获错误的分支。
 
 ## 固定文件与旧 APP 校验
 
 - Android `/meta.mobileCompatibility.android.updateUrl` 的字段结构及推荐／强制策略保持兼容；启用网关后指向本站按构建号固定的文件地址。`/download` 是给人阅读的页面，不能替代旧 APP 需要的文件 URL。下载页也不能独立产生或解除强制更新资格。
 - 旧 APP 的 HEAD 预检与 GET 下载继续指向同一制品；保留其读取的全部 metadata、正确正文长度、内容类型和 `Content-Disposition`，不通过取消摘要、大小、包名、构建号或签名验证来适配新地址。精确响应头以 Backend 固定契约为准。
-- HEAD 不发送文件正文、不占下载正文预算，但与 GET、失败请求一样受请求频率限制。浏览页面不主动发 HEAD；既有 APP 在用户更新流程中的 HEAD 预检仍被支持。
-- 单段 Range 返回同一制品的所请求范围和正确长度；每次请求独立计入实际计划响应正文预算。合法范围的 `If-Range` 不匹配时按 Backend 契约返回完整文件，并按完整正文预留；HEAD 使用同样的范围选择但无正文。非法、多段或不可满足的范围返回 `416`，不能因 `If-Range` 不匹配而放行或触发回源。断开、重试和重启不能返还或清空已经预留的额度。
+- HEAD 不发送文件正文、不占下载正文预算，但与 GET、失败请求一样受请求频率限制；HEAD 成功不表示 GET 正文额度充足。浏览页面不主动发 HEAD；既有 APP 在用户更新流程中的 HEAD 预检仍被支持。
+- 单段 Range 返回同一制品的所请求范围和正确长度；每次请求独立计入实际计划响应正文预算。合法范围的 `If-Range` 不匹配时按 Backend 契约返回完整文件，并按完整正文预留；HEAD 使用同样的范围选择但无正文。非法、多段或不可满足的范围返回 `416`，不能因 `If-Range` 不匹配而放行或触发回源。信息与错误 JSON 正文也占出站预算，不能只统计成功 APK；预算不足以发送错误正文时仍按上述 HTTP 状态处理。断开、重试和重启不能返还或清空已经预留的额度。
 - 固定构建 URL 不是永久可用承诺：撤回、暂停、缓存缺失或异常仍由服务端阻止。缓存保留与发布策略分开；不能因为 URL 可预测或文件仍留在磁盘就绕过发布可见性。
 
 ## 缓存、发布身份与迁移
