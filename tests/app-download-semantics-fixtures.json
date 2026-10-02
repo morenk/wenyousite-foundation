@@ -1,0 +1,330 @@
+{
+  "description": "公开 APP 下载的共享验收场景；不是 HTTP DTO、响应样本或可执行网关测试。",
+  "specification": "../docs/app-downloads.md",
+  "cases": [
+    {
+      "id": "entry-anonymous",
+      "owners": [
+        "web"
+      ],
+      "given": "游客或已登录用户位于桌面、窄屏或登录页",
+      "when": "从外观弹层底部激活下载 APP",
+      "then": [
+        "进入公开 /download 页面，不要求登录",
+        "入口位于省流量设置之后，使用导航语义"
+      ]
+    },
+    {
+      "id": "browse-without-file-request",
+      "owners": [
+        "web"
+      ],
+      "given": "尚未激活下载动作",
+      "when": "打开外观或页面、预取、悬停、聚焦、刷新下载信息",
+      "then": [
+        "允许读取下载信息",
+        "APK 文件 HEAD、GET、Range 请求均为零"
+      ]
+    },
+    {
+      "id": "qr-page-only",
+      "owners": [
+        "web"
+      ],
+      "given": "桌面下载页可展示二维码",
+      "when": "生成并扫描二维码",
+      "then": [
+        "内容为本站 /download 页面地址，旁有可读页面链接",
+        "没有 APK、桶或签名 URL，扫码不直接开始文件请求"
+      ]
+    },
+    {
+      "id": "info-available",
+      "owners": [
+        "web",
+        "backend"
+      ],
+      "given": "服务端明确允许下载一个已发布制品",
+      "when": "读取并展示下载信息",
+      "then": [
+        "Android 平台、版本、构建号、大小和下载动作对应同一制品",
+        "不根据文件名、说明或 UA 生成发布事实"
+      ]
+    },
+    {
+      "id": "info-no-release",
+      "owners": [
+        "web",
+        "backend"
+      ],
+      "given": "服务端明确没有推荐发布",
+      "when": "读取下载信息",
+      "then": [
+        "显示暂无可下载版本，允许重取信息",
+        "不提供猜测地址、历史包替代或可执行下载动作"
+      ]
+    },
+    {
+      "id": "info-withdrawn",
+      "owners": [
+        "web",
+        "backend"
+      ],
+      "given": "目标已撤回，但旧页面或固定 URL 仍被保留",
+      "when": "刷新信息并直接请求原文件 URL",
+      "then": [
+        "页面显示已撤回并撤下下载动作",
+        "服务端拒绝旧地址，不因缓存存在而继续下载"
+      ]
+    },
+    {
+      "id": "info-paused",
+      "owners": [
+        "web",
+        "backend"
+      ],
+      "given": "服务端暂停公开下载",
+      "when": "刷新信息并请求既有文件 URL",
+      "then": [
+        "页面显示下载暂时关闭，与无版本区分",
+        "文件请求被服务端阻止，重取信息不重试传输"
+      ]
+    },
+    {
+      "id": "info-unavailable",
+      "owners": [
+        "web",
+        "backend"
+      ],
+      "given": "服务端明确暂不可用",
+      "when": "读取下载信息",
+      "then": [
+        "显示暂时无法下载及重试入口",
+        "不猜测用户设备不支持，不提供桶地址兜底"
+      ]
+    },
+    {
+      "id": "info-load-failure",
+      "owners": [
+        "web"
+      ],
+      "given": "首次信息请求遇到网络错误、无效响应或服务故障",
+      "when": "等待请求结束后手动重试",
+      "then": [
+        "加载期间没有可执行文件地址",
+        "失败显示加载失败，不冒充暂无版本；重试只读取信息"
+      ]
+    },
+    {
+      "id": "info-refresh-failure",
+      "owners": [
+        "web"
+      ],
+      "given": "页面已有同一制品信息，本次刷新失败",
+      "when": "观察状态和下载动作",
+      "then": [
+        "保留的信息标明未能刷新，不能声称仍已确认可用",
+        "不能确认可用时暂停下载动作，读取成功后再恢复"
+      ]
+    },
+    {
+      "id": "info-target-race",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "先请求构建 A，后请求构建 B，B 先返回",
+      "when": "A 的旧响应最后返回",
+      "then": [
+        "旧响应不能覆盖 B 的版本、大小、摘要或地址，也不能恢复失效动作",
+        "已开始的 A 固定文件请求不能悄悄改为 B"
+      ]
+    },
+    {
+      "id": "download-explicit-action",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "已取得同一目标的有效下载信息或更新策略",
+      "when": "用户明确下载，并重复激活尚在处理的同一动作",
+      "then": [
+        "仅明确动作启动文件请求，同一次动作不产生并行重复传输",
+        "后续失败重试需要用户动作，信息刷新不自动触发文件请求"
+      ]
+    },
+    {
+      "id": "download-browser-handoff",
+      "owners": [
+        "web"
+      ],
+      "given": "浏览器原生下载接管文件请求，页面无法读取响应结果",
+      "when": "文件响应发生 429、503 或用户取消",
+      "then": [
+        "页面不宣称已下载、已安装或已校验",
+        "不虚构进度、错误已捕获或 Retry-After 倒计时，不自动重试"
+      ]
+    },
+    {
+      "id": "download-rate-limited",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "文件请求超过服务端额度、频率或并发限制",
+      "when": "执行 HEAD 或 GET，消费者可读取响应",
+      "then": [
+        "返回 429 与 Retry-After",
+        "呈现稍后重试并遵守等待时间，不循环 HEAD、GET 或切换桶地址",
+        "HEAD 与失败请求同样计入请求频率"
+      ]
+    },
+    {
+      "id": "download-service-unavailable",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "缓存、配置或依赖发生异常",
+      "when": "执行文件请求",
+      "then": [
+        "返回 503 并按暂不可用恢复，不报告下载成功或无需升级",
+        "不回源、不重定向桶、不改装其他构建；强制更新继续原阻断策略"
+      ]
+    },
+    {
+      "id": "legacy-head-get",
+      "owners": [
+        "mobile",
+        "backend"
+      ],
+      "given": "原已安装 APP 刷新 /meta 后获得本站固定构建文件地址",
+      "when": "在既有用户更新流程先 HEAD 再 GET",
+      "then": [
+        "updateUrl 是文件地址而不是 /download 页面，字段结构及升级策略兼容",
+        "两次响应对应同一制品，保留旧 APP 所需 metadata、Content-Disposition、内容类型与长度",
+        "HEAD 无正文和正文预算消耗；下载后仍校验大小、SHA-256、包名、构建号与签名"
+      ]
+    },
+    {
+      "id": "single-range",
+      "owners": [
+        "backend",
+        "mobile"
+      ],
+      "given": "已验证缓存存在，单段范围合法且可满足",
+      "when": "重复请求同一合法单段 Range，并覆盖 If-Range 匹配和不匹配",
+      "then": [
+        "未提供 If-Range 或匹配时返回正确片段、范围元数据与正文长度；合法范围的 If-Range 不匹配时返回完整文件",
+        "每次发送前按所选片段或完整正文长度独立预留，同时受日月预算约束；HEAD 选择相同但无正文"
+      ]
+    },
+    {
+      "id": "invalid-range",
+      "owners": [
+        "backend"
+      ],
+      "given": "范围非法、多段或不可满足",
+      "when": "请求固定构建文件",
+      "then": [
+        "返回 416 与 Backend 定义的范围错误元数据，不因 If-Range 不匹配而放行或改传完整文件",
+        "不回源，失败请求仍计入频率"
+      ]
+    },
+    {
+      "id": "budget-disconnect-restart",
+      "owners": [
+        "backend"
+      ],
+      "given": "正文长度已用持久化事务同时预留日月额度",
+      "when": "下载中断、并发重试并重启网关",
+      "then": [
+        "中断不退还，重试重新预留，重启不清零",
+        "额度不足返回 429 与 Retry-After；预算状态无法恢复时返回 503"
+      ]
+    },
+    {
+      "id": "cache-miss-or-corrupt",
+      "owners": [
+        "backend"
+      ],
+      "given": "推荐制品的缓存缺失、核验失败或未完成原子启用",
+      "when": "公众 HEAD、GET 或 Range 请求该构建",
+      "then": [
+        "返回 503，不发送未验证或部分文件",
+        "对象存储读取次数为零，不触发后台预热或公开桶回退"
+      ]
+    },
+    {
+      "id": "public-request-no-origin",
+      "owners": [
+        "backend"
+      ],
+      "given": "公众进程没有对象存储凭据，预热尚未执行",
+      "when": "反复访问下载信息、刷新、文件预检及失败重试",
+      "then": [
+        "公众路径只读取已验证缓存，不能调用回源或修复",
+        "不返回内部对象位置、凭据、签名 URL 或预算账本"
+      ]
+    },
+    {
+      "id": "prewarm-before-promote",
+      "owners": [
+        "backend",
+        "mobile"
+      ],
+      "given": "已登记待发布制品，使用隔离对象存储和受限只读预热身份",
+      "when": "并发预热同一制品，并分别注入权限、大小、摘要、包名或构建号失败",
+      "then": [
+        "相同制品预热合并，有限重试逐次计入回源额度",
+        "只有全部核验成功才原子启用缓存；失败临时文件不可下载",
+        "预热成功后仍须通过原晋级门禁才公开；预热或晋级失败保留旧策略"
+      ]
+    },
+    {
+      "id": "artifact-identity-preserved",
+      "owners": [
+        "backend",
+        "mobile"
+      ],
+      "given": "已有制品身份、历史发布记录和原下载地址",
+      "when": "把存储位置与本站对外下载地址分离",
+      "then": [
+        "保留原制品身份及历史，不由 URL 猜测身份或因换地址新造制品",
+        "发布工具鉴权核验私有对象，签名与说明确认门禁保留"
+      ]
+    },
+    {
+      "id": "accessible-layout",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "使用明暗主题、窄屏、长版本名及文字缩放",
+      "when": "键盘或读屏导航入口、状态、下载与重试",
+      "then": [
+        "Web 保持信息密度、焦点可见、可读页面链接，二维码不是唯一入口",
+        "Flutter 保持单列、安全区与既有 48dp 触控下限",
+        "状态不只靠颜色，说明与操作可达，没有可用的 iOS 下载动作"
+      ]
+    },
+    {
+      "id": "migration-public-read-gate",
+      "owners": [
+        "backend",
+        "web",
+        "mobile",
+        "governance"
+      ],
+      "given": "兼容网关、工具和缓存已准备，APK 公共读仍保持原状态",
+      "when": "评审启用与最后关闭公共读的证据",
+      "then": [
+        "先预热再切 /meta 与 Web，验证旧 APP HEAD、GET、安装校验后才独立评审关闭公共读",
+        "未取得批准不改云配置，不触碰图片桶或实例开关",
+        "隔离样本不冒称云权限或实际安装验收，回滚不自动重开公共读或清空预算"
+      ]
+    }
+  ]
+}
