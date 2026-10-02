@@ -62,6 +62,10 @@ Foundation 的 `fonts` 为空，不捆绑或运行时下载字体。Web 使用�
 
 权限、事务和版本语义由 [Backend API 契约](https://github.com/morenk/wenyousite-backend/blob/223bc19137e3c6cee3911f9ca3b5f0bc63715d77/docs/api-contract.md) 拥有（`5.21.0-dev.20260911.1`）：聚合保存的可选 `defaultSubthreadPostingPolicy` 省略时保持原值，与其他主贴修改原子保存。Foundation 只说明共享体验，不重新定义 API 枚举或服务端授权规则；本次不增加设计 Token、不提升契约版本，客户端继续消费已锁定的 Foundation 发布版本。
 
+## 长讨论阅读定位
+
+主题子贴主楼与独立楼中楼采用固定编号、简洁定位面板、目标附近加载及有限缓存，具体规则见 [长讨论编号定位](discussion-navigation.md)。现有主楼编号、帖子链接及普通阅读操作保持兼容；本次仅补充业务接入说明，不增加设计 Token 或发布版本。
+
 ## 集合与列表
 
 结果、通知、收藏、会话、交易等集合的容器和列表项必须占满当前分配列；短标题、空摘要或窄内容不能让卡片收缩到内容宽度。多列展示必须由明确的网格或瀑布流规则决定，不能由每项内容长度偶然形成。

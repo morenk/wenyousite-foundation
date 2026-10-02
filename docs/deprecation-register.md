@@ -1,5 +1,13 @@
 # Foundation 兼容登记
 
+## 长讨论编号定位候选
+
+- [长讨论编号定位](discussion-navigation.md) 统一固定编号和精简面板；原 Web 楼中楼当前列表序号改为服务端稳定回复编号，不删除主楼 `floorNumber` 或既有帖子 ID 深链。
+- Backend 采用兼容新增字段、历史编号回填与直接窗口接口；旧单向分页接口继续可用。Web／Mobile 在已提交契约稳定后接入，不能把候选视为已经部署或真人验收。
+- 本次只补业务体验文档，不修改 Foundation 机器契约、生成物、公开导出或包版本，不创建 Tag／Release，消费者继续固定已发布版本。
+- 回退消费者可恢复旧列表，保留 Backend 新增编号及历史迁移；编号分配后不回收重用。兼容清理需另行满足治理四项证据，不能伴随这次性能改造删除旧协议。
+
+
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
 ## 私密主题邀请重复分享
