@@ -8,6 +8,8 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI（3bd4
 
 部署顺序、可信代理、隔离身份、缓存与预算参数见[治理分发规范（22f129c）](https://github.com/morenk/wenyousite-workspace/blob/22f129cd83074904a6d84d18ebe7b5797a08bce0/docs/app-download-distribution.md)。这些是运维参数，不进入 Foundation 设计 Token 或生成常量。字体、明暗、布局和触控继续消费[机器契约](../contracts/foundation.v1.json)及平台 profile；本次文档与验收用例无需提升包版本或发布 Tag，Web／Mobile 继续固定各自现有正式 Foundation 依赖。
 
+上述固定提交保留 HTTP 与迁移顺序的交接基线；其中要求新建独立只读凭据的部分由下文[回源凭据边界](#回源凭据边界)替代，不再作为部署前置条件。
+
 ## 入口、页面与触发
 
 - 外观弹层底部、省流量设置之后提供独立的“下载 APP”导航入口；桌面、窄屏与登录页复用该入口，游客与已登录用户均可进入公开 `/download` 页面。下载不要求注册、登录或管理员身份。
@@ -47,7 +49,17 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI（3bd4
 
 普通公众请求只读取已验证缓存；缺失、损坏、依赖或配置异常时返回 `503`，不回源、不重定向公开桶、不生成可绕过网关的签名地址。客户端的刷新、重试、HEAD 和 Range 均不能触发预热。下载页不展示内部存储地址、凭据、缓存路径或预算账本。
 
-仅发布预热或显式缓存修复允许使用限定 APK 目录的只读凭据回源。相同制品合并预热，有限重试逐次计入回源预算；流式落盘并核验登记大小、SHA-256、包名和构建号后原子启用，失败临时文件不可被公众下载。预热成功不等于已晋级，公开信息只展示发布策略允许的制品。
+### 回源凭据边界
+
+无法再生成独立只读凭据时，允许显式发布预热／缓存修复进程复用已有存储凭据，不要求新建凭据，也不缩减或修改原凭据的云端权限，以免影响既有上传与图片流程。公开下载网关仍不得持有、读取或继承任何 S3 凭据；复用仅发生在受控回源进程，不把共享配置或凭据环境传给公开进程。
+
+预热配置独立存放并限制文件读取权限，日志与错误输出脱敏。预热代码固定访问 `wenyou-apk/mobile/android/*`，只调用核验与取包所需的读取操作，不因凭据具有额外权限而上传、删除对象或修改云策略。这是应用访问限制，不能证明已有凭据在云端只读或仅能访问 APK；凭据泄漏仍可能影响其原有全部授权资源，配置隔离不改变这一权限事实。
+
+凭据配置留到另行授权的部署阶段；开发与验收仅使用隔离样本，不读取或打印真实密钥、不复制生产配置，也不提前配置服务器或修改云策略。不能新建独立只读凭据本身不再阻塞部署准备；公开进程隔离、回源预算、缓存核验和部署审批仍须满足。
+
+### 缓存启用与发布
+
+相同制品合并预热，有限重试逐次计入回源预算；流式落盘并核验登记大小、SHA-256、包名和构建号后原子启用，失败临时文件不可被公众下载。预热成功不等于已晋级，公开信息只展示发布策略允许的制品。
 
 发布登记保留原制品身份和历史记录；存储位置与对外下载地址分开，迁移地址不新造制品、不改写已有身份，也不从 URL 反推身份。发布工具通过鉴权读取核验私有对象，预热成功后才能晋级。签名、更新说明确认和晋级事务继续遵守既有发布门禁；失败保持旧策略，不能把待发布包显示为正式版本。
 
@@ -63,7 +75,7 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI（3bd4
 | 信息与制品绑定 | `info-available`、`info-no-release`、`info-withdrawn`、`info-paused`、`info-unavailable`、`info-load-failure`、`info-refresh-failure`、`info-target-race` |
 | 点击与失败恢复 | `download-explicit-action`、`download-browser-handoff`、`download-rate-limited`、`download-service-unavailable` |
 | 旧 APP 与范围下载 | `legacy-head-get`、`single-range`、`invalid-range`、`budget-disconnect-restart` |
-| 缓存与发布 | `cache-miss-or-corrupt`、`public-request-no-origin`、`prewarm-before-promote`、`artifact-identity-preserved` |
+| 缓存与发布 | `cache-miss-or-corrupt`、`public-request-no-origin`、`origin-credential-reuse`、`prewarm-before-promote`、`artifact-identity-preserved` |
 | 呈现与迁移 | `accessible-layout`、`migration-public-read-gate` |
 
 Foundation 运行用例 JSON 结构、ID 唯一性与文档引用检查，以及仓库 `pnpm check`；不新增产品构建或发布。消费者在隔离资源执行相关行为测试，Web 提供明暗、窄屏、键盘及匿名入口画面，Mobile 在 Windows 验证实际旧 APP 与安装流程。缺少真实云凭据仅影响云权限和实际部署验收；隔离用例、文档交付与 PR 可继续完成。合并、部署、发正式包和关闭公共读仍由负责人分别决定。
