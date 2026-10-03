@@ -6,6 +6,8 @@
 
 HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.31.0-dev.20261003.1（1857d60fe3af309149eb5c1846be221d3a45fb86）](https://github.com/morenk/wenyousite-backend/blob/1857d60fe3af309149eb5c1846be221d3a45fb86/contracts/openapi.json)定义，配套流程见[同提交下载网关说明](https://github.com/morenk/wenyousite-backend/blob/1857d60fe3af309149eb5c1846be221d3a45fb86/docs/app-download-gateway.md)。匿名信息为 `GET /api/v1/app-downloads/android`（`appDownloadsInfo`），固定文件为 `GET/HEAD /api/v1/app-downloads/android/{buildNumber}/file`（`appDownloadsFile`／`appDownloadsHead`）。消费者从该提交生成类型，不复制一套 Foundation DTO；此引用用于契约交接，不代替消费者联验、部署或旧 APP 验收。
 
+下文每日下载次数是已确认的新增产品约束，上述 HTTP 基线尚未包含其交接。新增 HTTP 字段、Cookie 与原因头的名称、格式及状态映射等待 Backend 已提交契约后固定；本次先准备共享语义与场景，不据此启动消费者实现或自行声明 DTO。
+
 部署顺序、可信代理、隔离身份、缓存与预算参数见[治理分发规范（57b8dd1）](https://github.com/morenk/wenyousite-workspace/blob/57b8dd13c9399551c9f925b8f8152653dd44e16c/docs/app-download-distribution.md)。这些是运维参数，不进入 Foundation 设计 Token 或生成常量。字体、明暗、布局和触控继续消费[机器契约](../contracts/foundation.v1.json)及平台 profile；本次文档与验收用例无需提升包版本或发布 Tag，Web／Mobile 继续固定各自现有正式 Foundation 依赖。
 
 上述 Backend 与治理提交均允许显式预热／修复复用已有存储凭据；新建独立只读凭据不再作为部署前置条件，公开网关隔离与权限事实见[回源凭据边界](#回源凭据边界)。
@@ -50,7 +52,7 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.31.0
 
 预算或瞬时带宽不足时，`429`／`503` 可以只有状态与响应头、没有 JSON 正文；可读取响应的消费者按 HTTP 状态兜底，不把解析空正文失败覆盖成未知发布状态。代理未连上网关时的 `502` 同样作为请求失败处理，不触发任何回退下载。
 
-用户显式重试重新开始“查询信息 → HEAD 校验 → 原生下载”流程，全部通过后无需第二次点击；不自动轮询、到期自动重试或沿用旧预检结果跳过查询。若仍不可用或失败，就近更新状态并停止。本规则不把等待结束、菜单重开或组件重建当作重试授权。
+用户显式重试重新开始“查询信息 → HEAD 校验 → 原生下载”流程，全部通过后无需第二次点击；不自动轮询、到期自动重试或沿用旧预检结果跳过查询。若仍不可用或失败，就近更新状态并停止。本规则不把等待结束、菜单重开或组件重建当作重试授权；重试若再次获准文件 GET，会再次占用当日下载次数，原中断记录不退还。
 
 浏览器原生下载无法向菜单回传 GET 结果时，不伪造成功、进度或倒计时；恢复提示以实际可观察结果为限，消费者分别验证查询／HEAD 可捕获错误与浏览器原生交接分支。Web 不为读取 GET 结果先将整个 APK 拉进页面内存。
 
@@ -58,9 +60,32 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.31.0
 
 - Android `/meta.mobileCompatibility.android.updateUrl` 的字段结构及推荐／强制策略保持兼容；启用网关后指向本站按构建号固定的文件地址，不能替换成 Web 页面。Web 菜单下载不能独立产生或解除 App 强制更新资格。
 - 旧 APP 的 HEAD 预检与 GET 下载继续指向同一制品；保留其读取的全部 metadata、正确正文长度、内容类型和 `Content-Disposition`，不通过取消摘要、大小、包名、构建号或签名验证来适配新地址。精确响应头以 Backend 固定契约为准。
-- HEAD 不发送文件正文、不占下载正文预算，但与 GET、失败请求一样受请求频率限制；HEAD 成功不表示 GET 正文额度充足。Web 仅在明确下载动作中发 HEAD；既有 APP 在用户更新流程中的 HEAD 预检仍被支持。
-- 单段 Range 返回同一制品的所请求范围和正确长度；每次请求独立计入实际计划响应正文预算。合法范围的 `If-Range` 不匹配时按 Backend 契约返回完整文件，并按完整正文预留；HEAD 使用同样的范围选择但无正文。非法、多段或不可满足的范围返回 `416`，不能因 `If-Range` 不匹配而放行或触发回源。信息与错误 JSON 正文也占出站预算，不能只统计成功 APK；预算不足以发送错误正文时仍按上述 HTTP 状态处理。断开、重试和重启不能返还或清空已经预留的额度。
+- HEAD 不发送文件正文、不占下载正文预算或下载次数，但与 GET、信息和失败请求一样受请求频率限制；HEAD 成功不表示 GET 的字节或次数额度充足。Web 仅在明确下载动作中发 HEAD；既有 APP 在用户更新流程中的 HEAD 预检仍被支持。
+- 单段 Range 返回同一制品的所请求范围和正确长度；每次有效文件 GET 分别占一次下载次数，并按实际计划响应正文预留字节。合法范围的 `If-Range` 不匹配时按 Backend 契约返回完整文件，同样计一次并按完整正文预留；HEAD 使用同样的范围选择但不计下载次数、无正文。非法、多段或不可满足的范围返回 `416`，不能因 `If-Range` 不匹配而放行或触发回源。信息与错误 JSON 正文也占出站字节预算，但不消耗下载次数；预算不足以发送错误正文时仍按上述 HTTP 状态处理。断开、重试和重启不能返还或清空已经成功预留的额度。
 - 固定构建 URL 不是永久可用承诺：撤回、暂停、缓存缺失或异常仍由服务端阻止。缓存保留与发布策略分开；不能因为 URL 可预测或文件仍留在磁盘就绕过发布可见性。
+
+## 每日下载次数
+
+### 计数范围与用户身份
+
+- 按北京时间自然日限制每个浏览器设备标识最多 3 次、每个受信任客户端 IP 最多 10 次；两项同时满足才可下载，跨版本累计。多个设备共用同一出口 IP 时共同受 10 次限制；同一有效浏览器标识更换 IP 后，其当日 3 次计数仍继续累计，各 IP 另记自己的实际下载次数。
+- 浏览器使用第一方随机标识，不采用侵入性指纹，不以账号、屏幕尺寸、移动设备提示记录或浏览器自报的设备名称识别计数主体。访问提示的会话去重与服务端每日计数独立；关闭提示、切换路由、刷新或重建界面不重置下载计数。
+- 这是浏览器标识维度的限制，不能保证物理设备每日只能下载 3 次。清除、禁用 Cookie 或更换浏览器可能丢失该标识；这些请求仍共同受来源 IP 的每日 10 次限制，不因此获得无限下载。对用户不能宣称可靠识别同一物理设备，也不提示通过删除 Cookie 或换网络解除限制。
+- 标识缺失、失效或伪造时，不能把任意客户端输入当作可信身份去覆盖、清零或借用其他浏览器计数；按 Backend 已提交契约的兼容处理继续适用 IP 限制。具体校验与标识建立方式由 Backend 定义，本规范不预编 Cookie 名、签名格式、请求参数或原因头。
+- 无 Cookie 的旧 APP 继续直接请求文件 HEAD／GET，不要求先访问 Web、登录或补调下载信息接口；其有效文件 GET 计入来源 IP 的每日 10 次。原文件 metadata、大小、摘要、包名、构建号与签名校验保留。
+
+### 计次时点与事务边界
+
+统计的是已获准传输的下载尝试，不是下载完成次数；是否下载完、是否安装成功均不决定计次。
+
+- 文件存在、可发布、缓存已核验且请求可准入后，在有效文件 GET 发送正文前计一次；完整 GET 与每次有效单段 Range GET 均计次，重复下载和主动重试分别计次，不按版本或已下载字节去重。HEAD、信息查询和未准入文件传输的失败／拒绝请求不消耗下载次数，但继续计入请求频率。
+- 有效浏览器标识的当日次数、来源 IP 的当日次数以及本次 APK 响应所需日／月字节预算在同一持久化事务中检查并预留。任一限制不满足或事务失败，均不部分扣减下载次数，不遗留该次未获准 APK 的字节预留；实际发送的错误 JSON 仍遵循既有正文预算规则，不能把错误正文流量误称为误扣下载次数。
+- 成功预留后连接中断、取消或传输失败均不退还次数与字节，即使最终没有发送完整正文；再次获准下载会重新计次、预留字节。并发只能占用实际剩余名额，进程重启不能清零。账本不可用继续拒绝服务，不用本地计数或重建账本放行。
+- 日界为北京时间 00:00，与执行主机和浏览器时区无关。跨日传输归属成功预留时的自然日，完成或断开不再记入次日；新日的新请求使用新日额度。自然月字节预算仍独立累计，不能用每日次数更新清空已有字节账本。
+
+### 限次反馈
+
+可读取服务端结果时，按最终 Backend 契约区分浏览器标识当日次数、共享 IP 当日次数、短时频率与字节预算限制，保留就近反馈和显式重试；协议字段与原因头待交接后映射，不根据错误文字、UA 或本地估算猜测原因。共享 IP 用尽不能误报为当前用户已经下载 10 次，浏览器标识限制不能宣称物理设备不可绕过。遵守服务端等待时间，次日或倒计时结束不自动下载；Web 原生 GET 无法回传时仍不伪造次数余额、成功或具体拒绝原因。次数保护不改菜单、移动访问提示和按钮主次语义，也不解除 App 强制更新策略。
 
 ## 缓存、发布身份与迁移
 
@@ -93,6 +118,7 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.31.0
 | 信息与制品绑定 | `info-available`、`info-no-release`、`info-withdrawn`、`info-paused`、`info-unavailable`、`info-load-failure`、`info-refresh-failure`、`info-target-race` |
 | 点击与失败恢复 | `download-explicit-action`、`download-browser-handoff`、`download-rate-limited`、`download-service-unavailable` |
 | 旧 APP 与范围下载 | `legacy-head-get`、`single-range`、`invalid-range`、`budget-disconnect-restart` |
+| 每日下载次数 | `daily-browser-limit`、`daily-shared-ip-limit`、`daily-browser-across-ips`、`daily-request-accounting`、`daily-atomic-reservation`、`daily-beijing-boundary`、`daily-identity-fallback`、`daily-legacy-no-cookie` |
 | 缓存与发布 | `cache-miss-or-corrupt`、`public-request-no-origin`、`origin-credential-reuse`、`prewarm-before-promote`、`artifact-identity-preserved` |
 | 呈现与迁移 | `accessible-layout`、`migration-public-read-gate` |
 
