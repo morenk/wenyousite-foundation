@@ -1,0 +1,502 @@
+{
+  "description": "帖内 RP 身份共享验收描述，不是 HTTP DTO、响应样本或可执行 E2E。",
+  "specification": "../docs/thread-identities.md",
+  "cases": [
+    {
+      "id": "eligible-owner",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "主题楼主本人尚未设置 RP 身份",
+      "when": "楼主开启功能并保存自己的昵称和头像",
+      "then": [
+        "楼主有资格且无需先标记自己为玩家",
+        "编辑器显示已保存身份，站内资料不改变"
+      ]
+    },
+    {
+      "id": "eligible-collaborator-player",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "开启功能的同帖分别有协作者与玩家",
+      "when": "各自保存自己的资料",
+      "then": [
+        "两类账号均可设置，不能替其他玩家改资料",
+        "不增加发言或管理能力"
+      ]
+    },
+    {
+      "id": "ineligible-reader",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "旁观者可读主题但无楼主、协作者、玩家资格",
+      "when": "打开身份卡并尝试保存自己的身份",
+      "then": [
+        "可以查看对应站内账号，不获得设置资格",
+        "后端拒绝越权保存，不以客户端隐藏入口代替授权"
+      ]
+    },
+    {
+      "id": "scope-topic",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "同账号参与两个主题，每个主题有多个子贴",
+      "when": "分别设置身份并发表楼层和楼中楼",
+      "then": [
+        "同主题共用一套有效身份，两个主题互不影响",
+        "首页、主页、关注、私聊仍使用站内资料"
+      ]
+    },
+    {
+      "id": "avatar-only",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "仅设置 RP 头像，昵称未自定义",
+      "when": "发表后修改站内用户名和头像",
+      "then": [
+        "只设头像仍识别为 RP 身份",
+        "历史保留 RP 头像与发表时站内用户名快照"
+      ]
+    },
+    {
+      "id": "nickname-only",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "仅设置 RP 昵称，头像未自定义",
+      "when": "发表后修改站内头像",
+      "then": [
+        "记录发表时实际采用的站内头像快照",
+        "历史不随全站换图而变化，治理移除仍生效"
+      ]
+    },
+    {
+      "id": "settings-failure",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "设置页有未保存输入",
+      "when": "保存失败或连续保存响应乱序",
+      "then": [
+        "保留输入和错误，编辑器仍用已确认的服务端身份",
+        "旧响应不覆盖较新成功状态，预览不是保存证据"
+      ]
+    },
+    {
+      "id": "profile-snapshot",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "白鸦发表后改名夜渡并更换头像",
+      "when": "阅读新旧发言并修改站内资料",
+      "then": [
+        "新旧发言分别保留发表时昵称与头像",
+        "当前成员目录用夜渡，不覆盖白鸦快照"
+      ]
+    },
+    {
+      "id": "body-edit",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "旧楼层是白鸦，当前是夜渡",
+      "when": "编辑旧正文",
+      "then": [
+        "旧作者快照不改变",
+        "既有结构化 @ 保持节点及账号关联，普通文字不替换"
+      ]
+    },
+    {
+      "id": "clear-identity",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "账号已有 RP 历史发言",
+      "when": "清除资料并继续发表",
+      "then": [
+        "明确只影响之后发言，历史 RP 保留",
+        "新发言使用站内身份，不把清除当删除历史"
+      ]
+    },
+    {
+      "id": "partial-role-revoke",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "账号是玩家且同时为协作者或楼主",
+      "when": "取消玩家标记",
+      "then": [
+        "剩余资格继续允许设置 RP",
+        "不清空当前资料或历史"
+      ]
+    },
+    {
+      "id": "all-roles-revoke",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "账号只有玩家资格且有 RP 发言",
+      "when": "撤销最后一个合资格角色并继续按原有权限发言",
+      "then": [
+        "新发言用站内身份，历史 RP 保留",
+        "历史身份或旧确认凭据不能绕过资格检查"
+      ]
+    },
+    {
+      "id": "disable-mask",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "存在 RP 作者、旧 @、回复来源及已打开卡片",
+      "when": "楼主确认关闭",
+      "then": [
+        "全部结构化展示恢复站内资料，覆盖候选、卡片和缓存",
+        "后台保留资料和历史，普通正文名字不改写",
+        "不能通过展开或导出显示被关闭的 RP 数据"
+      ]
+    },
+    {
+      "id": "reenable-history",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "存在开启前、开启中与关闭期间发言",
+      "when": "重新开启功能",
+      "then": [
+        "原 RP 历史恢复各自快照",
+        "开启前与关闭期间普通发言不套用 RP"
+      ]
+    },
+    {
+      "id": "mention-snapshot",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "插入当前白鸦候选，目标后来改名夜渡",
+      "when": "发表、阅读旧 @ 并接收通知",
+      "then": [
+        "标签保留插入时的白鸦，通知与点击关联原账号",
+        "不能用标签反推账号，关闭时结构化标签恢复站内用户名"
+      ]
+    },
+    {
+      "id": "duplicate-alias",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "两个账号均使用白鸦",
+      "when": "按角色名或站内用户名搜索并选择 @、筛选",
+      "then": [
+        "RP 名为主、站内用户名为辅助，账号可区分",
+        "不按昵称合并账号或通知错人"
+      ]
+    },
+    {
+      "id": "filter-account",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "同账号有白鸦、夜渡、普通身份发言，且存在玩家订阅",
+      "when": "选择当前夜渡执行只看此人",
+      "then": [
+        "包含当前范围该账号所有发言，列表只占一项",
+        "订阅、拉黑和举报不因改名换头像失效"
+      ]
+    },
+    {
+      "id": "identity-card-history",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "旧发言白鸦，当前夜渡，读者有访问权",
+      "when": "打开旧头像卡片并点击提及、查看站内主页",
+      "then": [
+        "区分本条与当前身份，站内账号可见",
+        "提及用当前候选，主页仅经显式动作进入",
+        "关闭恢复阅读位置及焦点"
+      ]
+    },
+    {
+      "id": "reply-source",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "被回复楼层作者已换身份",
+      "when": "查看回复预览和结构化引用来源",
+      "then": [
+        "沿用被回复楼层当时身份并定位同一楼层",
+        "关闭时恢复站内资料，普通 Markdown 引用不改写"
+      ]
+    },
+    {
+      "id": "system-role-badge",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "普通玩家昵称为楼主，真实楼主有另一个 RP 昵称",
+      "when": "渲染楼层、候选、管理列表",
+      "then": [
+        "只有真实角色获得系统徽标，tone 复用现有契约",
+        "管理列表站内用户名优先",
+        "候选 OWNER、COLLABORATOR 分别显示楼主、协作者，不能当作 PLAYER"
+      ]
+    },
+    {
+      "id": "compose-context-change",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "编辑器显示 RP 身份且有正文和结构化节点",
+      "when": "关闭功能、撤销全部资格或身份上下文变化后提交",
+      "then": [
+        "阻止不一致发布并保留草稿",
+        "展示更新身份，用户确认后重试，不静默换身份",
+        "正常上下文不每次弹窗",
+        "明确 409 未写入并经用户确认后使用新幂等键；首次 BODY、子贴、aggregate 同样覆盖"
+      ]
+    },
+    {
+      "id": "legacy-confirmation",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "旧客户端没有所需确认能力，账号有 RP 设置",
+      "when": "尝试发表",
+      "then": [
+        "不得静默以 RP 身份发布，不伪造确认或自动降级重试",
+        "有效 RP 缺 token 返回 409／40011 且不写发言、自动加入或 Outbox；可升级或由本人清除资料，不承诺旧版已有草稿恢复界面",
+        "实际旧客户端兼容单独记录，不用新版单测替代"
+      ]
+    },
+    {
+      "id": "unknown-submit-result",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "发布后网络超时，结果未知",
+      "when": "重试前身份或权限变化",
+      "then": [
+        "冻结原 payload，同 clientRequestId 重试返回已经成功的原帖，即使之后改名或关闭也不重复发表",
+        "同键不同正文仍冲突，明确 409 未写入并重新确认后才换新键；结果未知时不清空草稿"
+      ]
+    },
+    {
+      "id": "private-visibility",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "账号曾访问私密帖但现已无权访问",
+      "when": "请求详情、候选、卡片、搜索、通知补充、导出",
+      "then": [
+        "不泄露 RP 昵称、头像、历史",
+        "撤下不可访问内容，不以缓存代替授权"
+      ]
+    },
+    {
+      "id": "cache-context",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "详情、分页、楼中楼、候选、筛选、卡片已有缓存",
+      "when": "关闭、改身份、撤权、退出或切换账号",
+      "then": [
+        "失效关联派生缓存并更新当前界面",
+        "按主题与会话隔离，不污染全局账号",
+        "清理展示缓存不删除草稿或后台历史"
+      ]
+    },
+    {
+      "id": "late-response",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "旧 RP 候选、楼层、卡片请求尚未返回",
+      "when": "返回前关闭功能、切换账号或丧失访问权",
+      "then": [
+        "丢弃不属当前上下文的迟到响应",
+        "不能重新填回已关闭或无权 RP 数据"
+      ]
+    },
+    {
+      "id": "moderated-avatar",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "历史快照引用已治理移除的头像",
+      "when": "读旧楼层或关闭重开功能",
+      "then": [
+        "不得恢复被治理移除图片",
+        "使用既有不可用占位，不能从缓存或历史 URL 绕过治理",
+        "rpIdentity 存在但 avatar 为 null 时使用不可用占位，不能回退当前账号头像"
+      ]
+    },
+    {
+      "id": "notification-boundary",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "私密帖 RP 发言产生站内通知与系统推送",
+      "when": "有访问权和已失去访问权的接收者分别查看",
+      "then": [
+        "通知绑定站内账号，全站及推送保持站内身份安全边界",
+        "角色补充仅出现在授权站内上下文"
+      ]
+    },
+    {
+      "id": "search-export",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "主题含 RP、普通、已改名和关闭期间发言",
+      "when": "开启和关闭状态下分别搜索、导出",
+      "then": [
+        "帖内结构化作者遵守开关及快照，全站作者用站内资料",
+        "只导出可访问内容，关闭不输出屏蔽 RP 展示",
+        "普通正文不改写"
+      ]
+    },
+    {
+      "id": "responsive-accessibility",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "长昵称、同名、缺失头像，分别明暗和窄屏",
+      "when": "键盘、读屏、双倍文字缩放及触控打开设置和卡片",
+      "then": [
+        "名字账号可辨认，徽标不只靠颜色，布局不溢出",
+        "Web 焦点返回，Mobile 安全区、系统返回及 48dp 命中区",
+        "真实画面与负责人验收独立记录"
+      ]
+    },
+    {
+      "id": "isolated-acceptance",
+      "owners": [
+        "web",
+        "mobile",
+        "backend",
+        "governance"
+      ],
+      "given": "准备运行设置、发表、撤权、关闭等写入验收",
+      "when": "核验 runId、资源归属、数据库、Redis、上传、实际代理后执行",
+      "then": [
+        "只用独立资源，关闭真实邮件、推送和外部存储写入",
+        "成功失败超时均清理，清理失败即验收失败",
+        "隔离不匹配时在登录和写入前停止，线上只读烟雾另列"
+      ]
+    },
+    {
+      "id": "mention-node-key",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "同账号在同正文同时被称为白鸦和夜渡，并含空格标点昵称",
+      "when": "渲染、关闭展示、编辑并重新保存",
+      "then": [
+        "按 userId 与原 label 二元键匹配 displayName，各称呼不互相覆盖",
+        "编辑保留源 content，关闭显示站内用户名不改 Markdown；覆盖生产者三个固定用例"
+      ]
+    },
+    {
+      "id": "mention-invalid-label",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "新增标签不属于所选账号的当前或已登记历史昵称",
+      "when": "提交包含该结构化 @ 的内容",
+      "then": [
+        "409／40012 保留草稿并要求重新选择，不修改收件账号后自动重试",
+        "代码、转义文本、普通 @角色名不被模糊解析为新 RP 提及"
+      ]
+    },
+    {
+      "id": "identity-single-field-clear",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "当前昵称和头像均已设置",
+      "when": "仅清除一个字段，分别以 null 和生成客户端 clear 标志提交",
+      "then": [
+        "省略的另一字段保留；单项清除后采用账号缺省字段",
+        "同时非空设置和清除同一项被拒绝，编辑 UI 保留输入"
+      ]
+    },
+    {
+      "id": "ordinary-account-fallback",
+      "owners": [
+        "web",
+        "mobile",
+        "backend"
+      ],
+      "given": "开启前、关闭期间、清除后或从未设置 RP 的普通账号发言",
+      "when": "重新开启、设置新 RP 并用旧无 token 客户端发表",
+      "then": [
+        "普通历史不套用新身份，rpIdentity 为 null 或缺失时使用账号资料",
+        "无有效 RP 且省略 token 可按旧账号路径发表；存在 RP 时不静默应用"
+      ]
+    }
+  ]
+}
