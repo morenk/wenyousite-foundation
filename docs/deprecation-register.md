@@ -2,10 +2,11 @@
 
 ## RP 帖内身份业务接入
 
-- [共享规范](thread-identities.md)固定每人每主题一套 RP 资料、每次新发表选择站内／RP 身份、楼主／协作者／玩家资格、当前与历史展示、账号关联的提及和筛选、关闭屏蔽、草稿确认及缓存隔离；[固定场景](../tests/thread-identity-semantics-fixtures.json)供三端实现关联。
-- 兼容新增，不删除普通站内资料、旧提及、订阅、筛选或治理协议。HTTP、Markdown、迁移、确认凭据与错误语义由 [Backend 5.33.0-dev.20261005.1（5ab9767）](https://github.com/morenk/wenyousite-backend/blob/5ab9767ff8ddce917ddb2560ea655bb58a2408a3/docs/thread-identity.md)唯一负责；Markdown v5 不变，未使用 RP 的普通账号路径保持兼容，不消费未提交生产者源码。
+- [共享规范](thread-identities.md)固定每人每主题最多 10 个未归档 RP 身份、每次新发表选择站内／RP 身份、楼主／协作者／玩家资格、当前与历史展示、账号关联的提及和筛选、关闭屏蔽、草稿确认及缓存隔离；[固定场景](../tests/thread-identity-semantics-fixtures.json)供三端实现关联。
+- 兼容新增，不删除普通站内资料、旧提及、订阅、筛选或治理协议。HTTP、Markdown、迁移、确认凭据与错误语义由 [Backend 5.34.0-dev.20261005.1（05b27a0）](https://github.com/morenk/wenyousite-backend/blob/05b27a051f76cb4b88379ae0211687d241282bbe/docs/thread-identity.md)唯一负责；Markdown v5 不变，未使用 RP 的普通账号路径保持兼容，不消费未提交生产者源码。
 - 旧客户端缺少身份确认能力时，不得静默以 RP 身份发布。新增逐次身份选择保留旧客户端省略模式的兼容边界；明确选择站内身份不受 RP 开关变化影响，选择 RP 不可用或确认失效时保留草稿并提示。明确选择 RP 不可用或 token 无效时返回 409／40011；省略 mode 的旧客户端仍遵守既有确认规则。实际旧版界面表现与测试证据由消费端交付；权限、通知和治理始终关联账号。
 - Foundation 不新增 Token、机器契约、公开导出或生成物，不提升包版本或创建 Tag／Release，不要求消费者锁定未发布 Foundation 提交。文档和静态场景不代表界面、视觉或隔离 E2E 已验收。
+- 新集合接口使用稳定 identityId 和所选角色 token，旧 single 接口与账号级 @ 保留并锚定明确兼容主身份；主身份归档不自动接管，旧 CLEAR 不清其他角色。清空资料仍占名额，删除归档释放名额但不复用 ID；旧消费者无法管理多角色不代表旧协议被删除。后端多角色迁移不能直接回滚至旧单角色唯一键实现，按固定 Backend 回滚方案前滚修复，不删角色恢复约束。
 - 清除资料和关闭功能不删除历史快照，关闭只屏蔽 RP 展示；客户端回滚不得删除新增资料或媒体引用。兼容后端先行，再接入消费者；旧协议清理另开 PR 并满足治理四项证据，本次不授权合并或部署。
 
 

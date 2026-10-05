@@ -6,6 +6,8 @@
 
 下面的静态检查同时覆盖下载与 RP 场景。通过只证明 JSON、结构与文档关联正确，消费任务仍须在真实实现测试中关联 ID，分别记录画面、旧客户端与隔离 E2E 结果。
 
+本轮新增 `identity-row-actions` 与 `unconfigured-identity-affordance`，按[中央 UI 精简原则](../docs/foundation.md#优先复用现有结构)检查原行选择／编辑分离和未配置入口，并在本轮补充 8 个多身份场景，合计 48 个 RP 场景。多身份场景覆盖上限并发、空资料名额、归档与 ID 不复用、兼容主身份、草稿和角色 token、同角色卡片及不变的账号级 @，关联 Backend multipleIdentityCases。它们是验收要求，不表示两端画面或交互已通过；消费任务还须记录长名称、仅头像、未选中 RP、失效草稿、明暗、窄屏、大字号、键盘和读屏结果。
+
 ## APP 下载语义
 
 `app-download-semantics-fixtures.json` 对应[共享下载规范](../docs/app-downloads.md)，使用稳定 ID 和中文前置条件、动作、观察结果描述跨仓验收；不是 HTTP DTO、响应样本或 Foundation 运行时导出。Backend OpenAPI 是字段的唯一事实源，接入任务固定共享规范中的精确 Backend 提交，并在真实实现测试中关联相关用例 ID。
