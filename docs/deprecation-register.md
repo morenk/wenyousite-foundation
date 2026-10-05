@@ -3,7 +3,7 @@
 ## RP 帖内身份业务接入
 
 - [共享规范](thread-identities.md)固定每人每主题最多 10 个平级 RP 身份，新稿默认 ACCOUNT，显式草稿保留选择；历史作者按快照，账号目录、筛选与订阅使用站内资料。角色提及保留稳定目标和原称呼，通知仍按账号去重；[固定场景](../tests/thread-identity-semantics-fixtures.json)供三端关联。
-- HTTP 与源码语义由 [Backend 5.35.0-dev.20261005.1（2ba848a）](https://github.com/morenk/wenyousite-backend/blob/2ba848a1dc835205a96887ee440c97428a74a5dd/docs/markdown-v6-role-mentions.md)唯一负责。Markdown v6 提及扩展使用读 header／写 DTO 能力协商，全局版本仍 5；新写默认关闭，不自动激活或锁出旧 App。旧 bare 用户链接、旧 single 端点及账号关联能力保留，不据本轮授权删除。
+- HTTP 与源码语义由 [Backend 5.35.0-dev.20261005.1（6ea1c4f）](https://github.com/morenk/wenyousite-backend/blob/6ea1c4ff48b74f6b0c739a02cac65d9f1710be47/docs/markdown-v6-role-mentions.md)唯一负责。Markdown v6 提及扩展使用读 header／写 DTO 能力协商，全局版本仍 5；新写默认关闭，不自动激活或锁出旧 App。旧 bare 用户链接、旧 single 端点及账号关联能力保留，不据本轮授权删除。
 - compatibilityIdentity 只用于旧 single 内部映射，不是新端可管理主角色，也不决定默认、候选或目录。清空资料仍占名额，删除归档释放名额但不复用 ID，旧快照与必要媒体引用保留。
 - 旧读获得安全账号显示副本，数据库原源不变；旧写遇新提交或原存 v6 节点返回 40014，防止降级副本覆盖。新写 gate 关闭仅拒新增源键（40015）；新端显式请求平级候选不回落旧映射。显示 identityId 可遮蔽，稳定 targetIdentityId 与原 sourceHref／label 不能因此丢失。
 - 兼容后端、两端可读保源、新写激活分阶段交付。后端多角色迁移不能直接回切旧单角色 unique upsert，新源也不能由旧写入实现覆盖；回滚优先关闭新写并前滚修复，保留角色、正文、快照和媒体，不删数据恢复旧约束。

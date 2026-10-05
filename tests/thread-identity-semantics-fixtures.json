@@ -768,7 +768,8 @@
         "普通代码和转义文本不产生提及；不把关闭时的显示名称写回源",
         "未知结果重试继续冻结原源与身份上下文，恢复草稿保留相同提及目标",
         "HTML 剪贴板以成对的 data-wenyou-mention-source-href 与 data-wenyou-mention-source-label 保存规范源 href 和完整 @原label，严格校验；缺失或不合法不能猜造角色目标",
-        "复制渲染文字及纯文本 fallback 使用当前投影名称，站内结构化 payload 保留原源，不把显示名写回编辑内容"
+        "复制渲染文字及纯文本 fallback 使用当前投影名称，站内结构化 payload 保留原源，不把显示名写回编辑内容",
+        "源码 label 长度按 1–32 个 Unicode 码点计算；合法 24 个 emoji 昵称可插入、编辑及 HTML 复制往返，不按 UTF-16 单元拒绝或截断"
       ]
     },
     {
@@ -815,7 +816,7 @@
       "then": [
         "原存或新提交含 v6 源而未声明 markdownContractVersion=6 时返回 409／40014；即使旧端删除全部节点也不能用降级副本覆盖原文或同槽草稿",
         "新写门禁关闭仅新增 sourceHref＋label 键返回 409／40015；声明 6 的普通和旧 bare 正文仍可写，具备能力可保留、重排、复制或删除已有新版节点",
-        "全局 markdownContractVersion 仍 5，roleMentionsV6Supported／roleMentionsV6WriteEnabled 缺失按 false；supported 后新端所有相关写 DTO 都带6，读取头不能替代写声明；不以全局升版锁出旧端",
+        "全局 markdownContractVersion 仍 5，roleMentionsV6Supported／roleMentionsV6WriteEnabled 缺失按 false；supported 后新端所有相关写 DTO 都带整数 6（不是字符串），读取头不能替代写声明；不以全局升版锁出旧端",
         "旧正文没有新版目标时保持既有读写能力，不批量改写历史",
         "无能力或新增目标被拒绝时保留原存储；可处理错误的客户端保留输入，不伪造确认或自动重复提交",
         "旧后端 supported=false 可沿用旧候选；supported=true 始终 includeIdentities=true，gate=false空 users 不降级旧候选并与暂无匹配区分；canMentionAllPlayers 按原独立权限保留"

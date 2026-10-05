@@ -6,7 +6,7 @@
 
 [治理一期交付与验收（05d8259）](https://github.com/morenk/wenyousite-workspace/blob/05d8259a8167e9e721ef699b84f431c68b5b3b85/docs/rp-identity-delivery.md)保留为单身份基线。本轮按已确认需求扩展为每人每帖最多 10 个平级发表身份，提及可明确选择站内账号或具体角色；筛选、订阅和通知仍按账号关联。旧 single 映射仅用于内部兼容，不决定新端默认选择、候选或账号目录。
 
-HTTP 事实源为 [Backend OpenAPI 5.35.0-dev.20261005.1（2ba848a）](https://github.com/morenk/wenyousite-backend/blob/2ba848a1dc835205a96887ee440c97428a74a5dd/contracts/openapi.json)。身份集合与发言快照见[同提交身份协议](https://github.com/morenk/wenyousite-backend/blob/2ba848a1dc835205a96887ee440c97428a74a5dd/docs/thread-identity.md)；平级提及、默认与目录以 [v6 分阶段扩展](https://github.com/morenk/wenyousite-backend/blob/2ba848a1dc835205a96887ee440c97428a74a5dd/docs/markdown-v6-role-mentions.md)覆盖旧主身份规则，并关联[角色提及固定语料](https://github.com/morenk/wenyousite-backend/blob/2ba848a1dc835205a96887ee440c97428a74a5dd/contracts/markdown-v6-role-mentions-fixtures.json)及[身份固定语料](https://github.com/morenk/wenyousite-backend/blob/2ba848a1dc835205a96887ee440c97428a74a5dd/contracts/thread-identity.v1.fixtures.json)。权限、确认凭据、错误码、Markdown 存储和媒体引用由 Backend 拥有，本文件不定义第二套 DTO。全局 Markdown 仍为 5，扩展能力为 6；引用提交不表示已部署、激活或完成端到端验收。
+HTTP 事实源为 [Backend OpenAPI 5.35.0-dev.20261005.1（6ea1c4f）](https://github.com/morenk/wenyousite-backend/blob/6ea1c4ff48b74f6b0c739a02cac65d9f1710be47/contracts/openapi.json)。身份集合与发言快照见[同提交身份协议](https://github.com/morenk/wenyousite-backend/blob/6ea1c4ff48b74f6b0c739a02cac65d9f1710be47/docs/thread-identity.md)；平级提及、默认与目录以 [v6 分阶段扩展](https://github.com/morenk/wenyousite-backend/blob/6ea1c4ff48b74f6b0c739a02cac65d9f1710be47/docs/markdown-v6-role-mentions.md)覆盖旧主身份规则，并关联[角色提及固定语料](https://github.com/morenk/wenyousite-backend/blob/6ea1c4ff48b74f6b0c739a02cac65d9f1710be47/contracts/markdown-v6-role-mentions-fixtures.json)及[身份固定语料](https://github.com/morenk/wenyousite-backend/blob/6ea1c4ff48b74f6b0c739a02cac65d9f1710be47/contracts/thread-identity.v1.fixtures.json)。权限、确认凭据、错误码、Markdown 存储和媒体引用由 Backend 拥有，本文件不定义第二套 DTO。全局 Markdown 仍为 5，扩展能力为 6；引用提交不表示已部署、激活或完成端到端验收。
 
 本次只把业务语义映射到既有身份、图片、提及、控件和浮层契约。Foundation 机器契约、Token、公开导出、生成物和包版本不变，不创建 Tag／Release；消费者继续固定各自现有正式 Foundation Tag，不依赖未发布的 Foundation 分支。
 
@@ -66,9 +66,9 @@ RP 卡保留该条发言采用的头像、昵称与独立系统角色；仅在�
 
 ## 提及源码与能力协商
 
-v6 角色源为 `[@label](/users/{userId}?rpIdentityId={identityId})`，显式账号为 `[@label](/users/{userId}?identityMode=ACCOUNT)`；旧 `[@label](/users/{userId})` 保留 LEGACY 语义，不能称其为明确 ACCOUNT。使用规范相对路径及唯一精确参数；混合、重复、未知参数或非法角色 ID 按契约拒绝，不落回普通 @ 扫描。跨主题粘贴后发布须重新验证，云草稿只保存合法语法，不证明角色使用权。
+v6 角色源为 `[@label](/users/{userId}?rpIdentityId={identityId})`，显式账号为 `[@label](/users/{userId}?identityMode=ACCOUNT)`；旧 `[@label](/users/{userId})` 保留 LEGACY 语义，不能称其为明确 ACCOUNT。源码 label 按 1–32 个 Unicode 码点校验，不按 UTF-16 单元计数；合法 24 个 emoji 昵称须可插入、编辑和复制。使用规范相对路径及唯一精确参数；混合、重复、未知参数或非法角色 ID 按契约拒绝，不落回普通 @ 扫描。跨主题粘贴后发布须重新验证，云草稿只保存合法语法，不证明角色使用权。
 
-- `/meta.capabilities.roleMentionsV6Supported` 和 `roleMentionsV6WriteEnabled` 缺失均为 false。supported 为 true 时新端读取带 `X-Markdown-Contract-Version: 6`，发言／编辑／BODY／子贴／aggregate／云草稿写 DTO 始终带 `markdownContractVersion: 6`，包括删光旧角色节点；读取头不能替代写声明。旧后端不支持时不发送未知 DTO 字段。
+- `/meta.capabilities.roleMentionsV6Supported` 和 `roleMentionsV6WriteEnabled` 缺失均为 false。supported 为 true 时新端读取带 `X-Markdown-Contract-Version: 6`，发言／编辑／BODY／子贴／aggregate／云草稿写 DTO 始终带整数 `markdownContractVersion: 6`，包括删光旧角色节点；读取头不能替代写声明。旧后端不支持时不发送未知 DTO 字段。
 - supported 为 true 时候选始终请求 includeIdentities=true。gate 开启才返回平级账号与角色，最多 20 个目标；gate 关闭 users 为空，不回退旧候选，以既有状态组件简短反馈“暂时无法提及用户”，区别于暂无匹配。仅 supported=false 的旧后端兼容期使用旧候选；@全体玩家按原独立权限，不随 users 为空关闭。
 - 新提交或原存正文任一含 v6 源而未声明能力，返回 409／MARKDOWN_CAPABILITY_REQUIRED（40014），不得用旧端降级副本覆盖原文。gate 关闭只拒新增的 sourceHref＋label 键，返回 409／ROLE_MENTIONS_DISABLED（40015）；具备能力仍可保留、重排、复制或删除原节点，普通正文和旧 bare 源不因声明 6 受阻。失败保留输入，不自动降级重试。
 - header6 保留授权可读原 content 与稳定目标，仅当前显示按开关及权限投影；无 header6 的响应副本把新版节点降成安全账号 bare 链接与账号称呼，不夹带角色 sourceHref／label／targetIdentityId，不改数据库。此边界覆盖 BODY、楼层、回复、聚合、搜索、通知摘要和云草稿；账号注销、拉黑及主题失权仍执行原可见性。
