@@ -1,5 +1,13 @@
 # 共享验收用例
 
+## RP 帖内身份语义
+
+文件 thread-identity-semantics-fixtures.json 对应[帖内身份规范](../docs/thread-identities.md)，沿用稳定 ID、owners、given／when／then 的验收描述，覆盖当前／历史身份、仅头像设置、旧客户端确认、开关与撤权、同名、缓存、私密可见性和隔离验收；不定义 HTTP DTO，也不执行业务写入。
+
+下面的静态检查同时覆盖下载与 RP 场景。通过只证明 JSON、结构与文档关联正确，消费任务仍须在真实实现测试中关联 ID，分别记录画面、旧客户端与隔离 E2E 结果。
+
+本轮共 61 个 RP 场景，按[中央 UI 精简原则](../docs/foundation.md#优先复用现有结构)覆盖原行选择／编辑分离、10 个平级角色、名额与历史、默认 ACCOUNT、同名提及源、草稿冻结、能力协商、缓存与旧编辑保护，关联固定 Backend 身份及 v6 语料。HTML 复制保源与纯文本显示、普通导出副本与原源清单分别验收；身份资料卡另覆盖同主题正文引用、当前绑定、原文更新、不可用三态、资料编辑与发表 token 分离及旧端缓存边界。这些是验收要求，不表示两端画面或交互已通过；消费任务仍须记录长名称、仅头像、失效草稿、明暗、窄屏、大字号、键盘和读屏结果。
+
 ## APP 下载语义
 
 `app-download-semantics-fixtures.json` 对应[共享下载规范](../docs/app-downloads.md)，使用稳定 ID 和中文前置条件、动作、观察结果描述跨仓验收；不是 HTTP DTO、响应样本或 Foundation 运行时导出。Backend OpenAPI 是字段的唯一事实源，接入任务固定共享规范中的精确 Backend 提交，并在真实实现测试中关联相关用例 ID。
@@ -13,20 +21,22 @@ node --input-type=module <<'JS'
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-const path = pathToFileURL(`${process.cwd()}/tests/app-download-semantics-fixtures.json`);
-const fixture = JSON.parse(readFileSync(path, 'utf8'));
-const doc = readFileSync(new URL(fixture.specification, path), 'utf8');
-const ids = fixture.cases.map(c => c.id);
-assert(ids.length > 0);
-assert.equal(new Set(ids).size, ids.length);
-for (const c of fixture.cases) {
-  assert.match(c.id, /^[a-z]+(?:-[a-z]+)*$/);
-  assert.deepEqual(Object.keys(c).sort(), ['given', 'id', 'owners', 'then', 'when']);
-  assert(c.owners.length && c.owners.every(o => ['web', 'mobile', 'backend', 'governance'].includes(o)));
-  assert([c.given, c.when, ...c.then].every(s => typeof s === 'string' && s.length));
-  assert(c.then.length && doc.includes('`' + c.id + '`'));
+for (const file of ['app-download-semantics-fixtures.json', 'thread-identity-semantics-fixtures.json']) {
+  const path = pathToFileURL(`${process.cwd()}/tests/${file}`);
+  const fixture = JSON.parse(readFileSync(path, 'utf8'));
+  const doc = readFileSync(new URL(fixture.specification, path), 'utf8');
+  const ids = fixture.cases.map(c => c.id);
+  assert(ids.length > 0);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const c of fixture.cases) {
+    assert.match(c.id, /^[a-z]+(?:-[a-z]+)*$/);
+    assert.deepEqual(Object.keys(c).sort(), ['given', 'id', 'owners', 'then', 'when']);
+    assert(c.owners.length && c.owners.every(o => ['web', 'mobile', 'backend', 'governance'].includes(o)));
+    assert([c.given, c.when, ...c.then].every(s => typeof s === 'string' && s.length));
+    assert(c.then.length && doc.includes('`' + c.id + '`'));
+  }
+  console.log(`${ids.length} 个 ${file} 语义用例静态检查通过`);
 }
-console.log(`${ids.length} 个下载语义用例静态检查通过`);
 JS
 ```
 

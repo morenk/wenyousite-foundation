@@ -10,6 +10,7 @@
 - [图标目录与治理](docs/icons.md)
 - [核心元素系统](docs/elements.md)
 - [通知分组契约](docs/notifications.md)
+- [沉浸式 RP 帖内身份](docs/thread-identities.md)
 - [后台预览与移动端更新说明](docs/mobile-releases.md)
 - [公开 APP 下载与兼容更新](docs/app-downloads.md)
 - [反馈、无障碍与浮层契约](docs/interaction.md)
