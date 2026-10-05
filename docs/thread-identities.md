@@ -6,7 +6,7 @@
 
 [治理一期交付与验收（05d8259）](https://github.com/morenk/wenyousite-workspace/blob/05d8259a8167e9e721ef699b84f431c68b5b3b85/docs/rp-identity-delivery.md)保留为单身份基线。本轮按已确认需求及下述已提交协议扩展为每人每帖最多 10 个发表身份，保留账号级提及与目录；不引入角色指向型 @ 或正式发布。
 
-HTTP 事实源为 [Backend OpenAPI 5.34.0-dev.20261005.1（05b27a0）](https://github.com/morenk/wenyousite-backend/blob/05b27a051f76cb4b88379ae0211687d241282bbe/contracts/openapi.json)，行为以[同提交身份协议](https://github.com/morenk/wenyousite-backend/blob/05b27a051f76cb4b88379ae0211687d241282bbe/docs/thread-identity.md)及[提及与多身份固定用例](https://github.com/morenk/wenyousite-backend/blob/05b27a051f76cb4b88379ae0211687d241282bbe/contracts/thread-identity.v1.fixtures.json)为准。权限判定、确认凭据、错误码、Markdown 存储和媒体引用由 Backend 拥有，本文件不定义第二套 DTO。Markdown v5 语法保持不变；精确引用用于交接，不表示已完成部署或端到端验收。
+HTTP 事实源为 [Backend OpenAPI 5.34.0-dev.20261005.1（3c82ed1）](https://github.com/morenk/wenyousite-backend/blob/3c82ed15532c99a42b7b88c003d2be5fdf4b587a/contracts/openapi.json)，行为以[同提交身份协议](https://github.com/morenk/wenyousite-backend/blob/3c82ed15532c99a42b7b88c003d2be5fdf4b587a/docs/thread-identity.md)及[提及与多身份固定用例](https://github.com/morenk/wenyousite-backend/blob/3c82ed15532c99a42b7b88c003d2be5fdf4b587a/contracts/thread-identity.v1.fixtures.json)为准。权限判定、确认凭据、错误码、Markdown 存储和媒体引用由 Backend 拥有，本文件不定义第二套 DTO。Markdown v5 语法保持不变；精确引用用于交接，不表示已完成部署或端到端验收。
 
 本次只把业务语义映射到既有身份、图片、提及、控件和浮层契约。Foundation 机器契约、Token、公开导出、生成物和包版本不变，不创建 Tag／Release；消费者继续固定各自现有正式 Foundation Tag，不依赖未发布的 Foundation 分支。
 
