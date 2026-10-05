@@ -6,7 +6,7 @@
 
 [治理一期交付与验收（05d8259）](https://github.com/morenk/wenyousite-workspace/blob/05d8259a8167e9e721ef699b84f431c68b5b3b85/docs/rp-identity-delivery.md)保留为单身份基线。本轮按已确认需求扩展为每人每帖最多 10 个平级发表身份，提及可明确选择站内账号或具体角色；筛选、订阅和通知仍按账号关联。旧 single 映射仅用于内部兼容，不决定新端默认选择、候选或账号目录。
 
-HTTP 事实源为 [Backend OpenAPI 5.35.0-dev.20261005.1（6214204）](https://github.com/morenk/wenyousite-backend/blob/62142042b76e2f15a92794337316bd4c1e3dd659/contracts/openapi.json)。身份集合与发言快照见[同提交身份协议](https://github.com/morenk/wenyousite-backend/blob/62142042b76e2f15a92794337316bd4c1e3dd659/docs/thread-identity.md)；平级提及、默认与目录以 [v6 分阶段扩展](https://github.com/morenk/wenyousite-backend/blob/62142042b76e2f15a92794337316bd4c1e3dd659/docs/markdown-v6-role-mentions.md)覆盖旧主身份规则，并关联[角色提及固定语料](https://github.com/morenk/wenyousite-backend/blob/62142042b76e2f15a92794337316bd4c1e3dd659/contracts/markdown-v6-role-mentions-fixtures.json)及[身份固定语料](https://github.com/morenk/wenyousite-backend/blob/62142042b76e2f15a92794337316bd4c1e3dd659/contracts/thread-identity.v1.fixtures.json)。权限、确认凭据、错误码、Markdown 存储和媒体引用由 Backend 拥有，本文件不定义第二套 DTO。全局 Markdown 仍为 5，扩展能力为 6；引用提交不表示已部署、激活或完成端到端验收。
+HTTP 事实源为 [Backend OpenAPI 5.36.0-dev.20261005.1（60273e5）](https://github.com/morenk/wenyousite-backend/blob/60273e5576c9837f645245ae2c610ba8a3f81ea1/contracts/openapi.json)。身份集合与发言快照见[同提交身份协议](https://github.com/morenk/wenyousite-backend/blob/60273e5576c9837f645245ae2c610ba8a3f81ea1/docs/thread-identity.md)；平级提及、默认与目录以 [v6 分阶段扩展](https://github.com/morenk/wenyousite-backend/blob/60273e5576c9837f645245ae2c610ba8a3f81ea1/docs/markdown-v6-role-mentions.md)覆盖旧主身份规则，并关联[角色提及固定语料](https://github.com/morenk/wenyousite-backend/blob/60273e5576c9837f645245ae2c610ba8a3f81ea1/contracts/markdown-v6-role-mentions-fixtures.json)及[身份固定语料](https://github.com/morenk/wenyousite-backend/blob/60273e5576c9837f645245ae2c610ba8a3f81ea1/contracts/thread-identity.v1.fixtures.json)。权限、确认凭据、错误码、Markdown 存储和媒体引用由 Backend 拥有，本文件不定义第二套 DTO。全局 Markdown 仍为 5，扩展能力为 6；引用提交不表示已部署、激活或完成端到端验收。
 
 本次只把业务语义映射到既有身份、图片、提及、控件和浮层契约。Foundation 机器契约、Token、公开导出、生成物和包版本不变，不创建 Tag／Release；消费者继续固定各自现有正式 Foundation Tag，不依赖未发布的 Foundation 分支。
 
@@ -45,7 +45,25 @@ HTTP 事实源为 [Backend OpenAPI 5.35.0-dev.20261005.1（6214204）](https://g
 
 RP 卡保留该条发言采用的头像、昵称与独立系统角色；仅在同一 identityId 的历史与当前确有差异且仍有当前 RP 展示时作简短对比，不添加“本条发言身份”或“当前使用站内资料”等重复说明。清除当前 RP 不抹去历史快照；关闭功能时撤下已展开的 RP 卡片，之后作者入口直接进入账号主页，访问权限失效仍遵循原有遮蔽规则。
 
-允许同帖同一账号的多个角色以及不同账号昵称相同；身份选择按稳定 ID 保留独立行，不按名字合并。候选、筛选与身份卡的站内用户名必须可辨认，不能只在悬停时显示。账号和角色同名时用简短类型辨识；列表键、鼠标／触控选择、键盘焦点和读屏位置都绑定同一稳定目标，不能按账号或名字找到第一项就插入。紧凑列表可截断长昵称，但保留完整无障碍名称与卡片详情；不依靠头像颜色区分账号。
+允许同帖同一账号的多个角色以及不同账号昵称相同；身份选择按稳定 ID 保留独立行，不按名字合并。候选、筛选与身份卡的站内用户名必须可辨认，不能只在悬停时显示。账号和角色同名时用简短类型辨识；列表键、鼠标／触控选择、键盘焦点和读屏位置都绑定同一稳定目标，不能按账号或名字找到第一项就插入。候选复用[现有身份选择行](foundation.md#帖内身份示例)，头像与昵称为主、下方小字承载账号消歧，去掉重复 @ 与右侧辅助堆叠；紧凑列表可截断长昵称，但保留完整无障碍名称与卡片详情，不依靠头像颜色区分账号。
+
+### 身份资料卡与楼层资料
+
+资料卡遵循[中央精简原则](foundation.md#帖内身份示例)：Mobile 复用底部面板，不保留重复总标题和可见关闭 X；小字“帖内身份”位于昵称下，系统标记邻昵称。正文直接嵌入，底部真实账号行仍负责主页导航；手势、外部点击、返回／Escape、焦点返回及无障碍关闭保持可用，不因移除 X 失去退出路径。
+
+- 每个稳定 identityId 可选绑定本主题的一条楼层作为当前资料，允许来自不同子贴、楼中楼回复及他人代贴；不能跨主题，也不转移原楼层的编辑、阅读或治理权限。
+- 只展示原楼层正文，复用原阅读格式与媒体、提及、骰子等既有显示规则；不复制作者区、楼层操作、重复标题或嵌套卡片。未绑定时不留空块；原文位置使用紧凑入口。长正文与卡内其他内容共用单一滚动，窄屏、大字号和媒体不造成横向溢出。
+- 绑定属于角色当前资料，不是发表快照。原楼层编辑后在后续有效读取中呈现新正文；历史发言头像／昵称仍是发表快照，同一角色后改绑定则显示当前资料，不冻结当时正文，也不以另一角色资料补位。
+- 资料读取独立于身份头部：局部加载与失败重试，不让整张卡消失。原楼层删除、隐藏或当前查看者无权阅读统一呈现不可用，不泄露具体受限原因、正文、媒体或可跳转原文入口。功能关闭、角色归档及主题失权沿用既有遮蔽。
+- 编辑表单只在昵称下增加可选楼层链接，沿用原保存与失败保留输入；清空链接表示解绑，不新增管理入口、常驻说明或额外确认。保存失败不提前替换当前资料，链接绑定不代表取得原文编辑权。
+- 缓存按账号会话、主题、角色及当前绑定区分；绑定、原文与权限变化失效相应正文，切号或失权撤下旧内容，迟到请求不能回填旧角色或旧账号。旧客户端与不支持的服务继续遵循原身份流程，不把缺少扩展当作解绑，不发送未知字段。
+
+资料引用字段以 [Backend 资料协议](https://github.com/morenk/wenyousite-backend/blob/60273e5576c9837f645245ae2c610ba8a3f81ea1/docs/rp-identity-profile-post.md)及[固定语料](https://github.com/morenk/wenyousite-backend/blob/60273e5576c9837f645245ae2c610ba8a3f81ea1/contracts/rp-identity-profile-post.v1.fixtures.json)为准：
+
+- capabilities.rpIdentityProfileSupported 缺失按 false，此时不发送新增字段；支持时将输入链接解析为本主题稳定 post ID，写 profilePostId，不能把 URL 直接提交。省略保留原绑定，null 或 clearProfilePost=true 解绑；非空 ID 与清除标记不能并用。本人编辑回显读取 identity.profilePostId，不能用展示层的 null 覆盖原绑定。
+- profilePostStatus=NONE 不显示资料区域；AVAILABLE 才使用可见 profilePostId 继续授权读正文；UNAVAILABLE 只显示统一不可用，ID 为空。关闭、归档、失去资格或昵称头像均空时为 NONE。资料只是附加信息，不能以仅绑定楼层创建或启用空角色；旧 single clear 只清昵称头像，保留绑定且不再展示资料。
+- 保存继续使用指定角色端点与 version；跨主题、不存在、删除或不可读目标统一 404／40403，版本冲突 409／40002，保留输入。仅改绑定增加编辑 version，不改变独立作者版本或发表 token；实际昵称／头像、资格、开关与有效显示变化仍按原规则确认。
+- 每次打开卡片先重新读取同角色状态，再复用 postsFindById 取得原正文与阅读所需媒体、提及、骰子及定位；不新增正文端点或存储副本。身份与正文请求遵守 private, no-store；刷新开始先隐藏旧正文，NONE／UNAVAILABLE、403／404、切号与失权清除正文和媒体，不能从旧缓存回退。
 
 ### 已提交协议的接入边界
 
@@ -96,7 +114,7 @@ v6 角色源为 `[@label](/users/{userId}?rpIdentityId={identityId})`，显式�
 - 新建楼层、楼中楼、子贴和首次 BODY 使用已提交 DTO 的 identityMode（ACCOUNT／RP）、identityId 及该角色 identityToken。新建主题尚未开放帖内身份，首正文沿用站内账号；编辑已有正文忽略新 mode、identityId 与 token。
 - 选择 RP 但不可用、缺少 token 或确认 token 失效时，返回 HTTP 409／RP_IDENTITY_CHANGED（40011）并保留草稿；不能改为站内身份自动重试。明确 ACCOUNT 忽略 RP identityId 与 token，不因 RP 开关、资料或资格变化而发生 RP 确认冲突，但仍实时检查发言权限。RP 冲突后重新读取集合及同 ID 角色，保留草稿并等待用户确认后发出新请求；新建正文、子贴及 aggregate 中首次 BODY 也遵守确认，编辑已有正文保持原作者。
 - 旧客户端省略 identityId 时只使用旧 single 内部兼容映射，不从集合任选。省略 identityMode 且兼容路径无有效 RP、无 token 时沿用账号发表；有效兼容 RP 仍需原确认能力，不得把其他角色 token 当作兼容角色凭据。不能静默换身份、伪造确认或循环重试。能够处理新错误的客户端保留输入并说明恢复方式，不能承诺旧客户端已有保稿交互。
-- token 绑定所选角色及其版本、资格、开关和实际缺省资料，修改角色 B 不改变角色 A 的 token；清空或删除已选角色仍需重新确认，不自动使用另一角色。
+- token 绑定所选角色的独立作者版本、资格、开关和实际缺省资料，修改角色 B 或仅修改 A 的资料楼层绑定不改变角色 A 的 token；清空或删除已选角色仍需重新确认，不自动使用另一角色。
 - 正常有效上下文直接发布，确认只用于身份变化等必要情况，不每次打断创作。
 - 网络超时或结果未知时冻结 mode、identityId、token、Markdown 能力声明和待重试完整 payload 并复用同 clientRequestId；已成功请求返回原帖，之后改名或关闭也不生成重复发言。明确 409 未写入且用户重新确认身份后，使用新幂等键；同键不同正文、mode、identityId 或 token 仍是冲突，省略 mode 与明确 ACCOUNT 不视为同一输入；遵循 Backend 各端点的原幂等错误语义。未确认成功前不清空草稿，不用刷新后的身份自动重复提交。
 
@@ -131,6 +149,7 @@ Web 复用 Popover／Dialog，支持键盘、焦点返回及窄屏；Mobile 使�
 | 行内操作与未配置入口 | `identity-row-actions`、`unconfigured-identity-affordance` |
 | 多身份与旧接口兼容 | `identity-limit-race`、`identity-delete-slot`、`empty-identity-slot`、`legacy-primary-anchor`、`draft-role-binding`、`role-token-isolation`、`identity-card-role-match`、`account-mention-compat` |
 | 平级角色与能力兼容 | `new-draft-account`、`account-directory-projection`、`equal-identity-mentions`、`mention-role-roundtrip`、`mention-role-lifecycle`、`mention-capability-cache`、`legacy-role-edit-protection` |
+| 身份资料与正文引用 | `profile-card-layout`、`profile-reference-scope`、`profile-live-content`、`profile-binding-edit`、`profile-unavailable`、`profile-compat-cache` |
 | 平台与隔离 | `responsive-accessibility`、`isolated-acceptance` |
 
 Foundation 只静态验证 JSON、结构、ID 与文档关联并执行仓库门禁。三端在实现测试中关联场景，功能、画面、负责人验收与旧客户端兼容分别记录。写入验收只用登记的独立数据库、Redis、上传路径与测试账号，验证身份和实际代理后执行，成功、失败、超时均清理。公开开发环境、localhost 或 Tailnet 都不是隔离证据。
