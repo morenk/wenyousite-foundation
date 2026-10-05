@@ -819,7 +819,8 @@
         "全局 markdownContractVersion 仍 5，roleMentionsV6Supported／roleMentionsV6WriteEnabled 缺失按 false；supported 后新端所有相关写 DTO 都带整数 6（不是字符串），读取头不能替代写声明；不以全局升版锁出旧端",
         "旧正文没有新版目标时保持既有读写能力，不批量改写历史",
         "无能力或新增目标被拒绝时保留原存储；可处理错误的客户端保留输入，不伪造确认或自动重复提交",
-        "旧后端 supported=false 可沿用旧候选；supported=true 始终 includeIdentities=true，gate=false空 users 不降级旧候选并与暂无匹配区分；canMentionAllPlayers 按原独立权限保留"
+        "旧后端 supported=false 可沿用旧候选；supported=true 始终 includeIdentities=true，gate=false空 users 不降级旧候选并与暂无匹配区分；canMentionAllPlayers 按原独立权限保留",
+        "初始主题 CreateThreadDto.content 也携带整数能力 6；合法显式 ACCOUNT 提及可保存，跨主题 RP 返回 40012 且保留草稿，不能因还未建立本帖角色跳过验证"
       ]
     }
   ]
