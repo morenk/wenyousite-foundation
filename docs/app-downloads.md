@@ -6,7 +6,7 @@
 
 HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.32.0-dev.20261003.1（10b7819ad4a15777490dad5ab9abb7ae961422fc）](https://github.com/morenk/wenyousite-backend/blob/10b7819ad4a15777490dad5ab9abb7ae961422fc/contracts/openapi.json)定义，配套流程见[同提交下载网关说明](https://github.com/morenk/wenyousite-backend/blob/10b7819ad4a15777490dad5ab9abb7ae961422fc/docs/app-download-gateway.md)。匿名信息为 `GET /api/v1/app-downloads/android`（`appDownloadsInfo`），固定文件为 `GET/HEAD /api/v1/app-downloads/android/{buildNumber}/file`（`appDownloadsFile`／`appDownloadsHead`）。消费者从该提交生成类型，不复制一套 Foundation DTO；此引用用于契约交接，不代替消费者联验、部署或旧 APP 验收。
 
-上述契约包含每日下载次数的兼容扩展，操作总数仍为 238，既有路径、operationId、下载信息 DTO、匿名访问及旧 APP metadata 保留。下文仅映射已提交的 Cookie、原因头与等待语义；HTTP 类型继续从 Backend 生成，Foundation 正式包保持 v7.2.1。
+上述 OpenAPI 契约包含每日下载次数的兼容扩展，操作总数仍为 238，既有路径、operationId、下载信息 DTO、匿名访问及旧 APP metadata 保留。持续隔离预览及其 HTTP Cookie 模式的退役以 [Backend 已提交说明（1fa648e04d576f8d52198b4f959204a744b4a0e2）](https://github.com/morenk/wenyousite-backend/blob/1fa648e04d576f8d52198b4f959204a744b4a0e2/docs/app-download-gateway.md#隔离验证)为准；该变更不改 HTTP 结构。下文按此退役说明使用统一的安全 Cookie 属性，原因头与等待语义保持原契约；HTTP 类型继续从 Backend 生成，Foundation 正式包保持 v7.2.1。
 
 部署顺序、可信代理、隔离身份、缓存与预算参数见[治理分发规范（57b8dd1）](https://github.com/morenk/wenyousite-workspace/blob/57b8dd13c9399551c9f925b8f8152653dd44e16c/docs/app-download-distribution.md)。这些是运维参数，不进入 Foundation 设计 Token 或生成常量。字体、明暗、布局和触控继续消费[机器契约](../contracts/foundation.v1.json)及平台 profile；本次文档与验收用例无需提升包版本或发布 Tag，Web／Mobile 继续固定各自现有正式 Foundation 依赖。
 
@@ -73,8 +73,8 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.32.0
 - 按北京时间自然日限制每个浏览器设备标识最多 3 次、每个受信任客户端 IP 最多 10 次；两项同时满足才可下载，跨版本累计。多个设备共用同一出口 IP 时共同受 10 次限制；同一有效浏览器标识更换 IP 后，其当日 3 次计数仍继续累计，各 IP 另记自己的实际下载次数。
 - 浏览器使用第一方随机标识，不采用侵入性指纹，不以账号、屏幕尺寸、移动设备提示记录或浏览器自报的设备名称识别计数主体。访问提示的会话去重与服务端每日计数独立；关闭提示、切换路由、刷新或重建界面不重置下载计数。
 - 这是浏览器标识维度的限制，不能保证物理设备每日只能下载 3 次。清除、禁用 Cookie 或更换浏览器可能丢失该标识；这些请求仍共同受来源 IP 的每日 10 次限制，不因此获得无限下载。对用户不能宣称可靠识别同一物理设备，也不提示通过删除 Cookie 或换网络解除限制。
-- 标识由服务端通过签名 Cookie 签发；生产名为 `__Host-wenyou-download-device`，使用 `Path=/; HttpOnly; SameSite=Lax; Secure` 且不设置 Domain。info 或有效文件 HEAD／GET 可签发／续签，Web 让同源浏览器自动接收和携带，不自行生成设备 ID，也不读取、复制或把 HttpOnly 值放入本地存储。签发本身不落次数记录，合法续签保持随机标识与已有当日计数。
-- 仅已核验的 HTTP 隔离预览使用 `preview-<runId>-download-device`，保留 HttpOnly／SameSite=Lax，在该显式预览模式省略 Secure。代理保留当前批次 Cookie 与 Set-Cookie，不能接受其他批次标识或将预览配置带入生产；签名绑定 Cookie 名，签名格式与生命周期由固定 Backend 契约拥有。
+- 标识由服务端通过签名 Cookie 签发；名称始终为 `__Host-wenyou-download-device`，使用 `Path=/; HttpOnly; SameSite=Lax; Secure` 且不设置 Domain。info 或有效文件 HEAD／GET 可签发／续签，Web 让同源浏览器自动接收和携带，不自行生成设备 ID，也不读取、复制或把 HttpOnly 值放入本地存储。签发本身不落次数记录，合法续签保持随机标识与已有当日计数。
+- 持续隔离预览的专用 Cookie 名称及省略 Secure 的 HTTP 模式已退役，旧预览配置会被拒绝，普通开发入口不放宽 Cookie 属性；签名绑定 Cookie 名，签名格式与生命周期仍由 Backend 拥有。自动化下载验证继续使用独立测试入口，不向真实环境写入计数或业务数据。
 - 缺失、篡改、重复同名、未知签名或过期 Cookie 按无有效标识处理并签发新随机标识，不能用任意客户端输入覆盖、清零或借用其他浏览器计数。直接 GET 新签发的标识也记本次获准尝试；客户端不保存时，后续请求无法识别为同一浏览器，仍受可信 IP 总限额约束。可信 IP 只取受控代理覆写后的来源，不接受客户端自报转发头作为身份。
 - 无 Cookie 的旧 APP 继续直接请求文件 HEAD／GET，不要求先访问 Web、登录或补调下载信息接口；其有效文件 GET 计入来源 IP 的每日 10 次。原文件 metadata、大小、摘要、包名、构建号与签名校验保留。
 
