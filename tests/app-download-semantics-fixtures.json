@@ -461,11 +461,11 @@
         "backend",
         "web"
       ],
-      "given": "已核验的生产协议样本及两个独立 HTTP 预览批次，使用合成标识和独立密钥",
-      "when": "同源执行 info、有效文件 HEAD／GET，并覆盖合法续签和跨批次 Cookie 输入",
+      "given": "已核验的独立下载测试资源，使用合成标识和独立密钥，覆盖统一安全 Cookie 协议及已退役预览配置",
+      "when": "同源执行 info、有效文件 HEAD／GET，并覆盖合法续签、未知签名 Cookie 输入及旧预览配置启动",
       "then": [
-        "生产使用 __Host-wenyou-download-device，Path=/、HttpOnly、SameSite=Lax、Secure 且无 Domain；由服务端签发，Web 自动接收携带、不读取复制 HttpOnly 值或自造设备 ID",
-        "隔离预览使用 preview-<runId>-download-device，保留 HttpOnly／SameSite=Lax，仅显式 HTTP 预览省略 Secure；当前批次代理保留 Cookie／Set-Cookie，不接受其他批次标识，不放宽生产配置",
+        "始终使用 __Host-wenyou-download-device，Path=/、HttpOnly、SameSite=Lax、Secure 且无 Domain；由服务端签发，Web 自动接收携带、不读取复制 HttpOnly 值或自造设备 ID",
+        "旧 HTTP 预览配置拒绝启动，不切换专用预览 Cookie 名称或省略 Secure；未知签名按无有效标识处理并签发新随机标识，不借用其他浏览器计数",
         "签发或合法续签本身不消费次数，续签保持随机标识与原计数；相同有效标识跨 info、HEAD 和 GET 连续使用",
         "拒绝保存 Cookie 仍可直接 HEAD／GET，并受 IP 总限额；不要求登录或建立硬件身份"
       ]
