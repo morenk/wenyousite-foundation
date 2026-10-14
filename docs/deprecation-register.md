@@ -16,13 +16,23 @@
 
 本文件记录 Foundation 契约的兼容影响；跨仓库旧协议清理继续遵循[治理仓库弃用登记](https://github.com/morenk/wenyousite-workspace/blob/main/docs/deprecation-register.md)。
 
+## APP 下载恢复存储桶直连
+
+- [共享下载规范](app-downloads.md)以 Backend `882889c5d8dc4a47893cb4fe913a0f68e536ce2f`（`5.37.0-dev.20261015.1`）为已提交事实源：新 `mobileReleasesAndroidDownload` 沿用既有 `AndroidDownloadInfoDto`，仅 `available`／`no_release`／`unavailable`；发布记录读取失败为 `503`，不复制 DTO。
+- Web 显式点击查询信息，再无本站凭据 HEAD 固定 RainS3 对象并核验身份，最后原生 GET；失败不回退网关、不预取、不自动重试。桶负责文件流量／缓存，旧网关每日次数及带宽预算不适用于直连；公开 URL 不承诺撤回后立即失效。
+- Mobile 保留 `/meta.updateUrl`、HEAD／GET、SHA-256、包身份和既有更新策略；发布工具不再默认 `--gateway`，但保留说明 `confirmedRevision`／`--notes-revision` 与原晋级事务。恢复地址不改写制品、promotion、TSV 或审计历史。
+- 原网关文档移入[兼容范围](app-downloads-gateway-compatibility.md)，原 42 条共享场景逐条保留并标记 `legacy-gateway`；新增 `current-direct-storage` 场景。旧 `/api/v1/app-downloads/*`、Cookie、账本、发布模式与回滚仍保留，未获得无消费者等四项证据，不删除协议或停止服务。
+- 交付顺序为兼容 Backend、受限流程恢复推荐桶 URL、核验 `/meta` 与新信息后切换 Web；Mobile 后续读取既有策略。此交付不代表已合并、部署、修改桶权限或完成旧 APP 实机验收，不发布 Foundation Tag／Release、不改 Token 或包版本。
+
 ## 公开 APP 下载与私有 APK 分发
 
-- [共享下载规范](app-downloads.md)与[固定验收用例](../tests/app-download-semantics-fixtures.json)规定匿名外观菜单直接下载：一次点击查询版本／状态、HEAD 校验后自动交给本站文件原生下载，状态就近呈现，失败显式重试。保留限流恢复、只读缓存及旧 APP 校验；HTTP 字段与精确来源由共享规范所引用的 Backend OpenAPI 拥有，不新增平行 DTO。
+本节保留原网关方案与兼容背景；下述本站文件、次数、预热及关闭公共读的要求仅属于旧网关模式，当前直连以[上一节](#app-下载恢复存储桶直连)为准，不据此触发新的部署或云权限修改。
+
+- [共享下载规范](app-downloads-gateway-compatibility.md)与[固定验收用例](../tests/app-download-semantics-fixtures.json)规定匿名外观菜单直接下载：一次点击查询版本／状态、HEAD 校验后自动交给本站文件原生下载，状态就近呈现，失败显式重试。保留限流恢复、只读缓存及旧 APP 校验；HTTP 字段与精确来源由共享规范所引用的 Backend OpenAPI 拥有，不新增平行 DTO。
 - 尚未发布的独立 Web `/download` 页面与二维码候选已取消；原 `qr-page-only` 用例退出当前验收清单，新增 `web-head-preflight` 覆盖点击后的预检与拒绝继续传输，其他用例同步直接入口行为。这不删除既有下载 HTTP 或旧 APP 协议，也不要求扩展运行时版本或发布 Foundation Tag。
 - 移动设备首次访问 Web 可关闭提示新增设备判断、会话去重及 iOS 可继续网页用例；提示本身不请求 APK，Android 点击复用直接下载流程。桌面窄窗口不触发，处理／关闭后同一浏览会话不重复；这不新增 Flutter 提示记录或 iOS 安装包。
 - `/meta` 字段结构、推荐／强制策略、原制品身份、历史记录和旧 APP 的 HEAD／GET 校验继续保留；存储位置与对外下载地址分离。固定 URL 不绕过撤回、暂停或缓存故障，公众请求不触发回源，也不回退公开桶。
-- [每日下载次数](app-downloads.md#每日下载次数)固定 Backend `10b7819ad4a15777490dad5ab9abb7ae961422fc`（`5.32.0-dev.20261003.1`，238 操作），新增北京时间每浏览器标识 3 次、共享 IP 10 次的保护。跨版本累计，获准文件 GET／Range 尝试与字节预算一起持久事务预留，预占后中断／失败不退，HEAD／信息／预占前拒绝不消费次数。`X-Download-Limit-Reason` 与 `Retry-After` 区分次数及其他限流，info 全局状态不受个体次数影响；不复制 DTO 或扩展 Foundation 运行时。
+- [每日下载次数](app-downloads-gateway-compatibility.md#每日下载次数)固定 Backend `10b7819ad4a15777490dad5ab9abb7ae961422fc`（`5.32.0-dev.20261003.1`，238 操作），新增北京时间每浏览器标识 3 次、共享 IP 10 次的保护。跨版本累计，获准文件 GET／Range 尝试与字节预算一起持久事务预留，预占后中断／失败不退，HEAD／信息／预占前拒绝不消费次数。`X-Download-Limit-Reason` 与 `Retry-After` 区分次数及其他限流，info 全局状态不受个体次数影响；不复制 DTO 或扩展 Foundation 运行时。
 - 第一方 Cookie 由服务端签发，同源浏览器自动携带；名称始终为 `__Host-wenyou-download-device`，使用 `Path=/; HttpOnly; SameSite=Lax; Secure` 且无 Domain，不等于物理设备身份。持续隔离预览的专用名称与 HTTP 模式按 [Backend 退役说明（1fa648e04d576f8d52198b4f959204a744b4a0e2）](https://github.com/morenk/wenyousite-backend/blob/1fa648e04d576f8d52198b4f959204a744b4a0e2/docs/app-download-gateway.md#隔离验证)退出当前验收用例，旧预览配置拒绝启动。清除／禁用 Cookie 仍由 IP 限额兜底，无 Cookie 旧 APP 不需先访问 Web、调用 info 或增加 Cookie／新响应头支持；原配额、签名与轮换语义，以及路径、operationId、DTO、旧 metadata、`/meta` 与更新策略保留。取消这些兼容仍需独立证据评审。
 - 出站账本 v1→v2 显式离线升级保留原字节累计和时钟，次数与签名状态持久化；重复升级、重启或合法密钥轮换不清零。旧 v1 程序拒绝 v2，不能通过删库、恢复旧账本或降版绕过额度；部署及回滚由 Backend／治理门禁决定，本次不执行迁移或清理历史。
 - 新建独立只读凭据不再是部署前置条件，显式预热／修复允许复用已有存储凭据，不改原权限而影响上传或图片；公开网关不得持有、读取或继承 S3 凭据。预热配置隔离、限制文件权限并脱敏日志，代码固定 APK 目录且只调用所需读取操作；这是应用限制，不代表云端只读／仅 APK 授权，泄漏仍可能影响原凭据全部授权资源。开发仅用隔离样本，不读取真实密钥、复制生产配置或提前配置服务器。

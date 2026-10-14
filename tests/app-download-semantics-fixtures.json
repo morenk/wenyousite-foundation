@@ -1,7 +1,290 @@
 {
-  "description": "公开 APP 下载的共享验收场景；不是 HTTP DTO、响应样本或可执行网关测试。",
+  "description": "公开 APP 下载的共享验收场景；scope 区分当前桶直连与历史网关兼容，不是 HTTP DTO、响应样本或可执行下载测试。",
   "specification": "../docs/app-downloads.md",
   "cases": [
+    {
+      "id": "direct-entry-anonymous",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "游客或已登录用户位于桌面、窄屏或登录页",
+      "when": "显式点击 ThemeMenu 外观弹层底部下载 APP",
+      "then": [
+        "入口位于主题选项之后，保持键盘语义与匿名可用，不恢复独立下载页、二维码或第二次确认",
+        "同一次动作查询 mobileReleasesAndroidDownload，校验固定桶 URL 与 HEAD，成功才原生 GET 同一对象",
+        "状态在入口附近反馈，不增加副标题、常驻说明或重复提示"
+      ]
+    },
+    {
+      "id": "direct-idle-no-request",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "尚未显式点击下载或重试",
+      "when": "挂载／重建、菜单打开、悬停、聚焦、框架预取或提示展示",
+      "then": [
+        "新信息请求、APK HEAD／GET／Range 及原生下载交接均为零",
+        "一次动作期间重复激活不产生并行流程，菜单重开或等待结束不触发重试"
+      ]
+    },
+    {
+      "id": "direct-mobile-visit-prompt",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "移动设备或桌面窄窗口首次访问，分别覆盖 Android 与 iOS",
+      "when": "显示提示并选择下载、继续网页或关闭，随后刷新、路由切换与重建",
+      "then": [
+        "仅真实移动平台出现可关闭提示，桌面窄窗口不触发；提示本身不请求 APK",
+        "Android 显式下载复用当前桶直连流程；iOS 可继续网页和关闭，不把 APK 声称为可安装的 iOS 包",
+        "同一浏览会话处理后不重复提示，下载失败不清除去重记录；提示与菜单共享进行中的动作",
+        "关闭恢复可用焦点，可观察失败保留显式重试"
+      ]
+    },
+    {
+      "id": "direct-info-available",
+      "scope": "current-direct-storage",
+      "owners": [
+        "backend",
+        "web"
+      ],
+      "given": "当前 meta 推荐策略为固定桶 URL，对应已公开说明与 SUCCEEDED 发布记录，版本、路径、大小和摘要一致",
+      "when": "匿名读取新下载信息入口",
+      "then": [
+        "复用 AndroidDownloadInfoDto 返回 available 与完整 release，retryAfterSeconds=null，Cache-Control: no-store",
+        "不签发网关设备 Cookie、不访问桶、不触发 HEAD／GET、预热、计次或业务写入",
+        "available 仅证明发布身份匹配，消费者仍须 HEAD 验证实际对象"
+      ]
+    },
+    {
+      "id": "direct-info-no-release",
+      "scope": "current-direct-storage",
+      "owners": [
+        "backend",
+        "web"
+      ],
+      "given": "当前策略没有推荐构建，历史存在旧制品",
+      "when": "查询新信息入口",
+      "then": [
+        "返回 no_release、release=null、retryAfterSeconds=null，不从历史记录重新推荐",
+        "界面就近显示暂无可下载版本，HEAD／GET 为零，不猜测旧地址"
+      ]
+    },
+    {
+      "id": "direct-info-unavailable",
+      "scope": "current-direct-storage",
+      "owners": [
+        "backend",
+        "web"
+      ],
+      "given": "分别准备策略仍指向网关、URL 或成功发布记录缺失、版本／路径／大小／摘要身份不匹配",
+      "when": "查询新信息入口",
+      "then": [
+        "各场景返回 unavailable、release=null、retryAfterSeconds=null，不把旧网关地址公开为直连制品",
+        "不生成 withdrawn／paused；这两个 DTO 状态仅供旧网关兼容",
+        "Web 停止 HEAD／GET，保留显式重试，不回退旧信息／文件接口"
+      ]
+    },
+    {
+      "id": "direct-info-read-failure",
+      "scope": "current-direct-storage",
+      "owners": [
+        "backend",
+        "web"
+      ],
+      "given": "发布记录读取故障，或消费者遭遇网络／无效响应／主 API 429，分别建独立场景",
+      "when": "显式查询新下载信息",
+      "then": [
+        "记录读取故障返回 503，不能伪装成 no_release 或 unavailable",
+        "Web 读取失败不复用上次地址发 HEAD／GET，保留上下文及显式重试",
+        "API 429 按状态和有效 Retry-After 反馈，不误报网关每日设备／IP 次数，也不自动重试"
+      ]
+    },
+    {
+      "id": "direct-url-identity",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "可用信息对应一份发布制品，准备精确桶 URL 和各类无效地址",
+      "when": "覆盖其他主机、错误版本或构建路径、查询参数、片段、签名 URL、旧网关和重定向别名",
+      "then": [
+        "仅允许 https://wenyou-apk.cn-nb1.rains3.com/mobile/android/wenyou-<versionName>-<buildNumber>.apk，文件名、版本及构建号同时匹配",
+        "地址无效时在 HEAD／GET 前拒绝，不根据 UA、说明或任意重定向替换目标",
+        "后续响应出现重定向也拒绝，不把别名视为已校验原对象"
+      ]
+    },
+    {
+      "id": "direct-head-preflight",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "显式操作已取得有效信息与精确桶 URL，CORS 允许站点 Origin 并暴露身份头",
+      "when": "使用 credentials: omit 发起 HEAD",
+      "then": [
+        "不发送本站 Cookie 或认证头，核对成功状态、APK Content-Type、Content-Length 和 Content-Disposition 文件名",
+        "核对 x-amz-meta-apk-sha256/application-id/version-name/version-code 与同一 release 完全一致，不用 ETag 替代 SHA-256",
+        "全部通过后向同一 URL 原生 GET 一次，不预取整包 Blob、不再次确认",
+        "HEAD 不证明 APK 正文、签名或安装已校验，HEAD 与 GET 之间仍可能发生对象或网络变化"
+      ]
+    },
+    {
+      "id": "direct-head-rejection",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "分别准备 HEAD 网络／非成功状态／CORS 失败、身份头未暴露或缺失／不匹配、重定向",
+      "when": "执行显式下载预检",
+      "then": [
+        "就近显示可观察的失败并保留显式重试，文件 GET 与原生交接均为零",
+        "不降级旧网关、换任意源、尝试其他构建或跳过预检",
+        "不通过后端代理绕过桶 CORS 或身份校验"
+      ]
+    },
+    {
+      "id": "direct-browser-handoff",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "HEAD 全部通过，浏览器已接管同一桶 URL 的下载，页面无法读取 GET 结果",
+      "when": "下载成功、失败、被取消或网络改变",
+      "then": [
+        "页面只表示请求已交出，不伪造成功、下载进度、摘要校验、安装结果或具体限流原因",
+        "不为观察 GET 先 fetch 整包到内存，不自动重试或换源"
+      ]
+    },
+    {
+      "id": "direct-target-race",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "构建 A 的动作已取消或被构建 B 替代，A 的查询或 HEAD 稍后返回",
+      "when": "按不同顺序返回响应",
+      "then": [
+        "A 响应不覆盖 B 状态或触发原生下载；B 必须独立取得信息与 HEAD 结果",
+        "版本、构建号、大小、摘要、文件名与 URL 整体绑定，不跨目标继承预检",
+        "已交出的固定构建下载不自动改指其他制品"
+      ]
+    },
+    {
+      "id": "direct-explicit-retry",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web"
+      ],
+      "given": "信息或 HEAD 失败，或服务返回可观察限流等待值",
+      "when": "等待结束、菜单重开后由用户再次显式重试",
+      "then": [
+        "没有用户动作时不轮询、自动刷新 URL 或重试",
+        "每次显式重试重新查询信息及 HEAD，成功后原生交接，不复用旧预检或回退网关",
+        "再次读取失败不得发旧对象 HEAD／GET，保留本轮真实失败"
+      ]
+    },
+    {
+      "id": "direct-storage-limits-cache",
+      "scope": "current-direct-storage",
+      "owners": [
+        "backend",
+        "web",
+        "mobile"
+      ],
+      "given": "消费者采用固定桶 URL，桶提供其缓存与服务限制",
+      "when": "读取信息并直接 HEAD／GET／Range 对象",
+      "then": [
+        "APK 流量及缓存由桶承担，不受网关设备／IP 每日次数、SQLite 字节账本或 4 Mbps 限制",
+        "主 API 正常限流仍有效，不能声称下载完全不限流；不为直连建立网关设备 Cookie",
+        "固定版本／构建对象发布后不可覆盖，可配置 public, max-age=31536000, immutable 与 Range，实际响应须由消费者另行核验",
+        "不把网关 Range 计次、预算预留或缓存预热当作桶行为"
+      ]
+    },
+    {
+      "id": "direct-public-url-withdrawal",
+      "scope": "current-direct-storage",
+      "owners": [
+        "backend",
+        "web",
+        "mobile"
+      ],
+      "given": "桶 URL 已公开并可能被用户或缓存保存",
+      "when": "推荐策略取消或对应发布撤回",
+      "then": [
+        "后续新推荐按当前策略与发布身份确定，不沿用上次信息重新发起下载",
+        "不宣称公开桶 URL 或缓存 APK 立即不可下载，也不宣称能召回已安装包",
+        "旧网关的撤回控制不能证明桶对象已失效，不自动修改桶公共读或删除对象"
+      ]
+    },
+    {
+      "id": "direct-mobile-update",
+      "scope": "current-direct-storage",
+      "owners": [
+        "mobile"
+      ],
+      "given": "旧或新 APP 从 /meta.mobileCompatibility.android.updateUrl 获得精确桶地址",
+      "when": "用户执行既有更新流程",
+      "then": [
+        "先 HEAD 校验 metadata，再 GET、计算 SHA-256 并保留大小、包名、构建号、签名和安装校验",
+        "不新增 mobileReleasesAndroidDownload 请求或 Cookie 支持，不要求强制升级旧 APP 才能直连",
+        "推荐／强制策略与字段结构保持原语义，说明和 Web 下载不能解除强制更新",
+        "HEAD 失败停止 GET，失败重试不自动回退网关"
+      ]
+    },
+    {
+      "id": "direct-release-notes-revision",
+      "scope": "current-direct-storage",
+      "owners": [
+        "mobile",
+        "backend"
+      ],
+      "given": "准备具有已确认说明和制品身份的发布候选，使用隔离样本验证工具",
+      "when": "生成预检／晋级参数并覆盖确认 revision 缺失或变化、同构建网关地址恢复桶地址",
+      "then": [
+        "新发布命令不带 --gateway，publicUrl 为原桶 URL，预检仍读取 confirmedRevision，晋级仍携带 --notes-revision",
+        "签名、大小、摘要、公开 HEAD、.sha256、说明确认及原晋级事务／失败补偿保留，确认缺失或变化时停止",
+        "同构建仅从精确旧网关地址恢复到对应桶对象，不改写历史 promotion／TSV 或 downloadArtifact",
+        "旧 --gateway 只保留显式兼容／回滚模式，本场景不授权实际晋级或发包"
+      ]
+    },
+    {
+      "id": "direct-migration-compatibility",
+      "scope": "current-direct-storage",
+      "owners": [
+        "backend",
+        "web",
+        "mobile",
+        "governance"
+      ],
+      "given": "兼容 Backend 与消费者代码已提交，真实部署和云配置尚待明确授权",
+      "when": "评审切换顺序和旧地址消费者",
+      "then": [
+        "先部署已合并兼容 Backend，再经原受限晋级恢复推荐桶 URL，核验新信息与 /meta 后切换已合并 Web；Mobile 后续读策略",
+        "策略仍为网关时新 Web 明确不可用，不回退旧入口；旧缓存地址仍可走保留的网关兼容",
+        "保留旧端点、Cookie、账本、预热发布模式及审计，退役另开 PR 并取得无消费者、数据已迁移、回归覆盖及回滚路径证据",
+        "回滚不清空账本、改写审计或自动变更桶权限；不改图片桶、共享开关或生产数据",
+        "结构用例不能代替实际 CORS、对象缓存、旧 APP 安装或部署验收"
+      ]
+    },
+    {
+      "id": "direct-accessible-layout",
+      "scope": "current-direct-storage",
+      "owners": [
+        "web",
+        "mobile"
+      ],
+      "given": "当前直连入口采用明暗主题、窄屏、长版本名和文字缩放",
+      "when": "键盘或读屏激活、观察状态、关闭移动访问提示并显式重试",
+      "then": [
+        "Web 保持菜单密度、可见焦点、状态可感知和原入口附近重试，不新增页面、二维码或重复说明",
+        "Mobile 保留单列、安全区与 48dp 触控，下载模式不改变更新提醒及强制策略",
+        "状态不只靠颜色，操作不被长版本名遮挡；实际受影响画面由消费者交付，本用例不冒充视觉验收"
+      ]
+    },
     {
       "id": "entry-anonymous",
       "owners": [
@@ -13,7 +296,8 @@
         "外观菜单仅提供主题切换与下载，入口位于主题选项之后，使用可键盘激活的操作语义，不要求登录",
         "同一次点击查询下载信息、校验本站固定文件 HEAD，通过后自动交给原生下载，不要求第二次确认",
         "不导航到独立下载页面，也不展示二维码"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "browse-without-file-request",
@@ -25,7 +309,8 @@
       "then": [
         "不启动信息查询和下载流程，不把菜单重开或等待结束视为用户重试",
         "APK 文件 HEAD、GET、Range 请求及浏览器原生下载交接均为零"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "web-head-preflight",
@@ -39,7 +324,8 @@
         "成功后无需再次点击，向同一地址发起一次浏览器原生下载交接，不先用 fetch 读取整包",
         "地址不合法、HEAD 失败或元数据不匹配时就近反馈，文件 GET 为零；显式重试从查询信息重新开始",
         "HEAD 成功不等于已校验 APK 正文、签名或已安装"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "mobile-visit-prompt",
@@ -52,7 +338,8 @@
         "移动设备首次访问出现可关闭提示，桌面缩窄窗口不触发，不仅凭视口宽度判断",
         "Android 提供下载 APP、继续网页与关闭；提示展示、设备检测、挂载及焦点变化不启动信息查询或 APK HEAD／GET／Range",
         "点击下载复用菜单的查询信息、HEAD 校验及原生下载流程，不新增页面、二维码或第二次确认"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "mobile-prompt-session",
@@ -65,7 +352,8 @@
         "同一浏览会话已处理记录抑制再次自动弹出，失败不清除记录，不叠加多个提示",
         "提示与菜单共用正在进行的下载动作，不产生并行重复查询、HEAD 或原生交接",
         "用户仍可从菜单显式下载或重试；可观察的状态与错误保留在可见入口附近，关闭恢复可用焦点"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "ios-prompt-platform",
@@ -78,7 +366,8 @@
         "明确当前只提供 Android 安装包，不把 Android 文件称为可安装 iOS 包，也不提供声称可安装 iOS APP 的动作",
         "可继续使用网页或关闭，操作后本会话不再自动弹出，不阻断访问、不自动请求 APK",
         "不为此新增 iOS 安装包、HTTP 字段、Flutter 提示记录或下载页面"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "info-available",
@@ -91,7 +380,8 @@
       "then": [
         "Android 平台、版本、构建号、大小、摘要和本站文件地址对应同一制品，不根据文件名、说明或 UA 生成发布事实",
         "状态就近呈现，信息有效后继续 HEAD，通过才自动交给原生下载"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "info-no-release",
@@ -104,7 +394,8 @@
       "then": [
         "就近显示暂无可下载版本并允许显式重试，本次 HEAD／GET 为零",
         "不提供猜测地址、历史包替代；显式重试重新查询，仅在可用且 HEAD 校验通过后交给原生下载"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "info-withdrawn",
@@ -117,7 +408,8 @@
       "then": [
         "入口附近显示已撤回并停止本次流程，不复用旧状态继续 HEAD／GET",
         "服务端拒绝旧地址，不因缓存存在而继续下载"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "info-paused",
@@ -130,7 +422,8 @@
       "then": [
         "入口附近显示下载暂时暂停，与无版本区分；遵守服务端建议等待时间，本次不继续 HEAD／GET，不在等待结束后自动重试",
         "运维暂停时服务端阻止旧文件 URL；额度不足按本次正文长度限流，HEAD 成功不代表 GET 额度充足"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "info-unavailable",
@@ -143,7 +436,8 @@
       "then": [
         "就近显示暂时无法下载及显式重试，本次不继续 HEAD／GET",
         "不猜测用户设备不支持，不提供桶地址兜底；再次明确重试重新开始查询与预检"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "info-load-failure",
@@ -155,7 +449,8 @@
       "then": [
         "查询期间显示就近状态且抑制重复动作；本次失败未发 HEAD／GET，不冒充暂无版本",
         "重试重新查询，可用且 HEAD 校验通过后自动交给原生下载；无需第二次点击，不沿用上次地址"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "info-refresh-failure",
@@ -167,7 +462,8 @@
       "then": [
         "保留的信息标明本轮未能确认，不能声称仍已确认可用",
         "停止本轮流程，不复用旧地址或预检结果发 HEAD／GET；后续仅由显式重试重新查询"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "info-target-race",
@@ -180,7 +476,8 @@
       "then": [
         "旧响应不能覆盖 B 的版本、大小、摘要或地址，也不能让过期动作继续下载；Web 不触发过期的原生交接",
         "B 必须使用自身有效目标与预检结果；已开始的 A 固定文件请求不能悄悄改为 B"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "download-explicit-action",
@@ -194,7 +491,8 @@
         "Web 同一次点击顺序完成信息查询、HEAD 校验和原生下载交接；处理中不产生并行重复查询、预检或交接",
         "Web 失败只在显式重试后重新查询、预检，通过后自动交接；菜单重开、等待结束或组件重建不触发重试",
         "Mobile 保持既有用户更新流程与安装校验，不因 Web 入口变更新增确认步骤"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "download-browser-handoff",
@@ -206,7 +504,8 @@
       "then": [
         "入口只表示已交给浏览器，不宣称已下载、已安装或已校验正文",
         "不虚构进度、错误已捕获或 Retry-After 倒计时，不自动重试；再次明确操作重新查询并 HEAD 校验"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "download-rate-limited",
@@ -223,7 +522,8 @@
         "HEAD 与失败请求同样计入请求频率",
         "429 无 JSON 正文时仍按 HTTP 状态及 Retry-After 恢复，不把空正文解析失败当作未知发布状态",
         "可读取响应时按 X-Download-Limit-Reason 的固定枚举及 Retry-After 解释，不把共享 IP 上限归因于单个用户、不估算物理设备次数；原因未知或缺失时按 429 兜底"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "download-service-unavailable",
@@ -238,7 +538,8 @@
         "返回 503 并按暂不可用恢复，不报告下载成功或无需升级",
         "不回源、不重定向桶、不改装其他构建；强制更新继续原阻断策略",
         "503 无正文仍按 HTTP 状态恢复；代理未连上网关的 502 作为请求失败处理，不回落主 API 或源站"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "legacy-head-get",
@@ -253,7 +554,8 @@
         "两次响应对应同一制品，保留旧 APP 所需 metadata、Content-Disposition、内容类型与长度",
         "HEAD 无正文和正文预算消耗；下载后仍校验大小、SHA-256、包名、构建号与签名",
         "无 Cookie 旧 APP 不需先访问 Web，HEAD 不计下载次数；已获准文件 GET 受来源 IP 每日次数限制"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "single-range",
@@ -267,7 +569,8 @@
         "未提供 If-Range 或匹配时返回正确片段、范围元数据与正文长度；合法范围的 If-Range 不匹配时返回完整文件",
         "每次发送前按所选片段或完整正文长度独立预留，同时受日月预算约束；HEAD 选择相同但无正文",
         "每次已获准的 Range GET 都计一次下载尝试，If-Range 不匹配的完整 GET 同样计一次；HEAD 不占下载次数"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "invalid-range",
@@ -280,7 +583,8 @@
         "返回 416 与 Backend 定义的范围错误元数据，不因 If-Range 不匹配而放行或改传完整文件",
         "不回源，失败请求仍计入频率",
         "预占前的范围拒绝不计下载次数，不遗留 APK 正文字节预留；实际错误 JSON 仍计原正文预算"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "budget-disconnect-restart",
@@ -294,7 +598,8 @@
         "额度不足返回 429 与 Retry-After；预算状态无法恢复时返回 503",
         "信息与错误 JSON 正文也占出站预算，预算不足以发送错误正文时保留 HTTP 状态与必要响应头",
         "有效文件 GET 的浏览器标识／IP 当日次数与 APK 日月字节一起原子预占；成功预占后中断或失败均不退，重启不清零"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-browser-limit",
@@ -309,7 +614,8 @@
         "第四次不能获准传输，不占新的下载次数或 APK 字节预留；实际错误 JSON 仍按既有规则计量",
         "刷新、路由切换、关闭提示或新浏览会话不清空服务端当日计数，次数归因不声称物理设备不可绕过",
         "第四次返回 429、X-Download-Limit-Reason=device_daily_limit 及距北京时间下一日的 Retry-After；不伪造剩余次数"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-shared-ip-limit",
@@ -323,7 +629,8 @@
         "共享 IP 已有 10 次，D 第二次因 IP 限制拒绝，虽 D 自身还未达到 3 次也不能继续",
         "拒绝后 D 仍为 1 次、IP 仍为 10 次，不能部分扣浏览器名额",
         "返回 429、X-Download-Limit-Reason=ip_daily_limit 及距北京时间下一日的 Retry-After，反馈区分共享 IP 用尽，不声称 D 用户本人已下载 10 次"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-browser-across-ips",
@@ -336,7 +643,8 @@
         "该浏览器跨 IP、跨版本累计为 3，第四次拒绝，不因换网络清零",
         "下载次数分别为 IP A 两次、IP B 一次、IP C 零次，拒绝不误扣新 IP 名额",
         "标识与 IP 是两项独立限制，不把所有设备因共用 IP 合并成同一个浏览器身份"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-request-accounting",
@@ -350,7 +658,8 @@
         "三个获准文件 GET 各计一次，Range 不因分段小或重复范围免计；未下载完仍按获准尝试计",
         "失败未获准文件传输不占 APK 正文字节，信息和实际错误 JSON 自身仍按原预算规则计量",
         "预占成功后即使立即断连、取消或传输失败也不退，主动重试若再次获准则再计一次"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-atomic-reservation",
@@ -363,7 +672,8 @@
         "有效浏览器标识次数、IP 次数、APK 日月字节在同一持久事务中预占，并发最多一份获准传输",
         "任一检查或事务提交失败不部分扣次数、不遗留未获准 APK 的字节预留；实际错误 JSON 不被误算成 APK 扣款",
         "成功预占后重启或传输失败仍保留原次数与字节，不重建或清空账本；账本不可用拒绝服务"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-beijing-boundary",
@@ -376,7 +686,8 @@
         "旧请求计入北京时间 10 月 3 日，分别达到 3／10 次；跨日完成或断开不在次日再计",
         "北京时间 10 月 4 日 00:00 后的新请求使用新日次数，不能以 UTC 日界、浏览器时区或进程重启提前重置",
         "当月字节仍继续累计，不因每日次数换日清空；日界不触发客户端自动重试"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-identity-fallback",
@@ -391,7 +702,8 @@
         "无有效标识仍受受信任来源 IP 每日 10 次限制，不因缺少 Cookie 获得无限下载",
         "无有效 Cookie 按兼容流程签发新随机标识，不得覆盖、清零或借用其他浏览器计数；直接 GET 获准时新标识与 IP 均计本次尝试，未保存 Cookie 则后续无法沿用浏览器身份",
         "清除／禁用 Cookie 或更换浏览器可能失去原标识，不能宣称物理设备 3 次不可绕过，也不向用户建议删 Cookie 绕过"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-legacy-no-cookie",
@@ -406,7 +718,8 @@
         "HEAD 不计下载次数；每次获准 GET 计 IP 次数，同 IP 的其他设备请求也纳入合计，第十一次不能获准",
         "预占前拒绝不计次数；获准后中断／失败不退还，主动重试若再次获准会再计一次，不在旧端额外要求 Cookie",
         "可以忽略 Set-Cookie 与新增原因头；因 IP 次数用尽而被拒绝的 HEAD 仍可按 429 和 Retry-After 处理，不以识别新头作为旧端下载前置条件"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-info-global-status",
@@ -420,7 +733,8 @@
         "info 均表达同一全局 release/status，不因 A 次数耗尽改为 paused，不输出个体余额",
         "info 不检查或消耗个体次数，签发 Cookie 不新建次数记录；其 JSON 字节、频率、并发及带宽仍按原规则计量",
         "A 的 HEAD 可因个体次数返回 429，但不能把该结果缓存或写回全局版本状态；B 按自身身份继续预检"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-head-get-race",
@@ -436,7 +750,8 @@
         "两个 GET 最终事务最多一份获准，另一份以实际限制返回 429 和原因头，不部分扣次数或 APK 字节",
         "已耗尽的 HEAD 无正文且返回对应次数原因和 Retry-After，Web 与更新流程停止本轮 GET",
         "原生 GET 结果不可观察时 Web 不推测拒绝或成功、不自动重试；Web 用户显式重试重新查询和 HEAD"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-limit-reason-header",
@@ -453,7 +768,8 @@
         "此时每日次数拒绝的 Retry-After 为 60 秒，到北京时间 10 月 4 日零点；其他原因遵守各自服务端等待秒数",
         "不依赖 JSON 正文才能处理 429；原因头缺失或未知时通用反馈并遵守有效等待值，不猜测余额、原因或恢复时刻",
         "HEAD 拒绝阻止 GET，等待结束不自动下载；反馈沿用入口附近状态及显式重试"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-cookie-handoff",
@@ -468,7 +784,8 @@
         "旧 HTTP 预览配置拒绝启动，不切换专用预览 Cookie 名称或省略 Secure；未知签名按无有效标识处理并签发新随机标识，不借用其他浏览器计数",
         "签发或合法续签本身不消费次数，续签保持随机标识与原计数；相同有效标识跨 info、HEAD 和 GET 连续使用",
         "拒绝保存 Cookie 仍可直接 HEAD／GET，并受 IP 总限额；不要求登录或建立硬件身份"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "daily-ledger-upgrade",
@@ -481,7 +798,8 @@
         "升级保留原日月字节累计与时钟，重复执行不重新生成身份或清零；次数和签名状态随账本持久化",
         "合法轮换／续签保留同一随机 ID 和计数身份，当日 3／10 次限制不能因重启或换签名重置",
         "旧 v1 程序拒绝 v2；不删除、恢复旧账本或降版放开额度，故障继续拒绝服务并遵守独立运维恢复门禁"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "cache-miss-or-corrupt",
@@ -493,7 +811,8 @@
       "then": [
         "返回 503，不发送未验证或部分文件",
         "对象存储读取次数为零，不触发后台预热或公开桶回退"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "public-request-no-origin",
@@ -506,7 +825,8 @@
         "公众路径只读取已验证缓存，不能调用回源或修复",
         "不返回内部对象位置、凭据、签名 URL 或预算账本",
         "公开网关不持有、读取或继承预热配置及 S3 凭据，不因复用凭据扩大公开进程权限"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "origin-credential-reuse",
@@ -523,7 +843,8 @@
         "独立预热配置限制文件权限，凭据不进入公开网关的文件、环境或继承路径，日志与错误不输出凭据",
         "应用访问限制不被描述为云端只读或仅 APK 权限；泄漏仍可能影响原凭据全部授权资源",
         "仅使用隔离样本，不读取或打印真实密钥、不复制生产配置、不配置服务器或修改云策略；原回源预算和核验门禁保留"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "prewarm-before-promote",
@@ -537,7 +858,8 @@
         "相同制品预热合并，有限重试逐次计入回源额度",
         "只有全部核验成功才原子启用缓存；失败临时文件不可下载",
         "预热成功后仍须通过原晋级门禁才公开；预热或晋级失败保留旧策略"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "artifact-identity-preserved",
@@ -550,7 +872,8 @@
       "then": [
         "保留原制品身份及历史，不由 URL 猜测身份或因换地址新造制品",
         "发布工具鉴权核验私有对象，签名与说明确认门禁保留"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "accessible-layout",
@@ -564,7 +887,8 @@
         "Web 保持菜单密度、焦点可见和可键盘激活，查询／预检／失败状态与重试就在入口附近，可被读屏感知",
         "Flutter 保持单列、安全区与既有 48dp 触控下限，其更新流程不受 Web 入口替换影响",
         "状态不只靠颜色，长版本名与操作可达；不显示独立下载页面、二维码或可用的 iOS 下载动作"
-      ]
+      ],
+      "scope": "legacy-gateway"
     },
     {
       "id": "migration-public-read-gate",
@@ -580,7 +904,12 @@
         "先预热再切 /meta 与 Web，验证旧 APP HEAD、GET、安装校验后才独立评审关闭公共读",
         "未取得批准不改云配置，不触碰图片桶或实例开关",
         "隔离样本不冒称云权限或实际安装验收，回滚不自动重开公共读或清空预算"
-      ]
+      ],
+      "scope": "legacy-gateway"
     }
-  ]
+  ],
+  "scopes": {
+    "current-direct-storage": "当前 Web 新信息入口、RainS3 对象 HEAD／GET、Mobile 既有 meta 更新及新发布工具；事实源为 Backend 882889c5d8dc4a47893cb4fe913a0f68e536ce2f。",
+    "legacy-gateway": "原场景完整保留，只适用于仍持有 /api/v1/app-downloads/* 的历史消费者及显式网关兼容／回滚；不得将其次数、Cookie、预热或关闭公共读要求套用到当前桶直连。"
+  }
 }
