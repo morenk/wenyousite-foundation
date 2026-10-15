@@ -528,6 +528,7 @@ abstract final class WenyouNotificationContract {
 abstract final class WenyouEditorContract {
   static const Map<String, String> labels = <String, String>{
     'heading': '正文样式',
+    'text-color': '字体颜色',
     'alignment': '对齐',
     'bold': '粗体',
     'italic': '斜体',
@@ -571,6 +572,7 @@ abstract final class WenyouEditorContract {
   static const double bodyLineHeight = 1.8;
   static const bool respectsSystemTextScale = true;
   static const Map<String, Map<String, String>> capabilities = <String, Map<String, String>>{
+    'text-color': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
     'heading': <String, String>{'creation': 'primary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
     'alignment': <String, String>{'creation': 'secondary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
     'bold': <String, String>{'creation': 'primary', 'editing': 'structured', 'rendering': 'native', 'roundTrip': 'structured'},
@@ -589,6 +591,38 @@ abstract final class WenyouEditorContract {
     'mention': <String, String>{'creation': 'contextual', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'identity-preserving'},
     'sticker': <String, String>{'creation': 'contextual', 'editing': 'atomic', 'rendering': 'native', 'roundTrip': 'identity-preserving'},
   };
+}
+
+abstract final class WenyouEditorTextColorContract {
+  static const List<String> scope = <String>['thread-body', 'subthread-body', 'floor-body', 'reply-body'];
+  static const List<String> excluded = <String>['moment', 'private-message', 'thread-title'];
+  static const int channelMinimum = 0;
+  static const int channelMaximum = 255;
+  static const List<String> presetOrder = <String>['red', 'orange', 'green', 'blue', 'purple'];
+  static const Map<String, String> presets = <String, String>{
+    'red': '#D14343',
+    'orange': '#D97706',
+    'green': '#25855A',
+    'blue': '#2563EB',
+    'purple': '#8B5CF6',
+  };
+  static const Map<String, String> presetLabels = <String, String>{
+    'red': '红色',
+    'orange': '橙色',
+    'green': '绿色',
+    'blue': '蓝色',
+    'purple': '紫色',
+  };
+  static const int maximumRecentColors = 4;
+  static const String defaultLabel = '默认';
+  static const String customLabel = '自定义';
+  static const String applyLabel = '应用';
+  static const String cancelLabel = '取消';
+  static const double minimumTarget = 48.0;
+  static const Map<String, Object> selection = <String, Object>{'application': 'selected-text-only', 'empty': 'disabled', 'atomicNodes': 'skip', 'paragraphs': 'split-inline-ranges', 'continuedTyping': 'no-color-inheritance', 'mixedColors': 'no-preselection', 'defaultBehavior': 'remove-color-only', 'undo': 'single-transaction'};
+  static const Map<String, Object> mobile = <String, Object>{'parentCapability': 'heading', 'mainToolbar': 'unchanged', 'sectionOrder': <String>['default', 'presets', 'recent', 'custom'], 'minimumTargetDp': 48, 'defaultLabel': '默认', 'customLabel': '自定义', 'applyLabel': '应用', 'cancelLabel': '取消', 'picker': 'inline-replacement', 'controls': <String>['drag-picker', 'red', 'green', 'blue', 'text-preview'], 'numericInput': 'integer-0-255', 'preview': 'panel-only', 'commit': 'explicit-apply', 'cancel': 'unchanged', 'keyboard': 'hide-body-before-picker-numeric-for-channels', 'completion': 'restore-body-focus-and-selection', 'layout': 'available-height-scroll'};
+  static const Map<String, Object> recent = <String, Object>{'maximum': 4, 'source': 'applied-custom-colors', 'scope': 'account-local', 'order': 'most-recent-first', 'deduplication': 'canonical-rgb'};
+  static const Map<String, Object> presentation = <String, Object>{'source': 'validated-user-rgb', 'alpha': 1, 'themeBehavior': 'preserve-identical-rgb', 'automaticAdjustment': false, 'contrastWarning': false, 'defaultBehavior': 'inherit-element-foreground', 'foregroundPrecedence': 'explicit-text-color-before-link-and-code', 'otherMarks': 'preserve', 'atomicNodes': 'excluded', 'protocolOwner': 'backend-contracts'};
 }
 
 abstract final class WenyouAudioContract {

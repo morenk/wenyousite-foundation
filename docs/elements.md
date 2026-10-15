@@ -75,3 +75,7 @@ Flutter Quill 编辑态的行内代码是明确的平台渲染例外：字体、
 - Web/TypeScript：`@wenyousite/foundation/elements` 导出元素样式、五档等级解析、身份/状态/经济 tone、平台 profile 与相关类型。
 - Web/CSS：`web/tokens.css` 导出 `--element-*`。
 - Flutter：`WenyouElementContract`、`WenyouLevelContract` 与 `WenyouIdentityContract` 导出移动端等价语义。
+
+## 作者文字颜色
+
+合法的作者 RGB 按 [主题帖文字颜色](text-color.md)原值呈现，明暗一致。仅替换选中文字的前景色，普通链接及行内代码其余样式保留；默认色继承该元素原前景。原子节点跳过，不通过父级样式染色，不改变既有控件、状态色或默认正文对比度规则。

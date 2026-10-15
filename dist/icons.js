@@ -197,6 +197,7 @@ export const ICON_SEMANTICS = Object.freeze({
   "metric.tips": "fuel",
   "metric.views": "eye",
   "editor.heading": "type",
+  "editor.text-color": "type",
   "editor.heading-2": "heading-2",
   "editor.heading-3": "heading-3",
   "editor.alignment": "align-left",

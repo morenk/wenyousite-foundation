@@ -125,6 +125,7 @@ abstract final class WenyouIconIds {
   static const String metricTips = 'metric.tips'; // fuel
   static const String metricViews = 'metric.views'; // eye
   static const String editorHeading = 'editor.heading'; // type
+  static const String editorTextColor = 'editor.text-color'; // type
   static const String editorHeading2 = 'editor.heading-2'; // heading-2
   static const String editorHeading3 = 'editor.heading-3'; // heading-3
   static const String editorAlignment = 'editor.alignment'; // align-left
@@ -319,6 +320,7 @@ abstract final class WenyouIconContract {
     'metric.tips': 'fuel',
     'metric.views': 'eye',
     'editor.heading': 'type',
+    'editor.text-color': 'type',
     'editor.heading-2': 'heading-2',
     'editor.heading-3': 'heading-3',
     'editor.alignment': 'align-left',
