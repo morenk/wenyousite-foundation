@@ -1,7 +1,8 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "7.3.0";
+export const FOUNDATION_VERSION = "7.4.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
+  "text-color": "字体颜色",
   "alignment": "对齐",
   "bold": "粗体",
   "italic": "斜体",
@@ -155,6 +156,129 @@ export const EDITOR_INVARIANTS = Object.freeze({
   "editRenderTypography": "equivalent",
   "clipboardIdentityOwner": "backend-node-contract"
 });
+export const EDITOR_TEXT_COLOR_PROFILE = Object.freeze({
+  "scope": [
+    "thread-body",
+    "subthread-body",
+    "floor-body",
+    "reply-body"
+  ],
+  "excluded": [
+    "moment",
+    "private-message",
+    "thread-title"
+  ],
+  "colorModel": "opaque-rgb",
+  "channelMinimum": 0,
+  "channelMaximum": 255,
+  "presets": [
+    {
+      "id": "red",
+      "label": "红色",
+      "rgb": "#D14343"
+    },
+    {
+      "id": "orange",
+      "label": "橙色",
+      "rgb": "#D97706"
+    },
+    {
+      "id": "green",
+      "label": "绿色",
+      "rgb": "#25855A"
+    },
+    {
+      "id": "blue",
+      "label": "蓝色",
+      "rgb": "#2563EB"
+    },
+    {
+      "id": "purple",
+      "label": "紫色",
+      "rgb": "#8B5CF6"
+    }
+  ],
+  "selection": {
+    "application": "selected-text-only",
+    "empty": "disabled",
+    "atomicNodes": "skip",
+    "paragraphs": "split-inline-ranges",
+    "continuedTyping": "no-color-inheritance",
+    "mixedColors": "no-preselection",
+    "defaultBehavior": "remove-color-only",
+    "undo": "single-transaction"
+  },
+  "mobile": {
+    "parentCapability": "heading",
+    "mainToolbar": "unchanged",
+    "sectionOrder": [
+      "default",
+      "presets",
+      "recent",
+      "custom"
+    ],
+    "minimumTargetDp": 48,
+    "defaultLabel": "默认",
+    "customLabel": "自定义",
+    "applyLabel": "应用",
+    "cancelLabel": "取消",
+    "picker": "inline-replacement",
+    "controls": [
+      "drag-picker",
+      "red",
+      "green",
+      "blue",
+      "text-preview"
+    ],
+    "numericInput": "integer-0-255",
+    "preview": "panel-only",
+    "commit": "explicit-apply",
+    "cancel": "unchanged",
+    "keyboard": "hide-body-before-picker-numeric-for-channels",
+    "completion": "restore-body-focus-and-selection",
+    "layout": "available-height-scroll"
+  },
+  "recent": {
+    "maximum": 4,
+    "source": "applied-custom-colors",
+    "scope": "account-local",
+    "order": "most-recent-first",
+    "deduplication": "canonical-rgb"
+  },
+  "web": {
+    "picker": false,
+    "existingContent": "render-edit-preserve",
+    "clipboard": "preserve-color"
+  },
+  "protocolOwner": "backend-markdown-contract"
+});
+export const EDITOR_TEXT_COLOR_PRESETS = Object.freeze([
+  {
+    "id": "red",
+    "label": "红色",
+    "rgb": "#D14343"
+  },
+  {
+    "id": "orange",
+    "label": "橙色",
+    "rgb": "#D97706"
+  },
+  {
+    "id": "green",
+    "label": "绿色",
+    "rgb": "#25855A"
+  },
+  {
+    "id": "blue",
+    "label": "蓝色",
+    "rgb": "#2563EB"
+  },
+  {
+    "id": "purple",
+    "label": "紫色",
+    "rgb": "#8B5CF6"
+  }
+]);
 export const EDITOR_CONTENT_POLICY = Object.freeze({
   "markdownContractVersion": 4,
   "structuredCapabilitySource": "toolbar",
@@ -208,6 +332,12 @@ export const EDITOR_MOBILE_MORE_INLINE = Object.freeze([
   "strikethrough"
 ]);
 export const EDITOR_WEB_CAPABILITIES = Object.freeze({
+  "text-color": {
+    "creation": "none",
+    "editing": "structured",
+    "rendering": "native",
+    "roundTrip": "structured"
+  },
   "heading": {
     "creation": "primary",
     "editing": "structured",
@@ -312,6 +442,12 @@ export const EDITOR_WEB_CAPABILITIES = Object.freeze({
   }
 });
 export const EDITOR_MOBILE_CAPABILITIES = Object.freeze({
+  "text-color": {
+    "creation": "secondary",
+    "editing": "structured",
+    "rendering": "native",
+    "roundTrip": "structured"
+  },
   "heading": {
     "creation": "primary",
     "editing": "structured",

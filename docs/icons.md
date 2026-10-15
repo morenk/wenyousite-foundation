@@ -161,6 +161,7 @@
 | `metric.tips` | `fuel` | `9f2840595e35b3893eaddd4995716e732cbda6c65bef9c1536004f9f2b28751e` |
 | `metric.views` | `eye` | `1469f198d32e5f42fcafb461c3caac42fcdbdf164e38c46b3b46ca512c702310` |
 | `editor.heading` | `type` | `40eece0115c92cbf8ea4c0e6f5561a32e8676e81b67c98a7d02f2c937a60753d` |
+| `editor.text-color` | `type` | `40eece0115c92cbf8ea4c0e6f5561a32e8676e81b67c98a7d02f2c937a60753d` |
 | `editor.heading-2` | `heading-2` | `a99abf77b3c53f48f02c8003d71678714e7b229c220ee60b7169b28c98447c42` |
 | `editor.heading-3` | `heading-3` | `61f552bf9e770f6bb4c751240ac05ebb09601a9ecf886767f3537a34719ed1b3` |
 | `editor.alignment` | `align-left` | `640ab375496e1b926e1b06c4b14d5dd86acea67cb1ace945623da4daef90cd35` |

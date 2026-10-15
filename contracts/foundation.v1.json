@@ -1,7 +1,7 @@
 {
   "$schema": "./foundation.schema.json",
   "schemaVersion": 3,
-  "version": "7.3.0",
+  "version": "7.4.0",
   "identity": {
     "subject": "多人文字共同创作社区",
     "keywords": ["温暖", "轻快", "社区感", "圆润", "信息清楚"],
@@ -461,6 +461,7 @@
         "metric.tips": "fuel",
         "metric.views": "eye",
         "editor.heading": "type",
+        "editor.text-color": "type",
         "editor.heading-2": "heading-2",
         "editor.heading-3": "heading-3",
         "editor.alignment": "align-left",
@@ -632,6 +633,18 @@
         "categoryColorNeedsTextLabel": true
       },
       "inline": {
+        "textColor": {
+          "source": "validated-user-rgb",
+          "alpha": 1,
+          "themeBehavior": "preserve-identical-rgb",
+          "automaticAdjustment": false,
+          "contrastWarning": false,
+          "defaultBehavior": "inherit-element-foreground",
+          "foregroundPrecedence": "explicit-text-color-before-link-and-code",
+          "otherMarks": "preserve",
+          "atomicNodes": "excluded",
+          "protocolOwner": "backend-contracts"
+        },
         "internalReference": {
           "tone": "brand",
           "foreground": "onAccent",
@@ -1170,6 +1183,7 @@
     "editor": {
       "labels": {
         "heading": "正文样式",
+        "text-color": "字体颜色",
         "alignment": "对齐",
         "bold": "粗体",
         "italic": "斜体",
@@ -1255,9 +1269,106 @@
           "respectsSystemTextScale": true
         }
       },
+      "textColor": {
+        "scope": [
+          "thread-body",
+          "subthread-body",
+          "floor-body",
+          "reply-body"
+        ],
+        "excluded": [
+          "moment",
+          "private-message",
+          "thread-title"
+        ],
+        "colorModel": "opaque-rgb",
+        "channelMinimum": 0,
+        "channelMaximum": 255,
+        "presets": [
+          {
+            "id": "red",
+            "label": "红色",
+            "rgb": "#D14343"
+          },
+          {
+            "id": "orange",
+            "label": "橙色",
+            "rgb": "#D97706"
+          },
+          {
+            "id": "green",
+            "label": "绿色",
+            "rgb": "#25855A"
+          },
+          {
+            "id": "blue",
+            "label": "蓝色",
+            "rgb": "#2563EB"
+          },
+          {
+            "id": "purple",
+            "label": "紫色",
+            "rgb": "#8B5CF6"
+          }
+        ],
+        "selection": {
+          "application": "selected-text-only",
+          "empty": "disabled",
+          "atomicNodes": "skip",
+          "paragraphs": "split-inline-ranges",
+          "continuedTyping": "no-color-inheritance",
+          "mixedColors": "no-preselection",
+          "defaultBehavior": "remove-color-only",
+          "undo": "single-transaction"
+        },
+        "mobile": {
+          "parentCapability": "heading",
+          "mainToolbar": "unchanged",
+          "sectionOrder": [
+            "default",
+            "presets",
+            "recent",
+            "custom"
+          ],
+          "minimumTargetDp": 48,
+          "defaultLabel": "默认",
+          "customLabel": "自定义",
+          "applyLabel": "应用",
+          "cancelLabel": "取消",
+          "picker": "inline-replacement",
+          "controls": [
+            "drag-picker",
+            "red",
+            "green",
+            "blue",
+            "text-preview"
+          ],
+          "numericInput": "integer-0-255",
+          "preview": "panel-only",
+          "commit": "explicit-apply",
+          "cancel": "unchanged",
+          "keyboard": "hide-body-before-picker-numeric-for-channels",
+          "completion": "restore-body-focus-and-selection",
+          "layout": "available-height-scroll"
+        },
+        "recent": {
+          "maximum": 4,
+          "source": "applied-custom-colors",
+          "scope": "account-local",
+          "order": "most-recent-first",
+          "deduplication": "canonical-rgb"
+        },
+        "web": {
+          "picker": false,
+          "existingContent": "render-edit-preserve",
+          "clipboard": "preserve-color"
+        },
+        "protocolOwner": "backend-markdown-contract"
+      },
       "creatableHeadingLevels": [2, 3],
       "capabilities": {
         "web": {
+          "text-color": { "creation": "none", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "heading": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "alignment": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "bold": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
@@ -1277,6 +1388,7 @@
           "sticker": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" }
         },
         "mobile": {
+          "text-color": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "heading": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "alignment": { "creation": "secondary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },
           "bold": { "creation": "primary", "editing": "structured", "rendering": "native", "roundTrip": "structured" },

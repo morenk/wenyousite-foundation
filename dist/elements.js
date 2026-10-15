@@ -9,6 +9,18 @@ export const ELEMENT_INVARIANTS = Object.freeze({
   "categoryColorNeedsTextLabel": true
 });
 export const INLINE_ELEMENT_STYLES = Object.freeze({
+  "textColor": {
+    "source": "validated-user-rgb",
+    "alpha": 1,
+    "themeBehavior": "preserve-identical-rgb",
+    "automaticAdjustment": false,
+    "contrastWarning": false,
+    "defaultBehavior": "inherit-element-foreground",
+    "foregroundPrecedence": "explicit-text-color-before-link-and-code",
+    "otherMarks": "preserve",
+    "atomicNodes": "excluded",
+    "protocolOwner": "backend-contracts"
+  },
   "internalReference": {
     "tone": "brand",
     "foreground": "onAccent",

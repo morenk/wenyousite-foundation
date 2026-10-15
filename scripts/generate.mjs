@@ -328,6 +328,8 @@ export const EDITOR_MORE_BY_DENSITY = Object.freeze(${js(editor.web.moreByDensit
 export const EDITOR_CONTEXTUAL_WEB = Object.freeze(${js(editor.web.contextual)});
 export const EDITOR_CONTEXTUAL_MOBILE = Object.freeze(${js(editor.mobile.contextual)});
 export const EDITOR_INVARIANTS = Object.freeze(${js(editor.invariants)});
+export const EDITOR_TEXT_COLOR_PROFILE = Object.freeze(${js(editor.textColor)});
+export const EDITOR_TEXT_COLOR_PRESETS = Object.freeze(${js(editor.textColor.presets)});
 export const EDITOR_CONTENT_POLICY = Object.freeze(${js(editor.contentPolicy)});
 export const EDITOR_WEB_LAYOUT = Object.freeze(${js(editor.web.layout)});
 export const EDITOR_MOBILE_LAYOUT = Object.freeze(${js(editor.mobile.layout)});
@@ -354,7 +356,7 @@ export declare const EDITOR_PRIMARY_WIDE: readonly EditorCapabilityId[];
 export declare const EDITOR_MORE_FALLBACK: readonly EditorCapabilityId[];
 export declare const EDITOR_MORE_PROGRESSIVE: readonly EditorCapabilityId[];
 export type EditorToolbarDensity = ${editor.web.densityOrder.map((density) => JSON.stringify(density)).join(" | ")};
-export type EditorCreationMode = "primary" | "secondary" | "contextual";
+export type EditorCreationMode = "primary" | "secondary" | "contextual" | "none";
 export type EditorEditingMode = "structured" | "atomic" | "ui-only";
 export type EditorRenderingMode = "native" | "not-applicable";
 export type EditorRoundTripMode = "structured" | "identity-preserving" | "not-applicable";
@@ -370,6 +372,8 @@ export declare const EDITOR_MORE_BY_DENSITY: Readonly<Record<EditorToolbarDensit
 export declare const EDITOR_CONTEXTUAL_WEB: readonly EditorCapabilityId[];
 export declare const EDITOR_CONTEXTUAL_MOBILE: readonly EditorCapabilityId[];
 export declare const EDITOR_INVARIANTS: Readonly<Record<string, string>>;
+export declare const EDITOR_TEXT_COLOR_PROFILE: Readonly<${JSON.stringify(editor.textColor)}>;
+export declare const EDITOR_TEXT_COLOR_PRESETS: ReadonlyArray<Readonly<{ id: string; label: string; rgb: string }>>;
 export declare const EDITOR_CONTENT_POLICY: Readonly<{
   markdownContractVersion: 4;
   structuredCapabilitySource: "toolbar";
@@ -1353,6 +1357,30 @@ ${labelEntries}
   static const Map<String, Map<String, String>> capabilities = <String, Map<String, String>>{
 ${mobileCapabilityEntries}
   };
+}
+
+abstract final class WenyouEditorTextColorContract {
+  static const List<String> scope = <String>${dartList(editor.textColor.scope)};
+  static const List<String> excluded = <String>${dartList(editor.textColor.excluded)};
+  static const int channelMinimum = ${editor.textColor.channelMinimum};
+  static const int channelMaximum = ${editor.textColor.channelMaximum};
+  static const List<String> presetOrder = <String>${dartList(editor.textColor.presets.map(({ id }) => id))};
+  static const Map<String, String> presets = <String, String>{
+${editor.textColor.presets.map(({ id, rgb }) => `    ${dartString(id)}: ${dartString(rgb)},`).join("\n")}
+  };
+  static const Map<String, String> presetLabels = <String, String>{
+${editor.textColor.presets.map(({ id, label }) => `    ${dartString(id)}: ${dartString(label)},`).join("\n")}
+  };
+  static const int maximumRecentColors = ${editor.textColor.recent.maximum};
+  static const String defaultLabel = ${dartString(editor.textColor.mobile.defaultLabel)};
+  static const String customLabel = ${dartString(editor.textColor.mobile.customLabel)};
+  static const String applyLabel = ${dartString(editor.textColor.mobile.applyLabel)};
+  static const String cancelLabel = ${dartString(editor.textColor.mobile.cancelLabel)};
+  static const double minimumTarget = ${editor.textColor.mobile.minimumTargetDp}.0;
+  static const Map<String, Object> selection = ${dartValue(editor.textColor.selection)};
+  static const Map<String, Object> mobile = ${dartValue(editor.textColor.mobile)};
+  static const Map<String, Object> recent = ${dartValue(editor.textColor.recent)};
+  static const Map<String, Object> presentation = ${dartValue(elements.inline.textColor)};
 }
 
 abstract final class WenyouAudioContract {

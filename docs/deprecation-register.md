@@ -1,5 +1,13 @@
 # Foundation 兼容登记
 
+## 主题帖文字颜色候选
+
+- 新增可选 `experiences.editor.textColor`、`experiences.elements.inline.textColor`、`text-color` 能力、Web `EDITOR_TEXT_COLOR_PROFILE`／`EDITOR_TEXT_COLOR_PRESETS` 和 Flutter `WenyouEditorTextColorContract`；`EditorCreationMode` 兼容新增 `none`，用于 Web 只读色／编辑保源而无取色入口。现有主栏布局、公开导出和语义值保留。
+- 具体规则见 [主题帖文字颜色](text-color.md)。仅作者不透明 RGB 明暗原值保留，不调整或警告对比度；控件和默认正文仍使用既有主题语义。Backend 拥有受控 span v1、能力协商、旧端降级读取和覆盖保护，本仓不建第二套存储语法，不删除角色提及兼容。
+- 本次保持既有 `7.3.0` 包与契约版本，新增能力建议后续 `7.4.0`，由负责人决定版本、合并及正式 Tag／Release。候选不是已发布 `7.3.0` 的一部分；消费者不得锁定候选 SHA 或复制新常量绕过正式发布。
+- Backend 固定来源为 `1bc1986a936131cdacf259c0fd9443be0de1f026`；颜色 fixtures、节点 Schema 与剪贴板 v2 原字节镜像登记 SHA-256。旧端去色保留内联语义并转义字面块前缀，不因去掉标签把文字升级成标题或列表。
+- 无历史数据迁移或旧协议删除。部署顺序为兼容后端 → 可读保源消费者 → 开启新写；回滚保留已有彩色正文和旧端覆盖保护。Foundation 检查不代表消费者、真机或隔离 E2E 验收。
+
 ## 正文音频候选
 
 - 新增 `experiences.audio`、Web `./audio` 导出、Flutter `WenyouAudioContract` 及 `editor.audio`／`media.play`／`media.pause` 语义；不删除旧图标、编辑能力或普通链接。新增机器字段为可选，既有消费者仍可读取旧契约。

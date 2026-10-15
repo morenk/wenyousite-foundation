@@ -674,6 +674,7 @@
           "type": "object",
           "required": ["internalReference", "link", "mention", "code", "dice"],
           "properties": {
+            "textColor": { "$ref": "#/$defs/inlineTextColor" },
             "internalReference": {
               "type": "object",
               "required": ["tone", "foreground", "surface", "border", "weight", "icon", "overflow", "editorBehavior"],
@@ -1102,6 +1103,7 @@
       "type": "object",
       "required": ["labels", "invariants", "contentPolicy", "web", "mobile", "creatableHeadingLevels", "capabilities"],
       "properties": {
+        "textColor": { "$ref": "#/$defs/editorTextColor" },
         "labels": { "type": "object", "minProperties": 1, "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" }, "additionalProperties": { "$ref": "#/$defs/nonEmptyString" } },
         "invariants": { "$ref": "#/$defs/stringMap" },
         "contentPolicy": {
@@ -1159,10 +1161,45 @@
       "type": "object",
       "required": ["creation", "editing", "rendering", "roundTrip"],
       "properties": {
-        "creation": { "enum": ["primary", "secondary", "contextual"] },
+        "creation": { "enum": ["primary", "secondary", "contextual", "none"] },
         "editing": { "enum": ["structured", "atomic", "ui-only"] },
         "rendering": { "enum": ["native", "not-applicable"] },
         "roundTrip": { "enum": ["structured", "identity-preserving", "not-applicable"] }
+      },
+      "additionalProperties": false
+    },
+    "editorTextColor": {
+      "type": "object",
+      "required": ["scope", "excluded", "colorModel", "channelMinimum", "channelMaximum", "presets", "selection", "mobile", "recent", "web", "protocolOwner"],
+      "properties": {
+        "scope": {"type": "array", "prefixItems": [{"const": "thread-body"}, {"const": "subthread-body"}, {"const": "floor-body"}, {"const": "reply-body"}], "items": false, "minItems": 4, "maxItems": 4},
+        "excluded": {"type": "array", "prefixItems": [{"const": "moment"}, {"const": "private-message"}, {"const": "thread-title"}], "items": false, "minItems": 3, "maxItems": 3},
+        "colorModel": {"const": "opaque-rgb"},
+        "channelMinimum": {"const": 0},
+        "channelMaximum": {"const": 255},
+        "presets": {"type": "array", "prefixItems": [{"type": "object", "required": ["id", "label", "rgb"], "properties": {"id": {"const": "red"}, "label": {"const": "红色"}, "rgb": {"const": "#D14343"}}, "additionalProperties": false}, {"type": "object", "required": ["id", "label", "rgb"], "properties": {"id": {"const": "orange"}, "label": {"const": "橙色"}, "rgb": {"const": "#D97706"}}, "additionalProperties": false}, {"type": "object", "required": ["id", "label", "rgb"], "properties": {"id": {"const": "green"}, "label": {"const": "绿色"}, "rgb": {"const": "#25855A"}}, "additionalProperties": false}, {"type": "object", "required": ["id", "label", "rgb"], "properties": {"id": {"const": "blue"}, "label": {"const": "蓝色"}, "rgb": {"const": "#2563EB"}}, "additionalProperties": false}, {"type": "object", "required": ["id", "label", "rgb"], "properties": {"id": {"const": "purple"}, "label": {"const": "紫色"}, "rgb": {"const": "#8B5CF6"}}, "additionalProperties": false}], "items": false, "minItems": 5, "maxItems": 5},
+        "selection": {"type": "object", "required": ["application", "empty", "atomicNodes", "paragraphs", "continuedTyping", "mixedColors", "defaultBehavior", "undo"], "properties": {"application": {"const": "selected-text-only"}, "empty": {"const": "disabled"}, "atomicNodes": {"const": "skip"}, "paragraphs": {"const": "split-inline-ranges"}, "continuedTyping": {"const": "no-color-inheritance"}, "mixedColors": {"const": "no-preselection"}, "defaultBehavior": {"const": "remove-color-only"}, "undo": {"const": "single-transaction"}}, "additionalProperties": false},
+        "mobile": {"type": "object", "required": ["parentCapability", "mainToolbar", "sectionOrder", "minimumTargetDp", "defaultLabel", "customLabel", "applyLabel", "cancelLabel", "picker", "controls", "numericInput", "preview", "commit", "cancel", "keyboard", "completion", "layout"], "properties": {"parentCapability": {"const": "heading"}, "mainToolbar": {"const": "unchanged"}, "sectionOrder": {"type": "array", "prefixItems": [{"const": "default"}, {"const": "presets"}, {"const": "recent"}, {"const": "custom"}], "items": false, "minItems": 4, "maxItems": 4}, "minimumTargetDp": {"const": 48}, "defaultLabel": {"const": "默认"}, "customLabel": {"const": "自定义"}, "applyLabel": {"const": "应用"}, "cancelLabel": {"const": "取消"}, "picker": {"const": "inline-replacement"}, "controls": {"type": "array", "prefixItems": [{"const": "drag-picker"}, {"const": "red"}, {"const": "green"}, {"const": "blue"}, {"const": "text-preview"}], "items": false, "minItems": 5, "maxItems": 5}, "numericInput": {"const": "integer-0-255"}, "preview": {"const": "panel-only"}, "commit": {"const": "explicit-apply"}, "cancel": {"const": "unchanged"}, "keyboard": {"const": "hide-body-before-picker-numeric-for-channels"}, "completion": {"const": "restore-body-focus-and-selection"}, "layout": {"const": "available-height-scroll"}}, "additionalProperties": false},
+        "recent": {"type": "object", "required": ["maximum", "source", "scope", "order", "deduplication"], "properties": {"maximum": {"const": 4}, "source": {"const": "applied-custom-colors"}, "scope": {"const": "account-local"}, "order": {"const": "most-recent-first"}, "deduplication": {"const": "canonical-rgb"}}, "additionalProperties": false},
+        "web": {"type": "object", "required": ["picker", "existingContent", "clipboard"], "properties": {"picker": {"const": false}, "existingContent": {"const": "render-edit-preserve"}, "clipboard": {"const": "preserve-color"}}, "additionalProperties": false},
+        "protocolOwner": {"const": "backend-markdown-contract"}
+      },
+      "additionalProperties": false
+    },
+    "inlineTextColor": {
+      "type": "object",
+      "required": ["source", "alpha", "themeBehavior", "automaticAdjustment", "contrastWarning", "defaultBehavior", "foregroundPrecedence", "otherMarks", "atomicNodes", "protocolOwner"],
+      "properties": {
+        "source": {"const": "validated-user-rgb"},
+        "alpha": {"const": 1},
+        "themeBehavior": {"const": "preserve-identical-rgb"},
+        "automaticAdjustment": {"const": false},
+        "contrastWarning": {"const": false},
+        "defaultBehavior": {"const": "inherit-element-foreground"},
+        "foregroundPrecedence": {"const": "explicit-text-color-before-link-and-code"},
+        "otherMarks": {"const": "preserve"},
+        "atomicNodes": {"const": "excluded"},
+        "protocolOwner": {"const": "backend-contracts"}
       },
       "additionalProperties": false
     },
