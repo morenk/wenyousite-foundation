@@ -1,10 +1,10 @@
 # Foundation Changelog
 
-## 未发布音频候选
+## 7.3.0
 
 - `shared`：新增文件上传、紧凑正文播放器、点击加载、单页互斥播放、后台暂停和显式重试的共享体验契约；默认展开工具栏，主题与回复共用本机布局。
 - `icons`：新增 `editor.audio`、`media.play`、`media.pause`，从固定 `lucide-static@1.28.0` 生成 Web 与 Flutter 资产。
-- `compatibility`：包与契约仍为 `7.2.1`，这是未发布候选，不覆盖既有 Tag。正式发布版本须由负责人决定，消费者只能在正式 Tag 后独立升级。
+- `release`：负责人已明确批准发布 `v7.3.0`；根包、Flutter 包与契约版本一致，`schemaVersion` 保持 `3`。客户端在正式 Tag 后独立升级，不改写旧 Tag，不触发产品部署。
 
 ## 未发布文档
 
