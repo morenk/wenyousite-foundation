@@ -18,6 +18,10 @@
       "types": "./dist/editor.d.ts",
       "default": "./dist/editor.js"
     },
+    "./audio": {
+      "types": "./dist/audio.d.ts",
+      "default": "./dist/audio.js"
+    },
     "./images": {
       "types": "./dist/images.d.ts",
       "default": "./dist/images.js"
@@ -76,7 +80,8 @@
   ],
   "scripts": {
     "generate": "node scripts/generate.mjs",
-    "check": "node scripts/check.mjs && node scripts/generate.mjs --check && pnpm test:formatting",
+    "check": "node scripts/check.mjs && node scripts/generate.mjs --check && pnpm test:formatting && pnpm test:audio",
+    "test:audio": "node --test tests/audio.test.mjs",
     "test:formatting": "node --test tests/formatting.test.mjs",
     "check:package": "node scripts/check-package.mjs"
   },

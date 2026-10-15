@@ -175,6 +175,9 @@
 | `editor.ordered-list` | `list-ordered` | `6242286c31f25c70d9a211b5eacb316fe681bc9b13ea9bff906d96fe907f791b` |
 | `editor.link` | `link-2` | `60abd81ef577b13bf6b74ac84b9737df341ae21e8f1ca50cf310d33b8557f7a9` |
 | `editor.image` | `image` | `d5ce3e3df40895e0a851482bc78080a58459112c954fe12c45e047dbaae1fa01` |
+| `editor.audio` | `file-audio` | `b251b7c76af9649be1422cc62688a3e74fa46f1245808414d8957b41c58cc719` |
+| `media.play` | `play` | `565a8890cf0f3d2f4322c39bd9f2f91ead2eaad639a61df1be21f5d557ac1229` |
+| `media.pause` | `pause` | `b689f2de1c64867369d549270be3fa9f1c5af4ec2da62e6922c629dd765cc359` |
 | `editor.quote` | `quote` | `b53e29e20d5fc7677c8f8e0bd446e269f0c51e1fb7d4ea6c319b44a03345cc9e` |
 | `editor.horizontal-rule` | `minus` | `54a2700b8c11bfe3c4e8542b559aa5dfe14b464d23ded80b7a6ecddd39fc7e56` |
 | `editor.dice` | `dices` | `45929a46324246faa64738faa66d2fc40eb5ea2159fac8382728654849ad3814` |

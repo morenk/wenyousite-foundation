@@ -152,6 +152,7 @@
         "language": { "$ref": "#/$defs/language" },
         "notifications": { "$ref": "#/$defs/notifications" },
         "editor": { "$ref": "#/$defs/editor" },
+        "audio": { "$ref": "#/$defs/audio" },
         "images": { "$ref": "#/$defs/images" }
       },
       "additionalProperties": false
@@ -1162,6 +1163,222 @@
         "editing": { "enum": ["structured", "atomic", "ui-only"] },
         "rendering": { "enum": ["native", "not-applicable"] },
         "roundTrip": { "enum": ["structured", "identity-preserving", "not-applicable"] }
+      },
+      "additionalProperties": false
+    },
+    "audio": {
+      "type": "object",
+      "required": [
+        "upload",
+        "presentation",
+        "playback",
+        "accessibility"
+      ],
+      "properties": {
+        "upload": {
+          "type": "object",
+          "required": [
+            "source",
+            "defaultToolbarPlacement",
+            "preferenceScope",
+            "composerPreference",
+            "toolbarPreview",
+            "arrangement",
+            "sourceLimitsOwner"
+          ],
+          "properties": {
+            "source": {
+              "const": "file-picker-only"
+            },
+            "defaultToolbarPlacement": {
+              "const": "more"
+            },
+            "preferenceScope": {
+              "const": "local-per-platform"
+            },
+            "composerPreference": {
+              "const": "shared-thread-reply"
+            },
+            "toolbarPreview": {
+              "const": "actual-editor-layout"
+            },
+            "arrangement": {
+              "const": "direct-drag"
+            },
+            "sourceLimitsOwner": {
+              "const": "backend-contract"
+            }
+          },
+          "additionalProperties": false
+        },
+        "presentation": {
+          "type": "object",
+          "required": [
+            "layout",
+            "controls",
+            "filename",
+            "waveform",
+            "cover",
+            "persistentInstructions",
+            "list",
+            "surfaceToken",
+            "foregroundToken",
+            "secondaryForegroundToken",
+            "progressToken",
+            "radiusRole",
+            "typographyRole",
+            "timeTypographyRole",
+            "controlTarget"
+          ],
+          "properties": {
+            "layout": {
+              "const": "compact-inline-body-width"
+            },
+            "controls": {
+              "const": [
+                "play-pause",
+                "seek",
+                "elapsed-duration"
+              ]
+            },
+            "filename": {
+              "const": "when-needed"
+            },
+            "waveform": {
+              "const": "none"
+            },
+            "cover": {
+              "const": "none"
+            },
+            "persistentInstructions": {
+              "const": false
+            },
+            "list": {
+              "const": "summary-only"
+            },
+            "surfaceToken": {
+              "const": "surface"
+            },
+            "foregroundToken": {
+              "const": "foreground"
+            },
+            "secondaryForegroundToken": {
+              "const": "mutedForeground"
+            },
+            "progressToken": {
+              "const": "brandStrong"
+            },
+            "radiusRole": {
+              "const": "compact"
+            },
+            "typographyRole": {
+              "const": "body"
+            },
+            "timeTypographyRole": {
+              "const": "utility"
+            },
+            "controlTarget": {
+              "const": "platform-minimum"
+            }
+          },
+          "additionalProperties": false
+        },
+        "playback": {
+          "type": "object",
+          "required": [
+            "sourceLoading",
+            "preload",
+            "autoplay",
+            "concurrency",
+            "pauseOn",
+            "resume",
+            "failure",
+            "automaticRetry",
+            "seek",
+            "sourceUrlOwner",
+            "urlDerivation"
+          ],
+          "properties": {
+            "sourceLoading": {
+              "const": "explicit-play-only"
+            },
+            "preload": {
+              "const": "none"
+            },
+            "autoplay": {
+              "const": false
+            },
+            "concurrency": {
+              "const": "one-active-per-page"
+            },
+            "pauseOn": {
+              "const": [
+                "page-inactive",
+                "background",
+                "audio-interruption"
+              ]
+            },
+            "resume": {
+              "const": "explicit-play-only"
+            },
+            "failure": {
+              "const": "inline-explicit-retry"
+            },
+            "automaticRetry": {
+              "const": false
+            },
+            "seek": {
+              "const": "native-range-playback"
+            },
+            "sourceUrlOwner": {
+              "const": "backend-contract"
+            },
+            "urlDerivation": {
+              "const": "forbidden"
+            }
+          },
+          "additionalProperties": false
+        },
+        "accessibility": {
+          "type": "object",
+          "required": [
+            "playLabel",
+            "pauseLabel",
+            "seekLabel",
+            "retryLabel",
+            "seekControl",
+            "timeAnnouncement",
+            "status",
+            "reducedMotion"
+          ],
+          "properties": {
+            "playLabel": {
+              "const": "播放"
+            },
+            "pauseLabel": {
+              "const": "暂停"
+            },
+            "seekLabel": {
+              "const": "播放进度"
+            },
+            "retryLabel": {
+              "const": "重试"
+            },
+            "seekControl": {
+              "const": "adjustable"
+            },
+            "timeAnnouncement": {
+              "const": "user-interaction-only"
+            },
+            "status": {
+              "const": "text-and-semantics"
+            },
+            "reducedMotion": {
+              "const": "respect-system"
+            }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },

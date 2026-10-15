@@ -475,6 +475,9 @@
         "editor.ordered-list": "list-ordered",
         "editor.link": "link-2",
         "editor.image": "image",
+        "editor.audio": "file-audio",
+        "media.play": "play",
+        "media.pause": "pause",
         "editor.quote": "quote",
         "editor.horizontal-rule": "minus",
         "editor.dice": "dices",
@@ -1292,6 +1295,65 @@
           "mention": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" },
           "sticker": { "creation": "contextual", "editing": "atomic", "rendering": "native", "roundTrip": "identity-preserving" }
         }
+      }
+    },
+    "audio": {
+      "upload": {
+        "source": "file-picker-only",
+        "defaultToolbarPlacement": "more",
+        "preferenceScope": "local-per-platform",
+        "composerPreference": "shared-thread-reply",
+        "toolbarPreview": "actual-editor-layout",
+        "arrangement": "direct-drag",
+        "sourceLimitsOwner": "backend-contract"
+      },
+      "presentation": {
+        "layout": "compact-inline-body-width",
+        "controls": [
+          "play-pause",
+          "seek",
+          "elapsed-duration"
+        ],
+        "filename": "when-needed",
+        "waveform": "none",
+        "cover": "none",
+        "persistentInstructions": false,
+        "list": "summary-only",
+        "surfaceToken": "surface",
+        "foregroundToken": "foreground",
+        "secondaryForegroundToken": "mutedForeground",
+        "progressToken": "brandStrong",
+        "radiusRole": "compact",
+        "typographyRole": "body",
+        "timeTypographyRole": "utility",
+        "controlTarget": "platform-minimum"
+      },
+      "playback": {
+        "sourceLoading": "explicit-play-only",
+        "preload": "none",
+        "autoplay": false,
+        "concurrency": "one-active-per-page",
+        "pauseOn": [
+          "page-inactive",
+          "background",
+          "audio-interruption"
+        ],
+        "resume": "explicit-play-only",
+        "failure": "inline-explicit-retry",
+        "automaticRetry": false,
+        "seek": "native-range-playback",
+        "sourceUrlOwner": "backend-contract",
+        "urlDerivation": "forbidden"
+      },
+      "accessibility": {
+        "playLabel": "播放",
+        "pauseLabel": "暂停",
+        "seekLabel": "播放进度",
+        "retryLabel": "重试",
+        "seekControl": "adjustable",
+        "timeAnnouncement": "user-interaction-only",
+        "status": "text-and-semantics",
+        "reducedMotion": "respect-system"
       }
     },
     "images": {

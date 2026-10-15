@@ -65,10 +65,18 @@ const dartIdentifier = (value) => value
   .map((part, index) => index === 0 ? part : `${part[0].toUpperCase()}${part.slice(1)}`)
   .join("");
 
+const dartValue = (value) => {
+  if (typeof value === "string") return dartString(value);
+  if (Array.isArray(value)) return `<String>${dartList(value)}`;
+  if (value && typeof value === "object") return `<String, Object>{${Object.entries(value).map(([key, item]) => `${dartString(key)}: ${dartValue(item)}`).join(", ")}}`;
+  return String(value);
+};
+
 const editor = contract.experiences.editor;
 const brand = contract.experiences.brand;
 const icons = contract.experiences.icons;
 const images = contract.experiences.images;
+const audio = contract.experiences.audio;
 const collections = contract.experiences.collections;
 const controls = contract.experiences.controls;
 const elements = contract.experiences.elements;
@@ -401,6 +409,14 @@ export declare const EDITOR_WEB_CAPABILITIES: Readonly<Record<EditorCapabilityId
 export declare const EDITOR_MOBILE_CAPABILITIES: Readonly<Record<EditorCapabilityId, EditorCapabilityContract>>;
 export declare const EDITOR_CREATABLE_HEADING_LEVELS: readonly (2 | 3)[];
 export declare function editorCapabilityLabels(ids: readonly EditorCapabilityId[]): string[];`);
+
+const audioExports = Object.entries(audio).map(([id, value]) => [
+  `AUDIO_${id.toUpperCase()}`, value,
+]);
+write("dist/audio.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+${audioExports.map(([name, value]) => `export const ${name} = Object.freeze(${js(value)});`).join("\n")}`);
+write("dist/audio.d.ts", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
+${audioExports.map(([name, value]) => `export declare const ${name}: Readonly<${JSON.stringify(value)}>;`).join("\n")}`);
 
 write("dist/images.js", `/** 由 contracts/foundation.v1.json 生成，禁止手改。 */
 export const IMAGE_ROLES = Object.freeze(${js(images.roles)});
@@ -1339,6 +1355,10 @@ ${mobileCapabilityEntries}
   };
 }
 
+abstract final class WenyouAudioContract {
+${Object.entries(audio).map(([id, value]) => `  static const Map<String, Object> ${id} = ${dartValue(value)};`).join("\n")}
+}
+
 abstract final class WenyouImageContract {
   static const Map<String, String> roleFits = <String, String>{
 ${Object.entries(images.roles).map(([role, value]) => `    ${dartString(role)}: ${dartString(value.fit)},`).join("\n")}
@@ -1560,7 +1580,7 @@ class WenyouIcon extends StatelessWidget {
 }`);
 
 const artifactPaths = [
-  ...["brand", "theme", "icons", "editor", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
+  ...["brand", "theme", "icons", "editor", "audio", "images", "collections", "controls", "notifications", "typography", "interaction", "formatting", "navigation", "language", "elements"]
     .flatMap((name) => [`dist/${name}.js`, `dist/${name}.d.ts`]),
   "web/tokens.css",
   "packages/flutter/lib/src/foundation_tokens.dart",
@@ -1591,6 +1611,7 @@ const manifest = JSON.stringify({
     elements: true,
     brand: true,
     themes: true,
+    audio: true,
   },
   artifactSha256,
   icons: {

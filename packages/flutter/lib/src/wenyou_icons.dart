@@ -139,6 +139,9 @@ abstract final class WenyouIconIds {
   static const String editorOrderedList = 'editor.ordered-list'; // list-ordered
   static const String editorLink = 'editor.link'; // link-2
   static const String editorImage = 'editor.image'; // image
+  static const String editorAudio = 'editor.audio'; // file-audio
+  static const String mediaPlay = 'media.play'; // play
+  static const String mediaPause = 'media.pause'; // pause
   static const String editorQuote = 'editor.quote'; // quote
   static const String editorHorizontalRule = 'editor.horizontal-rule'; // minus
   static const String editorDice = 'editor.dice'; // dices
@@ -330,6 +333,9 @@ abstract final class WenyouIconContract {
     'editor.ordered-list': 'list-ordered',
     'editor.link': 'link-2',
     'editor.image': 'image',
+    'editor.audio': 'file-audio',
+    'media.play': 'play',
+    'media.pause': 'pause',
     'editor.quote': 'quote',
     'editor.horizontal-rule': 'minus',
     'editor.dice': 'dices',

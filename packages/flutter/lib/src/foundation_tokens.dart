@@ -591,6 +591,13 @@ abstract final class WenyouEditorContract {
   };
 }
 
+abstract final class WenyouAudioContract {
+  static const Map<String, Object> upload = <String, Object>{'source': 'file-picker-only', 'defaultToolbarPlacement': 'more', 'preferenceScope': 'local-per-platform', 'composerPreference': 'shared-thread-reply', 'toolbarPreview': 'actual-editor-layout', 'arrangement': 'direct-drag', 'sourceLimitsOwner': 'backend-contract'};
+  static const Map<String, Object> presentation = <String, Object>{'layout': 'compact-inline-body-width', 'controls': <String>['play-pause', 'seek', 'elapsed-duration'], 'filename': 'when-needed', 'waveform': 'none', 'cover': 'none', 'persistentInstructions': false, 'list': 'summary-only', 'surfaceToken': 'surface', 'foregroundToken': 'foreground', 'secondaryForegroundToken': 'mutedForeground', 'progressToken': 'brandStrong', 'radiusRole': 'compact', 'typographyRole': 'body', 'timeTypographyRole': 'utility', 'controlTarget': 'platform-minimum'};
+  static const Map<String, Object> playback = <String, Object>{'sourceLoading': 'explicit-play-only', 'preload': 'none', 'autoplay': false, 'concurrency': 'one-active-per-page', 'pauseOn': <String>['page-inactive', 'background', 'audio-interruption'], 'resume': 'explicit-play-only', 'failure': 'inline-explicit-retry', 'automaticRetry': false, 'seek': 'native-range-playback', 'sourceUrlOwner': 'backend-contract', 'urlDerivation': 'forbidden'};
+  static const Map<String, Object> accessibility = <String, Object>{'playLabel': '播放', 'pauseLabel': '暂停', 'seekLabel': '播放进度', 'retryLabel': '重试', 'seekControl': 'adjustable', 'timeAnnouncement': 'user-interaction-only', 'status': 'text-and-semantics', 'reducedMotion': 'respect-system'};
+}
+
 abstract final class WenyouImageContract {
   static const Map<String, String> roleFits = <String, String>{
     'avatar': 'cover',

@@ -113,3 +113,7 @@ Android 使用更新前与升级后的说明弹窗，直接呈现后台人工编
 ## 变更规则
 
 共享语义变化必须同时审视 Web 与 Flutter profile；平台特有变化只修改对应 profile，并在 CHANGELOG 标明 `shared`、`web` 或 `mobile`。客户端通过固定版本升级，不允许直接读取本仓库主分支。
+
+## 音频文件
+
+正文内音频的上传入口、紧凑播放器、加载与暂停行为遵循 [音频体验契约](./audio.md) 和机器事实源 `experiences.audio`。音频语法、媒体投影与授权由后端拥有，Foundation 不定义上传大小、格式或时长上限。
