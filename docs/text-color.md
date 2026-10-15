@@ -24,9 +24,9 @@ Web 首期提供既有颜色的显示、编辑保源、草稿与复制粘贴，�
 
 ## 已提交协议来源
 
-[Backend 文本颜色 v1](https://github.com/morenk/wenyousite-backend/blob/1bc1986a936131cdacf259c0fd9443be0de1f026/docs/markdown-text-color-v1.md)拥有精确协议；[固定颜色语料](../contracts/fixtures/markdown-text-color-v1-fixtures.json)、[节点 Schema](../contracts/fixtures/markdown-text-color-v1.schema.json)与[剪贴板 v2](../contracts/fixtures/editor-clipboard-v2-fixtures.json)按该提交原字节同步，来源及 SHA-256 记录于 [text-color-source.json](../contracts/fixtures/text-color-source.json)。
+[Backend 文本颜色 v1](https://github.com/morenk/wenyousite-backend/blob/7f58f9c15269663a9e615493c82e2084afd300c8/docs/markdown-text-color-v1.md)拥有精确协议；[固定颜色语料](../contracts/fixtures/markdown-text-color-v1-fixtures.json)、[节点 Schema](../contracts/fixtures/markdown-text-color-v1.schema.json)与[剪贴板 v2](../contracts/fixtures/editor-clipboard-v2-fixtures.json)按该提交原字节同步，来源及 SHA-256 记录于 [text-color-source.json](../contracts/fixtures/text-color-source.json)。
 
-合法颜色只包裹单个物理行内的平衡格式；H2/H3、引用和列表前缀位于颜色外。旧端去色须保留文字语义并重新转义可能变成块语法的字面标点，不能简单删除标签再解释。Mobile 本机结构化剪贴板保色，系统剪贴板继续纯文本互操作；Web 只识别本站 envelope 的受控颜色属性，外部 HTML/CSS 仍按既有纯文本策略处理。
+合法颜色只包裹单个物理行内的平衡格式；H2/H3、引用和列表前缀位于颜色外。旧端去色须按整段行内语义重序列化，保留边缘空白、格式邻接和可能变成块语法的字面标点，不能简单删除标签再解释。关闭新写时，完整连续同色范围按文字与格式语义多重集比较；等价转义、分隔符和相邻同色分片不算新增，真实改字、改色、改格式与增加范围次数仍拒绝。Mobile 本机结构化剪贴板保色，系统剪贴板继续纯文本互操作；Web 只识别本站 envelope 的受控颜色属性，外部 HTML/CSS 仍按既有纯文本策略处理。
 
 此镜像不定义 HTTP Schema，也不代表后端已合并或部署；消费者应在服务端能力确认后开放入口，新写关闭仍需读取保源和旧端覆盖保护。
 
@@ -36,4 +36,4 @@ Web 首期提供既有颜色的显示、编辑保源、草稿与复制粘贴，�
 
 视觉候选须提供 320/360dp、明暗、大字号和键盘状态画面；自动化真实环境只读，写入 E2E 使用本轮核验的隔离资源并记录清理结果。
 
-本次提交保留既有包、契约和 Manifest 版本，新增能力建议后续以 `7.4.0` 发布，版本须由负责人明确决定。合并、版本提升、正式 Tag／Release 分别遵守仓库门禁；消费者只能在正式发布后独立锁定 Tag，不消费候选提交或复制常量绕过发布。发布顺序为兼容后端 → 可读保源消费者 → 开启新写。回退消费者不删除存储中的颜色；旧端兼容和覆盖保护继续保留，后续清理另开 PR。
+负责人已明确批准本能力以 `7.4.0` 升版、合并和发布正式 Tag／Release；根包、Flutter 包、契约及 Manifest 同步版本。发布前重新生成并通过完整检查；消费者只能在正式发布后独立锁定 Tag，不消费候选提交或复制常量绕过发布。发布顺序为兼容后端 → 可读保源消费者 → 开启新写。回退消费者不删除存储中的颜色；旧端兼容和覆盖保护继续保留，后续清理另开 PR。

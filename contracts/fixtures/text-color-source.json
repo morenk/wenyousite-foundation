@@ -1,10 +1,10 @@
 {
   "repository": "morenk/wenyousite-backend",
-  "commit": "1bc1986a936131cdacf259c0fd9443be0de1f026",
+  "commit": "7f58f9c15269663a9e615493c82e2084afd300c8",
   "files": {
     "markdown-text-color-v1-fixtures.json": {
       "sourcePath": "contracts/markdown-text-color-v1-fixtures.json",
-      "sha256": "6ef7ea9bdee2a22cd6ecd5c32a147a5abcff9b7b8b6f7b1e3d45e353a18a701a"
+      "sha256": "0f7a6beaf9dae4f73901f5ee2e6eeaf87e364ce156404b9957c59e9b2920953d"
     },
     "markdown-text-color-v1.schema.json": {
       "sourcePath": "contracts/markdown-text-color-v1.schema.json",

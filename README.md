@@ -70,3 +70,10 @@ pnpm check:package
 Web 通过 Git tag 安装根 npm package；Flutter 通过同一 tag 安装 `packages/flutter`。主题消费者使用生成的 Web Token、`@wenyousite/foundation/theme` 或 Flutter 主题合同，不复制调色板。发布遵循 SemVer：语义删除或改变为 Major，兼容新增通常为 Minor，文字修正为 Patch；经负责人明确决定的兼容视觉 Token 调整可按 Patch 发布。
 
 Codex 可将 `skills/wenyou-design` 以符号链接或技能安装器接入本地。Skill 只定义审美工作流，每次使用时读取本仓库契约和对应平台 profile，不复制 Token 数值。
+
+
+## v7.4.0 主题帖文字颜色
+
+App 在现有正文样式面板提供默认色、五个固定预设、自定义 RGB 和按账号本地保存的最近色；只对有效文字选区应用，原子元素跳过，取消不改正文，应用作为单次可撤销事务。Web 提供阅读与无损编辑，不新增取色入口。正文颜色在明暗主题均保留原始 RGB。
+
+根包、Flutter 包及契约版本同步为 7.4.0，schemaVersion 保持 3。消费者锁定正式 Tag 后升级；Foundation 发布不代表后端或消费者已合并部署，兼容协议与验收边界见[文字颜色规则](docs/text-color.md)。
