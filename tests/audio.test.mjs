@@ -76,7 +76,10 @@ test("后端固定音频语料保持来源校验和与 Schema，不复制成第�
   const fixtureSchema = new Ajv2020({ strict: true }).compile(JSON.parse(read("contracts/fixtures/markdown-audio-v1.schema.json")));
   assert.equal(fixtureSchema(fixtures), true, JSON.stringify(fixtureSchema.errors));
   const cases = Object.fromEntries(fixtures.cases.map((entry) => [entry.id, entry]));
-  for (const id of ["standalone", "renamed", "surrounded", "duplicate", "label-escape"]) assert.equal(cases[id].player, true);
-  for (const id of ["soft-break", "inline", "quote", "list", "code", "escaped", "adjacent", "external", "missing-projection"]) assert.equal(cases[id].player, false);
+  for (const id of ["standalone", "renamed", "surrounded", "duplicate", "label-escape", "marked-label"]) assert.equal(cases[id].player, true);
+  for (const id of ["soft-break", "inline", "quote", "list", "code", "escaped", "adjacent", "external", "missing-projection", "mismatched-source"]) assert.equal(cases[id].player, false);
   assert.deepEqual(cases.renamed.labels, ["雨夜片段"]);
+  assert.deepEqual(cases["marked-label"].labels, ["雨夜与片段"]);
+  assert.deepEqual(fixtures.invalidProjectionCases.map((entry) => entry.id), ["wrong-mime", "zero-size", "negative-duration", "too-long", "empty-media-id"]);
+  assert.ok(fixtures.invalidProjectionCases.every((entry) => entry.player === false));
 });

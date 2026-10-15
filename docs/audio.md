@@ -4,7 +4,7 @@
 
 ## 已提交接口来源
 
-[Backend 62d1918b 音频契约](https://github.com/morenk/wenyousite-backend/blob/62d1918b437c2d5c992b70f8fceb81466878f2b6/docs/audio-upload.md)及同提交 [OpenAPI](https://github.com/morenk/wenyousite-backend/blob/62d1918b437c2d5c992b70f8fceb81466878f2b6/contracts/openapi.json)拥有接口事实。上传 purpose 精确为 `RICH_CONTENT_AUDIO`；`meta.audioUpload` 缺失时隐藏入口。播放器精确匹配 `mediaAudios.sourceUrl`，使用可信投影中的时长，不探测陌生 URL。当前对象沿用图片的公开 URL 语义，帖子访问控制不撤销已知媒体 URL，不能宣称音频私有。输入上限和标准播放副本以该来源为准，不写入 Foundation Token。
+[Backend 509dba4a 音频契约](https://github.com/morenk/wenyousite-backend/blob/509dba4aa7d63525eed082cddc0d99a461dc8bfe/docs/audio-upload.md)及同提交 [OpenAPI](https://github.com/morenk/wenyousite-backend/blob/509dba4aa7d63525eed082cddc0d99a461dc8bfe/contracts/openapi.json)拥有接口事实。上传 purpose 精确为 `RICH_CONTENT_AUDIO`；`meta.audioUpload` 缺失时隐藏入口。播放器精确匹配 `mediaAudios.sourceUrl`，使用可信投影中的时长，不探测陌生 URL。当前对象沿用图片的公开 URL 语义，帖子访问控制不撤销已知媒体 URL，不能宣称音频私有。输入上限和标准播放副本以该来源为准，不写入 Foundation Token。
 
 ## 上传与工具栏
 
@@ -18,7 +18,7 @@
 
 常驻操作只有播放／暂停、可调整的进度与已播／总时长；文件名只在区分音频等必要场景显示，长名称允许省略但无障碍名称完整。错误、处理中与加载状态靠近对应音频，不叠加常驻说明。窄屏和系统文字放大时允许自然换行，不能压缩操作命中区；明暗模式保持相同层级。
 
-只有 Backend 可信媒体投影与规范正文位置匹配时才升级为播放器。普通外链、内联链接、列表及引用内链接保持原有语义，用户修改过的链接文案不丢失。缺少投影、未知音频或旧客户端均保留普通链接，不根据扩展名猜测播放器。具体识别和往返边界以 [Backend 固定语料](https://github.com/morenk/wenyousite-backend/blob/62d1918b437c2d5c992b70f8fceb81466878f2b6/contracts/markdown-audio-v1-fixtures.json)为准；本仓库 [原样副本](../contracts/fixtures/markdown-audio-v1-fixtures.json)与 [来源及校验和](../contracts/fixtures/audio-source.json)仅供跨端验收，不另建语法事实源。
+只有 Backend 可信媒体投影与规范正文位置匹配时才升级为播放器。普通外链、内联链接、列表及引用内链接保持原有语义，用户修改过的链接文案不丢失。缺少投影、未知音频或旧客户端均保留普通链接，不根据扩展名猜测播放器。带粗体／斜体的标签必须保留原始链接内容及 marks。错配 URL、错误 MIME、空媒体 ID、非正大小、无效或超限时长的投影不得升级或发起音源请求。具体识别和往返边界以 [Backend 固定语料](https://github.com/morenk/wenyousite-backend/blob/509dba4aa7d63525eed082cddc0d99a461dc8bfe/contracts/markdown-audio-v1-fixtures.json)为准；本仓库 [原样副本](../contracts/fixtures/markdown-audio-v1-fixtures.json)与 [来源及校验和](../contracts/fixtures/audio-source.json)仅供跨端验收，不另建语法事实源。
 
 ## 加载与生命周期
 
