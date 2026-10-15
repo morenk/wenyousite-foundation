@@ -2,25 +2,22 @@
 
 ## 边界与事实源
 
-本规范描述匿名下载入口、信息状态、传输触发和既有 Android 更新校验的共享语义。当前只提供 Android；Web 实现外观菜单直接下载，Mobile 实现更新与发布工具，Backend 拥有下载 HTTP、发布身份、缓存和额度。Foundation 不实现网关、业务 DTO 或消费者界面。
+新下载入口恢复 RainS3 存储桶直连：Backend 提供推荐版本与制品身份，Web／Mobile 从桶下载 APK，正文不经过自研网关。Foundation 只描述跨端体验与验收语义，不实现下载服务或复制业务 DTO。本规范是待消费者接入、合并与切换验收的交付要求，不表示已经上线。
 
-HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.32.0-dev.20261003.1（10b7819ad4a15777490dad5ab9abb7ae961422fc）](https://github.com/morenk/wenyousite-backend/blob/10b7819ad4a15777490dad5ab9abb7ae961422fc/contracts/openapi.json)定义，配套流程见[同提交下载网关说明](https://github.com/morenk/wenyousite-backend/blob/10b7819ad4a15777490dad5ab9abb7ae961422fc/docs/app-download-gateway.md)。匿名信息为 `GET /api/v1/app-downloads/android`（`appDownloadsInfo`），固定文件为 `GET/HEAD /api/v1/app-downloads/android/{buildNumber}/file`（`appDownloadsFile`／`appDownloadsHead`）。消费者从该提交生成类型，不复制一套 Foundation DTO；此引用用于契约交接，不代替消费者联验、部署或旧 APP 验收。
+HTTP 唯一事实源为 [Backend OpenAPI 5.37.0-dev.20261015.1（882889c5d8dc4a47893cb4fe913a0f68e536ce2f）](https://github.com/morenk/wenyousite-backend/blob/882889c5d8dc4a47893cb4fe913a0f68e536ce2f/contracts/openapi.json)，流程见[同提交 Android 存储桶直连下载](https://github.com/morenk/wenyousite-backend/blob/882889c5d8dc4a47893cb4fe913a0f68e536ce2f/docs/android-direct-download.md)。新匿名入口为 `GET /api/v1/mobile-releases/android/download`（`mobileReleasesAndroidDownload`），沿用 `AndroidDownloadInfoDto`，返回标准 envelope、`Cache-Control: no-store`，不签发下载 Cookie。
 
-上述 OpenAPI 契约包含每日下载次数的兼容扩展，操作总数仍为 238，既有路径、operationId、下载信息 DTO、匿名访问及旧 APP metadata 保留。持续隔离预览及其 HTTP Cookie 模式的退役以 [Backend 已提交说明（1fa648e04d576f8d52198b4f959204a744b4a0e2）](https://github.com/morenk/wenyousite-backend/blob/1fa648e04d576f8d52198b4f959204a744b4a0e2/docs/app-download-gateway.md#隔离验证)为准；该变更不改 HTTP 结构。下文按此退役说明使用统一的安全 Cookie 属性，原因头与等待语义保持原契约；HTTP 类型继续从 Backend 生成，Foundation 正式包保持 v7.2.1。
+旧 `/api/v1/app-downloads/*`、Cookie、每日次数、字节账本、预热及审计协议仅保留兼容，原规则完整保存在[旧网关兼容范围](app-downloads-gateway-compatibility.md)。不删除旧协议、不停止网关，也不以新入口代替旧客户端兼容验收。新请求失败不得回退旧网关。
 
-部署顺序、可信代理、隔离身份、缓存与预算参数见[治理分发规范（57b8dd1）](https://github.com/morenk/wenyousite-workspace/blob/57b8dd13c9399551c9f925b8f8152653dd44e16c/docs/app-download-distribution.md)。这些是运维参数，不进入 Foundation 设计 Token 或生成常量。字体、明暗、布局和触控继续消费[机器契约](../contracts/foundation.v1.json)及平台 profile；本次文档与验收用例无需提升包版本或发布 Tag，Web／Mobile 继续固定各自现有正式 Foundation 依赖。
-
-上述 Backend 与治理提交均允许显式预热／修复复用已有存储凭据；新建独立只读凭据不再作为部署前置条件，公开网关隔离与权限事实见[回源凭据边界](#回源凭据边界)。
-
-独立 Web `/download` 页面与二维码是已取消的未发布候选；当前 Web 入口及恢复行为以本规范为准。这一入口调整不改 HTTP 结构、operationId、Android 更新策略或正式客户端兼容协议。
+明暗、字体、排版、布局和触控继续消费[机器契约](../contracts/foundation.v1.json)与平台 profile；本次无 Token、公开导出、生成物或包版本变化，不发布 Tag／Release，Web／Mobile 保持原正式 Foundation 依赖。
 
 ## 直接入口与触发
 
-- `ThemeMenu` 外观弹层仅提供主题切换与“下载 APP”操作，下载位于主题选项之后；桌面、窄屏与登录页复用该入口，游客与已登录用户均可操作，不要求注册、登录或管理员身份。取消独立下载页面和二维码，不再导航到介绍页或要求用户第二次确认下载。菜单不再提供省流量控件，底层封面能力与已有用户偏好保留。
-- 用户点击一次后依次查询公开信息中的版本与状态、核对可用制品及本站固定构建文件地址、对该地址发起 HEAD 校验；全部通过后，在同一次动作中自动交给浏览器原生下载。版本、构建号、大小、摘要与文件地址必须属于同一制品，不根据说明、文件名或 UA 猜测发布事实。
-- HEAD 核对成功响应、文件类型、长度及与下载信息相符的制品 metadata；字段以固定 Backend 契约为准，缺失、不一致或请求失败均停止本次动作，不进入 GET。HEAD 只核对响应元数据，不代表 Web 已读取并校验 APK 正文、签名或安装结果。预检与原生下载使用同一本站固定构建地址，不接受源站或签名 URL 替代。
-- 菜单打开、组件挂载／重建、悬停、聚焦和框架预取均不启动下载流程；信息查询及 HEAD 由明确点击或重试触发，文件 GET／Range 不作为后台探测、预加载或缓存资源。一次动作处理中阻止重复激活产生并行查询、预检或下载交接。
-- 查询、预检、不可用与错误状态保留在菜单或入口附近；需要时简短呈现同一制品的版本与大小，不另建信息页或安装说明页。再次下载与失败重试需要用户动作。浏览器接管后只表示请求已交出，不宣称已下载、已校验或已安装。
+- `ThemeMenu` 外观弹层保留主题切换与“下载 APP”，下载位于主题选项之后；桌面、窄屏与登录页复用，游客无需登录。不恢复独立下载页面、二维码、第二次确认或省流量控件，已有封面能力和偏好保留。
+- 用户显式点击一次后查询新信息入口，验证可用制品身份与精确桶 URL，再发起 `credentials: omit` 的跨域 HEAD；成功后交给浏览器原生 GET 同一 URL。不得向桶发送本站 Cookie 或认证头，不先下载完整 Blob 来观察 GET 结果。
+- 桶地址必须精确为 `https://wenyou-apk.cn-nb1.rains3.com/mobile/android/wenyou-<versionName>-<buildNumber>.apk`，版本名、构建号、文件名与信息属于同一制品。不接受其他主机、查询参数、片段、签名 URL、重定向别名或旧网关地址。说明文字和 UA 不能决定下载目标。
+- HEAD 验证成功状态、APK `Content-Type`、`Content-Length`、`Content-Disposition` 文件名，以及 `x-amz-meta-apk-sha256`、`x-amz-meta-application-id`、`x-amz-meta-version-name`、`x-amz-meta-version-code`，均须与信息对应。缺失、不匹配、重定向、CORS 或网络失败即停止，不进入 GET。ETag 不等同 APK SHA-256，HEAD 不证明正文、签名或安装已校验。
+- 挂载、菜单打开、悬停、聚焦、框架预取和提示出现不触发查询或文件 HEAD／GET／Range；一次动作期间抑制重复激活。过期／已取消动作的响应不能覆盖新目标或发起下载，新目标不能继承旧 HEAD 结果。
+- 查询、预检、失败与显式重试就在原入口附近反馈，复用现有状态及无障碍语义，不新增说明页、常驻副标题或重复文案。浏览器接管仅表示请求已交出，不伪造下载进度、成功、摘要校验或安装结果。
 
 ## 移动设备首次访问提示
 
@@ -30,114 +27,57 @@ HTTP 字段、状态枚举、响应头和错误码只由 [Backend OpenAPI 5.32.0
 - iOS 提示明确当前只提供 Android 安装包，允许继续网页与关闭；不得把 Android 文件显示为可安装的 iOS 包，不提供声称可安装 iOS APP 的动作，也不阻断网页使用。
 - 提示消费既有浮层、焦点、主题及无障碍语义，状态与显式重试保留在可见入口附近；关闭恢复可用焦点。不能因提示关闭或原生下载交接而丢失可观察的错误，也不伪造浏览器后续 GET 或安装结果。
 
+
 ## 信息与恢复状态
 
-以下是界面语义，不是新增 HTTP 枚举。客户端根据上述 OpenAPI 的结构化结果呈现，不能根据错误文案或单个空字段推断发布状态。服务端明确的暂不可用属于信息状态，可成功返回信息；信息请求本身的 429／503 或网络错误属于读取失败，两者不能混淆。有建议等待时间时尊重服务端值，不虚构恢复时刻。
+以下解释既有 DTO 的新入口语义，不导出另一套状态类型。`available` 只表示已提交发布身份匹配，Backend 不为信息请求访问桶、预热、计次或写业务数据；对象实时可用性仍由消费者 HEAD 确认。
 
-信息接口的 `release`／`status` 始终表达全局发布、缓存与字节可用性，不检查或消耗当前访客的下载次数，不因其浏览器／IP 次数耗尽改为 `paused`，也不输出个体余额。访客的文件 HEAD／GET 拒绝不能写回或缓存为全局版本状态；info 自身仍受请求频率、并发、带宽及响应字节预算约束。
-
-| 条件 | 用户可见内容与动作 |
+| 信息或请求结果 | 共享处理 |
 | --- | --- |
-| 查询中 | 用户点击后就近显示正在获取下载信息，抑制重复动作；不使用上次地址提前传输 |
-| 可下载／预检中 | 信息有效后继续 HEAD 校验，通过才自动交给原生下载；不要求再次点击，也不承诺后续 GET 必然成功 |
-| 没有推荐发布 | 就近显示暂无可下载版本，允许用户显式重试；本轮不继续 HEAD／GET，不提供猜测地址或历史包替代 |
-| 已撤回 | 就近显示版本已撤回，停止本轮下载；旧状态和固定地址不能绕过撤回 |
-| 暂停服务 | 明确显示下载暂时暂停，可由运维暂停或完整 APK 剩余额度不足触发；遵守服务端建议等待时间，不推测恢复时刻，也不伪装成没有发布 |
-| 暂不可用 | 显示暂时无法下载及重试入口，不把缓存或服务异常归因为用户设备不支持 |
-| 信息读取失败 | 就近显示加载失败及显式重试，不显示“暂无版本”或虚构版本、大小与下载地址 |
-| 再次查询失败 | 即使保留上次信息，也标明本轮未能确认；停止本轮动作，不复用旧地址发 HEAD／GET |
-| HEAD 校验失败 | 就近显示暂时无法下载或校验失败及显式重试，保留真实错误类别，不绕过预检交给原生下载 |
+| `available` | 当前 `/meta` 推荐策略已指向精确桶地址，存在对应已公开说明与 `SUCCEEDED` 发布记录，版本、大小、摘要和路径一致；返回完整 `release` 后继续 HEAD |
+| `no_release` | 当前未配置推荐构建；`release=null`，不从历史记录、缓存或旧地址猜测推荐包，停止 HEAD／GET |
+| `unavailable` | 策略仍指向旧网关、URL／成功记录缺失或制品身份无效；`release=null`，就近显示暂不可用并停止，不降级旧入口 |
+| 读取失败／`503` | 发布记录读取故障属于请求失败，不伪装成没有版本或继续使用上次地址；保留显式重试 |
+| API `429` | 按可观察的 HTTP 状态及有效 `Retry-After` 提示稍后重试，不解释成网关设备／IP 每日次数用尽 |
+| 桶 HEAD 失败 | 反馈实际可观察的失败类别并停止 GET；不自动换源、刷新地址、尝试其他构建或跳过预检 |
 
-推荐目标变化时，版本、构建号、大小、摘要校验依据和下载地址作为同一身份整体更新。过期、已取消或已被替代动作的响应不得覆盖新状态或触发原生下载；新目标不可继承旧目标的预检结果。已发出的固定构建下载不自动改指另一个制品。
+新入口三个成功信息状态的 `retryAfterSeconds` 均为 `null`；DTO 的 `withdrawn`／`paused` 为旧网关保留，新入口不生成这两个状态。不能用网关缓存／预算或当前访客次数推断新入口的发布状态。
 
-限流 `429` 应呈现稍后重试；可读取响应时遵守 `Retry-After`，等待期间不循环探测 HEAD／GET。文件 `503` 表示本次暂不可用，不自动回退、自动刷新下载地址或尝试桶地址。
+再次查询失败时即使仍显示上次版本，也不能复用旧地址下载。用户显式重试重新执行“查询 → HEAD → 原生 GET”，等待结束、菜单重开或组件重建不构成重试授权。HEAD 与 GET 之间对象和网络仍可能变化，成功 HEAD 不保证后续 GET 成功；原生下载的不可观察结果不能被猜测。
 
-预算或瞬时带宽不足时，`429`／`503` 可以只有状态与响应头、没有 JSON 正文；可读取响应的消费者按 HTTP 状态兜底，不把解析空正文失败覆盖成未知发布状态。代理未连上网关时的 `502` 同样作为请求失败处理，不触发任何回退下载。
+## 存储、缓存与公开 URL 边界
 
-用户显式重试重新开始“查询信息 → HEAD 校验 → 原生下载”流程，全部通过后无需第二次点击；不自动轮询、到期自动重试或沿用旧预检结果跳过查询。若仍不可用或失败，就近更新状态并停止。本规则不把等待结束、菜单重开或组件重建当作重试授权；重试若再次获准文件 GET，会再次占用当日下载次数，原中断记录不退还。
+- 桶承担 APK 文件流量、缓存与服务限制，网关设备／IP 每日次数、SQLite 字节账本及 4 Mbps 限制不适用于直连。新信息仍受主 API 的正常限流约束，不能宣称下载完全不限流。
+- 桶须允许站点 Origin 的 HEAD 并暴露上述身份头；缺失 CORS 或暴露头时 Web 预检失败。跨域预检不发送本站凭据，不借自研代理绕过校验。本次文档不修改桶权限或云配置。
+- 版本与构建号组成固定对象名，发布后不覆盖相同对象。桶响应可使用 `public, max-age=31536000, immutable` 与 Range，实际缓存和范围响应以桶配置为准，不把网关范围计次规则套用到桶。
+- 取消推荐或撤回发布仅停止后续推荐，不保证已发出的公开桶 URL 或缓存中的 APK 立即失效，也不能召回已安装包。旧网关对其固定文件的撤回控制不能证明公开对象不可下载。
 
-浏览器原生下载无法向菜单回传 GET 结果时，不伪造成功、进度或倒计时；恢复提示以实际可观察结果为限，消费者分别验证查询／HEAD 可捕获错误与浏览器原生交接分支。Web 不为读取 GET 结果先将整个 APK 拉进页面内存。
+## Mobile 与发布工具
 
-## 固定文件与旧 APP 校验
+- Mobile 继续读取 `/meta.mobileCompatibility.android.updateUrl`，字段结构、推荐／强制策略不变；桶 URL 仍指向安装文件，不是网页。无需为本次恢复增加新信息请求、Cookie 支持或强制升级旧 APP。
+- 同一更新流程先 HEAD 校验上述 metadata，再 GET 并计算 SHA-256、验证大小和包身份；既有包名、构建号、签名及安装校验不能删减。Web 菜单与更新说明不能产生或解除 APP 强制更新资格。
+- 新发布预检与晋级命令移除 `--gateway`，制品 `publicUrl` 恢复原桶 URL；预检仍获取 `confirmedRevision`，晋级仍携带 `--notes-revision`。签名、制品身份、说明确认、晋级事务及失败补偿保留。
+- 受限晋级工具验证公开 HEAD 与 `.sha256` 后更新说明／策略／TSV。同构建仅允许从精确历史网关地址恢复桶地址，不改写历史 promotion／TSV 或 `downloadArtifact`。旧 `--gateway` 模式仅保留显式兼容／回滚使用，不能成为新发布默认。
 
-- Android `/meta.mobileCompatibility.android.updateUrl` 的字段结构及推荐／强制策略保持兼容；启用网关后指向本站按构建号固定的文件地址，不能替换成 Web 页面。Web 菜单下载不能独立产生或解除 App 强制更新资格。
-- 旧 APP 的 HEAD 预检与 GET 下载继续指向同一制品；保留其读取的全部 metadata、正确正文长度、内容类型和 `Content-Disposition`，不通过取消摘要、大小、包名、构建号或签名验证来适配新地址。精确响应头以 Backend 固定契约为准。
-- HEAD 预检同一访客的次数与所请求范围的字节预算，但不预留、不发送文件正文、不占下载正文预算或下载次数；与 GET、信息和失败请求一样受请求频率限制。访客已达限额时 HEAD 返回 `429`，Web 就近反馈并停止 GET；HEAD 成功后仍可能因并发竞争而在 GET 被拒绝，以最终事务为准。Web 仅在明确下载动作中发 HEAD；既有 APP 在用户更新流程中的 HEAD 预检仍被支持。
-- 单段 Range 返回同一制品的所请求范围和正确长度；每次有效文件 GET 分别占一次下载次数，并按实际计划响应正文预留字节。合法范围的 `If-Range` 不匹配时按 Backend 契约返回完整文件，同样计一次并按完整正文预留；HEAD 使用同样的范围选择但不计下载次数、无正文。非法、多段或不可满足的范围返回 `416`，不能因 `If-Range` 不匹配而放行或触发回源。信息与错误 JSON 正文也占出站字节预算，但不消耗下载次数；预算不足以发送错误正文时仍按上述 HTTP 状态处理。断开、重试和重启不能返还或清空已经成功预留的额度。
-- 固定构建 URL 不是永久可用承诺：撤回、暂停、缓存缺失或异常仍由服务端阻止。缓存保留与发布策略分开；不能因为 URL 可预测或文件仍留在磁盘就绕过发布可见性。
+## 切换与旧网关兼容
 
-## 每日下载次数
+先合并并通过管理入口部署兼容 Backend，再按原受限流程把推荐策略恢复到桶 URL，核验新信息与 `/meta` 一致后切换已合并 Web。Mobile 在后续读取策略时恢复直连；未切换策略的新 Web 显示不可用，不偷偷使用旧网关。具体命令、事务及回滚以固定 Backend 文档为准。
 
-### 计数范围与用户身份
-
-- 按北京时间自然日限制每个浏览器设备标识最多 3 次、每个受信任客户端 IP 最多 10 次；两项同时满足才可下载，跨版本累计。多个设备共用同一出口 IP 时共同受 10 次限制；同一有效浏览器标识更换 IP 后，其当日 3 次计数仍继续累计，各 IP 另记自己的实际下载次数。
-- 浏览器使用第一方随机标识，不采用侵入性指纹，不以账号、屏幕尺寸、移动设备提示记录或浏览器自报的设备名称识别计数主体。访问提示的会话去重与服务端每日计数独立；关闭提示、切换路由、刷新或重建界面不重置下载计数。
-- 这是浏览器标识维度的限制，不能保证物理设备每日只能下载 3 次。清除、禁用 Cookie 或更换浏览器可能丢失该标识；这些请求仍共同受来源 IP 的每日 10 次限制，不因此获得无限下载。对用户不能宣称可靠识别同一物理设备，也不提示通过删除 Cookie 或换网络解除限制。
-- 标识由服务端通过签名 Cookie 签发；名称始终为 `__Host-wenyou-download-device`，使用 `Path=/; HttpOnly; SameSite=Lax; Secure` 且不设置 Domain。info 或有效文件 HEAD／GET 可签发／续签，Web 让同源浏览器自动接收和携带，不自行生成设备 ID，也不读取、复制或把 HttpOnly 值放入本地存储。签发本身不落次数记录，合法续签保持随机标识与已有当日计数。
-- 持续隔离预览的专用 Cookie 名称及省略 Secure 的 HTTP 模式已退役，旧预览配置会被拒绝，普通开发入口不放宽 Cookie 属性；签名绑定 Cookie 名，签名格式与生命周期仍由 Backend 拥有。自动化下载验证继续使用独立测试入口，不向真实环境写入计数或业务数据。
-- 缺失、篡改、重复同名、未知签名或过期 Cookie 按无有效标识处理并签发新随机标识，不能用任意客户端输入覆盖、清零或借用其他浏览器计数。直接 GET 新签发的标识也记本次获准尝试；客户端不保存时，后续请求无法识别为同一浏览器，仍受可信 IP 总限额约束。可信 IP 只取受控代理覆写后的来源，不接受客户端自报转发头作为身份。
-- 无 Cookie 的旧 APP 继续直接请求文件 HEAD／GET，不要求先访问 Web、登录或补调下载信息接口；其有效文件 GET 计入来源 IP 的每日 10 次。原文件 metadata、大小、摘要、包名、构建号与签名校验保留。
-
-### 计次时点与事务边界
-
-统计的是已获准传输的下载尝试，不是下载完成次数；是否下载完、是否安装成功均不决定计次。
-
-- 文件存在、可发布、缓存已核验且请求可准入后，在有效文件 GET 发送正文前计一次；完整 GET 与每次有效单段 Range GET 均计次，重复下载和主动重试分别计次，不按版本或已下载字节去重。HEAD、信息查询和未准入文件传输的失败／拒绝请求不消耗下载次数，但继续计入请求频率。
-- 有效浏览器标识的当日次数、来源 IP 的当日次数以及本次 APK 响应所需日／月字节预算在同一持久化事务中检查并预留。任一限制不满足或事务失败，均不部分扣减下载次数，不遗留该次未获准 APK 的字节预留；实际发送的错误 JSON 仍遵循既有正文预算规则，不能把错误正文流量误称为误扣下载次数。
-- 成功预留后连接中断、取消或传输失败均不退还次数与字节，即使最终没有发送完整正文；再次获准下载会重新计次、预留字节。并发只能占用实际剩余名额，进程重启不能清零。账本不可用继续拒绝服务，不用本地计数或重建账本放行。
-- 日界为北京时间 00:00，与执行主机和浏览器时区无关。跨日传输归属成功预留时的自然日，完成或断开不再记入次日；新日的新请求使用新日额度。自然月字节预算仍独立累计，不能用每日次数更新清空已有字节账本。
-
-### 限次反馈
-
-可读取 `429` 响应时，优先按 HTTP 状态、`X-Download-Limit-Reason` 和 `Retry-After` 反馈；HEAD 无正文，GET 错误正文也可能为空，不能要求 JSON 解析成功后才处理限流。以下为固定 Backend 枚举的界面解释，不在 Foundation 导出另一套类型：
-
-| `X-Download-Limit-Reason` | 反馈含义 |
-| --- | --- |
-| `device_daily_limit` | 当前浏览器标识当日下载尝试已达上限，不声称识别物理设备 |
-| `ip_daily_limit` | 当前共享网络出口当日下载尝试已达上限，不声称当前用户本人下载了 10 次 |
-| `byte_budget` | 下载流量预算不足，不误报为浏览器次数用尽 |
-| `request_rate` | 请求过于频繁，等待后由用户显式重试 |
-| `concurrency` | 同时处理的请求已达上限，等待后由用户显式重试 |
-| `bandwidth` | 当前传输带宽不足，等待后由用户显式重试 |
-
-`device_daily_limit`／`ip_daily_limit` 的 `Retry-After` 为距北京时间下一日零点的整数秒数；其他原因使用服务端对应的预算或限流等待时间，不能一概显示次日恢复。原因头缺失或未知时按 `429` 通用反馈并尊重有效等待值，不根据错误文字、UA 或本地估算猜测原因、余额或恢复时刻。次日或倒计时结束不自动下载；Web 用户显式重试仍完整执行查询、HEAD 与原生交接。Web 原生 GET 无法回传时不伪造成功、具体拒绝原因或次数余额。次数保护不改菜单、移动访问提示和按钮主次语义，也不解除 App 强制更新策略。
-
-## 缓存、发布身份与迁移
-
-普通公众请求只读取已验证缓存；缺失、损坏、依赖或配置异常时返回 `503`，不回源、不重定向公开桶、不生成可绕过网关的签名地址。客户端的刷新、重试、HEAD 和 Range 均不能触发预热。下载状态不展示内部存储地址、凭据、缓存路径或预算账本。
-
-### 回源凭据边界
-
-无法再生成独立只读凭据时，允许显式发布预热／缓存修复进程复用已有存储凭据，不要求新建凭据，也不缩减或修改原凭据的云端权限，以免影响既有上传与图片流程。公开下载网关仍不得持有、读取或继承任何 S3 凭据；复用仅发生在受控回源进程，不把共享配置或凭据环境传给公开进程。
-
-预热配置独立存放并限制文件读取权限，日志与错误输出脱敏。预热代码固定访问 `wenyou-apk/mobile/android/*`，只调用核验与取包所需的读取操作，不因凭据具有额外权限而上传、删除对象或修改云策略。这是应用访问限制，不能证明已有凭据在云端只读或仅能访问 APK；凭据泄漏仍可能影响其原有全部授权资源，配置隔离不改变这一权限事实。
-
-凭据配置留到另行授权的部署阶段；开发与验收仅使用隔离样本，不读取或打印真实密钥、不复制生产配置，也不提前配置服务器或修改云策略。不能新建独立只读凭据本身不再阻塞部署准备；公开进程隔离、回源预算、缓存核验和部署审批仍须满足。
-
-### 缓存启用与发布
-
-相同制品合并预热，有限重试逐次计入回源预算；流式落盘并核验登记大小、SHA-256、包名和构建号后原子启用，失败临时文件不可被公众下载。预热成功不等于已晋级，公开信息只展示发布策略允许的制品。
-
-发布登记保留原制品身份和历史记录；存储位置与对外下载地址分开，迁移地址不新造制品、不改写已有身份，也不从 URL 反推身份。发布工具通过鉴权读取核验私有对象，预热成功后才能晋级。签名、更新说明确认和晋级事务继续遵守既有发布门禁；失败保持旧策略，不能把待发布包显示为正式版本。
-
-迁移依次完成兼容网关与发布工具、预热推荐包、切换 `/meta` 与 Web、验证已安装旧 APP 的 HEAD／GET／安装校验，再独立评审关闭 APK 公共读。具体部署与回滚服从治理规范；不自动重开公共读、不清空预算、不删除历史制品或兼容协议。图片桶及共享实例开关不随 APK 迁移调整。
-
-每日次数扩展的既有出站账本按固定 Backend 流程显式离线升级 v1→v2，保留原日／月字节累计及计量时钟；签名密钥与计数状态随账本持久化，重启或合法续签／密钥轮换不能清零当日次数。旧 v1 程序拒绝 v2，不能靠删库、恢复旧账本或降版放开已用额度；升级、轮换与回滚操作留在 Backend／治理运维门禁，本规范不执行迁移。
+已缓存旧网关 URL 的消费者继续按[兼容规范](app-downloads-gateway-compatibility.md)工作。旧服务、账本、审计和历史不随新入口删除；退役需独立 PR 提供无消费者、数据已迁移、回归覆盖与回滚路径四项证据。回滚不清空账本、不改写审计或自动调整桶公共读，图片桶与共享开关不随 APK 切换修改。
 
 ## 固定验收用例与交付
 
-[共享用例](../tests/app-download-semantics-fixtures.json)以稳定 ID、前置条件、动作和观察结果记录场景，不含 HTTP 响应样本或另一套 DTO。Web／Mobile／Backend 在各自测试中将相应 ID 映射到真实实现；不得把 Foundation 对用例文件的结构检查当作下载、限流或安装已验证。
+[共享用例](../tests/app-download-semantics-fixtures.json)保留稳定 ID，并以 `scope` 区分 `current-direct-storage` 与 `legacy-gateway`。旧场景内容完整保留，只适用于兼容网关；当前直连场景覆盖下表，不包含 HTTP 响应样本或另一套 DTO。
 
-| 用例分组 | 稳定 ID |
+| 当前用例分组 | 稳定 ID |
 | --- | --- |
-| 直接入口与点击前边界 | `entry-anonymous`、`browse-without-file-request`、`web-head-preflight` |
-| 移动设备访问提示 | `mobile-visit-prompt`、`mobile-prompt-session`、`ios-prompt-platform` |
-| 信息与制品绑定 | `info-available`、`info-no-release`、`info-withdrawn`、`info-paused`、`info-unavailable`、`info-load-failure`、`info-refresh-failure`、`info-target-race` |
-| 点击与失败恢复 | `download-explicit-action`、`download-browser-handoff`、`download-rate-limited`、`download-service-unavailable` |
-| 旧 APP 与范围下载 | `legacy-head-get`、`single-range`、`invalid-range`、`budget-disconnect-restart` |
-| 每日下载次数 | `daily-browser-limit`、`daily-shared-ip-limit`、`daily-browser-across-ips`、`daily-request-accounting`、`daily-atomic-reservation`、`daily-beijing-boundary`、`daily-identity-fallback`、`daily-legacy-no-cookie` |
-| 次数协议与兼容交接 | `daily-info-global-status`、`daily-head-get-race`、`daily-limit-reason-header`、`daily-cookie-handoff`、`daily-ledger-upgrade` |
-| 缓存与发布 | `cache-miss-or-corrupt`、`public-request-no-origin`、`origin-credential-reuse`、`prewarm-before-promote`、`artifact-identity-preserved` |
-| 呈现与迁移 | `accessible-layout`、`migration-public-read-gate` |
+| 入口与非交互边界 | `direct-entry-anonymous`、`direct-idle-no-request`、`direct-mobile-visit-prompt` |
+| 信息状态与请求故障 | `direct-info-available`、`direct-info-no-release`、`direct-info-unavailable`、`direct-info-read-failure` |
+| URL、HEAD 与原生交接 | `direct-url-identity`、`direct-head-preflight`、`direct-head-rejection`、`direct-browser-handoff`、`direct-target-race` |
+| 恢复、缓存与安全边界 | `direct-explicit-retry`、`direct-storage-limits-cache`、`direct-public-url-withdrawal` |
+| Mobile、发布与迁移 | `direct-mobile-update`、`direct-release-notes-revision`、`direct-migration-compatibility` |
+| 共享呈现 | `direct-accessible-layout` |
 
-Foundation 运行用例 JSON 结构、ID 唯一性与文档引用检查，以及仓库 `pnpm check`；不新增产品构建或发布。消费者在隔离资源执行相关行为测试，Web 提供明暗、窄屏、键盘及匿名入口画面，Mobile 在 Windows 验证实际旧 APP 与安装流程。缺少真实云凭据仅影响云权限和实际部署验收；隔离用例、文档交付与 PR 可继续完成。合并、部署、发正式包和关闭公共读仍由负责人分别决定。
+开发阶段仅做所改 JSON 结构、ID／范围完整性、文档链接等定向验证。用户未明确授权合并前，不运行 `pnpm check`、完整构建、全量测试或门禁，也不借提交、推送、draft PR 自动触发；明确合并后再执行仓库必要完整检查。这一时机遵循[治理开发规范](https://github.com/morenk/wenyousite-workspace/blob/1e1948f103290b1ea9f83f86524845062db3fbbb/AGENTS.md)，不把未运行门禁写成通过。
+
+Foundation 的结构检查不证明下载、CORS、实际缓存、安装或部署已验收。消费者分别提供定向实现证据与受影响界面画面；真实环境自动化仅只读，写入 E2E 必须先核验独立资源并记录清理。合并、部署、发正式包与兼容清理仍由负责人分别授权。

@@ -37,8 +37,8 @@ v7 接入只在 Windows 完成：等待正式 Tag 后独立升级依赖，移除
 ## Android 下载兼容
 
 - 更新流程遵循[共享下载规范](../app-downloads.md)；`/meta.mobileCompatibility.android.updateUrl` 继续是目标构建的文件 URL，不能替换成 Web 页面。保留 HEAD 预检、GET 下载、元数据、大小、摘要、包名、构建号和签名校验，地址迁移不降低安装门禁。
-- [每日下载次数](../app-downloads.md#每日下载次数)保留无 Cookie 旧 APP 直接 HEAD／GET 的兼容，不能要求先访问 Web、额外查询信息或新增 Cookie 支持；有效文件 GET 受来源 IP 北京时间每日 10 次限制。HEAD 预检次数／字节但不预留，拒绝后停止本轮下载，成功后 GET 仍可能竞争失败；预占前拒绝／失败不计次但仍计请求频率。成功预占后中断或失败均不退还，重试再次获准 GET 会计新一次。消费端可按固定 Backend `X-Download-Limit-Reason` 区分浏览器／共享 IP 次数与其他限流原因，遵守 `Retry-After`；HEAD 无正文，原因缺失时按状态兜底，不要求旧端识别新头才能下载。
-- 限流遵守 `Retry-After`，暂不可用在更新上下文反馈；不循环请求、不回退源站或改装其他构建。强制更新失败继续保持原阻断策略，普通下载失败不被误报为已安装或无需升级。
+- 恢复桶直连继续使用 `/meta.mobileCompatibility.android.updateUrl`，先 HEAD 核对身份，再 GET、计算 SHA-256 并保留包名、构建号、签名及安装校验；不增加信息接口或 Cookie 请求。桶承担文件流量和缓存，原[每日下载次数](../app-downloads-gateway-compatibility.md#每日下载次数)仅适用于仍持有旧网关 URL 的消费者，不能套用到桶直连。发布工具移除默认 `--gateway`，仍预检 `confirmedRevision` 并在晋级携带 `--notes-revision`。
+- 限流遵守 `Retry-After`，暂不可用在更新上下文反馈；不循环请求、不回退旧网关、另换地址或改装其他构建。强制更新失败继续保持原阻断策略，普通下载失败不被误报为已安装或无需升级。
 - 控件沿用 Flutter 48dp 触控下限、单列、系统文字缩放和安全区；不因 Web 入口新增独立更新历史页面。窄屏浏览器的外观菜单直接下载由 Web profile 负责，不改变 Flutter 既有更新流程。
 - 移动设备访问 Web 的首次下载提示属于 Web 浏览会话，不在 Flutter 再加启动弹窗、不复用 App 更新提示记录；Android 的下载动作与 Web 菜单共用流程，iOS 明确只提供 Android 包并允许继续网页。
 - Windows Mobile 任务验证已安装旧 APP 的 HEAD／GET／安装与发布工具；Foundation 用例通过不等于真机或签名发布验收。本次沿用现有正式 Foundation 依赖，无需新 Tag。

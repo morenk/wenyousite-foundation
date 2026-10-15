@@ -10,7 +10,7 @@ HTTP 字段、内容校验、权限、确认记录、分页和发布事务由 [B
 
 颜色、系统字体、排版层级、间距、触控、明暗模式和无障碍复用 [共享设计基础](foundation.md)、[反馈与浮层](interaction.md)、[呈现规则](presentation.md)及对应平台 profile，数值仍由 [机器契约](../contracts/foundation.v1.json)拥有。本次不增加 Token、公开导出、生成常量或包版本；消费者继续固定原已发布 Foundation Tag。
 
-公开下载入口、固定构建文件地址、旧 APP HEAD／GET 元数据与发布预热的共享边界见[公开 APP 下载与兼容更新](app-downloads.md)。该迁移不改变本文的说明确认、目标身份、一次性提示或推荐／强制策略，也不恢复 App 已移除的独立历史入口。
+公开下载入口、固定 RainS3 桶地址、旧 APP HEAD／GET 元数据与发布工具恢复直连的共享边界见[公开 APP 下载与兼容更新](app-downloads.md)。发布工具移除默认 `--gateway`，继续预检 `confirmedRevision` 并在晋级携带 `--notes-revision`；桶直连不取消说明确认。该迁移不改变本文的说明确认、目标身份、一次性提示或推荐／强制策略，也不恢复 App 已移除的独立历史入口。
 
 ## 内容与版本身份
 
