@@ -68,3 +68,30 @@ test("Web、Flutter 预设与能力来自同一机器契约且主栏保持原有
     assert.equal(crypto.createHash("sha256").update(read(name)).digest("hex"), manifest.artifactSha256[name]);
   }
 });
+
+test("后端颜色与剪贴板语料保留精确提交及原始字节", () => {
+  const source = JSON.parse(read("contracts/fixtures/text-color-source.json"));
+  assert.match(source.commit, /^[a-f0-9]{40}$/);
+  assert.equal(source.repository, "morenk/wenyousite-backend");
+  for (const [name, entry] of Object.entries(source.files)) {
+    assert.equal(entry.sourcePath, `contracts/${name}`);
+    assert.equal(crypto.createHash("sha256").update(read(`contracts/fixtures/${name}`)).digest("hex"), entry.sha256);
+  }
+  const validateNode = new Ajv2020({ strict: true }).compile(JSON.parse(read("contracts/fixtures/markdown-text-color-v1.schema.json")));
+  assert.equal(validateNode({ version: 1, color: "#000000", content: "中文😀" }), true);
+  assert.equal(validateNode({ version: 1, color: "#FFFFFF", content: "**文字**" }), true);
+  for (const patch of [{ color: "#123" }, { color: "#12345678" }, { color: "#aabbcc" }, { content: "" }, { content: "跨\n行" }, { style: "color:red" }]) {
+    assert.equal(validateNode({ version: 1, color: "#123456", content: "文字", ...patch }), false);
+  }
+  const fixtures = JSON.parse(read("contracts/fixtures/markdown-text-color-v1-fixtures.json"));
+  assert.equal(fixtures.version, 1);
+  assert.ok(fixtures.validCases.length > 0 && fixtures.invalidSources.length > 0 && fixtures.writeCases.length > 0);
+  assert.equal(new Set(fixtures.validCases.map(({ id }) => id)).size, fixtures.validCases.length);
+  const clipboard = JSON.parse(read("contracts/fixtures/editor-clipboard-v2-fixtures.json"));
+  assert.equal(clipboard.version, 2);
+  assert.equal(clipboard.textColorRule.externalPaste, "literal-text");
+  assert.equal(clipboard.mobileTransport.interoperability, "plain-text-only");
+  for (const id of ["reader-text-color-v1", "text-color-style-not-allowed"]) {
+    assert.ok(clipboard.goldenCases.some((entry) => entry.id === id));
+  }
+});

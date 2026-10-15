@@ -22,6 +22,14 @@ Web 首期提供既有颜色的显示、编辑保源、草稿与复制粘贴，�
 
 正文协议、受控标记、能力声明、旧端读取降级、缓存区分和旧端覆盖保护由 Backend 的独立文本颜色 v1 契约拥有。只接受其受控 `span`，不因此开放任意 HTML、CSS 或未知属性；颜色外层与粗斜删、普通链接及行内代码的组合、物理行范围和原子排除以固定后端语料为准。不提升全局 Markdown 版本，不替代角色提及能力。合法协议的纯文本复制与摘要只保留文字，不泄漏隐藏标记。
 
+## 已提交协议来源
+
+[Backend 文本颜色 v1](https://github.com/morenk/wenyousite-backend/blob/1bc1986a936131cdacf259c0fd9443be0de1f026/docs/markdown-text-color-v1.md)拥有精确协议；[固定颜色语料](../contracts/fixtures/markdown-text-color-v1-fixtures.json)、[节点 Schema](../contracts/fixtures/markdown-text-color-v1.schema.json)与[剪贴板 v2](../contracts/fixtures/editor-clipboard-v2-fixtures.json)按该提交原字节同步，来源及 SHA-256 记录于 [text-color-source.json](../contracts/fixtures/text-color-source.json)。
+
+合法颜色只包裹单个物理行内的平衡格式；H2/H3、引用和列表前缀位于颜色外。旧端去色须保留文字语义并重新转义可能变成块语法的字面标点，不能简单删除标签再解释。Mobile 本机结构化剪贴板保色，系统剪贴板继续纯文本互操作；Web 只识别本站 envelope 的受控颜色属性，外部 HTML/CSS 仍按既有纯文本策略处理。
+
+此镜像不定义 HTTP Schema，也不代表后端已合并或部署；消费者应在服务端能力确认后开放入口，新写关闭仍需读取保源和旧端覆盖保护。
+
 ## 验收与发布
 
 共享检查覆盖 Schema 反向用例、预设和导出同源、现有主栏不扩张、Web 无创建入口、原值呈现及原子排除。消费者另验选区、取消、默认、单步撤销／重做、RGB 边界、混合颜色、跨段、中文输入法、emoji、组合格式、草稿和 App → Web → App 往返，不能将 Foundation 常量检查代替实际编辑与视觉验收。
