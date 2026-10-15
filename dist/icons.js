@@ -211,6 +211,9 @@ export const ICON_SEMANTICS = Object.freeze({
   "editor.ordered-list": "list-ordered",
   "editor.link": "link-2",
   "editor.image": "image",
+  "editor.audio": "file-audio",
+  "media.play": "play",
+  "media.pause": "pause",
   "editor.quote": "quote",
   "editor.horizontal-rule": "minus",
   "editor.dice": "dices",
@@ -1257,6 +1260,26 @@ export const ICON_GLYPH_NODES = Object.freeze({
       "path",
       {
         "d": "m2 2 20 20"
+      }
+    ]
+  ],
+  "file-audio": [
+    [
+      "path",
+      {
+        "d": "M4 6.835V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2h-.343"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M14 2v5a1 1 0 0 0 1 1h5"
+      }
+    ],
+    [
+      "path",
+      {
+        "d": "M2 19a2 2 0 0 1 4 0v1a2 2 0 0 1-4 0v-4a6 6 0 0 1 12 0v4a2 2 0 0 1-4 0v-1a2 2 0 0 1 4 0"
       }
     ]
   ],
@@ -2560,6 +2583,28 @@ export const ICON_GLYPH_NODES = Object.freeze({
       }
     ]
   ],
+  "pause": [
+    [
+      "rect",
+      {
+        "x": "14",
+        "y": "3",
+        "width": "5",
+        "height": "18",
+        "rx": "1"
+      }
+    ],
+    [
+      "rect",
+      {
+        "x": "5",
+        "y": "3",
+        "width": "5",
+        "height": "18",
+        "rx": "1"
+      }
+    ]
+  ],
   "pencil": [
     [
       "path",
@@ -2611,6 +2656,14 @@ export const ICON_GLYPH_NODES = Object.freeze({
       "path",
       {
         "d": "M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"
+      }
+    ]
+  ],
+  "play": [
+    [
+      "path",
+      {
+        "d": "M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"
       }
     ]
   ],
@@ -3695,6 +3748,7 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "external-link": "<svg class=\"lucide lucide-external-link\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M15 3h6v6\" /><path d=\"M10 14 21 3\" /><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\" /></svg>",
   "eye": "<svg class=\"lucide lucide-eye\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0\" /><circle cx=\"12\" cy=\"12\" r=\"3\" /></svg>",
   "eye-off": "<svg class=\"lucide lucide-eye-off\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49\" /><path d=\"M14.084 14.158a3 3 0 0 1-4.242-4.242\" /><path d=\"M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143\" /><path d=\"m2 2 20 20\" /></svg>",
+  "file-audio": "<svg class=\"lucide lucide-file-audio\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M4 6.835V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2h-.343\" /><path d=\"M14 2v5a1 1 0 0 0 1 1h5\" /><path d=\"M2 19a2 2 0 0 1 4 0v1a2 2 0 0 1-4 0v-4a6 6 0 0 1 12 0v4a2 2 0 0 1-4 0v-1a2 2 0 0 1 4 0\" /></svg>",
   "file-clock": "<svg class=\"lucide lucide-file-clock\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M16 22h2a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v2.85\" /><path d=\"M14 2v5a1 1 0 0 0 1 1h5\" /><path d=\"M8 14v2.2l1.6 1\" /><circle cx=\"8\" cy=\"16\" r=\"6\" /></svg>",
   "file-text": "<svg class=\"lucide lucide-file-text\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z\" /><path d=\"M14 2v5a1 1 0 0 0 1 1h5\" /><path d=\"M10 9H8\" /><path d=\"M16 13H8\" /><path d=\"M16 17H8\" /></svg>",
   "flag": "<svg class=\"lucide lucide-flag\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528\" /></svg>",
@@ -3750,9 +3804,11 @@ export const ICON_GLYPH_SVGS = Object.freeze({
   "newspaper": "<svg class=\"lucide lucide-newspaper\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M15 18h-5\" /><path d=\"M18 14h-8\" /><path d=\"M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2\" /><rect width=\"8\" height=\"4\" x=\"10\" y=\"6\" rx=\"1\" /></svg>",
   "notebook-pen": "<svg class=\"lucide lucide-notebook-pen\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4\" /><path d=\"M2 6h4\" /><path d=\"M2 10h4\" /><path d=\"M2 14h4\" /><path d=\"M2 18h4\" /><path d=\"M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z\" /></svg>",
   "notebook-text": "<svg class=\"lucide lucide-notebook-text\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M2 6h4\" /><path d=\"M2 10h4\" /><path d=\"M2 14h4\" /><path d=\"M2 18h4\" /><rect width=\"16\" height=\"20\" x=\"4\" y=\"2\" rx=\"2\" /><path d=\"M9.5 8h5\" /><path d=\"M9.5 12H16\" /><path d=\"M9.5 16H14\" /></svg>",
+  "pause": "<svg class=\"lucide lucide-pause\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><rect x=\"14\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\" /><rect x=\"5\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\" /></svg>",
   "pencil": "<svg class=\"lucide lucide-pencil\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\" /><path d=\"m15 5 4 4\" /></svg>",
   "pencil-off": "<svg class=\"lucide lucide-pencil-off\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"m10 10-6.157 6.162a2 2 0 0 0-.5.833l-1.322 4.36a.5.5 0 0 0 .622.624l4.358-1.323a2 2 0 0 0 .83-.5L14 13.982\" /><path d=\"m12.829 7.172 4.359-4.346a1 1 0 1 1 3.986 3.986l-4.353 4.353\" /><path d=\"m15 5 4 4\" /><path d=\"m2 2 20 20\" /></svg>",
   "pin": "<svg class=\"lucide lucide-pin\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M12 17v5\" /><path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\" /></svg>",
+  "play": "<svg class=\"lucide lucide-play\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z\" /></svg>",
   "plus": "<svg class=\"lucide lucide-plus\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M5 12h14\" /><path d=\"M12 5v14\" /></svg>",
   "quote": "<svg class=\"lucide lucide-quote\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z\" /><path d=\"M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z\" /></svg>",
   "receipt-text": "<svg class=\"lucide lucide-receipt-text\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" ><path d=\"M13 16H8\" /><path d=\"M14 8H8\" /><path d=\"M16 12H8\" /><path d=\"M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z\" /></svg>",
@@ -3844,6 +3900,7 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "external-link": "49982b8caf1a6801f8160c336739b29f9de4090b4115244ce9eaed38b2b18da4",
   "eye": "1469f198d32e5f42fcafb461c3caac42fcdbdf164e38c46b3b46ca512c702310",
   "eye-off": "b62f1ab4e46b499906ea79ddaddb69d6853f23250f2d77d86d496eb487655850",
+  "file-audio": "b251b7c76af9649be1422cc62688a3e74fa46f1245808414d8957b41c58cc719",
   "file-clock": "0dc0120d5218b24d06c5a0c96d18b6dedc86be1127b94877b6870705840ec4cb",
   "file-text": "c85e9abe570c3e5bebb0b84534939d02bf6bfe84c9e6ea2d09302e190fc2a879",
   "flag": "c73ca68240ea29106b4694748e01de503516bbd91c15bcfaf49243dc54a8f662",
@@ -3899,9 +3956,11 @@ export const ICON_GLYPH_SHA256 = Object.freeze({
   "newspaper": "13e528c20bc837013bf83aee83d85adead6bf477a8747a4d2509428eb2d9612e",
   "notebook-pen": "a15095743e75a53d63c94d023b08ae9c5d7344b84134ee39b7c403a744d4cb8a",
   "notebook-text": "809cbd237584d92a094d9916815fc55ddb0d09f3c60e756493832804dc564002",
+  "pause": "b689f2de1c64867369d549270be3fa9f1c5af4ec2da62e6922c629dd765cc359",
   "pencil": "8db295372b8afe5eb9dcf3b74ca8bb99233bc9fbe2a98062e75f7da588c87efb",
   "pencil-off": "193194362ba22b6bcacd5263257c399fbcaae8b831a643490974dd8d5fe3087b",
   "pin": "e808dc9ff0925654149d034d5b51ccbb4c915510a014e969db41d2c8ad50d4ed",
+  "play": "565a8890cf0f3d2f4322c39bd9f2f91ead2eaad639a61df1be21f5d557ac1229",
   "plus": "3b74adc0a37118240d587bf18d73a27f030ae1ce5c4db6fe7423212cf9f5ee49",
   "quote": "b53e29e20d5fc7677c8f8e0bd446e269f0c51e1fb7d4ea6c319b44a03345cc9e",
   "receipt-text": "b7b0a1dd5538bfd8871240577831300d3b12880bdf9d1dcbde0cd3272fd3d995",

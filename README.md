@@ -7,6 +7,7 @@
 - [Web profile](docs/platforms/web.md)
 - [Flutter profile](docs/platforms/mobile.md)
 - [图片呈现契约](docs/images.md)
+- [正文音频体验契约](docs/audio.md)
 - [图标目录与治理](docs/icons.md)
 - [核心元素系统](docs/elements.md)
 - [通知分组契约](docs/notifications.md)
@@ -19,6 +20,12 @@
 - [Codex 审美指导 Skill](skills/wenyou-design/SKILL.md)
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
+
+## v7.3.0 正文音频
+
+新增音频文件上传入口、正文播放器及按需加载的共享体验契约，提供 `editor.audio`、`media.play`、`media.pause` 语义图标。主题与回复共用本机工具栏布局，音频默认放在展开工具栏；不增加录音功能。
+
+根包、Flutter 包和契约版本为 `7.3.0`，`schemaVersion` 保持 `3`。本次为兼容新增；客户端在正式 Tag 后分别升级并验证，发布 Foundation 不代表音频后端或客户端已上线。
 
 ## v7.2.1 移动端阅读滑块职责边界清理
 

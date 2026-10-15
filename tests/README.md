@@ -43,3 +43,9 @@ TZ=America/New_York dart tests/formatting_test.dart
 ```
 
 Dart 接口只接受有效 `DateTime`，无效字符串属于上游解析职责，因此不复刻 JavaScript 字符串输入的占位测试。没有 Dart SDK 时必须在交付中说明未执行，不能以 JS 通过声称跨语言运行验收完成。
+
+## 音频候选定向验证
+
+`pnpm test:audio` 仅覆盖音频体验 Schema 的有效与拒绝用例、Web／Flutter 导出和清单哈希、三个新增图标与固定 Lucide 资产一致性、既有 Token 复用，以及 Backend 精确提交语料及校验和。该入口不运行全量 `pnpm check`；合并授权后全量入口会包含这些音频回归。
+
+跨端播放器交互与真实画面需各消费者自行验证，本仓库检查不能代替。

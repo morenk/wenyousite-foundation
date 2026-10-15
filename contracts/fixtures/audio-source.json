@@ -1,0 +1,14 @@
+{
+  "repository": "morenk/wenyousite-backend",
+  "commit": "509dba4aa7d63525eed082cddc0d99a461dc8bfe",
+  "files": {
+    "markdown-audio-v1-fixtures.json": {
+      "sourcePath": "contracts/markdown-audio-v1-fixtures.json",
+      "sha256": "78c3ceafe79568afc454f2e30822167939f8398f3d52db2b11fd36035e41003d"
+    },
+    "markdown-audio-v1.schema.json": {
+      "sourcePath": "contracts/markdown-audio-v1.schema.json",
+      "sha256": "8d5e64823f871548076a08893dba38fa9b3819fbef8a8c03cf54c74740312202"
+    }
+  }
+}

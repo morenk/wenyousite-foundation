@@ -1,5 +1,11 @@
 # Foundation Changelog
 
+## 7.3.0
+
+- `shared`：新增文件上传、紧凑正文播放器、点击加载、单页互斥播放、后台暂停和显式重试的共享体验契约；默认展开工具栏，主题与回复共用本机布局。
+- `icons`：新增 `editor.audio`、`media.play`、`media.pause`，从固定 `lucide-static@1.28.0` 生成 Web 与 Flutter 资产。
+- `release`：负责人已明确批准发布 `v7.3.0`；根包、Flutter 包与契约版本一致，`schemaVersion` 保持 `3`。客户端在正式 Tag 后独立升级，不改写旧 Tag，不触发产品部署。
+
 ## 未发布文档
 
 - `shared`／`web`／`mobile`：编辑器段落对齐改为居中、居右两个独立 Toggle，居左为隐式默认，再点已选项恢复居左；统一互斥、混合选区及宽工具栏／“更多”的交互。明确编辑器格式与段落 Toggle 使用既有 accent 色对和平台控件圆角角色作为选中态，保留通用互动图标、禁用与平台触控规则；不变更 Markdown 协议、机器契约、Token 或包版本。
