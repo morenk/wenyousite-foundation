@@ -1,5 +1,12 @@
 # Foundation 兼容登记
 
+## 光标处先选色后输入候选
+
+- 在既有文字颜色能力内新增有效折叠光标输入色，文字选区继续仅改所选范围；`selection.application`、`empty`、`continuedTyping` 策略值更新，并新增 `selection.caret` 生命周期。公开导出和已有字段均保留，但消费者针对旧策略字符串的断言需随独立升级调整。
+- 最近自定义色仍最多四个，预设、取色入口、原子排除、明暗原值、范围改色单步撤销和跨应用纯文本行为不变。未输入的颜色不写入文档／草稿，不新增空撤销记录；主动移动光标按新位置重新计算。
+- 建议新增交互能力以 `7.5.0` 发布，待负责人明确决定版本、合并及正式 Tag／Release。本候选保持 `7.4.0` 版本，不能被视为已发布 Tag 内容；旧 Tag 不改写，Mobile 仅在正式发布后独立升级，Web 无需同步开放入口。
+- 无 OpenAPI／HTTP DTO、Backend Markdown 文本颜色 v1、能力开关变更，无历史迁移或旧协议删除。回退客户端只关闭新输入交互，已经输入并保存的彩色文字继续按 v1 读取保源。
+
 ## 主题帖文字颜色候选
 
 - 新增可选 `experiences.editor.textColor`、`experiences.elements.inline.textColor`、`text-color` 能力、Web `EDITOR_TEXT_COLOR_PROFILE`／`EDITOR_TEXT_COLOR_PRESETS` 和 Flutter `WenyouEditorTextColorContract`；`EditorCreationMode` 兼容新增 `none`，用于 Web 只读色／编辑保源而无取色入口。现有主栏布局、公开导出和语义值保留。
