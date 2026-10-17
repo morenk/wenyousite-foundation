@@ -16,11 +16,22 @@ const schema = JSON.parse(read("contracts/foundation.schema.json"));
 const validateProfile = new Ajv2020({ strict: true }).compile(schema.$defs.editorTextColor);
 const validatePresentation = new Ajv2020({ strict: true }).compile(schema.$defs.inlineTextColor);
 
-test("文字颜色拒绝持续输入模式、原子染色、跨账号最近色和新增主栏入口", () => {
+test("文字颜色允许显式光标输入色并拒绝无条件继承、原子染色和新增主栏入口", () => {
   const profile = contract.experiences.editor.textColor;
   assert.equal(validateProfile(profile), true);
   for (const mutate of [
     (value) => { value.selection.continuedTyping = "inherit"; },
+    (value) => { value.selection.application = "selected-text-only"; },
+    (value) => { value.selection.empty = "disabled"; },
+    (value) => { delete value.selection.caret; },
+    (value) => { value.selection.caret.invalid = "enabled"; },
+    (value) => { value.selection.caret.documentMutation = "on-color-pick"; },
+    (value) => { value.selection.caret.inputState = "rgb-or-null"; },
+    (value) => { value.selection.caret.insertions = "override-all-content"; },
+    (value) => { value.selection.caret.defaultBehavior = "remove-all-marks"; },
+    (value) => { value.selection.caret.relocation = "keep-global-color"; },
+    (value) => { value.selection.caret.persistence = "account-local"; },
+    (value) => { value.selection.caret.undo = "empty-format-transaction"; },
     (value) => { value.selection.atomicNodes = "color"; },
     (value) => { value.mobile.mainToolbar = "add-button"; },
     (value) => { value.mobile.preview = "mutate-body"; },
@@ -35,6 +46,34 @@ test("文字颜色拒绝持续输入模式、原子染色、跨账号最近色�
     const candidate = structuredClone(profile);
     mutate(candidate);
     assert.equal(validateProfile(candidate), false);
+  }
+});
+
+test("折叠光标与范围改色具有不同的文档、生命周期和撤销边界", () => {
+  const selection = EDITOR_TEXT_COLOR_PROFILE.selection;
+  assert.equal(selection.application, "selected-text-or-caret");
+  assert.equal(selection.empty, "caret-sets-typing-color");
+  assert.equal(selection.continuedTyping, "explicit-caret-color-only");
+  assert.equal(selection.undo, "single-transaction");
+  assert.equal(selection.defaultBehavior, "remove-color-only");
+  assert.deepEqual(selection.caret, {
+    invalid: "disabled",
+    emptyDocument: "enabled",
+    documentMutation: "on-text-input-only",
+    inputState: "unset-rgb-default",
+    insertions: "preserve-source-and-skip-atoms",
+    defaultBehavior: "clear-typing-color-only",
+    continuation: "typing-and-newline",
+    relocation: "derive-from-new-position",
+    persistence: "document-text-only",
+    undo: "normal-input-history",
+  });
+  assert.equal(EDITOR_TEXT_COLOR_PROFILE.mobile.cancel, "unchanged");
+  assert.equal(EDITOR_TEXT_COLOR_PROFILE.mobile.completion, "restore-body-focus-and-selection");
+  assert.equal(EDITOR_TEXT_COLOR_PROFILE.recent.maximum, 4);
+  const dart = read("packages/flutter/lib/src/foundation_tokens.dart");
+  for (const [key, value] of Object.entries(selection.caret)) {
+    assert.ok(dart.includes(`'${key}': '${value}'`));
   }
 });
 

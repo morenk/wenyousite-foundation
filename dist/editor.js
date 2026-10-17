@@ -1,5 +1,5 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "7.4.0";
+export const FOUNDATION_VERSION = "7.5.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
   "text-color": "字体颜色",
@@ -199,14 +199,26 @@ export const EDITOR_TEXT_COLOR_PROFILE = Object.freeze({
     }
   ],
   "selection": {
-    "application": "selected-text-only",
-    "empty": "disabled",
+    "application": "selected-text-or-caret",
+    "empty": "caret-sets-typing-color",
     "atomicNodes": "skip",
     "paragraphs": "split-inline-ranges",
-    "continuedTyping": "no-color-inheritance",
+    "continuedTyping": "explicit-caret-color-only",
     "mixedColors": "no-preselection",
     "defaultBehavior": "remove-color-only",
-    "undo": "single-transaction"
+    "undo": "single-transaction",
+    "caret": {
+      "invalid": "disabled",
+      "emptyDocument": "enabled",
+      "documentMutation": "on-text-input-only",
+      "inputState": "unset-rgb-default",
+      "insertions": "preserve-source-and-skip-atoms",
+      "defaultBehavior": "clear-typing-color-only",
+      "continuation": "typing-and-newline",
+      "relocation": "derive-from-new-position",
+      "persistence": "document-text-only",
+      "undo": "normal-input-history"
+    }
   },
   "mobile": {
     "parentCapability": "heading",
