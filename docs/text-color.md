@@ -55,8 +55,8 @@ App 视觉候选须提供 320/360dp、明暗、大字号和键盘状态画面；
 
 HTTP DTO、OpenAPI、Markdown 文本颜色 v1、能力开关、预设和最近色数量均不变，无历史数据迁移。该版本的 Web 继续无取色入口并保留既有颜色，可继续锁定旧 Tag。Mobile 在正式 Tag 的独立升级后实现新交互，不消费候选 SHA 或复制规则绕过发布。
 
-## Web 颜色创建候选
+## Web 颜色创建（7.6.0）
 
-本次将 Web `text-color.creation` 从 `none` 扩展为 `secondary`，`web.picker` 从 `false` 改为 `true`，新增正文菜单、紧凑行、取色预览与焦点规则；现有公开导出保留，App 平台规则和共享光标生命周期不变。候选包与契约版本暂留 `7.5.0`，不是已发布 `v7.5.0` 的内容；建议正式版本 `7.6.0`，升版、合并、Tag 与 Release 等待负责人明确批准。Web 只有在正式发布后才能通过独立升级提交锁定 Tag，不能锁候选 SHA 或复制新常量绕过发布。
+本次将 Web `text-color.creation` 从 `none` 扩展为 `secondary`，`web.picker` 从 `false` 改为 `true`，新增正文菜单、紧凑行、取色预览与焦点规则；现有公开导出保留，App 平台规则和共享光标生命周期不变。负责人已明确批准 `7.6.0` 升版、PR #37 合并及不可改写正式 Tag／Release；根包、Flutter 包、契约与 Manifest 同步版本，`schemaVersion` 保持 `3`。已发布 `v7.5.0` 不改写。Web 只有在正式发布后才能通过独立升级提交锁定 Tag，不能锁候选 SHA 或复制新常量绕过发布。
 
 不改 HTTP DTO、OpenAPI、Markdown 文本颜色 v1、能力标记、后端语料或数据，没有迁移或兼容协议清理。回滚时恢复原正式 Tag 与配套入口实现，已保存的颜色继续读取与保源。Foundation 的机器检查不代替 Web 预览、中文输入法、浏览器和隔离 E2E 验收。
