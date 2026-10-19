@@ -1,5 +1,5 @@
 /** 由 contracts/foundation.v1.json 生成，禁止手改。 */
-export const FOUNDATION_VERSION = "7.5.0";
+export const FOUNDATION_VERSION = "7.6.0";
 export const EDITOR_CAPABILITY_LABELS = Object.freeze({
   "heading": "正文样式",
   "text-color": "字体颜色",
@@ -258,9 +258,37 @@ export const EDITOR_TEXT_COLOR_PROFILE = Object.freeze({
     "deduplication": "canonical-rgb"
   },
   "web": {
-    "picker": false,
+    "picker": true,
     "existingContent": "render-edit-preserve",
-    "clipboard": "preserve-color"
+    "clipboard": "preserve-color",
+    "parentCapability": "heading",
+    "mainToolbar": "unchanged",
+    "primaryRow": [
+      "default",
+      "presets",
+      "custom"
+    ],
+    "defaultPresentation": "t-icon",
+    "defaultLabel": "默认",
+    "customLabel": "自定义",
+    "applyLabel": "应用",
+    "cancelLabel": "取消",
+    "recentPresentation": "separate-row-when-present",
+    "pickerPresentation": "popover-content-replacement",
+    "controls": [
+      "drag-picker",
+      "red",
+      "green",
+      "blue",
+      "text-preview"
+    ],
+    "numericInput": "integer-0-255",
+    "preview": "panel-only",
+    "commit": "explicit-apply",
+    "cancel": "unchanged",
+    "completion": "restore-body-focus-and-selection",
+    "layout": "available-height-scroll",
+    "keyboard": "tab-controls-escape-cancel"
   },
   "protocolOwner": "backend-markdown-contract"
 });
@@ -345,7 +373,7 @@ export const EDITOR_MOBILE_MORE_INLINE = Object.freeze([
 ]);
 export const EDITOR_WEB_CAPABILITIES = Object.freeze({
   "text-color": {
-    "creation": "none",
+    "creation": "secondary",
     "editing": "structured",
     "rendering": "native",
     "roundTrip": "structured"

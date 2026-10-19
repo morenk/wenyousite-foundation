@@ -1,5 +1,12 @@
 # Foundation 兼容登记
 
+## Web 颜色创建（7.6.0）
+
+- Web `text-color.creation` 从 `none` 扩展为 `secondary`，`textColor.web.picker` 从 `false` 改为 `true`，新增正文菜单、紧凑颜色行、同 popover 取色预览和键盘／焦点规则。原有导出与字段保留；针对旧布尔值和能力字符串的消费者断言须随正式升级更新。
+- App 规则、五个预设、最多四个账号本机最近色及共享 `selection`／`caret` 生命周期不变；不将 App 的 48dp 用于 Web。
+- 负责人已明确批准 `7.6.0` 升版、PR #37 合并及不可改写正式 Tag／Release；根包、Flutter 包、契约与 Manifest 同步，`schemaVersion` 保持 `3`。已发布的 `v7.5.0` 不改写。Web 消费者仅在正式发布后独立锁定 Tag，不消费候选 SHA 或复制常量绕过发布。
+- 不改 OpenAPI／HTTP DTO、Backend 文本颜色 v1、能力开关、后端 fixtures 或外部剪贴板策略，无迁移或旧协议删除。回退时还原消费者入口与正式 Tag，已有彩色文档仍保源。
+
 ## 光标处先选色后输入（7.5.0）
 
 - 在既有文字颜色能力内新增有效折叠光标输入色，文字选区继续仅改所选范围；`selection.application`、`empty`、`continuedTyping` 策略值更新，并新增 `selection.caret` 生命周期。公开导出和已有字段均保留，但消费者针对旧策略字符串的断言需随独立升级调整。

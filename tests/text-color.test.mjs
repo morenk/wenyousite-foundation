@@ -38,7 +38,17 @@ test("文字颜色允许显式光标输入色并拒绝无条件继承、原子�
     (value) => { value.mobile.minimumTargetDp = 32; },
     (value) => { value.recent.scope = "device-global"; },
     (value) => { value.recent.maximum = 5; },
-    (value) => { value.web.picker = true; },
+    (value) => { value.web.picker = false; },
+    (value) => { value.web.parentCapability = "more"; },
+    (value) => { value.web.mainToolbar = "add-button"; },
+    (value) => { value.web.primaryRow = ["default", "presets", "recent", "custom"]; },
+    (value) => { value.web.defaultPresentation = "text-label"; },
+    (value) => { value.web.recentPresentation = "always-visible-row"; },
+    (value) => { value.web.pickerPresentation = "nested-dialog"; },
+    (value) => { value.web.numericInput = "decimal-with-alpha"; },
+    (value) => { value.web.preview = "mutate-body"; },
+    (value) => { value.web.cancel = "keep-preview"; },
+    (value) => { value.web.minimumTargetDp = 48; },
     (value) => { value.presets[0].rgb = "#D1434380"; },
     (value) => { value.channelMaximum = 256; },
     (value) => { value.excluded = []; },
@@ -77,6 +87,26 @@ test("折叠光标与范围改色具有不同的文档、生命周期和撤销�
   }
 });
 
+test("Web 正文菜单提供紧凑颜色入口，共享光标规则而保留平台密度", () => {
+  const { web, mobile, selection } = EDITOR_TEXT_COLOR_PROFILE;
+  assert.equal(web.picker, true);
+  assert.equal(web.parentCapability, "heading");
+  assert.deepEqual(web.primaryRow, ["default", "presets", "custom"]);
+  assert.equal(web.defaultPresentation, "t-icon");
+  assert.equal(web.recentPresentation, "separate-row-when-present");
+  assert.equal(web.pickerPresentation, "popover-content-replacement");
+  for (const name of ["controls", "numericInput", "preview", "commit", "cancel", "completion", "layout"]) {
+    assert.deepEqual(web[name], mobile[name]);
+  }
+  assert.equal(web.keyboard, "tab-controls-escape-cancel");
+  assert.equal(Object.hasOwn(web, "minimumTargetDp"), false);
+  assert.equal(mobile.minimumTargetDp, 48);
+  assert.equal(selection.caret.emptyDocument, "enabled");
+  assert.equal(selection.caret.continuation, "typing-and-newline");
+  assert.equal(web.existingContent, "render-edit-preserve");
+  assert.equal(web.clipboard, "preserve-color");
+});
+
 test("作者 RGB 保持明暗原值，仅覆盖文本前景且不改变其他格式", () => {
   const value = contract.experiences.elements.inline.textColor;
   assert.equal(validatePresentation(value), true);
@@ -91,7 +121,7 @@ test("Web、Flutter 预设与能力来自同一机器契约且主栏保持原有
   assert.deepEqual(EDITOR_TEXT_COLOR_PROFILE, contract.experiences.editor.textColor);
   assert.deepEqual(EDITOR_TEXT_COLOR_PRESETS, EDITOR_TEXT_COLOR_PROFILE.presets);
   assert.equal(new Set(EDITOR_TEXT_COLOR_PRESETS.map(({ rgb }) => rgb)).size, 5);
-  assert.equal(EDITOR_WEB_CAPABILITIES["text-color"].creation, "none");
+  assert.equal(EDITOR_WEB_CAPABILITIES["text-color"].creation, "secondary");
   assert.equal(EDITOR_MOBILE_CAPABILITIES["text-color"].creation, "secondary");
   for (const entries of [EDITOR_PRIMARY_NARROW, EDITOR_PRIMARY_WIDE, contract.experiences.editor.mobile.primary]) {
     assert.equal(entries.includes("text-color"), false);
