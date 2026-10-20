@@ -49,3 +49,11 @@ Dart 接口只接受有效 `DateTime`，无效字符串属于上游解析职责�
 `pnpm test:audio` 仅覆盖音频体验 Schema 的有效与拒绝用例、Web／Flutter 导出和清单哈希、三个新增图标与固定 Lucide 资产一致性、既有 Token 复用，以及 Backend 精确提交语料及校验和。该入口不运行全量 `pnpm check`；合并授权后全量入口会包含这些音频回归。
 
 跨端播放器交互与真实画面需各消费者自行验证，本仓库检查不能代替。
+
+## 主题帖字体协议测试镜像
+
+`pnpm test:text-font` 校验 `fixtures/text-font/source.json` 固定的 Backend 提交与三份原字节镜像，验证目录身份与字体 Schema 一致、未知身份／属性／跨行／颜色格式被解析结果 Schema 拒绝，以及四种读取投影和写入保护语料的完整性。此入口纳入 `pnpm check`；测试不运行生产者 Markdown 解析器或 HTTP，也不把源码字符串的语法验证等同于解析结果 Schema 校验。
+
+镜像仅置于测试目录，不进入 Foundation 运行时包、Token 或公开导出。目录只从记录中的 Backend 精确 SHA 同步，不能手改镜像添加字体或更新资源状态；消费者直接固定 Backend 来源，不升级 Foundation 未发布提交。大型 manifest 和生成索引只登记来源哈希／长度，交接时从同提交 `git show` 核对索引描述符、目录和预算一致；CI 不声称联网重新核验远端资源。
+
+实际 Markdown 投影、字体／颜色保存保护、剪贴板、编辑往返、可见字符回退、资源完整性／预算、浏览器与 Flutter 设备画面由消费者用同一语料执行。完整接入与成本证据边界见[正文字体规范](../docs/thread-fonts.md)。

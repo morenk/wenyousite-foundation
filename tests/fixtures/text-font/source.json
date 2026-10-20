@@ -1,0 +1,44 @@
+{
+  "repository": "morenk/wenyousite-backend",
+  "commit": "1cf51dd752a98e3733f3dc0c83b17add75be7e46",
+  "purpose": "只读测试镜像；消费者直接固定 Backend 契约，不作为 Foundation 运行时目录",
+  "files": {
+    "markdown-text-font-v1.schema.json": {
+      "sourcePath": "contracts/markdown-text-font-v1.schema.json",
+      "sha256": "cf126196cd457bd045a12c6a9546483b6dc72c1c7817b536919daf40b8429920",
+      "bytes": 977
+    },
+    "markdown-text-font-v1-fixtures.json": {
+      "sourcePath": "contracts/markdown-text-font-v1-fixtures.json",
+      "sha256": "8b1705fb9c19e05cb9c2631d69b89c464a88e533755a5eee45d533ede043bfef",
+      "bytes": 9768
+    },
+    "thread-font-catalog-v1.json": {
+      "sourcePath": "contracts/thread-font-catalog-v1.json",
+      "sha256": "6b50fef4967d7f1e605e962ca6528edb777f8d97fff526a1ed6df72e68b0bb24",
+      "bytes": 1795
+    }
+  },
+  "references": {
+    "docs/markdown-text-font-v1.md": {
+      "sha256": "2b0faf1d0ba0cc6bdf41b4694d0c6ca13448dbdd42de6a6e56007e97754a5ac1",
+      "bytes": 7345
+    },
+    "docs/thread-font-assets.md": {
+      "sha256": "4cf275a68739e90854a29373b5d0eeb12fe9dbd716b1cad86fe8ddc745bac78a",
+      "bytes": 12250
+    },
+    "contracts/thread-font-manifest-v1.json": {
+      "sha256": "ad22427e048b90f798bddafc308195786600ee006459f54144610d1bbe35d5c3",
+      "bytes": 3207159
+    },
+    "contracts/thread-font-manifest-v1.schema.json": {
+      "sha256": "f4300463e82662a4dec3c287bcf0dd335fc7fcddcabff192458b292c1de8ff65",
+      "bytes": 11459
+    },
+    "src/common/text-font-assets.generated.ts": {
+      "sha256": "37aa9b406792f74df47b1561c09608a8a69c73d9e9902aacc59ae4ea5b7e7660",
+      "bytes": 2618
+    }
+  }
+}

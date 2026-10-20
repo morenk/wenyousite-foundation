@@ -80,11 +80,12 @@
   ],
   "scripts": {
     "generate": "node scripts/generate.mjs",
-    "check": "node scripts/check.mjs && node scripts/generate.mjs --check && pnpm test:formatting && pnpm test:audio && pnpm test:text-color",
+    "check": "node scripts/check.mjs && node scripts/generate.mjs --check && pnpm test:formatting && pnpm test:audio && pnpm test:text-color && pnpm test:text-font",
     "test:audio": "node --test tests/audio.test.mjs",
     "test:formatting": "node --test tests/formatting.test.mjs",
     "check:package": "node scripts/check-package.mjs",
-    "test:text-color": "node --test tests/text-color.test.mjs"
+    "test:text-color": "node --test tests/text-color.test.mjs",
+    "test:text-font": "node --test tests/text-font.test.mjs"
   },
   "dependencies": {
     "lucide-static": "1.28.0"
