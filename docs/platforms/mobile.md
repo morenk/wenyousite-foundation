@@ -32,7 +32,7 @@
 - 移动端阅读进度、手动快翻和自适应阅读滑块属于 Mobile 产品实现，由 Mobile 的 `ReadingScrollSpec` 管理状态、尺寸、阈值、时序、手势竞争及专属可访问性语义；Foundation 不发布这些产品专属常量。实现仍消费 Foundation 的通用主题 Token、动效尺度、普通表单滑块与无障碍基础。
 - Snackbar 只承载短暂确认；加载失败、权限受限和需要重试的结果保留在原任务上下文。浮层使用 Foundation elevation 角色，并保留安全区与系统返回。
 
-v7 接入只在 Windows 完成：等待正式 Tag 后独立升级依赖，移除旧捆绑字体注册、资产声明和家族名常量引用；`WenyouFoundationTypography.mobileFamilies` 只返回 body/display/utility 语义角色，结合 sizes、lineHeights、weights 映射到继承平台默认字体的 TextStyle，不设置自定义 fontFamily/fontFamilyFallback，也不把 `system-ui` 当作 Flutter 字体名。设置与管理标题仍选择 body 600，保留 pageTitle 等角色映射。验证中文与中英混排、数字、长标题换行、编辑与阅读、品牌文字、双倍文字缩放、单列布局、48dp 触控和安全区；本 Foundation 任务不代表已完成消费者升级或 Flutter 真机验收。
+UI 与默认正文的 v7 接入只在 Windows 完成：等待正式 Tag 后独立升级依赖，移除旧捆绑字体注册、资产声明和家族名常量引用；`WenyouFoundationTypography.mobileFamilies` 只返回 body/display/utility 语义角色，结合 sizes、lineHeights、weights 映射到继承平台默认字体的 TextStyle，不设置自定义 fontFamily/fontFamilyFallback，也不把 `system-ui` 当作 Flutter 字体名。设置与管理标题仍选择 body 600，保留 pageTitle 等角色映射。验证中文与中英混排、数字、长标题换行、编辑与阅读、品牌文字、双倍文字缩放、单列布局、48dp 触控和安全区；本 Foundation 任务不代表已完成消费者升级或 Flutter 真机验收。
 
 ## Android 下载兼容
 
@@ -52,6 +52,12 @@ v7 接入只在 Windows 完成：等待正式 Tag 后独立升级依赖，移除
 - 展示协调者在前台安全时机串行处理：先强制，应用可用后升级后提醒优先，推荐择后且不叠窗。使用实际安装包身份核验说明，跨多版只提示本次安装版；强制使用不可关闭的弹窗／启动门禁容器，直接显示完整说明，系统返回、遮罩和任何一次性记录都不能解除阻断。
 - 下载、关闭和重试控件保持既有触控下限与安全区，文字缩放后仍能读完整内容并执行动作。亮色与黑夜均检查长说明、错误态、读屏顺序、焦点恢复及弹窗优先级；推荐与升级后说明失败可关闭／重试，不阻断普通启动。强制说明失败保留重试与原更新动作，弹窗持续阻断且不可关闭。
 - 本规范不要求升级 Foundation 依赖；功能接入、实际画面、真机及发版预检验证只由 Windows Mobile 任务完成，不扩展 iOS 发版或新增推送。
+
+## 主题帖正文字体
+
+- 遵循[共享正文字体规则](../thread-fonts.md)，复用正文样式区域，在可用高度内单列滚动；保留 48dp 命中区、安全区、系统文字缩放、软键盘和系统返回。名称和状态继承 UI 系统字体，样字预览与正文的字体仅作用于相应文本。
+- 只按 Backend 的 Mobile 资源记录下载、校验并注册需要的家族，不将 Web 的 CSS 家族名或分片加载方式照搬为 Flutter 方案；不把 30 个家族打入安装包，也不在启动或打开选择器时全部注册。字体文件、解码缓冲和已注册字体分别记录成本；不能把删除磁盘缓存描述为已释放引擎字体内存。
+- 下载、注册和排版异步完成时保留当前阅读内容、选区及输入法组合状态；长列表更新高度测量并保持可见文字锚点。缺资源或离线仍显示原文；缓存清理不改草稿或已保存 `fontId`。接入和实际内存、安装包、真机验收只在 Windows 的 Mobile 任务执行。
 
 ## 主题帖 RGB 取色
 
