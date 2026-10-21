@@ -4,12 +4,12 @@
 
 ## 范围与事实源
 
-- 首批 revision 5 目录为 29 个风格有明显差异的字体家族：原 17 款移除站酷小薇体、加入怪盗予告黑体，再增加日文 6 款、英文 6 款；名单以 Backend 目录 `1.1.0` 为准。字重、斜体或资源分片不能重复计为不同家族。它们用于一般文字表达，不加入特效模板、动画、渐变或任意字体上传。
+- 首批 revision 5 目录为 29 个风格有明显差异的字体家族：原 17 款移除站酷小薇体、加入怪盗予告黑体，再增加日文 6 款、英文 6 款；名单以 Backend 目录 `1.1.1` 为准。字重、斜体或资源分片不能重复计为不同家族。它们用于一般文字表达，不加入特效模板、动画、渐变或任意字体上传。
 - 应用导航、控件、用户名、时间、计数、主题标题和列表摘要继续使用系统字体；不得把作者选择写入全局主题、整页字体或持久化为应用外观偏好。主题、子帖、楼层、回复等具体正文写入范围以 Backend 的能力与协议为准，不据共用编辑器扩大到动态或私信。
 - Backend 唯一拥有字体目录、稳定 `fontId`、家族及中英覆盖、授权与来源、字重资源、Web／Mobile 文件及分片、版本／摘要、分发与能力声明，以及字体和颜色组合的 Markdown、剪贴板、摘要、错误与旧端覆盖保护。本仓不另建运行时目录或分发字体文件，不另定 HTTP API、属性语法和资源版本；测试所需目录只保留带来源哈希的原字节镜像。
-- 协议与测试镜像固定 Backend 提交 `a192628fc1484990871a8d159a7324446cdf0b05`（OpenAPI `5.41.0-dev.20261021.2`）。[字体协议 v1](https://github.com/morenk/wenyousite-backend/blob/a192628fc1484990871a8d159a7324446cdf0b05/docs/markdown-text-font-v1.md)、[资源规则](https://github.com/morenk/wenyousite-backend/blob/a192628fc1484990871a8d159a7324446cdf0b05/docs/thread-font-assets.md)、[家族目录](https://github.com/morenk/wenyousite-backend/blob/a192628fc1484990871a8d159a7324446cdf0b05/contracts/thread-font-catalog-v1.json)与[资源 manifest](https://github.com/morenk/wenyousite-backend/blob/a192628fc1484990871a8d159a7324446cdf0b05/contracts/thread-font-manifest-v1.json)是本轮 revision 5 来源；后续资源变更须从 Backend 新提交整体同步，不手改镜像或自造字段。消费者直接同步生产者契约，不依赖未发布的 Foundation 运行时产物。
+- 协议与测试镜像固定 Backend 提交 `102b825379eb5da462f0ff765b29dc8fd7fb93ad`（OpenAPI `5.41.0-dev.20261021.2`）。[字体协议 v1](https://github.com/morenk/wenyousite-backend/blob/102b825379eb5da462f0ff765b29dc8fd7fb93ad/docs/markdown-text-font-v1.md)、[资源规则](https://github.com/morenk/wenyousite-backend/blob/102b825379eb5da462f0ff765b29dc8fd7fb93ad/docs/thread-font-assets.md)、[家族目录](https://github.com/morenk/wenyousite-backend/blob/102b825379eb5da462f0ff765b29dc8fd7fb93ad/contracts/thread-font-catalog-v1.json)与[资源 manifest](https://github.com/morenk/wenyousite-backend/blob/102b825379eb5da462f0ff765b29dc8fd7fb93ad/contracts/thread-font-manifest-v1.json)是本轮 revision 5 来源；后续资源变更须从 Backend 新提交整体同步，不手改镜像或自造字段。消费者直接同步生产者契约，不依赖未发布的 Foundation 运行时产物。
 
-上述固定提交的快照登记 29 款，其中 28 款资源为 `ready`，怪盗予告黑体为 `pendingSource`；小城拉风体已按原 TTF 核验并就绪。`ready` 只表示本地资源已核验，不代表已经发布、覆盖全部中英日字符或通过消费者验收。怪盗原 ZIP 的后续核验不改写此固定快照；完整 29 款资源仍待 Backend 最终提交后同步。
+上述固定提交的快照登记 29 款，全部资源为 `ready`；怪盗予告黑体已锁定原 ZIP 并按 OFL-1.1 构建固定分片，小城拉风体保留原 TTF。`ready` 只表示本地资源已核验，不代表已经发布、覆盖全部中英日字符或通过消费者验收。怪盗原包不含独立许可文件，随资产分发的完整许可与归属来源以 Backend 源锁记录为准，不称其为原包附带文件。
 
 ## 语言分组
 
@@ -77,7 +77,7 @@ Web 与 Mobile 使用同一业务身份，但消费各自的资源描述，不�
 
 - 目录验收依据 Backend 已提交版本，确认首批 29 个家族的数量口径、完整资源可用状态、许可、真实中英日样字、缺字回退与风格差异；Foundation 文档不代表该目录、授权或字体质量已通过验收。
 - Web／Flutter 使用同一后端语料验证选择局部文字、跨段、混合字体、先选后输入、中文输入法、颜色与格式组合、默认、取消、撤销／重做、草稿、复制粘贴及 Web → App → Web 往返。资源失败不改原文与属性，无法保源不发覆盖写请求。
-- 覆盖冷缓存、离线、缺字、资源失效／损坏、快速切换、目录更新、缓存回收，以及字体异步到达时的长讨论阅读锚点和编辑选区；按上表分别提供流量、包体、磁盘和内存证据。预算按首批 29 款目标调整，逐项区分已核验资源实测与缺资源的未测项，不以旧 30 款预算或预览大小替代；此前 audit-v3 的 11 款子集实验不再作为正式构建成本依据；上述固定提交中 28 款构建产物的分片、覆盖与实际字节数直接引用上述 Backend manifest 和资源规则，也不能冒称完整 29 款或运行内存实测；预算数值与未覆盖项随消费者交付，不在本文猜测。
+- 覆盖冷缓存、离线、缺字、资源失效／损坏、快速切换、目录更新、缓存回收，以及字体异步到达时的长讨论阅读锚点和编辑选区；按上表分别提供流量、包体、磁盘和内存证据。预算按首批 29 款目标调整，逐项区分已核验资源实测与缺资源的未测项，不以旧 30 款预算或预览大小替代；此前 audit-v3 的 11 款子集实验不再作为正式构建成本依据；上述固定提交中 29 款构建产物的分片、覆盖与实际字节数直接引用上述 Backend manifest 和资源规则，不能把资源构建核验当作运行内存实测；预算数值与未覆盖项随消费者交付，不在本文猜测。
 - Web 提供桌面／窄屏、明暗、缩放和键盘操作画面；Mobile 在 Windows 提供窄屏、明暗、大字号、安全区与键盘状态画面。负责人确认实际样字、可读性、选择效率与滚动体验；文档检查不代替视觉或真机验收。真实环境自动化只读，写入 E2E 仍使用本轮核验的独立隔离资源。
 - 此次补充业务接入文档、规则和测试镜像，不新增 Foundation Token、Schema、导出、生成常量或版本；无需新 Tag，消费者继续锁定已发布版本，可保持 `v7.6.0`。若实际实现必须新增 Foundation 运行时规则，则报告发布依赖，等待负责人明确版本与正式发布，不能引用未发布提交或复制候选常量。
 - 新写开放、旧端降级和关闭新写时的保源依 Backend 协议执行，顺序为兼容后端 → 可读保源消费者 → 开放新写。合并、Tag／Release 和部署仍须明确授权；本次不删除旧协议或字体迁移历史，回滚也不能静默抹掉已保存字体。

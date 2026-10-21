@@ -39,8 +39,8 @@ test("解析结果 Schema 与后端目录身份一致，资源未就绪不删除
   assert.ok(catalog.fonts.every(({ availability }) => ["ready", "pendingSource"].includes(availability)));
 });
 
-test("revision 5 语言分类来自目录，待资源身份仍参与日文分组", () => {
-  assert.equal(catalog.catalogVersion, "1.1.0");
+test("最终目录保留三种语言分类，29 款全部资源就绪", () => {
+  assert.equal(catalog.catalogVersion, "1.1.1");
   const groups = { zh: [], ja: [], en: [] };
   for (const font of catalog.fonts) {
     assert.ok(Object.hasOwn(groups, font.designLanguage), font.id);
@@ -52,10 +52,8 @@ test("revision 5 语言分类来自目录，待资源身份仍参与日文分组
   for (const id of ["shinsyoku-mincho", "hakkou-mincho", "bouken-gothic", "kaitou-yokoku-gothic"]) {
     assert.ok(groups.ja.includes(id), id);
   }
-  assert.equal(catalog.fonts.filter(({ availability }) => availability === "ready").length, 28);
-  assert.deepEqual(catalog.fonts.filter(({ availability }) => availability === "pendingSource").map(({ id }) => id), [
-    "kaitou-yokoku-gothic",
-  ]);
+  assert.equal(catalog.fonts.filter(({ availability }) => availability === "ready").length, 29);
+  assert.deepEqual(catalog.fonts.filter(({ availability }) => availability === "pendingSource"), []);
   assert.equal(catalog.fonts.some(({ id }) => id === "zcoolxiaowei"), false);
   // 固定源快照的分类与状态；客户端对未知语言的回退仍由各端验证。
 });

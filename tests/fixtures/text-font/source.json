@@ -1,6 +1,6 @@
 {
   "repository": "morenk/wenyousite-backend",
-  "commit": "a192628fc1484990871a8d159a7324446cdf0b05",
+  "commit": "102b825379eb5da462f0ff765b29dc8fd7fb93ad",
   "purpose": "只读测试镜像；消费者直接固定 Backend 契约，不作为 Foundation 运行时目录",
   "files": {
     "markdown-text-font-v1.schema.json": {
@@ -15,30 +15,30 @@
     },
     "thread-font-catalog-v1.json": {
       "sourcePath": "contracts/thread-font-catalog-v1.json",
-      "sha256": "20e0fd55c8b971df84917fa70e490cbc0c6bf72f721dab0ab5bb7a7c1769e671",
-      "bytes": 3857
+      "sha256": "0407cbbe81e543ae008273818770b70a9a9bea59e51ac23de3fff9c6d6576dd4",
+      "bytes": 3849
     }
   },
   "references": {
     "docs/markdown-text-font-v1.md": {
-      "sha256": "ee4c836ab661bc0cb4832a27aa42a15f9e00ddcfab0661e9d7ce8b10403f1ddb",
-      "bytes": 7142
+      "sha256": "a20a02734fd0aa307330ed545585ab3be3e74492a4504ba535336398319f0a69",
+      "bytes": 7181
     },
     "docs/thread-font-assets.md": {
-      "sha256": "185733746cf73c09d83f488c5d5c364a4b7060b296404f840fd18654c1663728",
-      "bytes": 14775
+      "sha256": "11de7e9c60d8a822b7c2b6a3be43e4efa699a64ad2f4616fe343b1ecbdb227b6",
+      "bytes": 15835
     },
     "contracts/thread-font-manifest-v1.json": {
-      "sha256": "e793a3f4674a85840c8da2cd2a5c53f8af62c3c6256a951d269875f4cba2f1e6",
-      "bytes": 4802519
+      "sha256": "7aab91a436933049bc8f55c1aba6085078a251d174c5b253456d3af0c91a0582",
+      "bytes": 5031019
     },
     "contracts/thread-font-manifest-v1.schema.json": {
       "sha256": "b4a28cd978a1b72428cab6c5262e7728544f2239889070ed2ad2d49acf1a9367",
       "bytes": 18238
     },
     "src/common/text-font-assets.generated.ts": {
-      "sha256": "03d72b94985a8d953b3d3f7cd529334a8049cea1c386abe2eb7975b2e3b1a66c",
-      "bytes": 4680
+      "sha256": "baf5a453126f252d44407f48809e12bb488f66e11037fa663e191959d97fa85c",
+      "bytes": 4672
     }
   }
 }
