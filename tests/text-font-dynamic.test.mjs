@@ -29,7 +29,7 @@ const mutate = (object, path, value) => {
 test("动态镜像固定生产者提交与原字节，旧协议来源独立保留", () => {
   assert.equal(source.repository, "morenk/wenyousite-backend");
   assert.match(source.commit, /^[a-f0-9]{40}$/);
-  assert.equal(source.apiVersion, "5.43.0-dev.20261022.1");
+  assert.equal(source.apiVersion, "5.43.0-dev.20261022.2");
   assert.deepEqual(Object.keys(source.files).sort(), [
     "markdown-text-font-v2-fixtures.json", "markdown-text-font-v2.schema.json",
     "thread-font-dynamic-v2-fixtures.json", "thread-font-manifest-v2.schema.json",
@@ -259,4 +259,73 @@ test("可信导入保留 WYF1 alias，跨协议夹具要求相同注册键零新
     assert.equal(entry.expectedChargedBytes, legacyEvent.bytes);
   }
   // 只核对生产者轨迹与绑定；源清单实物在同步时核验，真实引擎去重由 Mobile 执行。
+});
+
+test("动态支持要求完整导入发布，激活后固定映射只走版本状态网关", () => {
+  assert.deepEqual(dynamic.legacyRoutingRules, {
+    activation: "textFontV2Supported=true",
+    activationStickyWithinSession: true,
+    mappingFile: "thread-font-v1-import-map.json",
+    statusSource: "v2-version-descriptor",
+    assetSource: "v2-version-gateway",
+    allowLegacyManifestFallback: false,
+    preserveSourceMarkup: true,
+    unmappedRetiredLegacyRenderAllowed: false,
+    serverSupportRequiresAllMappedVersionsPublished: true,
+    writeEnabledRequiresSupportAndFeatureFlag: true,
+    withdrawnTombstoneWins: true,
+    legacyPublicBytesRevocable: false,
+    supportIndependentOfCurrentSelectionEnabledOrWithdrawn: true,
+    knownTombstoneOverridesCapabilityDowngrade: true,
+  });
+});
+
+test("旧标记路由语料保留可信缓存及墓碑，未知与失败不触发旧 manifest", () => {
+  const expected = {
+    "mapped-active": [true, true, "v2"],
+    "mapped-disabled": [true, false, "v2"],
+    "mapped-withdrawn": [false, false, "none"],
+    "mapped-unknown": [false, false, "none"],
+    "mapped-404": [false, false, "none"],
+    "offline-trusted": [true, true, "none"],
+    "404-trusted": [true, true, "none"],
+    "offline-tombstone": [false, false, "none"],
+    "stale-published-after-tombstone": [false, false, "none"],
+  };
+  const cases = dynamic.legacyRoutingCases;
+  assert.equal(new Set(cases.map(({ id }) => id)).size, cases.length);
+  assert.deepEqual(cases.map(({ id }) => id).sort(), Object.keys(expected).sort());
+  for (const entry of cases) {
+    const mapped = mapping.fonts.find(({ legacyId }) => legacyId === entry.legacyId);
+    assert.ok(mapped, entry.id);
+    assert.equal(entry.versionId, mapped.versionId, entry.id);
+    assert.equal(entry.expectedLegacyManifestRequests, 0, entry.id);
+    assert.equal(entry.expectedSourceUnchanged, true, entry.id);
+    assert.deepEqual([entry.expectedRenderAllowed, entry.expectedPasteAllowed, entry.expectedAssetRequest],
+      expected[entry.id], entry.id);
+  }
+  assert.deepEqual(new Set(cases.map(({ response }) => response)), new Set([
+    "published", "disabled", "withdrawn", "unknown", "404", "network-error", "stale-published",
+  ]));
+  // 只验证生产者路由预期，不构造消费者状态机或发起资源请求。
+});
+
+test("已激活或已知墓碑不因能力 false、缺失和离线回退旧通道", () => {
+  const expected = {
+    "not-yet-imported": "legacy-v1",
+    "activated-then-false": "mapped-v2",
+    "activated-then-missing": "mapped-v2",
+    "activated-then-offline": "mapped-v2",
+    "tombstone-then-false": "default-font",
+    "tombstone-then-missing": "default-font",
+  };
+  const cases = dynamic.legacyCapabilityCases;
+  assert.equal(new Set(cases.map(({ id }) => id)).size, cases.length);
+  assert.deepEqual(cases.map(({ id }) => id).sort(), Object.keys(expected).sort());
+  for (const entry of cases) assert.equal(entry.expectedRoute, expected[entry.id], entry.id);
+  for (const capability of [false, null, "network-error"]) {
+    assert.ok(cases.some((entry) => entry.previouslyActivated && entry.capability === capability));
+  }
+  assert.ok(cases.some((entry) => !entry.previouslyActivated && entry.knownWithdrawn
+    && entry.expectedRoute === "default-font"));
 });

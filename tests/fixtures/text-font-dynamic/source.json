@@ -1,8 +1,8 @@
 {
   "repository": "morenk/wenyousite-backend",
-  "commit": "a720be6d29f578f39186696b1e7ac2842a910ad9",
-  "apiVersion": "5.43.0-dev.20261022.1",
-  "purpose": "只读动态协议测试镜像；运行入口尚为503且新写关闭，不代表运行验收",
+  "commit": "7c9719e44dbdc62ede77056fe93a98551133d0e9",
+  "apiVersion": "5.43.0-dev.20261022.2",
+  "purpose": "只读动态协议测试镜像；运行入口尚为503且支持及新写关闭，不代表运行验收",
   "files": {
     "markdown-text-font-v2.schema.json": {
       "sourcePath": "contracts/markdown-text-font-v2.schema.json",
@@ -16,8 +16,8 @@
     },
     "thread-font-dynamic-v2-fixtures.json": {
       "sourcePath": "contracts/thread-font-dynamic-v2-fixtures.json",
-      "sha256": "8e538534d89839fc72d6a811ea409cf5f6245e5c67f67480cbeb2093cb2ceeb0",
-      "bytes": 3248
+      "sha256": "81208c419c05b8cdac64a1e48655b124229c5a47efa9976a75adb5f980b2d039",
+      "bytes": 8658
     },
     "thread-font-manifest-v2.schema.json": {
       "sourcePath": "contracts/thread-font-manifest-v2.schema.json",
@@ -42,12 +42,12 @@
   },
   "references": {
     "docs/dynamic-text-fonts.md": {
-      "sha256": "4a878f832ed355af47af8468b4aa73844f14fbacf2544f9bc57276a9d2f2635a",
-      "bytes": 11540
+      "sha256": "4ad3ae21426baf83940fa17180d1a28d7f9f0fca9185fed54efbdbe185b15588",
+      "bytes": 13935
     },
     "contracts/openapi.json": {
-      "sha256": "01df60c9c87e20b7cbba015b68ea23a39884eb75ca4e2cc878efbd9357629dd9",
-      "bytes": 1783244
+      "sha256": "5ea67140592e7234240a88cd3e985b333f4360874746df28932d312658b5fd1f",
+      "bytes": 1783306
     },
     "src/text-fonts/font-protocol.ts": {
       "sha256": "d54f58d74207f3a92d268472928e3006190489009ec9ca3977bd01c6ee258117",
@@ -68,6 +68,14 @@
     "contracts/thread-font-manifest-v1.json": {
       "sha256": "e2836703a30eec5f59dd9d4d72f6887756c2dd30c070606db5cee258ebd0efa3",
       "bytes": 4941141
+    },
+    "docs/deprecation-register.md": {
+      "sha256": "c012d4683b6d9d53ac02e18fa85d0f56b4f5fbd2e6598064cb310e4744b867a1",
+      "bytes": 19160
+    },
+    "src/meta/meta.controller.ts": {
+      "sha256": "9de28b0bd0ef20444cd5a8eb3bb000e43e2d264fb815682ff3a831bda58d725c",
+      "bytes": 5519
     }
   }
 }
