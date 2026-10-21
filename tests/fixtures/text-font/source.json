@@ -1,6 +1,6 @@
 {
   "repository": "morenk/wenyousite-backend",
-  "commit": "102b825379eb5da462f0ff765b29dc8fd7fb93ad",
+  "commit": "d86734e5aa229c5401a092096b8845b3d17546b0",
   "purpose": "只读测试镜像；消费者直接固定 Backend 契约，不作为 Foundation 运行时目录",
   "files": {
     "markdown-text-font-v1.schema.json": {
@@ -17,16 +17,31 @@
       "sourcePath": "contracts/thread-font-catalog-v1.json",
       "sha256": "0407cbbe81e543ae008273818770b70a9a9bea59e51ac23de3fff9c6d6576dd4",
       "bytes": 3849
+    },
+    "thread-font-runtime-policy-v2.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v2.json",
+      "sha256": "e0d0edb8ca7ab38a814f77177669dfbfa64946ab22d39e802a8901ba62719ae5",
+      "bytes": 1759
+    },
+    "thread-font-runtime-policy-v2.schema.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v2.schema.json",
+      "sha256": "a2fac8f2030f54d6083d2a0e9b8f95fa762bba0193d6b02be51873161f80171e",
+      "bytes": 8012
+    },
+    "thread-font-runtime-policy-v2-fixtures.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v2-fixtures.json",
+      "sha256": "cf7cefa1bd5adcc43bf91f687fc52e84c06055b541b1e1b55948b1c06583e687",
+      "bytes": 5424
     }
   },
   "references": {
     "docs/markdown-text-font-v1.md": {
-      "sha256": "a20a02734fd0aa307330ed545585ab3be3e74492a4504ba535336398319f0a69",
-      "bytes": 7181
+      "sha256": "5f10692c8d011e2a17ac090982c48905abd0da59c271fcbf726d945ab82ed584",
+      "bytes": 7379
     },
     "docs/thread-font-assets.md": {
-      "sha256": "11de7e9c60d8a822b7c2b6a3be43e4efa699a64ad2f4616fe343b1ecbdb227b6",
-      "bytes": 15835
+      "sha256": "b7e77733f76b2c9fa9db900ad16824010285a679b4ebe58912a5a4adc38eae97",
+      "bytes": 16241
     },
     "contracts/thread-font-manifest-v1.json": {
       "sha256": "7aab91a436933049bc8f55c1aba6085078a251d174c5b253456d3af0c91a0582",
@@ -39,6 +54,14 @@
     "src/common/text-font-assets.generated.ts": {
       "sha256": "baf5a453126f252d44407f48809e12bb488f66e11037fa663e191959d97fa85c",
       "bytes": 4672
+    },
+    "docs/thread-font-runtime-policy.md": {
+      "sha256": "b70d46a8c3cf672a4b7ce88b2a92d8fc104fd0d22638e833675664175b520153",
+      "bytes": 9345
+    },
+    "src/common/text-font-runtime-policy.generated.ts": {
+      "sha256": "0e28ed98c33694c7fb0db887a773a1b68ccc27e844bfce802ab063a24378e9e1",
+      "bytes": 1901
     }
   }
 }

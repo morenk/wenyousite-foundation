@@ -2,8 +2,10 @@
 
 ## 主题帖正文字体业务边界
 
+- 持续加载通过 Backend `d86734e5aa229c5401a092096b8845b3d17546b0`（API `5.42.0-dev.20261021.1`）的独立运行策略 v2 接入，显式协商并绑定 manifest SHA；旧 manifest 及累计 limits 原义保留。网络窗口刷新、Web 无引用回收及 Mobile 固定快照注册是不同生命周期，不以抬上限、改字段含义或重启引擎替代持续读取。目录／策略元数据也计入网络窗口并按本地 64 KiB 预占、流式限长；策略不可用或不匹配时仅按已验证 v1 限额回退，不修改正文或 clipboard v2。
+
 - 原系统字体约定覆盖 UI 和默认正文；按本次授权增加[作者选择的正文字体](thread-fonts.md)例外，不把原约定追溯解释为一直允许下载正文字体。主题、控件、元数据、标题等 UI 仍使用系统字体，Foundation 的空 `fonts`、三个字体角色与已发布产物保持不变。
-- [Backend 已提交字体 v1](https://github.com/morenk/wenyousite-backend/blob/102b825379eb5da462f0ff765b29dc8fd7fb93ad/docs/markdown-text-font-v1.md)（`102b825379eb5da462f0ff765b29dc8fd7fb93ad`）拥有稳定 `fontId`、组合标记、独立读写能力及旧端覆盖保护；该 revision 5 快照为目录 `1.1.1`、29 款全部 `ready`，怪盗予告黑体原包与 OFL 派生分片已核验。小城拉风体以项目授权原 TTF 就绪，`deliveryMode: original` 与绑定文件哈希的预算例外不可扩大为通用额度。不把本地 `ready` 当成已发布或允许新写。
+- [Backend 已提交字体 v1](https://github.com/morenk/wenyousite-backend/blob/d86734e5aa229c5401a092096b8845b3d17546b0/docs/markdown-text-font-v1.md)（`d86734e5aa229c5401a092096b8845b3d17546b0`）拥有稳定 `fontId`、组合标记、独立读写能力及旧端覆盖保护；该 revision 5 快照为目录 `1.1.1`、29 款全部 `ready`，怪盗予告黑体原包与 OFL 派生分片已核验。小城拉风体以项目授权原 TTF 就绪，`deliveryMode: original` 与绑定文件哈希的预算例外不可扩大为通用额度。不把本地 `ready` 当成已发布或允许新写。
 - revision 5 移除未发布候选站酷小薇体、加入怪盗予告黑体，另增日文 6 款与英文 6 款。两端消费 `designLanguage`，中文／日文／英文分别 13／10／6 款；缺失或未知值保留未分类／系统回退，不以汉字或字符覆盖推断语言。原字节镜像与来源哈希已整体同步上述提交，包含怪盗最终资源状态。移除未发布候选与历史身份兼容分开处理；已提交不等于已上线，不虚构退役迁移，也不据候选调整删除实际历史身份。
 - 本仓新增只读测试镜像与 Schema／完整性验证，原始字节、来源路径和 SHA-256 见[来源记录](../tests/fixtures/text-font/source.json)，不分发运行时业务目录。既有颜色协议与语料镜像保留，字体与颜色的四种协商组合用字体 v1 语料验证，不覆盖旧色彩版本或删除兼容协议。
 - 所有正文写入（含清空字体）声明 DTO 能力，缺能力仍拒绝旧端覆盖；新写默认关闭，关闭时保留／移除和无字体编辑规则由 Backend 拥有。`assetBaseUrl: null` 时禁止请求资源或第三方上游，未知、离线、缺字、完整性失败和超预算仅显示回退，保留正文身份。
