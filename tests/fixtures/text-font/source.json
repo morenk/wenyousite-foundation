@@ -1,12 +1,12 @@
 {
   "repository": "morenk/wenyousite-backend",
-  "commit": "1cf51dd752a98e3733f3dc0c83b17add75be7e46",
+  "commit": "a192628fc1484990871a8d159a7324446cdf0b05",
   "purpose": "只读测试镜像；消费者直接固定 Backend 契约，不作为 Foundation 运行时目录",
   "files": {
     "markdown-text-font-v1.schema.json": {
       "sourcePath": "contracts/markdown-text-font-v1.schema.json",
-      "sha256": "cf126196cd457bd045a12c6a9546483b6dc72c1c7817b536919daf40b8429920",
-      "bytes": 977
+      "sha256": "16491effe91ad69787860d394ebe7859f5cabac696133a390c741a3945f9542f",
+      "bytes": 1250
     },
     "markdown-text-font-v1-fixtures.json": {
       "sourcePath": "contracts/markdown-text-font-v1-fixtures.json",
@@ -15,30 +15,30 @@
     },
     "thread-font-catalog-v1.json": {
       "sourcePath": "contracts/thread-font-catalog-v1.json",
-      "sha256": "6b50fef4967d7f1e605e962ca6528edb777f8d97fff526a1ed6df72e68b0bb24",
-      "bytes": 1795
+      "sha256": "20e0fd55c8b971df84917fa70e490cbc0c6bf72f721dab0ab5bb7a7c1769e671",
+      "bytes": 3857
     }
   },
   "references": {
     "docs/markdown-text-font-v1.md": {
-      "sha256": "2b0faf1d0ba0cc6bdf41b4694d0c6ca13448dbdd42de6a6e56007e97754a5ac1",
-      "bytes": 7345
+      "sha256": "ee4c836ab661bc0cb4832a27aa42a15f9e00ddcfab0661e9d7ce8b10403f1ddb",
+      "bytes": 7142
     },
     "docs/thread-font-assets.md": {
-      "sha256": "4cf275a68739e90854a29373b5d0eeb12fe9dbd716b1cad86fe8ddc745bac78a",
-      "bytes": 12250
+      "sha256": "185733746cf73c09d83f488c5d5c364a4b7060b296404f840fd18654c1663728",
+      "bytes": 14775
     },
     "contracts/thread-font-manifest-v1.json": {
-      "sha256": "ad22427e048b90f798bddafc308195786600ee006459f54144610d1bbe35d5c3",
-      "bytes": 3207159
+      "sha256": "e793a3f4674a85840c8da2cd2a5c53f8af62c3c6256a951d269875f4cba2f1e6",
+      "bytes": 4802519
     },
     "contracts/thread-font-manifest-v1.schema.json": {
-      "sha256": "f4300463e82662a4dec3c287bcf0dd335fc7fcddcabff192458b292c1de8ff65",
-      "bytes": 11459
+      "sha256": "b4a28cd978a1b72428cab6c5262e7728544f2239889070ed2ad2d49acf1a9367",
+      "bytes": 18238
     },
     "src/common/text-font-assets.generated.ts": {
-      "sha256": "37aa9b406792f74df47b1561c09608a8a69c73d9e9902aacc59ae4ea5b7e7660",
-      "bytes": 2618
+      "sha256": "03d72b94985a8d953b3d3f7cd529334a8049cea1c386abe2eb7975b2e3b1a66c",
+      "bytes": 4680
     }
   }
 }
