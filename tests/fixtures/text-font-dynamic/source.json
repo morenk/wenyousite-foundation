@@ -1,0 +1,69 @@
+{
+  "repository": "morenk/wenyousite-backend",
+  "commit": "01e5fefab99ec6baba075681a995f4e811fb5e4a",
+  "apiVersion": "5.43.0-dev.20261022.1",
+  "purpose": "只读动态协议测试镜像；运行入口尚为503且新写关闭，不代表运行验收",
+  "files": {
+    "markdown-text-font-v2.schema.json": {
+      "sourcePath": "contracts/markdown-text-font-v2.schema.json",
+      "sha256": "a639ef58c6849699f2cbbf05f82ceae56ecb482cf2c4360762038746639c2b57",
+      "bytes": 638
+    },
+    "markdown-text-font-v2-fixtures.json": {
+      "sourcePath": "contracts/markdown-text-font-v2-fixtures.json",
+      "sha256": "c327b33a2ab8167b25c9eeb64ebd102799a1464bb4b7d6f975d3717b58badafb",
+      "bytes": 5615
+    },
+    "thread-font-dynamic-v2-fixtures.json": {
+      "sourcePath": "contracts/thread-font-dynamic-v2-fixtures.json",
+      "sha256": "c8593a783ba5ec28ebe8e49daf8b2660cf182d93bbbe7e27575b35f0d0c72444",
+      "bytes": 2434
+    },
+    "thread-font-manifest-v2.schema.json": {
+      "sourcePath": "contracts/thread-font-manifest-v2.schema.json",
+      "sha256": "556fb0458b09f685f33a5d98a0a76ee68006409432176aee0fda67cd8c80c083",
+      "bytes": 3350
+    },
+    "thread-font-runtime-policy-v3.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v3.json",
+      "sha256": "83b731625cc0f6e30a604d79322ef8c727ee19b819b7ebc61c31d0b0d8ef6ac1",
+      "bytes": 1533
+    },
+    "thread-font-runtime-policy-v3.schema.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v3.schema.json",
+      "sha256": "0ffcec1c307d10cdadb262450e295a4f124ad1aeee522bf19dc2b466f74df4e9",
+      "bytes": 6441
+    },
+    "thread-font-v1-import-map.json": {
+      "sourcePath": "contracts/thread-font-v1-import-map.json",
+      "sha256": "880794e1ed0842e8a6c8731724a5984e23e13fc4cdbf733b69da431b1162b5e5",
+      "bytes": 4613
+    }
+  },
+  "references": {
+    "docs/dynamic-text-fonts.md": {
+      "sha256": "deb9b3c4acbe32f09bc3a702363ea46b937214d934fac62b5e3aad4ad63af318",
+      "bytes": 10911
+    },
+    "contracts/openapi.json": {
+      "sha256": "01df60c9c87e20b7cbba015b68ea23a39884eb75ca4e2cc878efbd9357629dd9",
+      "bytes": 1783244
+    },
+    "src/text-fonts/font-protocol.ts": {
+      "sha256": "d54f58d74207f3a92d268472928e3006190489009ec9ca3977bd01c6ee258117",
+      "bytes": 566
+    },
+    "src/text-fonts/font-version-state.ts": {
+      "sha256": "0fc75edb2d3803fdb0c8f921180104bef97c301d98f046b14f015d6a3948c151",
+      "bytes": 301
+    },
+    "src/text-fonts/font-catalog-page.ts": {
+      "sha256": "3ab2cc8e630c77644a36e9e9d3a506baadec072c7f17a669f394d9980d9a3c3a",
+      "bytes": 2187
+    },
+    "src/text-fonts/text-font-availability.service.ts": {
+      "sha256": "6d60d76e3c344241daea79839bc858165e0b22910c7532f9985af41cbfa2e7ae",
+      "bytes": 622
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 本文规定作者选择正文字体时的共享体验。应用 UI、未指定字体的正文与平台排版尺度继续消费 [Foundation 机器契约](../contracts/foundation.v1.json)；作者选择是正文内容属性，不新增 `body`、`display`、`utility` 角色，也不修改 Foundation 的空 `fonts` 清单。
 
-本文的目录、协议镜像与运行策略对应下述固定 Backend 快照。新增[动态字体行为规范](thread-fonts-dynamic.md)单独记录待契约接入的版本与生命周期要求，不把本文固定目录／快照预算改义为动态协议。
+本文的目录、协议镜像与运行策略对应下述固定 Backend 快照。新增[动态字体行为规范](thread-fonts-dynamic.md)固定动态正文 v2／运行策略 v3 的已提交契约与生命周期要求，不把本文固定目录／快照预算改义为动态协议。
 
 ## 范围与事实源
 

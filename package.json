@@ -85,7 +85,7 @@
     "test:formatting": "node --test tests/formatting.test.mjs",
     "check:package": "node scripts/check-package.mjs",
     "test:text-color": "node --test tests/text-color.test.mjs",
-    "test:text-font": "node --test tests/text-font.test.mjs"
+    "test:text-font": "node --test tests/text-font.test.mjs tests/text-font-dynamic.test.mjs"
   },
   "dependencies": {
     "lucide-static": "1.28.0"
