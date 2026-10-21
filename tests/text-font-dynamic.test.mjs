@@ -229,3 +229,34 @@ test("历史导入映射覆盖旧 28 款且小城退役，不成为动态 ID 白
     assert.equal(validateBody({ version: 2, versionId: font.versionId, content: "历史映射" }), true);
   }
 });
+
+test("可信导入保留 WYF1 alias，跨协议夹具要求相同注册键零新增尝试", () => {
+  const validateFamily = ajv.compile(manifestSchema.properties.shards.items.properties.family);
+  for (const family of [`WYF2-${"a".repeat(32)}-core`, `WYF1-${"a".repeat(16)}-core`]) {
+    assert.equal(validateFamily(family), true, family);
+  }
+  for (const family of [`WYF1-${"a".repeat(32)}-core`, `WYF2-${"a".repeat(16)}-core`,
+    `WYF1-${"A".repeat(16)}-core`, "Display Name", "WYF1-arbitrary-core"]) {
+    assert.equal(validateFamily(family), false, family);
+  }
+  assert.equal(mapping.preserveAssetFamily, true);
+  const legacySource = JSON.parse(fs.readFileSync(new URL("./fixtures/text-font/source.json", import.meta.url)));
+  assert.equal(mapping.sourceManifestSha256, legacySource.references["contracts/thread-font-manifest-v1.json"].sha256);
+  assert.equal(mapping.sourceManifestSha256, source.references["contracts/thread-font-manifest-v1.json"].sha256);
+  const cases = dynamic.legacyImportRegistrationCases;
+  assert.ok(cases.some(({ id }) => id === "v1-then-imported-v2-no-additional-native-attempt"));
+  assert.equal(new Set(cases.map(({ id }) => id)).size, cases.length);
+  for (const entry of cases) {
+    assert.ok(mapping.fonts.some(({ legacyId }) => legacyId === entry.legacyId));
+    assert.equal(entry.sourceManifestSha256, mapping.sourceManifestSha256);
+    assert.deepEqual(entry.events.map(({ protocol }) => protocol), [1, 2]);
+    const [legacyEvent, importedEvent] = entry.events;
+    assert.match(legacyEvent.family, /^WYF1-/);
+    for (const event of entry.events) assert.equal(validateFamily(event.family), true);
+    for (const key of ["sha256", "family", "bytes"]) assert.equal(importedEvent[key], legacyEvent[key], key);
+    assert.equal(entry.expectedNativeAttempts, 1);
+    assert.equal(entry.expectedAdditionalAttemptsAfterImport, 0);
+    assert.equal(entry.expectedChargedBytes, legacyEvent.bytes);
+  }
+  // 只核对生产者轨迹与绑定；源清单实物在同步时核验，真实引擎去重由 Mobile 执行。
+});

@@ -1,6 +1,6 @@
 # 动态主题正文字体
 
-本文固定 Backend `01e5fefab99ec6baba075681a995f4e811fb5e4a`（API `5.43.0-dev.20261022.1`）的[动态字体契约](https://github.com/morenk/wenyousite-backend/blob/01e5fefab99ec6baba075681a995f4e811fb5e4a/docs/dynamic-text-fonts.md)与 [OpenAPI](https://github.com/morenk/wenyousite-backend/blob/01e5fefab99ec6baba075681a995f4e811fb5e4a/contracts/openapi.json)。七份原字节镜像及文档／OpenAPI 等引用摘要见[来源记录](../tests/fixtures/text-font-dynamic/source.json)。Backend 唯一拥有协议、业务目录与资源，Foundation 不建立另一套运行时目录或版本 ID 白名单。
+本文固定 Backend `a720be6d29f578f39186696b1e7ac2842a910ad9`（API `5.43.0-dev.20261022.1`）的[动态字体契约](https://github.com/morenk/wenyousite-backend/blob/a720be6d29f578f39186696b1e7ac2842a910ad9/docs/dynamic-text-fonts.md)与 [OpenAPI](https://github.com/morenk/wenyousite-backend/blob/a720be6d29f578f39186696b1e7ac2842a910ad9/contracts/openapi.json)。七份原字节镜像及文档／OpenAPI 等引用摘要见[来源记录](../tests/fixtures/text-font-dynamic/source.json)。Backend 唯一拥有协议、业务目录与资源，Foundation 不建立另一套运行时目录或版本 ID 白名单。
 
 该提交完成契约与正文保源切片，动态管理和目录运行入口仍为 `503/50301`，`textFontV2WriteEnabled=false`。此状态不是最终动态运行实现；镜像和 Schema 检查通过不代表上传、Worker、发布或客户端同会话流程已验收。后续运行版本须由 Backend 提交，再整体同步相关来源，不读取未提交实现。
 
@@ -107,6 +107,8 @@ Schema 结构测试中的合成清单不代表真实构建产物；范围语义�
 
 后续须固定 Backend 真实 DB／Worker／发布实现的提交，使用已登记隔离入口完成构建后新 ID、第二版、状态切换与失败清理链路；当前 503 和关闭新写只允许验证不可用时的保源回退，不充当完整运行结果。17 项运行验收、Web 画面和 Android 同会话内存仍需逐项提供证据。
 
-可信历史导入复用原 family 的兼容扩展待 Backend 后续提交；当前镜像只记录上述 SHA 的 Schema 形状，不据此将所有运行时动态资源硬编码为新 family 前缀。扩展提交后同步原字节 Schema 与跨协议去重语料，再由 Mobile 在真实引擎账本证明零新增注册，不能仅比较文件 SHA。
+可信历史导入固定 `sourceManifestSha256` 并声明 `preserveAssetFamily=true`，逐对象核验源清单、SHA、长度及原 family。新构建使用 `WYF2-32hex-shard`；导入保留已验证的 `WYF1-16hex-shard`、原 SFNT／WOFF2 字节和 SHA，两种 family 均可出现在 v2 清单中。匹配名称形状本身不证明来源可信，不能给导入资源重取别名。
+
+v1／v2 共用同一运行时注册账本，先读 v1 再读导入 v2 的相同 `(assetSHA,family)` 不新增原生尝试或重复收费。共享 `legacyImportRegistrationCases` 已原字节同步并核对源清单；Mobile 仍须在真实引擎执行，不能以静态预期或仅比较文件 SHA 代替零新增注册证据。不同 family 即使 SHA 相同也继续分别计费，目录更新与协议切换不得清账。
 
 Foundation 机器体验契约、Token、生成产物、包版本及正式 Tag 不变；消费者继续锁定已发布 `v7.6.0`，业务协议直接固定 Backend 已提交契约。契约切片检查通过后可以交接，运行功能未验收前不宣称整项完成或可发布。

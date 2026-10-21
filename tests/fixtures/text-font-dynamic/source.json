@@ -1,6 +1,6 @@
 {
   "repository": "morenk/wenyousite-backend",
-  "commit": "01e5fefab99ec6baba075681a995f4e811fb5e4a",
+  "commit": "a720be6d29f578f39186696b1e7ac2842a910ad9",
   "apiVersion": "5.43.0-dev.20261022.1",
   "purpose": "只读动态协议测试镜像；运行入口尚为503且新写关闭，不代表运行验收",
   "files": {
@@ -16,13 +16,13 @@
     },
     "thread-font-dynamic-v2-fixtures.json": {
       "sourcePath": "contracts/thread-font-dynamic-v2-fixtures.json",
-      "sha256": "c8593a783ba5ec28ebe8e49daf8b2660cf182d93bbbe7e27575b35f0d0c72444",
-      "bytes": 2434
+      "sha256": "8e538534d89839fc72d6a811ea409cf5f6245e5c67f67480cbeb2093cb2ceeb0",
+      "bytes": 3248
     },
     "thread-font-manifest-v2.schema.json": {
       "sourcePath": "contracts/thread-font-manifest-v2.schema.json",
-      "sha256": "556fb0458b09f685f33a5d98a0a76ee68006409432176aee0fda67cd8c80c083",
-      "bytes": 3350
+      "sha256": "2852f42f19a88e8254c467b607f6626df3ec1ed5303f123ec62ff35096b5705c",
+      "bytes": 3370
     },
     "thread-font-runtime-policy-v3.json": {
       "sourcePath": "contracts/thread-font-runtime-policy-v3.json",
@@ -36,14 +36,14 @@
     },
     "thread-font-v1-import-map.json": {
       "sourcePath": "contracts/thread-font-v1-import-map.json",
-      "sha256": "880794e1ed0842e8a6c8731724a5984e23e13fc4cdbf733b69da431b1162b5e5",
-      "bytes": 4613
+      "sha256": "246ab8d162bd593a56ca0737385c46dbde66f068f8ed78a71c21913ce4e6dc27",
+      "bytes": 4738
     }
   },
   "references": {
     "docs/dynamic-text-fonts.md": {
-      "sha256": "deb9b3c4acbe32f09bc3a702363ea46b937214d934fac62b5e3aad4ad63af318",
-      "bytes": 10911
+      "sha256": "4a878f832ed355af47af8468b4aa73844f14fbacf2544f9bc57276a9d2f2635a",
+      "bytes": 11540
     },
     "contracts/openapi.json": {
       "sha256": "01df60c9c87e20b7cbba015b68ea23a39884eb75ca4e2cc878efbd9357629dd9",
@@ -64,6 +64,10 @@
     "src/text-fonts/text-font-availability.service.ts": {
       "sha256": "6d60d76e3c344241daea79839bc858165e0b22910c7532f9985af41cbfa2e7ae",
       "bytes": 622
+    },
+    "contracts/thread-font-manifest-v1.json": {
+      "sha256": "e2836703a30eec5f59dd9d4d72f6887756c2dd30c070606db5cee258ebd0efa3",
+      "bytes": 4941141
     }
   }
 }
