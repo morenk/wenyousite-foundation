@@ -1,8 +1,8 @@
 # 动态主题正文字体
 
-本文固定 Backend `7c9719e44dbdc62ede77056fe93a98551133d0e9`（API `5.43.0-dev.20261022.2`）的[动态字体契约](https://github.com/morenk/wenyousite-backend/blob/7c9719e44dbdc62ede77056fe93a98551133d0e9/docs/dynamic-text-fonts.md)与 [OpenAPI](https://github.com/morenk/wenyousite-backend/blob/7c9719e44dbdc62ede77056fe93a98551133d0e9/contracts/openapi.json)。七份原字节镜像及文档／OpenAPI 等引用摘要见[来源记录](../tests/fixtures/text-font-dynamic/source.json)。Backend 唯一拥有协议、业务目录与资源，Foundation 不建立另一套运行时目录或版本 ID 白名单。
+本文固定 Backend `62a0313a75c85e42dfa39cd09b7cc90ae5c34186`（API `5.43.0-dev.20261022.3`）的[动态字体契约](https://github.com/morenk/wenyousite-backend/blob/62a0313a75c85e42dfa39cd09b7cc90ae5c34186/docs/dynamic-text-fonts.md)与 [OpenAPI](https://github.com/morenk/wenyousite-backend/blob/62a0313a75c85e42dfa39cd09b7cc90ae5c34186/contracts/openapi.json)。七份原字节镜像、审计枚举投影及文档／OpenAPI 等引用摘要见[来源记录](../tests/fixtures/text-font-dynamic/source.json)。Backend 唯一拥有协议、业务目录与资源，Foundation 不建立另一套运行时目录或版本 ID 白名单。
 
-该提交完成契约与正文保源切片，动态管理和目录运行入口仍为 `503/50301`，`textFontV2Supported=false`、`textFontV2WriteEnabled=false`。此状态不是最终动态运行实现；镜像和 Schema 检查通过不代表上传、Worker、发布或客户端同会话流程已验收。后续运行版本须由 Backend 提交，再整体同步相关来源，不读取未提交实现。
+该提交已实现数据库版本、独立 Worker、私有资源网关及历史导入，动态入口不再是固定 503 占位。未配置私有 bucket 或沙箱目录时仍返回 `503/50301`；新写默认关闭，v2 支持及新写按完整导入、资源校验和配置门禁计算。公共环境尚未部署，两端真实联合同会话验收仍待 Android，不能把代码交付或后端测试通过等同于已经上线。
 
 [既有规范](thread-fonts.md)固定的正文 v1 与运行策略 v2 继续作为兼容依据。该运行策略 v2 的固定 28 款快照，与新增动态正文协议是不同概念；不能因为版本名称相似而拼接策略。现有原字节测试镜像不覆盖、不改义。以下动态行为适用于完成新协议接入的消费者。只有本会话尚未激活 v2 且无已知撤回墓碑时，才可继续原 v1 路径；首次确认支持后不得因能力缺失或失败切回旧路径。
 
@@ -83,6 +83,25 @@ Mobile 改为同一 FlutterEngine 内持续追加的注册账本，以 SHA＋fam
 
 管理端 `/admin/text-fonts` 复用管理员 Cookie、ADMIN／SUPER_ADMIN、写操作 CSRF，撤回额外 AdminStepUp。配置与源上传绑定 `expectedFamilyRevision` 和当次配置快照；处理前验证三项权限，不足返回 `409/40929` 并保留 draft。发布／启停需复核家族及目录修订，撤回需目录修订及原因，CAS 冲突 `409/40928`；回滚用发布入口选较旧版本。源、配置和工具链确定 buildKey，ready 不等于已发布，失败只返回固定 failureCode。具体请求 DTO 直接读取上述 OpenAPI，不在 Foundation 重定义。
 
+## 管理审计与运行门禁
+
+OpenAPI 的审计列表、导出筛选及 `AdminAuditLogResponseDto` 已包含以下动作，目标类型为 `TEXT_FONT`。管理端须能筛选、显示和导出这些记录，不能将它们落入未知类型或因仅支持旧枚举而丢失；具体权限、目标 ID 和记录内容继续按 Backend DTO 执行。
+
+| 审计动作 | 业务阶段 |
+| --- | --- |
+| `TEXT_FONT_DRAFT_UPDATED` | 草稿配置修改 |
+| `TEXT_FONT_SOURCE_UPLOADED` | 原件上传 |
+| `TEXT_FONT_PROCESS_REQUESTED` | 请求处理 |
+| `TEXT_FONT_VERSION_READY` | 不可变版本就绪 |
+| `TEXT_FONT_PUBLISHED` | 发布／切换当前版本 |
+| `TEXT_FONT_ENABLED_UPDATED` | 家族启停 |
+| `TEXT_FONT_WITHDRAWN` | 版本撤回 |
+| `TEXT_FONT_IMPORTED` | 历史导入 |
+
+[audit-enums 测试投影](../tests/fixtures/text-font-dynamic/audit-enums.json)逐项保留上述三处 OpenAPI 枚举的完整源值，JSON Pointer、生产者 OpenAPI 摘要和投影哈希记录在 source.json；它是可追溯投影，不是第八份原字节业务契约，也不定义第二套审计接口。静态一致性检查不代替实际审计记录落库、权限或导出验收。
+
+运行时在 API 中暂存原件并投递 Outbox，独立 Worker 通过 BullMQ 全局单并发处理；私有存储与公共媒体 bucket 分开，返回字节前复核版本状态，慢存储不占用长期状态事务。首次就绪要求 28 个固定版本已有完整资源校验后的发布记录，冷启动只对一个样张执行有截止的 HEAD，不重下全库；支持能力就绪后不随启停、撤回或临时存储错误下降。部署、私有 bucket 配置、历史导入和恢复仍需相应授权，测试通过不执行这些动作。
+
 ## 跨仓验收用例
 
 下列 17 个 ID 关联跨仓真实验收。正文投影／写入、状态／刷新／账本语料、严格策略与清单 Schema、导入映射已原字节同步；本仓只检查这些契约及语料，表中运行流程仍由责任仓提供证据，不能把矩阵登记为已通过。
@@ -111,11 +130,13 @@ Mobile 改为同一 FlutterEngine 内持续追加的注册账本，以 SHA＋fam
 
 ## 检查与运行交接
 
-`pnpm test:text-font` 同时执行旧协议与动态协议测试。新组验证七份镜像的来源／字节完整性、导入表外身份、非法解析结果、混合能力与写入预期、三个状态权限、映射路由／能力降级预期、目录／缓存数值、v3 严格形状和全部可收紧范围的边界、账本预期、manifest 结构及历史导入映射。保留旧 v1 与固定快照运行策略 v2 的独立测试，不以动态目录覆盖旧资源依据。
+`pnpm test:text-font` 同时执行旧协议与动态协议测试。新组验证七份镜像的来源／字节完整性、导入表外身份、非法解析结果、混合能力与写入预期、三个状态权限、映射路由／能力降级预期、目录／缓存数值、v3 严格形状和全部可收紧范围的边界、账本预期、manifest 结构、历史导入映射及审计枚举投影一致性。保留旧 v1 与固定快照运行策略 v2 的独立测试，不以动态目录覆盖旧资源依据。
 
 Schema 结构测试中的合成清单不代表真实构建产物；范围语义、角色格式、流式限长、事务锁、资源状态网关、原生注册与 Markdown 解析器均需生产者／消费者运行验证。本仓没有将静态语料做成模拟成功的加载器，API 哈希登记也不等于调用了运行路由。
 
-后续须固定 Backend 真实 DB／Worker／发布实现的提交，使用已登记隔离入口完成构建后新 ID、第二版、状态切换与失败清理链路；当前 503、支持及新写关闭只允许验证不可用时的保源回退，不充当完整运行结果。17 项运行验收、Web 画面和 Android 同会话内存仍需逐项提供证据。
+治理交接记录：固定 Backend 提交的 `pnpm check` 通过 2,966 tests／219 suites，完整隔离 E2E `e2e_084b5262458cf5b259dd3e60` 通过且完成清理核验。此为 Backend／治理提供的执行结果，Foundation 本轮只核对已提交来源与契约，不重复执行后端重型测试；它不代替 Web／Android 构建后创建新 ID 的联合会话验收。公共环境未部署，联合真实验收仍待 Android，其余场景按各仓证据逐项确认，不能将 17 项矩阵整体标为已通过。
+
+跨端验收使用该提交的统一隔离 runner，登记独立 PostgreSQL、Redis、私有对象存储夹具、API 与 Worker 身份；两端固定构建并开启会话后才创建新版本。Web 与 Android 顺序使用同一 runId、资源和账号，状态推进须等双方完成，不混入会修改状态的后端功能套件；消费者结束后由 runner 统一清理。后端功能测试的随机 ID 和 `synthetic-legacy-readiness-only` 记录不能冒充真实历史导入或跨端核心证据。执行入口及参数直接以生产者[同一 runId 的跨端会话](https://github.com/morenk/wenyousite-backend/blob/62a0313a75c85e42dfa39cd09b7cc90ae5c34186/docs/dynamic-text-fonts.md#同一-runid-的跨端会话)为准，本仓不启动写入验收或改变公共服务。
 
 可信历史导入固定 `sourceManifestSha256` 并声明 `preserveAssetFamily=true`，逐对象核验源清单、SHA、长度及原 family。新构建使用 `WYF2-32hex-shard`；导入保留已验证的 `WYF1-16hex-shard`、原 SFNT／WOFF2 字节和 SHA，两种 family 均可出现在 v2 清单中。匹配名称形状本身不证明来源可信，不能给导入资源重取别名。
 

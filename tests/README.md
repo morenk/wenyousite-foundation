@@ -60,10 +60,12 @@ Dart 接口只接受有效 `DateTime`，无效字符串属于上游解析职责�
 
 ## 动态字体契约检查
 
-`pnpm test:text-font` 同时运行 `text-font.test.mjs` 与 `text-font-dynamic.test.mjs`，并纳入 `pnpm check`。动态组的 `fixtures/text-font-dynamic/source.json` 固定 Backend `7c9719e44dbdc62ede77056fe93a98551133d0e9`，七份生产者原字节镜像分别覆盖正文 Schema／投影写入语料、状态刷新账本语料、manifest Schema、运行策略 JSON／Schema、历史导入映射；按精确提交、源路径、长度及 SHA-256 校验，OpenAPI 和源文档等仅登记摘要，不复制大型完整接口文档。旧六份镜像及其来源不改动。
+`pnpm test:text-font` 同时运行 `text-font.test.mjs` 与 `text-font-dynamic.test.mjs`，并纳入 `pnpm check`。动态组的 `fixtures/text-font-dynamic/source.json` 固定 Backend `62a0313a75c85e42dfa39cd09b7cc90ae5c34186`，七份生产者原字节镜像分别覆盖正文 Schema／投影写入语料、状态刷新账本语料、manifest Schema、运行策略 JSON／Schema、历史导入映射；按精确提交、源路径、长度及 SHA-256 校验，OpenAPI 保留摘要及下述审计枚举投影，其余源文档登记摘要，不复制大型完整接口文档。旧六份镜像及其来源不改动。
 
 新组验证导入表外的合法版本身份、非法解析结果、混合正文及旧端覆盖预期、selectable／pasteAllowed／renderAllowed 区别、截页与负缓存值、严格 v3 形状、11 个可收紧预算范围的下界／上界／越界／小数拒绝、跨发布账本预期、清单结构和历史导入身份。新增跨协议注册夹具检查，核对来源 manifest 绑定、保留 WYF1 alias 和两次输入身份／字节相同、生产者零新增尝试预期；同时拒绝错误长度或任意 family。清单合成样本仅用于结构验证，不是真实资源；Schema 不证明 Unicode 范围并集、角色格式、实际字节／SHA 或状态网关正确。静态投影和写入语料检查不执行生产者 Markdown 解析器、HTTP 或事务锁。
 
-[动态字体验收矩阵](../docs/thread-fonts-dynamic.md#跨仓验收用例)保留 17 个跨仓 ID，关联构建后新版本同会话使用、状态与缓存、隔离上传发布、Android 网络／剪贴板／RSS 等真实流程。当前 Backend 契约切片运行路由仍返回 503，支持及新写均关闭；这些运行场景未由 Foundation 执行，不将静态检查或 503 回退声称为动态功能验收。后续生产者更新须整体同步明确提交，消费者负责对应真实执行及失败清理。
+[动态字体验收矩阵](../docs/thread-fonts-dynamic.md#跨仓验收用例)保留 17 个跨仓 ID，关联构建后新版本同会话使用、状态与缓存、隔离上传发布、Android 网络／剪贴板／RSS 等真实流程。固定 Backend 提交已实现运行时，治理确认后端检查及完整隔离 E2E／清理通过；这些运行场景未由 Foundation 重跑，公共部署与真实跨端同会话验收另行记录，不能将静态检查视为动态功能验收。后续生产者更新须整体同步明确提交，消费者负责对应真实执行及失败清理。
 
 `legacyRoutingRules`、9 条 `legacyRoutingCases` 与 6 条 `legacyCapabilityCases` 固定 v1 映射状态及防降级预期：同会话激活后只走 v2 网关，无旧 manifest 请求，404／断网保留最近可信状态，墓碑压过迟到响应和能力降级；来源标记保持。Foundation 核对映射和语料，不执行消费者路由器或声称旧公共字节可撤回。
+
+`audit-enums.json` 是已提交 OpenAPI 的可追溯投影：JSON Pointer 为键，值为未修改的完整枚举数组，按 UTF-8、两空格缩进和末尾换行保存。`source.json.projections` 记录六个指针、OpenAPI 原文件摘要及投影字节／摘要；同步时从同一 Git SHA 核对每个指针值。测试验证三处 action／targetType 的枚举一致、八个 TEXT_FONT 动作及 TEXT_FONT 目标存在，不改变七份字体原字节镜像的口径，也不复制审计执行器。

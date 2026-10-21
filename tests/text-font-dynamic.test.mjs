@@ -29,7 +29,7 @@ const mutate = (object, path, value) => {
 test("动态镜像固定生产者提交与原字节，旧协议来源独立保留", () => {
   assert.equal(source.repository, "morenk/wenyousite-backend");
   assert.match(source.commit, /^[a-f0-9]{40}$/);
-  assert.equal(source.apiVersion, "5.43.0-dev.20261022.2");
+  assert.equal(source.apiVersion, "5.43.0-dev.20261022.3");
   assert.deepEqual(Object.keys(source.files).sort(), [
     "markdown-text-font-v2-fixtures.json", "markdown-text-font-v2.schema.json",
     "thread-font-dynamic-v2-fixtures.json", "thread-font-manifest-v2.schema.json",
@@ -328,4 +328,40 @@ test("已激活或已知墓碑不因能力 false、缺失和离线回退旧通�
   }
   assert.ok(cases.some((entry) => !entry.previouslyActivated && entry.knownWithdrawn
     && entry.expectedRoute === "default-font"));
+});
+
+test("审计枚举投影绑定同提交 OpenAPI，保留六处 JSON Pointer 与内容摘要", () => {
+  const name = "audit-enums.json";
+  const entry = source.projections[name];
+  assert.equal(entry.sourcePath, "contracts/openapi.json");
+  assert.equal(entry.sourceSha256, source.references[entry.sourcePath].sha256);
+  assert.equal(bytes(name).length, entry.bytes);
+  assert.equal(crypto.createHash("sha256").update(bytes(name)).digest("hex"), entry.sha256);
+  const projection = read(name);
+  assert.deepEqual(Object.keys(projection), entry.pointers);
+  assert.equal(entry.pointers.length, 6);
+  assert.equal(new Set(entry.pointers).size, entry.pointers.length);
+  assert.equal(bytes(name).toString("utf8"), `${JSON.stringify(projection, null, 2)}\n`);
+  // 与 OpenAPI 指针值逐项比对在 Git 同步时执行；CI 不伪称联网重新核验生产者。
+});
+
+test("审计列表、导出与响应包含相同字体动作和目标枚举", () => {
+  const projection = read("audit-enums.json");
+  const response = "/components/schemas/AdminAuditLogResponseDto/properties/";
+  const actions = projection[`${response}action/enum`];
+  const targets = projection[`${response}targetType/enum`];
+  assert.deepEqual(actions.filter((action) => action.startsWith("TEXT_FONT_")), [
+    "TEXT_FONT_DRAFT_UPDATED", "TEXT_FONT_SOURCE_UPLOADED", "TEXT_FONT_PROCESS_REQUESTED",
+    "TEXT_FONT_VERSION_READY", "TEXT_FONT_PUBLISHED", "TEXT_FONT_ENABLED_UPDATED",
+    "TEXT_FONT_WITHDRAWN", "TEXT_FONT_IMPORTED",
+  ]);
+  assert.ok(targets.includes("TEXT_FONT"));
+  assert.equal(new Set(actions).size, actions.length);
+  assert.equal(new Set(targets).size, targets.length);
+  for (const endpoint of ["audit-logs", "audit-logs~1export"]) {
+    const prefix = `/paths/~1api~1v1~1admin~1${endpoint}/get/parameters/`;
+    assert.deepEqual(projection[`${prefix}3/schema/enum`], actions, endpoint);
+    assert.deepEqual(projection[`${prefix}4/schema/enum`], targets, endpoint);
+  }
+  // 这里只验证契约枚举，不替代实际审计记录、权限筛选或导出执行验收。
 });
