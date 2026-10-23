@@ -13,6 +13,7 @@
 - [核心元素系统](docs/elements.md)
 - [通知分组契约](docs/notifications.md)
 - [后台预览与移动端更新说明](docs/mobile-releases.md)
+- [字体后台上传与列表管理（契约接入准备）](docs/thread-font-admin.md)
 - [公开 APP 下载与兼容更新](docs/app-downloads.md)
 - [反馈、无障碍与浮层契约](docs/interaction.md)
 - [控件、内容与格式化呈现](docs/presentation.md)
@@ -22,7 +23,7 @@
 
 HTTP API、错误码、Markdown 存储协议和推送协议仍由 `wenyousite-backend` 负责。本仓库不包含密钥、账号、业务数据或私密截图。
 
-[主题帖正文字体](docs/thread-fonts.md)补充作者选择字体的业务内容边界；应用 UI 与默认正文仍使用系统字体。字体目录、文件与字体／颜色组合协议由 Backend 拥有，本次补充规范与测试依据，不新增 Foundation 运行时产物或版本，消费者可继续固定已发布 `v7.6.0`。
+[主题帖正文字体](docs/thread-fonts.md)补充作者选择字体的业务内容边界；应用 UI 与默认正文仍使用系统字体。字体目录、文件与字体／颜色组合协议由 Backend 拥有，本次补充规范与测试依据，不新增 Foundation 运行时产物或版本，消费者继续固定各自已发布版本。
 
 ## v7.3.0 正文音频
 
