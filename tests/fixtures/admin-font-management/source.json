@@ -1,0 +1,22 @@
+{
+  "repository": "morenk/wenyousite-backend",
+  "commit": "832a3989be7aac22c803a6375e756bea745b443f",
+  "apiVersion": "5.44.0-dev.20261024.1",
+  "files": {
+    "openapi.json": {
+      "sourcePath": "contracts/openapi.json",
+      "bytes": 1819585,
+      "sha256": "1a3c568fb021055257d26b087546808396929a46aa128ee0cecdce28472922eb"
+    },
+    "admin-font-management-v1-fixtures.json": {
+      "sourcePath": "contracts/admin-font-management-v1-fixtures.json",
+      "bytes": 32391,
+      "sha256": "50b961e762e9ff85bfc278aeae43ba42cc443eb3b8536e9e8497067881e14b93"
+    },
+    "admin-font-management.md": {
+      "sourcePath": "docs/admin-font-management.md",
+      "bytes": 9328,
+      "sha256": "96e40239ec68e0904a8e0cf107facb7d8d74e91c17c58c1c9aa2e62a05dbba44"
+    }
+  }
+}
