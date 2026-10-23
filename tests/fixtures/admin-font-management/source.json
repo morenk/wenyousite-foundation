@@ -1,22 +1,22 @@
 {
   "repository": "morenk/wenyousite-backend",
-  "commit": "832a3989be7aac22c803a6375e756bea745b443f",
-  "apiVersion": "5.44.0-dev.20261024.1",
+  "commit": "1ce559b42be9ac04c4fd09137ee30f482facbfe2",
+  "apiVersion": "5.44.0-dev.20261024.2",
   "files": {
     "openapi.json": {
       "sourcePath": "contracts/openapi.json",
-      "bytes": 1819585,
-      "sha256": "1a3c568fb021055257d26b087546808396929a46aa128ee0cecdce28472922eb"
+      "bytes": 1819878,
+      "sha256": "0ef6740eedadf50793bdc0fc14dd04ddde0e0840b001d22503bf4b5514e6b59c"
     },
     "admin-font-management-v1-fixtures.json": {
       "sourcePath": "contracts/admin-font-management-v1-fixtures.json",
-      "bytes": 32391,
-      "sha256": "50b961e762e9ff85bfc278aeae43ba42cc443eb3b8536e9e8497067881e14b93"
+      "bytes": 33164,
+      "sha256": "16bc40f293a82230f2d8dfe38d4d30de17ea7417162136ba6b6c6601a63e8d62"
     },
     "admin-font-management.md": {
       "sourcePath": "docs/admin-font-management.md",
-      "bytes": 9328,
-      "sha256": "96e40239ec68e0904a8e0cf107facb7d8d74e91c17c58c1c9aa2e62a05dbba44"
+      "bytes": 10916,
+      "sha256": "420cbb51c037c99deea843e4cde263b29e7ca2bf78c220675e09451097724130"
     }
   }
 }

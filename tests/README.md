@@ -2,9 +2,9 @@
 
 ## 字体后台管理员契约
 
-`pnpm test:font-admin` 验证 Backend `832a3989be7aac22c803a6375e756bea745b443f` 的三份[原字节镜像与来源摘要](fixtures/admin-font-management/source.json)，并纳入 `pnpm check`。覆盖所有九组 Cases、26 条列表数据、OpenAPI DTO 绑定、多语言顺序边界、提交／源重放、多行许可、版本复用和发布历史；八项行为关联见[管理员验收](../docs/thread-font-admin.md#兼容与验收)。
+`pnpm test:font-admin` 验证 Backend `1ce559b42be9ac04c4fd09137ee30f482facbfe2` 的三份[原字节镜像与来源摘要](fixtures/admin-font-management/source.json)，并纳入 `pnpm check`。覆盖所有十组 Cases、26 条列表数据、OpenAPI DTO 绑定、多语言顺序边界、提交／源重放、多行许可、版本复用、发布历史与 job 准确绑定恢复；八项行为关联见[管理员验收](../docs/thread-font-admin.md#兼容与验收)。
 
-测试不复制业务比较器或状态机。OpenAPI 未表达的规范化、额外字段拒绝、成对字段和 nullable＋allOf 边界，以及 orderCases 缺完整集合快照的限制均在规范中列明；共享预期检查不是运行实现验收。此 SHA 的新增入口仍返回 503，完整 E2E 等待 Backend 实现及隔离证据。既有 v1／v2 镜像和测试原样保留。
+测试不复制业务比较器或状态机。OpenAPI 未表达的规范化、额外字段拒绝、成对字段和 nullable＋allOf 边界，以及 orderCases 缺完整集合快照的限制均在规范中列明；共享预期检查不是运行实现验收。此 SHA 为恢复契约 pin；新增检查覆盖可选／可空 UUID、历史 job 不取最新提交及旧手工任务 null，完整 E2E 等待 Backend 实现及隔离证据。既有 v1／v2 镜像和测试原样保留。
 
 ## APP 下载语义
 

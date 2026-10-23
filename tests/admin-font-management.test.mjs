@@ -25,8 +25,8 @@ const setEqual = (actual, expected) => assert.deepEqual(new Set(actual), new Set
 
 test("管理员三份镜像固定已提交来源、字节摘要及独立版本，不覆盖历史镜像", () => {
   assert.equal(source.repository, "morenk/wenyousite-backend");
-  assert.equal(source.commit, "832a3989be7aac22c803a6375e756bea745b443f");
-  assert.equal(source.apiVersion, "5.44.0-dev.20261024.1");
+  assert.equal(source.commit, "1ce559b42be9ac04c4fd09137ee30f482facbfe2");
+  assert.equal(source.apiVersion, "5.44.0-dev.20261024.2");
   assert.equal(api.info.version, source.apiVersion);
   assert.equal(fixtures.apiContractVersion, source.apiVersion);
   assert.equal(fixtures.fixtureVersion, 1);
@@ -40,7 +40,7 @@ test("管理员三份镜像固定已提交来源、字节摘要及独立版本�
     const old = JSON.parse(fs.readFileSync(new URL(`./fixtures/${directory}/source.json`, import.meta.url)));
     assert.notEqual(old.commit, source.commit);
   }
-  const sections = ["createCases", "submissionCases", "sourceCases", "listCases", "cursorCases", "publicationHistoryCases", "orderCases", "metadataCases", "versionReuseCases"];
+  const sections = ["createCases", "submissionCases", "sourceCases", "listCases", "cursorCases", "publicationHistoryCases", "orderCases", "metadataCases", "versionReuseCases", "jobRecoveryCases"];
   setEqual(Object.keys(fixtures).filter((key) => key.endsWith("Cases")), sections);
   for (const section of sections) {
     assert.ok(fixtures[section].length > 0, section);
@@ -136,6 +136,64 @@ test("提交与源重放预期区分响应丢失、同键冲突、明确重试�
   assert.equal(concurrent.expectedAttempts, 1);
   assert.equal(concurrent.expectedActiveJobs, 1);
   assert.equal(byId("submissionCases", "no-automatic-publication").expectedPublished, false);
+});
+
+test("job 提交绑定是可选可空 UUID，兼容旧响应并拒绝非法类型和格式", () => {
+  const property = schemas.FontJobDto.properties.submissionId;
+  assert.equal(property.type, "string");
+  assert.equal(property.format, "uuid");
+  assert.equal(property.nullable, true);
+  assert.equal(schemas.FontJobDto.required.includes("submissionId"), false);
+  // 仅此标量启用 UUID 格式验证；不收紧生产者 Schema 为仅接受 UUID v4。
+  const checkId = new Ajv({ strict: false, formats: {
+    uuid: /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i,
+  } }).compile(property);
+  for (const value of [null, byId("jobRecoveryCases", "simple-job-after-refresh").submissionId]) {
+    assert.equal(checkId(value), true);
+  }
+  for (const value of ["", "not-a-uuid", "tff_" + "0".repeat(32), 1, {}, []]) {
+    assert.equal(checkId(value), false, JSON.stringify(value));
+  }
+  // 合成 job 只验证响应结构，不作为运行任务或资源证据。
+  const job = {
+    jobId: `tfj_${"0".repeat(32)}`, familyId: `tff_${"0".repeat(32)}`,
+    status: "failed", sourceSha256: "a".repeat(64), sourceBytes: 1,
+    versionId: null, failureCode: "processing-failed",
+  };
+  const checkJob = validate("FontJobDto");
+  assert.equal(checkJob(job), true, JSON.stringify(checkJob.errors));
+  for (const submissionId of [null, byId("jobRecoveryCases", "simple-job-after-refresh").submissionId]) {
+    assert.equal(checkJob({ ...job, submissionId }), true, JSON.stringify(checkJob.errors));
+  }
+  assert.equal(checkJob({ ...job, submissionId: 1 }), false);
+});
+
+test("刷新与旧任务恢复绑定任务自身提交，不能扫描列表后改用最新提交", () => {
+  setEqual(fixtures.jobRecoveryCases.map(({ id }) => id), [
+    "legacy-job", "simple-job-after-refresh", "older-job-after-newer-submission",
+    "anonymous-recovery", "ordinary-user-process",
+  ]);
+  const legacy = byId("jobRecoveryCases", "legacy-job");
+  assert.equal(legacy.submissionId, null);
+  assert.equal(legacy.expectedProcessRoute, "legacy-job");
+  const simple = byId("jobRecoveryCases", "simple-job-after-refresh");
+  assert.match(simple.submissionId, uuid4);
+  assert.equal(simple.expectedProcessRoute, "bound-submission");
+  const historical = byId("jobRecoveryCases", "older-job-after-newer-submission");
+  assert.match(historical.submissionId, uuid4);
+  assert.match(historical.latestSubmissionId, uuid4);
+  assert.equal(historical.expectedProcessSubmissionId, historical.submissionId);
+  assert.notEqual(historical.expectedProcessSubmissionId, historical.latestSubmissionId);
+  assert.equal(historical.expectedScanManagementList, false);
+  assert.equal(byId("jobRecoveryCases", "anonymous-recovery").expectedHttpStatus, 401);
+  assert.equal(byId("jobRecoveryCases", "ordinary-user-process").expectedHttpStatus, 403);
+  for (const [suffix, method] of [
+    ["/jobs/{jobId}", "get"], ["/jobs/{jobId}/process", "post"],
+    ["/submissions/{submissionId}", "get"], ["/submissions/{submissionId}/process", "post"],
+  ]) {
+    assert.deepEqual(route(suffix, method).security, [{ adminSession: [], adminCsrf: [] }]);
+  }
+  // 只核对契约关联与生产者预期；身份鉴别、权限执行和真实恢复仍由运行验收覆盖。
 });
 
 test("缺元数据、显式限制及原始上传大小边界与 job schema 一致", () => {

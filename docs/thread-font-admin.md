@@ -1,12 +1,12 @@
 # 字体后台上传与列表管理
 
-本文固定 Backend `832a3989be7aac22c803a6375e756bea745b443f`（HTTP `5.44.0-dev.20261024.1`）的[管理员契约](https://github.com/morenk/wenyousite-backend/blob/832a3989be7aac22c803a6375e756bea745b443f/docs/admin-font-management.md)、[OpenAPI](https://github.com/morenk/wenyousite-backend/blob/832a3989be7aac22c803a6375e756bea745b443f/contracts/openapi.json)和[共享夹具](https://github.com/morenk/wenyousite-backend/blob/832a3989be7aac22c803a6375e756bea745b443f/contracts/admin-font-management-v1-fixtures.json)。三份原字节镜像的路径、长度和 SHA-256 见[来源记录](../tests/fixtures/admin-font-management/source.json)；Backend 唯一拥有 HTTP 与业务语义，Foundation 不另造接口、默认样张或运行目录。
+本文固定 Backend `1ce559b42be9ac04c4fd09137ee30f482facbfe2`（HTTP `5.44.0-dev.20261024.2`）的[管理员契约](https://github.com/morenk/wenyousite-backend/blob/1ce559b42be9ac04c4fd09137ee30f482facbfe2/docs/admin-font-management.md)、[OpenAPI](https://github.com/morenk/wenyousite-backend/blob/1ce559b42be9ac04c4fd09137ee30f482facbfe2/contracts/openapi.json)和[共享夹具](https://github.com/morenk/wenyousite-backend/blob/1ce559b42be9ac04c4fd09137ee30f482facbfe2/contracts/admin-font-management-v1-fixtures.json)。三份原字节镜像的路径、长度和 SHA-256 见[来源记录](../tests/fixtures/admin-font-management/source.json)；Backend 唯一拥有 HTTP 与业务语义，Foundation 不另造接口、默认样张或运行目录。
 
-**此提交仅交付契约**：新增五个操作及携带 `submissionId` 的源上传暂时返回 `503/50301`，不写数据；旧入口继续工作。它不能作为完整 E2E 后端或部署候选。本文与[动态正文字体规范](thread-fonts-dynamic.md)及既有镜像共同交付，消费者 v2、旧 v1 引用、历史资源和授权记录保留。新管理契约不表示旧运行链路全部不可用，也不代表本轮流程已实现。
+**此 SHA 是恢复契约 pin，不是可部署运行时**。其生产者文档保留新增五个操作及带 `submissionId` 源上传为 `503/50301` 的契约阶段说明；该固定快照不代表后续运行实现状态。业务实现和隔离 E2E 仍在进行，须另行提交验收证据。本文与[动态正文字体规范](thread-fonts-dynamic.md)及既有镜像共同交付，消费者 v2、旧 v1 引用、历史资源和授权记录保留。新管理契约不表示旧运行链路全部不可用，也不代表本轮流程已实现。
 
 ## 提交与授权确认
 
-表单仅要求文件、名称、语言，语言为 `zh/ja/en/other`，默认 `other`。默认样张按语言由 Backend 生成，固定文本直接取共享夹具 `specimens`；不要求管理员补填作者、许可、来源、样张或排序，也不在客户端伪造这些字段。名称规范化与校验由生产者负责。
+表单仅要求文件、名称、语言，语言为 `zh/ja/en/other`，默认 `other`。新家族默认样张按语言由 Backend 生成，固定文本直接取共享夹具 `specimens`；不要求管理员补填作者、许可、来源、样张或排序，也不在客户端伪造这些字段。名称规范化与校验由生产者负责。已有家族新版保留已保存的作者、来源、许可等补充资料，授权仍由本次服务端确认单独判定；自动样张随语言更新，通过旧配置入口保存过的自定义样张保留。
 
 上传即确认允许分发、转码与分片。靠近提交操作保留一次简短必要提示，不增加重复勾选或许可表单；字体原始许可仍须遵守。首次绑定源时，服务端记录实际上传者、确认时间、源 SHA 及规则版本 `admin-font-upload-v1`，证据持久化到 job，新版本复制并在处理、Worker、发布各阶段核验。既有版本证据不被重写，新 job 保留本次确认；公开 notices 不泄漏账号、IP、请求标识、确认时间或审计对象。
 
@@ -21,6 +21,8 @@
 | 处理 | `POST /admin/text-fonts/submissions/{submissionId}/process` 提交处理意图 `requestId`。一次上传按钮编排创建、上传、处理，完成后先预览。 |
 | 恢复 | `GET /admin/text-fonts/submissions/{submissionId}`；已有 job 直接查询或处理，不重传源。创建响应丢失先 GET，不存在才重放原请求；查询暂未看到仍在上传的 job，可重发同一源。 |
 | 发布 | 保持独立确认，调用旧发布端点并提交精确版本、家族和目录修订；ready 不等于已发布，不自动发布。 |
+
+`FontJobDto.submissionId` 是该任务准确绑定的提交，OpenAPI 将其定义为可选、可空 UUID；旧手工任务为 `null`，字段未列入 required 以兼容旧响应。详情、刷新或家族出现更新提交时，恢复必须取 job 自身的绑定，不能拿家族 `latestSubmissionId` 替代历史任务，不能靠扫描管理列表或浏览器会话缓存猜测。绑定非空时使用对应提交恢复／处理；旧手工任务走既有 job 处理路径。匿名恢复与普通用户处理分别保留 401／403 边界，不能因新增恢复字段绕过权限。
 
 `submissionId` 为持久保存的 UUID v4，绑定首次规范化请求、首次修订和创建者。相同请求先查重再检查修订，修订变化后重放仍返回同一家族；换请求或创建者复用同键返回 `409/40930`。其他管理员仍可按契约恢复读取和处理。
 
@@ -61,17 +63,23 @@
 | `admin-three-fields` | createCases／specimens：默认值、名称规范化、已有家族成对修订及拒绝客户端伪造字段；真实三字段提交。 |
 | `admin-upload-consent` | authorizationRuleVersion／submissionCases：服务端实际上传者和源绑定证据、重放无重复；旧授权保留。 |
 | `admin-license-metadata` | sourceCases／metadataPolicy／metadataCases：缺元数据、显式限制、大小边界、多行许可原字节及非法 NUL 省略；沙箱实物验收。 |
-| `admin-stage-resume` | submissionCases：创建／源响应丢失、同键冲突、明确重试、并发意图及不自动发布；真实持久化与 Outbox。 |
+| `admin-stage-resume` | submissionCases／jobRecoveryCases：任务准确绑定、旧任务 null、刷新恢复、401／403，以及创建／源响应丢失、同键冲突、明确重试、并发意图及不自动发布；真实持久化与 Outbox。 |
 | `admin-global-filter` | listDataset（26 条）／listCases／cursorCases：跨 20 条分页、未加载页筛选、文字通配符、稳定排序与过期游标。 |
 | `admin-view-order` | listCases／orderCases：查看排序不写公开顺序，公开保存是独立原子请求。 |
 | `admin-language-move` | orderCases：多语言完整集合、目录／家族 CAS、全组拒绝及 no-op；验证无部分成功，历史字节不变。 |
 | `admin-history-preserved` | versionReuseCases／publicationHistoryCases：同源改名、撤回后新版本、回滚再撤回及可靠回填失败；旧 v1／v2 与历史资源回归。 |
 
-`pnpm test:font-admin` 校验三份原字节摘要、接口与 DTO 绑定、可由 OpenAPI 表达的结构、夹具跨页和身份关联、各段预期完整性；同时进入 `pnpm check`。不复制业务比较器、源解析器或状态机，也不把固定预期断言当作 HTTP 调用。OpenAPI 没有表达名称规范化、额外字段拒绝与成对字段全部运行校验；nullable＋allOf job 也不作为 JSON Schema 的 null 联合处理，列表仅验证标量字段及 job 声明绑定。
+`pnpm test:font-admin` 校验三份原字节摘要、接口与 DTO 绑定、可由 OpenAPI 表达的结构、夹具跨页和身份关联、各段预期完整性；新增检查验证 job 绑定的可选／可空 UUID 结构、非法类型／格式和历史 job 与最新提交不一致时的预期。它们不生成客户端处理器，也不执行权限或恢复业务；同时进入 `pnpm check`。不复制业务比较器、源解析器或状态机，也不把固定预期断言当作 HTTP 调用。OpenAPI 没有表达名称规范化、额外字段拒绝与成对字段全部运行校验；nullable＋allOf job 也不作为 JSON Schema 的 null 联合处理，列表仅验证标量字段及 job 声明绑定。
 
 orderCases 是独立场景，不能关联 listDataset 推断语言成员；它没有提供完整可选集合快照或每个拒绝案例的请求体。本仓核对多组 DTO、边界及整批拒绝预期，完整集合校验、真实并发锁和事务回滚须由责任仓执行，不能以本仓测试证明通过。
 
-治理交接的 Backend 3063 项测试、静态／脚本回归与构建通过属于本次契约切片证据，Foundation 未重复执行后端重型检查。新管理入口仍为 503，业务实现、迁移、真实画面与隔离写入 E2E 尚未完成。Web 提供明暗和窄窗口的授权、错误恢复、筛选及重排画面；写入 E2E 使用本轮登记的独立 PostgreSQL、Redis、上传目录及账号，记录 runId、提交、资源身份和清理结果，失败或清理失败不得记为通过。历史字体镜像、包版本、已发布 Tag、Token 与生成物不变。
+此前治理交接的 Backend 3063 项测试、静态／脚本回归与构建属于初始 832a3989 契约切片证据，不作为此次恢复 pin 的运行验收结论。Foundation 未重复执行后端重型检查。业务实现、迁移、真实画面与隔离写入 E2E 的最终证据仍待责任仓交付，不能把此契约提交当作可部署运行时。Web 提供明暗和窄窗口的授权、错误恢复、筛选及重排画面；写入 E2E 使用本轮登记的独立 PostgreSQL、Redis、上传目录及账号，记录 runId、提交、资源身份和清理结果，失败或清理失败不得记为通过。历史字体镜像、包版本、已发布 Tag、Token 与生成物不变。
+
+## 迁移与回退边界
+
+依生产者迁移约定，新提交／请求账本、授权证据、参数版本、最后当前版本、样张来源和列表修订增量保存，旧版本、许可配置、发布时间、资源与正文保留。可复用版本身份与家族／产物分开，同一家族同产物可有多个不可变版本，撤回释放可复用身份但保留撤回记录。
+
+产生上述多版本或 parametersVersion=2 数据后，不得直接回退不能解释新数据的旧二进制并声称无损。兼容后端与 Worker 先于新 Web，按既有部署入口协调在途任务，不混跑旧参数 Worker。异常优先前滚至理解新 schema／参数的修复提交；暂停简化新提交也须保留兼容二进制，不删除新版本来恢复旧唯一索引。确需恢复备份时遵守独立离线校验、显式切换和新增数据处理门禁，不覆盖活动卷。本次同步仅记录这些边界，不执行迁移、切换或恢复。
 
 ## 已发布产物与复现
 
