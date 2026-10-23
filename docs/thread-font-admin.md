@@ -1,12 +1,12 @@
 # 字体后台上传与列表管理
 
-本文固定 Backend `1ce559b42be9ac04c4fd09137ee30f482facbfe2`（HTTP `5.44.0-dev.20261024.2`）的[管理员契约](https://github.com/morenk/wenyousite-backend/blob/1ce559b42be9ac04c4fd09137ee30f482facbfe2/docs/admin-font-management.md)、[OpenAPI](https://github.com/morenk/wenyousite-backend/blob/1ce559b42be9ac04c4fd09137ee30f482facbfe2/contracts/openapi.json)和[共享夹具](https://github.com/morenk/wenyousite-backend/blob/1ce559b42be9ac04c4fd09137ee30f482facbfe2/contracts/admin-font-management-v1-fixtures.json)。三份原字节镜像的路径、长度和 SHA-256 见[来源记录](../tests/fixtures/admin-font-management/source.json)；Backend 唯一拥有 HTTP 与业务语义，Foundation 不另造接口、默认样张或运行目录。
+本文固定 Backend `2b8abf3b6ae23c94dd843dfd6ce72865554a657e`（HTTP `5.44.0-dev.20261024.2`）的[管理员契约](https://github.com/morenk/wenyousite-backend/blob/2b8abf3b6ae23c94dd843dfd6ce72865554a657e/docs/admin-font-management.md)、[OpenAPI](https://github.com/morenk/wenyousite-backend/blob/2b8abf3b6ae23c94dd843dfd6ce72865554a657e/contracts/openapi.json)和[共享夹具](https://github.com/morenk/wenyousite-backend/blob/2b8abf3b6ae23c94dd843dfd6ce72865554a657e/contracts/admin-font-management-v1-fixtures.json)。三份原字节镜像的路径、长度和 SHA-256 见[来源记录](../tests/fixtures/admin-font-management/source.json)；Backend 唯一拥有 HTTP 与业务语义，Foundation 不另造接口、默认样张或运行目录。
 
-**此 SHA 是恢复契约 pin，不是可部署运行时**。其生产者文档保留新增五个操作及带 `submissionId` 源上传为 `503/50301` 的契约阶段说明；该固定快照不代表后续运行实现状态。业务实现和隔离 E2E 仍在进行，须另行提交验收证据。本文与[动态正文字体规范](thread-fonts-dynamic.md)及既有镜像共同交付，消费者 v2、旧 v1 引用、历史资源和授权记录保留。新管理契约不表示旧运行链路全部不可用，也不代表本轮流程已实现。
+该提交已将五个管理操作及带 `submissionId` 的源上传接入持久化、Worker 和原子目录事务，保留旧手工入口。OpenAPI 与管理员夹具对恢复契约 `1ce559b42be9ac04c4fd09137ee30f482facbfe2` 逐字节一致，HTTP 仍为 `.2`，无需重复生成消费者类型。来源记录更新为最终运行提交，并同步生产者文档的实现状态；本仓不将契约一致性检查视为 Web／Mobile 联验通过。本文与[动态正文字体规范](thread-fonts-dynamic.md)及既有镜像共同交付，消费者 v2、旧 v1 引用、历史资源和授权记录保留。合并、部署及安装继续等待相应授权。
 
 ## 提交与授权确认
 
-表单仅要求文件、名称、语言，语言为 `zh/ja/en/other`，默认 `other`。新家族默认样张按语言由 Backend 生成，固定文本直接取共享夹具 `specimens`；不要求管理员补填作者、许可、来源、样张或排序，也不在客户端伪造这些字段。名称规范化与校验由生产者负责。已有家族新版保留已保存的作者、来源、许可等补充资料，授权仍由本次服务端确认单独判定；自动样张随语言更新，通过旧配置入口保存过的自定义样张保留。
+表单仅要求文件、名称、语言，语言为 `zh/ja/en/other`，默认 `other`。新家族默认样张按语言由 Backend 生成，固定文本直接取共享夹具 `specimens`；不要求管理员补填作者、许可、来源、样张或排序，也不在客户端伪造这些字段。名称规范化与校验由生产者负责。新家族追加若将超过旧配置排序上限 `1000000`，服务端在同一事务内按现有顺序和家族 ID 压紧该语言排序再追加，同时更新必要家族修订、目录、列表和审计；不修改版本或历史正文。已有家族新版保留已保存的作者、来源、许可等补充资料，授权仍由本次服务端确认单独判定；自动样张随语言更新，通过旧配置入口保存过的自定义样张保留。
 
 上传即确认允许分发、转码与分片。靠近提交操作保留一次简短必要提示，不增加重复勾选或许可表单；字体原始许可仍须遵守。首次绑定源时，服务端记录实际上传者、确认时间、源 SHA 及规则版本 `admin-font-upload-v1`，证据持久化到 job，新版本复制并在处理、Worker、发布各阶段核验。既有版本证据不被重写，新 job 保留本次确认；公开 notices 不泄漏账号、IP、请求标识、确认时间或审计对象。
 
@@ -73,7 +73,7 @@
 
 orderCases 是独立场景，不能关联 listDataset 推断语言成员；它没有提供完整可选集合快照或每个拒绝案例的请求体。本仓核对多组 DTO、边界及整批拒绝预期，完整集合校验、真实并发锁和事务回滚须由责任仓执行，不能以本仓测试证明通过。
 
-此前治理交接的 Backend 3063 项测试、静态／脚本回归与构建属于初始 832a3989 契约切片证据，不作为此次恢复 pin 的运行验收结论。Foundation 未重复执行后端重型检查。业务实现、迁移、真实画面与隔离写入 E2E 的最终证据仍待责任仓交付，不能把此契约提交当作可部署运行时。Web 提供明暗和窄窗口的授权、错误恢复、筛选及重排画面；写入 E2E 使用本轮登记的独立 PostgreSQL、Redis、上传目录及账号，记录 runId、提交、资源身份和清理结果，失败或清理失败不得记为通过。历史字体镜像、包版本、已发布 Tag、Token 与生成物不变。
+此前治理交接的 Backend 3063 项测试、静态／脚本回归与构建属于初始 832a3989 契约切片证据，不作为最终运行提交的验收结论。Foundation 未重复执行后端重型检查。最终运行提交已交接，Web 使用已提交 runner 新建独立资源进行联验；本仓只核对文档和来源，运行、迁移、真实画面及清理证据由责任仓交付，不重复执行联验或推断其已通过。Web 提供明暗和窄窗口的授权、错误恢复、筛选及重排画面；写入 E2E 使用本轮登记的独立 PostgreSQL、Redis、上传目录及账号，记录 runId、提交、资源身份和清理结果，失败或清理失败不得记为通过。历史字体镜像、包版本、已发布 Tag、Token 与生成物不变。
 
 ## 迁移与回退边界
 

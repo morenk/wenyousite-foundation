@@ -25,7 +25,7 @@ const setEqual = (actual, expected) => assert.deepEqual(new Set(actual), new Set
 
 test("管理员三份镜像固定已提交来源、字节摘要及独立版本，不覆盖历史镜像", () => {
   assert.equal(source.repository, "morenk/wenyousite-backend");
-  assert.equal(source.commit, "1ce559b42be9ac04c4fd09137ee30f482facbfe2");
+  assert.equal(source.commit, "2b8abf3b6ae23c94dd843dfd6ce72865554a657e");
   assert.equal(source.apiVersion, "5.44.0-dev.20261024.2");
   assert.equal(api.info.version, source.apiVersion);
   assert.equal(fixtures.apiContractVersion, source.apiVersion);
