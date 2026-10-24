@@ -2,9 +2,11 @@
 
 ## 字体后台管理员契约
 
-`pnpm test:font-admin` 验证 Backend `2b8abf3b6ae23c94dd843dfd6ce72865554a657e` 的三份[原字节镜像与来源摘要](fixtures/admin-font-management/source.json)，并纳入 `pnpm check`。覆盖所有十组 Cases、26 条列表数据、OpenAPI DTO 绑定、多语言顺序边界、提交／源重放、多行许可、版本复用、发布历史与 job 准确绑定恢复；八项行为关联见[管理员验收](../docs/thread-font-admin.md#兼容与验收)。
+`pnpm test:font-admin` 验证 Backend `2db4ef1254c7738966dc28b1cd1fc10dcb19da47` 的三份[原字节镜像与来源摘要](fixtures/admin-font-management/source.json)，并纳入 `pnpm check`。覆盖所有十组 Cases、26 条列表数据、OpenAPI DTO 绑定、多语言顺序边界、提交／源重放、多行许可、版本复用、发布历史与 job 准确绑定恢复；八项行为关联见[管理员验收](../docs/thread-font-admin.md#兼容与验收)。
 
-测试不复制业务比较器或状态机。OpenAPI 未表达的规范化、额外字段拒绝、成对字段和 nullable＋allOf 边界，以及 orderCases 缺完整集合快照的限制均在规范中列明；共享预期检查不是运行实现验收。此 SHA 已包含管理运行实现，OpenAPI 与夹具对 1ce559b4 逐字节不变，跳过重复生成；检查保留可选／可空 UUID、历史 job 不取最新提交及旧手工任务 null。Web／Mobile 联验与隔离证据仍由责任仓交付。既有 v1／v2 镜像和测试原样保留。
+测试不复制业务比较器或状态机。OpenAPI 未表达的规范化、额外字段拒绝、成对字段和 nullable＋allOf 边界，以及 orderCases 缺完整集合快照的限制均在规范中列明；共享预期检查不是运行实现验收。本次 `.3` 只更新四类默认样张与 OpenAPI 版本元数据；检查保留可选／可空 UUID、历史 job 不取最新提交及旧手工任务 null。Web／Mobile 联验与隔离证据仍由责任仓交付。既有 v1／v2 镜像和测试原样保留。
+
+新增默认值与历史快照检查：固定四类 Wenyou 文案，将 `.2` 原字节夹具保存在 history/ 并登记旧提交来源；去除版本元数据后验证 OpenAPI 摘要不变，管理员夹具除版本和 specimens 外完全一致。旧提交重放／失败重试使用原快照及自定义样张的运行验证引用已提交 Backend 服务测试；本仓不复制服务逻辑，也不以归档完整性代替运行验收。
 
 ## APP 下载语义
 
