@@ -1,0 +1,118 @@
+{
+  "repository": "morenk/wenyousite-backend",
+  "commit": "62a0313a75c85e42dfa39cd09b7cc90ae5c34186",
+  "apiVersion": "5.43.0-dev.20261022.3",
+  "purpose": "只读动态协议测试镜像；后端运行时已实现，公共部署及真实跨端验收另行记录",
+  "files": {
+    "markdown-text-font-v2.schema.json": {
+      "sourcePath": "contracts/markdown-text-font-v2.schema.json",
+      "sha256": "a639ef58c6849699f2cbbf05f82ceae56ecb482cf2c4360762038746639c2b57",
+      "bytes": 638
+    },
+    "markdown-text-font-v2-fixtures.json": {
+      "sourcePath": "contracts/markdown-text-font-v2-fixtures.json",
+      "sha256": "c327b33a2ab8167b25c9eeb64ebd102799a1464bb4b7d6f975d3717b58badafb",
+      "bytes": 5615
+    },
+    "thread-font-dynamic-v2-fixtures.json": {
+      "sourcePath": "contracts/thread-font-dynamic-v2-fixtures.json",
+      "sha256": "81208c419c05b8cdac64a1e48655b124229c5a47efa9976a75adb5f980b2d039",
+      "bytes": 8658
+    },
+    "thread-font-manifest-v2.schema.json": {
+      "sourcePath": "contracts/thread-font-manifest-v2.schema.json",
+      "sha256": "2852f42f19a88e8254c467b607f6626df3ec1ed5303f123ec62ff35096b5705c",
+      "bytes": 3370
+    },
+    "thread-font-runtime-policy-v3.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v3.json",
+      "sha256": "83b731625cc0f6e30a604d79322ef8c727ee19b819b7ebc61c31d0b0d8ef6ac1",
+      "bytes": 1533
+    },
+    "thread-font-runtime-policy-v3.schema.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v3.schema.json",
+      "sha256": "0ffcec1c307d10cdadb262450e295a4f124ad1aeee522bf19dc2b466f74df4e9",
+      "bytes": 6441
+    },
+    "thread-font-v1-import-map.json": {
+      "sourcePath": "contracts/thread-font-v1-import-map.json",
+      "sha256": "246ab8d162bd593a56ca0737385c46dbde66f068f8ed78a71c21913ce4e6dc27",
+      "bytes": 4738
+    }
+  },
+  "references": {
+    "docs/dynamic-text-fonts.md": {
+      "sha256": "ed5f612867333636b1984147504cef07dd2722c3d80ef7f7a05ceb3284854dce",
+      "bytes": 20174
+    },
+    "contracts/openapi.json": {
+      "sha256": "68aa20aa55aaa6a0bcb690c614c719fc8001fc686151c34add346454a39145f3",
+      "bytes": 1784392
+    },
+    "src/text-fonts/font-protocol.ts": {
+      "sha256": "d54f58d74207f3a92d268472928e3006190489009ec9ca3977bd01c6ee258117",
+      "bytes": 566
+    },
+    "src/text-fonts/font-version-state.ts": {
+      "sha256": "0fc75edb2d3803fdb0c8f921180104bef97c301d98f046b14f015d6a3948c151",
+      "bytes": 301
+    },
+    "src/text-fonts/font-catalog-page.ts": {
+      "sha256": "3ab2cc8e630c77644a36e9e9d3a506baadec072c7f17a669f394d9980d9a3c3a",
+      "bytes": 2187
+    },
+    "contracts/thread-font-manifest-v1.json": {
+      "sha256": "e2836703a30eec5f59dd9d4d72f6887756c2dd30c070606db5cee258ebd0efa3",
+      "bytes": 4941141
+    },
+    "docs/deprecation-register.md": {
+      "sha256": "22f2775a91d6b9ca4ff02f1e737c3384e4b865d60d651c9a28b87f1b9026d1ad",
+      "bytes": 19160
+    },
+    "src/meta/meta.controller.ts": {
+      "sha256": "069a2f2a671171c267a33d83c5e380f62c6a248dfc5e9ec1e467d623c9e4e883",
+      "bytes": 5841
+    },
+    "src/text-fonts/font-readiness.service.ts": {
+      "sha256": "da7db7a37a6335cf05f1daae5b4e9a5ec852a031d4802e0c6174619dcbe3dddd",
+      "bytes": 2187
+    },
+    "src/text-fonts/font-query.service.ts": {
+      "sha256": "af6eeb982b2406cf00df86457f2f0681b57e0b78b997ab37e44b627880aa5bbe",
+      "bytes": 7467
+    },
+    "src/text-fonts/font-admin.service.ts": {
+      "sha256": "9ffa8b4e09c56c1078c5f8cacc01414155db1859ea9f296359cc60b6ed4b4ffa",
+      "bytes": 11329
+    },
+    "src/text-fonts/font-legacy-import.service.ts": {
+      "sha256": "560bfa978175a4330c6f4fc8966685e64082faefc2772183f2b04f0fe6024fd7",
+      "bytes": 12254
+    },
+    "scripts/text-font-v2.integration.ts": {
+      "sha256": "e305c7919bae4f2a025994705239e72837701566210e4bf0cacfa959fa1d3aef",
+      "bytes": 17933
+    },
+    "scripts/e2e-runner.ts": {
+      "sha256": "295d522d4e1224ae7ba8d126eefc2bf333aa1f25a35f0ba1a067e2afbfb15048",
+      "bytes": 26673
+    }
+  },
+  "projections": {
+    "audit-enums.json": {
+      "sourcePath": "contracts/openapi.json",
+      "sourceSha256": "68aa20aa55aaa6a0bcb690c614c719fc8001fc686151c34add346454a39145f3",
+      "format": "JSON Pointer keys to unchanged source values; UTF-8 JSON, 2-space indent, trailing newline",
+      "pointers": [
+        "/paths/~1api~1v1~1admin~1audit-logs/get/parameters/3/schema/enum",
+        "/paths/~1api~1v1~1admin~1audit-logs/get/parameters/4/schema/enum",
+        "/paths/~1api~1v1~1admin~1audit-logs~1export/get/parameters/3/schema/enum",
+        "/paths/~1api~1v1~1admin~1audit-logs~1export/get/parameters/4/schema/enum",
+        "/components/schemas/AdminAuditLogResponseDto/properties/action/enum",
+        "/components/schemas/AdminAuditLogResponseDto/properties/targetType/enum"
+      ],
+      "sha256": "4bada7f535e5d591d4a60ede88b0ecf68b956cee28233f0950d2319ce2f2f8ff",
+      "bytes": 5024
+    }
+  }
+}

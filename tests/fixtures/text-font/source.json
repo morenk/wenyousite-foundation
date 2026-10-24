@@ -1,0 +1,77 @@
+{
+  "repository": "morenk/wenyousite-backend",
+  "commit": "f27898ec3b168b9e027b5d5abef43a0d3dafa242",
+  "purpose": "只读测试镜像；消费者直接固定 Backend 契约，不作为 Foundation 运行时目录",
+  "files": {
+    "markdown-text-font-v1.schema.json": {
+      "sourcePath": "contracts/markdown-text-font-v1.schema.json",
+      "sha256": "16491effe91ad69787860d394ebe7859f5cabac696133a390c741a3945f9542f",
+      "bytes": 1250
+    },
+    "markdown-text-font-v1-fixtures.json": {
+      "sourcePath": "contracts/markdown-text-font-v1-fixtures.json",
+      "sha256": "c7f73fc7bbb3acaedee141929acc98fb063463fb70e364d58b355ab10a5d1262",
+      "bytes": 11237
+    },
+    "thread-font-catalog-v1.json": {
+      "sourcePath": "contracts/thread-font-catalog-v1.json",
+      "sha256": "540fbd411b9ca9c1c0a042d3cb2bbf371aa712508f459b30c4bed09b17eece70",
+      "bytes": 3711
+    },
+    "thread-font-runtime-policy-v2.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v2.json",
+      "sha256": "817b5fba82504dde926ca7b8d111f5a69cd274f0001adc4afa4d793a23c789f7",
+      "bytes": 1609
+    },
+    "thread-font-runtime-policy-v2.schema.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v2.schema.json",
+      "sha256": "78da4c4171783255384fb8af23b799d739a82e6ae2127c4ccf2628d690cc9104",
+      "bytes": 7467
+    },
+    "thread-font-runtime-policy-v2-fixtures.json": {
+      "sourcePath": "contracts/thread-font-runtime-policy-v2-fixtures.json",
+      "sha256": "2b8e227ffae820a724c93253bbb99be4ed22ddfa3b1ae8e99195f4e69a9e944f",
+      "bytes": 12205
+    }
+  },
+  "references": {
+    "docs/markdown-text-font-v1.md": {
+      "sha256": "799e1ee52b0e4e8405da7dc900f70ab4a77f60321b2a569bd50fe89055f41483",
+      "bytes": 7614
+    },
+    "docs/thread-font-assets.md": {
+      "sha256": "404e4860268b363378396e95df6457db1efccf5d8fadd36c99b95a0820c8150d",
+      "bytes": 16901
+    },
+    "contracts/thread-font-manifest-v1.json": {
+      "sha256": "e2836703a30eec5f59dd9d4d72f6887756c2dd30c070606db5cee258ebd0efa3",
+      "bytes": 4941141
+    },
+    "contracts/thread-font-manifest-v1.schema.json": {
+      "sha256": "b4a28cd978a1b72428cab6c5262e7728544f2239889070ed2ad2d49acf1a9367",
+      "bytes": 18238
+    },
+    "src/common/text-font-assets.generated.ts": {
+      "sha256": "c7d2285d6e2b6aa51c67be40cccacf38670416b18cc0307b0ede6239b0dde026",
+      "bytes": 4534
+    },
+    "docs/thread-font-runtime-policy.md": {
+      "sha256": "3ae1f653418dcff9a205d0adfeb93d5e9f5d81cc1ad1011329b62213ae83d565",
+      "bytes": 12330
+    },
+    "src/common/text-font-runtime-policy.generated.ts": {
+      "sha256": "ef2769ef03fc2ac75feade402967f7b3ab614a3af3a4357d230169edc55fc1a3",
+      "bytes": 1751
+    },
+    "contracts/archive/thread-font-xiaocheng-lafeng-v1.json": {
+      "sha256": "6b298a5eb5bb835968decf8acf1023541408fffdb323332542947f9ff4e2c1f4",
+      "bytes": 84259
+    }
+  },
+  "legacyManifest": {
+    "commit": "d86734e5aa229c5401a092096b8845b3d17546b0",
+    "sourcePath": "contracts/thread-font-manifest-v1.json",
+    "sha256": "7aab91a436933049bc8f55c1aba6085078a251d174c5b253456d3af0c91a0582",
+    "bytes": 5031019
+  }
+}

@@ -1,5 +1,11 @@
 # 共享验收用例
 
+## 字体后台管理员契约
+
+`pnpm test:font-admin` 验证 Backend `2b8abf3b6ae23c94dd843dfd6ce72865554a657e` 的三份[原字节镜像与来源摘要](fixtures/admin-font-management/source.json)，并纳入 `pnpm check`。覆盖所有十组 Cases、26 条列表数据、OpenAPI DTO 绑定、多语言顺序边界、提交／源重放、多行许可、版本复用、发布历史与 job 准确绑定恢复；八项行为关联见[管理员验收](../docs/thread-font-admin.md#兼容与验收)。
+
+测试不复制业务比较器或状态机。OpenAPI 未表达的规范化、额外字段拒绝、成对字段和 nullable＋allOf 边界，以及 orderCases 缺完整集合快照的限制均在规范中列明；共享预期检查不是运行实现验收。此 SHA 已包含管理运行实现，OpenAPI 与夹具对 1ce559b4 逐字节不变，跳过重复生成；检查保留可选／可空 UUID、历史 job 不取最新提交及旧手工任务 null。Web／Mobile 联验与隔离证据仍由责任仓交付。既有 v1／v2 镜像和测试原样保留。
+
 ## APP 下载语义
 
 `app-download-semantics-fixtures.json` 对应[共享下载规范](../docs/app-downloads.md)，使用稳定 ID 和中文前置条件、动作、观察结果描述跨仓验收；不是 HTTP DTO、响应样本或 Foundation 运行时导出。Backend OpenAPI 是字段的唯一事实源，接入任务固定共享规范中的精确 Backend 提交，并在真实实现测试中关联相关用例 ID。
@@ -49,3 +55,23 @@ Dart 接口只接受有效 `DateTime`，无效字符串属于上游解析职责�
 `pnpm test:audio` 仅覆盖音频体验 Schema 的有效与拒绝用例、Web／Flutter 导出和清单哈希、三个新增图标与固定 Lucide 资产一致性、既有 Token 复用，以及 Backend 精确提交语料及校验和。该入口不运行全量 `pnpm check`；合并授权后全量入口会包含这些音频回归。
 
 跨端播放器交互与真实画面需各消费者自行验证，本仓库检查不能代替。
+
+## 主题帖字体协议测试镜像
+
+`pnpm test:text-font` 校验 `fixtures/text-font/source.json` 固定的 Backend 提交与六份原字节镜像，验证当前目录身份属于正文 Schema，并保留目录外的已退役历史身份、主要设计语言和就绪状态、未知身份／属性／跨行／颜色格式被解析结果 Schema 拒绝，运行策略 v2 的严格 Schema／manifest 绑定及无效策略拒绝，以及四种读取投影、写入保护和运行策略语料的完整性。此入口纳入 `pnpm check`；测试不运行生产者 Markdown 解析器或 HTTP，也不把源码字符串的语法验证等同于解析结果 Schema 校验。
+
+镜像仅置于测试目录，不进入 Foundation 运行时包、Token 或公开导出。目录只从记录中的 Backend 精确 SHA 同步，不能手改镜像添加字体或更新资源状态；消费者直接固定 Backend 来源，不升级 Foundation 未发布提交。大型 manifest、退役审计和生成索引只登记来源哈希／长度，旧 manifest 另以 `legacyManifest` 保留精确提交及摘要，交接时从同提交 `git show` 核对索引描述符、目录和预算一致；CI 不声称联网重新核验远端资源。策略夹具的窗口、退避、Retry-After、SFNT 估算、快照及 `transferCases` 场景供消费者执行；传输轨迹包含 100 秒持续下载、idle／总截止、排队、取消与元数据超限，`complete` 只表示传输阶段完成；本仓不复制运行调度器，静态校验不代表流式元数据限长、恢复调度或原生资源生命周期已验收。
+
+实际 Markdown 投影、字体／颜色保存保护、剪贴板、编辑往返、可见字符回退、资源完整性／预算、浏览器与 Flutter 设备画面由消费者用同一语料执行。完整接入与成本证据边界见[正文字体规范](../docs/thread-fonts.md)。
+
+## 动态字体契约检查
+
+`pnpm test:text-font` 同时运行 `text-font.test.mjs` 与 `text-font-dynamic.test.mjs`，并纳入 `pnpm check`。动态组的 `fixtures/text-font-dynamic/source.json` 固定 Backend `62a0313a75c85e42dfa39cd09b7cc90ae5c34186`，七份生产者原字节镜像分别覆盖正文 Schema／投影写入语料、状态刷新账本语料、manifest Schema、运行策略 JSON／Schema、历史导入映射；按精确提交、源路径、长度及 SHA-256 校验，OpenAPI 保留摘要及下述审计枚举投影，其余源文档登记摘要，不复制大型完整接口文档。旧六份镜像及其来源不改动。
+
+新组验证导入表外的合法版本身份、非法解析结果、混合正文及旧端覆盖预期、selectable／pasteAllowed／renderAllowed 区别、截页与负缓存值、严格 v3 形状、11 个可收紧预算范围的下界／上界／越界／小数拒绝、跨发布账本预期、清单结构和历史导入身份。新增跨协议注册夹具检查，核对来源 manifest 绑定、保留 WYF1 alias 和两次输入身份／字节相同、生产者零新增尝试预期；同时拒绝错误长度或任意 family。清单合成样本仅用于结构验证，不是真实资源；Schema 不证明 Unicode 范围并集、角色格式、实际字节／SHA 或状态网关正确。静态投影和写入语料检查不执行生产者 Markdown 解析器、HTTP 或事务锁。
+
+[动态字体验收矩阵](../docs/thread-fonts-dynamic.md#跨仓验收用例)保留 17 个跨仓 ID，关联构建后新版本同会话使用、状态与缓存、隔离上传发布、Android 网络／剪贴板／RSS 等真实流程。固定 Backend 提交已实现运行时，治理确认后端检查及完整隔离 E2E／清理通过；这些运行场景未由 Foundation 重跑，公共部署与真实跨端同会话验收另行记录，不能将静态检查视为动态功能验收。后续生产者更新须整体同步明确提交，消费者负责对应真实执行及失败清理。
+
+`legacyRoutingRules`、9 条 `legacyRoutingCases` 与 6 条 `legacyCapabilityCases` 固定 v1 映射状态及防降级预期：同会话激活后只走 v2 网关，无旧 manifest 请求，404／断网保留最近可信状态，墓碑压过迟到响应和能力降级；来源标记保持。Foundation 核对映射和语料，不执行消费者路由器或声称旧公共字节可撤回。
+
+`audit-enums.json` 是已提交 OpenAPI 的可追溯投影：JSON Pointer 为键，值为未修改的完整枚举数组，按 UTF-8、两空格缩进和末尾换行保存。`source.json.projections` 记录六个指针、OpenAPI 原文件摘要及投影字节／摘要；同步时从同一 Git SHA 核对每个指针值。测试验证三处 action／targetType 的枚举一致、八个 TEXT_FONT 动作及 TEXT_FONT 目标存在，不改变七份字体原字节镜像的口径，也不复制审计执行器。

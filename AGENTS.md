@@ -3,7 +3,7 @@
 - 本文件继承工作区根 `AGENTS.md` 的环境边界、变更隔离与普通提交规则；Foundation 长期分支为 `main`。
 - `contracts/foundation.v1.json` 是审美与跨端体验的机器事实源；文档和生成产物不得反向定义第二套数值。
 - `docs/foundation.md` 描述共享意图，`docs/images.md` 描述跨端图片呈现语义，`docs/platforms/` 只描述必要的平台差异。不得用“统一”削弱 Web 的信息密度或 Flutter 的 48dp 触控、安全区和单列布局。
-- 排版使用系统字体，三种语义角色及字重、字号、行高以机器契约为准；不捆绑或运行时下载字体，不绑定具体字形。
+- 应用 UI 与未指定字体的正文使用系统字体，三种语义角色及字重、字号、行高以机器契约为准；Foundation 不捆绑或运行时下载字体，不绑定具体字形。作者显式选择的主题帖正文字体是业务内容例外，遵循 `docs/thread-fonts.md`，由 Backend 拥有字体目录、协议和资源分发，不替换 UI Token 或另建字体事实源。
 - 修改契约后运行 `pnpm generate`，交付前运行 `pnpm check`。不得手改 `dist/`、`web/tokens.css`、Flutter 生成常量来绕过契约。
 - 完成切片后显式暂存并复核 staged diff，以 `feat|fix|refactor|test|docs|chore(scope): 中文说明` 创建原子提交；从最新 `origin/main` 建立并推送 `codex/YYYYMMDD-<目标>`，不得直接更新 `main`。
 - Foundation 变化必须通过 PR，由用户明确决定合并；Codex 不得自行合并、创建 Tag、发布 Release 或触发部署。
