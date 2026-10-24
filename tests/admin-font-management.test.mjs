@@ -25,8 +25,8 @@ const setEqual = (actual, expected) => assert.deepEqual(new Set(actual), new Set
 
 test("管理员三份镜像固定已提交来源、字节摘要及独立版本，不覆盖历史镜像", () => {
   assert.equal(source.repository, "morenk/wenyousite-backend");
-  assert.equal(source.commit, "2b8abf3b6ae23c94dd843dfd6ce72865554a657e");
-  assert.equal(source.apiVersion, "5.44.0-dev.20261024.2");
+  assert.equal(source.commit, "2db4ef1254c7738966dc28b1cd1fc10dcb19da47");
+  assert.equal(source.apiVersion, "5.44.0-dev.20261024.3");
   assert.equal(api.info.version, source.apiVersion);
   assert.equal(fixtures.apiContractVersion, source.apiVersion);
   assert.equal(fixtures.fixtureVersion, 1);
@@ -106,6 +106,49 @@ test("创建样例绑定 DTO 形状，规范化与成对修订约束保留为生
   assert.equal(byId("createCases", "blank-name").accepted, false);
   assert.notEqual(byId("createCases", "normalize-name").input.name, byId("createCases", "normalize-name").expected.name);
   // OpenAPI 未完整表达规范化、额外字段拒绝与成对字段，不宣称执行了 DTO 运行校验。
+});
+
+test("四类自动样张使用已提交 Wenyou 文案，HTTP 仅更新版本元数据", () => {
+  assert.deepEqual(fixtures.specimens, {
+    zh: "温油文字 Aa 0123", ja: "温油文字 Aa 0123",
+    en: "Wenyou Aa 0123", other: "Wenyou Aa 0123",
+  });
+  assert.equal(fixtures.parametersVersion, 2);
+  assert.equal(fixtures.authorizationRuleVersion, "admin-font-upload-v1");
+  const canonical = (value) => Array.isArray(value) ? value.map(canonical)
+    : value && typeof value === "object"
+      ? Object.fromEntries(Object.keys(value).sort().map((key) => [key, canonical(value[key])]))
+      : value;
+  const withoutVersion = structuredClone(api);
+  delete withoutVersion.info.version;
+  // 摘要在同步时从 history.commit 的原始 OpenAPI 计算，覆盖字段、路由和其他元数据。
+  assert.equal(crypto.createHash("sha256").update(JSON.stringify(canonical(withoutVersion))).digest("hex"),
+    source.history.openapiWithoutVersionSha256);
+});
+
+test("旧默认值原字节快照独立保留，样张修订不改变重放和版本复用语料", () => {
+  const history = source.history;
+  assert.equal(history.commit, "2b8abf3b6ae23c94dd843dfd6ce72865554a657e");
+  assert.equal(history.apiVersion, "5.44.0-dev.20261024.2");
+  assert.deepEqual(Object.keys(history.files), ["history/admin-font-management-v1-fixtures.5.44.0-dev.20261024.2.json"]);
+  const [name, entry] = Object.entries(history.files)[0];
+  assert.equal(entry.sourcePath, "contracts/admin-font-management-v1-fixtures.json");
+  assert.equal(bytes(name).length, entry.bytes);
+  assert.equal(crypto.createHash("sha256").update(bytes(name)).digest("hex"), entry.sha256);
+  const previous = read(name);
+  assert.equal(previous.apiContractVersion, history.apiVersion);
+  assert.deepEqual(previous.specimens, {
+    zh: "温油站，一起书写故事。0123456789",
+    ja: "物語を一緒に紡ぎましょう。0123456789",
+    en: "The quick brown fox jumps over the lazy dog. 0123456789",
+    other: "Aa Bb Cc 0123456789",
+  });
+  const { specimens: oldSpecimens, apiContractVersion: oldVersion, ...oldCases } = previous;
+  const { specimens: newSpecimens, apiContractVersion: newVersion, ...newCases } = fixtures;
+  assert.notDeepEqual(oldSpecimens, newSpecimens);
+  assert.notEqual(oldVersion, newVersion);
+  assert.deepEqual(newCases, oldCases);
+  // 这是历史契约快照和语料完整性断言；旧提交/失败重试使用原配置由 Backend 真实服务测试保证。
 });
 
 test("提交与源重放预期区分响应丢失、同键冲突、明确重试和并发意图", () => {

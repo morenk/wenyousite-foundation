@@ -1,14 +1,41 @@
 # 字体后台上传与列表管理
 
-本文固定 Backend `2b8abf3b6ae23c94dd843dfd6ce72865554a657e`（HTTP `5.44.0-dev.20261024.2`）的[管理员契约](https://github.com/morenk/wenyousite-backend/blob/2b8abf3b6ae23c94dd843dfd6ce72865554a657e/docs/admin-font-management.md)、[OpenAPI](https://github.com/morenk/wenyousite-backend/blob/2b8abf3b6ae23c94dd843dfd6ce72865554a657e/contracts/openapi.json)和[共享夹具](https://github.com/morenk/wenyousite-backend/blob/2b8abf3b6ae23c94dd843dfd6ce72865554a657e/contracts/admin-font-management-v1-fixtures.json)。三份原字节镜像的路径、长度和 SHA-256 见[来源记录](../tests/fixtures/admin-font-management/source.json)；Backend 唯一拥有 HTTP 与业务语义，Foundation 不另造接口、默认样张或运行目录。
+本文固定 Backend `2db4ef1254c7738966dc28b1cd1fc10dcb19da47`（HTTP `5.44.0-dev.20261024.3`）的[管理员契约](https://github.com/morenk/wenyousite-backend/blob/2db4ef1254c7738966dc28b1cd1fc10dcb19da47/docs/admin-font-management.md)、[OpenAPI](https://github.com/morenk/wenyousite-backend/blob/2db4ef1254c7738966dc28b1cd1fc10dcb19da47/contracts/openapi.json)和[共享夹具](https://github.com/morenk/wenyousite-backend/blob/2db4ef1254c7738966dc28b1cd1fc10dcb19da47/contracts/admin-font-management-v1-fixtures.json)。三份原字节镜像的路径、长度和 SHA-256 见[来源记录](../tests/fixtures/admin-font-management/source.json)；Backend 唯一拥有 HTTP 与业务语义，Foundation 不另造接口、默认样张或运行目录。
 
-该提交已将五个管理操作及带 `submissionId` 的源上传接入持久化、Worker 和原子目录事务，保留旧手工入口。OpenAPI 与管理员夹具对恢复契约 `1ce559b42be9ac04c4fd09137ee30f482facbfe2` 逐字节一致，HTTP 仍为 `.2`，无需重复生成消费者类型。来源记录更新为最终运行提交，并同步生产者文档的实现状态；本仓不将契约一致性检查视为 Web／Mobile 联验通过。本文与[动态正文字体规范](thread-fonts-dynamic.md)及既有镜像共同交付，消费者 v2、旧 v1 引用、历史资源和授权记录保留。合并、部署及安装继续等待相应授权。
+该提交已将五个管理操作及带 `submissionId` 的源上传接入持久化、Worker 和原子目录事务，保留旧手工入口。本次 `.3` 只修订自动样张默认文案：OpenAPI 相对 `.2` 仅 info.version 改变，HTTP 形状、参数版本和授权规则不变；消费者按各自流程同步精确契约及版本元数据。来源记录固定本次已提交修订；本仓不将契约一致性检查视为 Web／Mobile 联验通过。本文与[动态正文字体规范](thread-fonts-dynamic.md)及既有镜像共同交付，消费者 v2、旧 v1 引用、历史资源和授权记录保留。合并、部署及安装继续等待相应授权。
 
 ## 提交与授权确认
 
 表单仅要求文件、名称、语言，语言为 `zh/ja/en/other`，默认 `other`。新家族默认样张按语言由 Backend 生成，固定文本直接取共享夹具 `specimens`；不要求管理员补填作者、许可、来源、样张或排序，也不在客户端伪造这些字段。名称规范化与校验由生产者负责。新家族追加若将超过旧配置排序上限 `1000000`，服务端在同一事务内按现有顺序和家族 ID 压紧该语言排序再追加，同时更新必要家族修订、目录、列表和审计；不修改版本或历史正文。已有家族新版保留已保存的作者、来源、许可等补充资料，授权仍由本次服务端确认单独判定；自动样张随语言更新，通过旧配置入口保存过的自定义样张保留。
 
 上传即确认允许分发、转码与分片。靠近提交操作保留一次简短必要提示，不增加重复勾选或许可表单；字体原始许可仍须遵守。首次绑定源时，服务端记录实际上传者、确认时间、源 SHA 及规则版本 `admin-font-upload-v1`，证据持久化到 job，新版本复制并在处理、Worker、发布各阶段核验。既有版本证据不被重写，新 job 保留本次确认；公开 notices 不泄漏账号、IP、请求标识、确认时间或审计对象。
+
+## 自动样张默认值与历史快照
+
+新自动提交使用生产者共享夹具 `specimens`，与既有各语言 Wenyou 样张文案一致：
+
+| 语言 | 默认文字 |
+| --- | --- |
+| `zh`／`ja` | `温油文字 Aa 0123` |
+| `en`／`other` | `Wenyou Aa 0123` |
+
+当前默认值仅在新建提交时选取，包括已有自动家族的新版本提交；自动样张随本次语言变化。已存在提交的幂等重放、旧失败任务的明确重试仍使用其原配置快照，不按最新默认值重新赋值；自定义样张始终保留。已发布版本、PNG、manifest 及其他不可变字节不回填、不覆盖，旧正文仍绑定原版本。样张属于构建输入，新提交和旧重试不得因文案相同或源字节相同混用配置。
+
+[历史 `.2` 原字节夹具](../tests/fixtures/admin-font-management/history/admin-font-management-v1-fixtures.5.44.0-dev.20261024.2.json)单独保留旧默认值，来源固定 Backend `2b8abf3b6ae23c94dd843dfd6ce72865554a657e`。`source.json` 记录其长度、哈希及去除 info.version 后的旧 OpenAPI 规范化摘要。Foundation 检查新四分类精确值、旧快照未改写及其余语料／HTTP 内容不变，不模拟提交服务。实际新建、旧快照上传／重试和自定义配置行为由同提交的 [Backend 服务测试](https://github.com/morenk/wenyousite-backend/blob/2db4ef1254c7738966dc28b1cd1fc10dcb19da47/src/text-fonts/font-submission.service.spec.ts#L188)覆盖，其来源摘要同样登记，不能以本仓静态断言代替服务执行。
+
+本次未新增上传格式或字体协议：入口仍接受 TTF／OTF，可变字体按既有规则固定默认轴，v2 样张仍为服务端 PNG。后续字体格式专项回归由 Backend 独立交付，本次样张同步不宣称该回归已完成。
+
+## 消费者同步依据
+
+以下只读核对已提交代码，未修改消费者仓库，也未在 VPS 执行 Flutter 门禁：
+
+| 已提交依据 | 对本次修订的影响 |
+| --- | --- |
+| [Web 2514846 的样张组件](https://github.com/morenk/wenyousite-frontend/blob/2514846b90bd9f641986ea6e1552a48348d614e0/src/components/editor/dynamic-font-specimen.tsx#L68)与[资源读取](https://github.com/morenk/wenyousite-frontend/blob/2514846b90bd9f641986ea6e1552a48348d614e0/src/lib/dynamic-text-font-runtime.ts#L174) | 按服务端 descriptor 的样张 SHA 读取字节，构建 image/png Blob 后交给 img；不在客户端生成语言样张文字。 |
+| [Mobile 8ab9f1b 的 PNG 读取](https://github.com/morenk/wenyousite-mobile/blob/8ab9f1bdb031290d89d6e093177b0ecb6a680fa4/lib/core/text_fonts/dynamic_font_runtime.dart#L143)与[图像解码绘制](https://github.com/morenk/wenyousite-mobile/blob/8ab9f1bdb031290d89d6e093177b0ecb6a680fa4/lib/features/editor/presentation/editor_font_specimen.dart#L45) | 校验 PNG 资产后解码图像并按透明边界绘制，不依据语言自行排印样张。 |
+| [Web 管理页空值回退](https://github.com/morenk/wenyousite-frontend/blob/2514846b90bd9f641986ea6e1552a48348d614e0/src/components/admin/text-font-detail.tsx#L205) | 已读取共享 fixtures 的语言默认值，需同步 `.3` 夹具；该提交的[相关测试](https://github.com/morenk/wenyousite-frontend/blob/2514846b90bd9f641986ea6e1552a48348d614e0/src/components/admin/__tests__/text-font-detail.test.tsx#L247)仍断言旧文案，需由 Web 更新。 |
+
+据上述实现，本次文案修订无需更改 Web／Mobile v2 PNG 渲染代码或升级字体协议；这不等于消费者无同步工作。各仓仍按门禁更新 OpenAPI 元数据、fixtures、生成产物和受影响断言，Mobile 仅在 Windows 执行。实际新样张与明暗／窄屏呈现由责任仓验收，不用旧 `.2` 构建结果冒充 `.3` 已验证产物。
 
 ## 阶段与失败恢复
 
@@ -73,7 +100,7 @@
 
 orderCases 是独立场景，不能关联 listDataset 推断语言成员；它没有提供完整可选集合快照或每个拒绝案例的请求体。本仓核对多组 DTO、边界及整批拒绝预期，完整集合校验、真实并发锁和事务回滚须由责任仓执行，不能以本仓测试证明通过。
 
-此前治理交接的 Backend 3063 项测试、静态／脚本回归与构建属于初始 832a3989 契约切片证据，不作为最终运行提交的验收结论。Foundation 未重复执行后端重型检查。最终运行提交已交接，Web 使用已提交 runner 新建独立资源进行联验；本仓只核对文档和来源，运行、迁移、真实画面及清理证据由责任仓交付，不重复执行联验或推断其已通过。Web 提供明暗和窄窗口的授权、错误恢复、筛选及重排画面；写入 E2E 使用本轮登记的独立 PostgreSQL、Redis、上传目录及账号，记录 runId、提交、资源身份和清理结果，失败或清理失败不得记为通过。历史字体镜像、包版本、已发布 Tag、Token 与生成物不变。
+治理交接确认本次 Backend `2db4ef1` 的 pnpm check 通过 231 suites／3129 tests。Foundation 未重复执行后端重型检查；此证据属于稳定样张契约切片，不代表后续字体格式专项回归或消费者新画面验收已完成。本仓只核对文档和来源，运行、真实画面及清理证据由责任仓交付。Web 提供明暗和窄窗口的授权、错误恢复、筛选及重排画面；写入 E2E 使用本轮登记的独立 PostgreSQL、Redis、上传目录及账号，记录 runId、提交、资源身份和清理结果，失败或清理失败不得记为通过。历史字体镜像、包版本、已发布 Tag、Token 与生成物不变。
 
 ## 迁移与回退边界
 

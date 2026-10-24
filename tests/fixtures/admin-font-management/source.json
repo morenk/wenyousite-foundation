@@ -1,22 +1,46 @@
 {
   "repository": "morenk/wenyousite-backend",
-  "commit": "2b8abf3b6ae23c94dd843dfd6ce72865554a657e",
-  "apiVersion": "5.44.0-dev.20261024.2",
+  "commit": "2db4ef1254c7738966dc28b1cd1fc10dcb19da47",
+  "apiVersion": "5.44.0-dev.20261024.3",
   "files": {
     "openapi.json": {
       "sourcePath": "contracts/openapi.json",
       "bytes": 1819878,
-      "sha256": "0ef6740eedadf50793bdc0fc14dd04ddde0e0840b001d22503bf4b5514e6b59c"
+      "sha256": "69dcb32a2bb51d71172ff1648e54e17c6b7be213416625569f0b75a900d47227"
     },
     "admin-font-management-v1-fixtures.json": {
       "sourcePath": "contracts/admin-font-management-v1-fixtures.json",
-      "bytes": 33164,
-      "sha256": "16bc40f293a82230f2d8dfe38d4d30de17ea7417162136ba6b6c6601a63e8d62"
+      "bytes": 33066,
+      "sha256": "41f047b8ae59e4aadd9d2ddb0f70f40598bcf652fe08aef4da11e8a458c32e0a"
     },
     "admin-font-management.md": {
       "sourcePath": "docs/admin-font-management.md",
-      "bytes": 11144,
-      "sha256": "d7489ce6b67ccacc6f689e59a12d0243204a33ee7db32e9070a640d8c23a2998"
+      "bytes": 11632,
+      "sha256": "0b6a705b64a88718b7c381e8207275938a97253f0d5a9b1603db8cd283d4846b"
+    }
+  },
+  "history": {
+    "commit": "2b8abf3b6ae23c94dd843dfd6ce72865554a657e",
+    "apiVersion": "5.44.0-dev.20261024.2",
+    "files": {
+      "history/admin-font-management-v1-fixtures.5.44.0-dev.20261024.2.json": {
+        "sourcePath": "contracts/admin-font-management-v1-fixtures.json",
+        "bytes": 33164,
+        "sha256": "16bc40f293a82230f2d8dfe38d4d30de17ea7417162136ba6b6c6601a63e8d62"
+      }
+    },
+    "openapiWithoutVersionSha256": "f5bb5c4ccde3acf4809375ac13ec89942d44f7a0323a64f9b207a001ba86d6e0"
+  },
+  "references": {
+    "src/text-fonts/font-submission.service.spec.ts": {
+      "sourcePath": "src/text-fonts/font-submission.service.spec.ts",
+      "bytes": 15171,
+      "sha256": "9af3fc545dfca79dce49c6f51a37ea7846855a9eac6037641544c8221da2bf57"
+    },
+    "docs/deprecation-register.md": {
+      "sourcePath": "docs/deprecation-register.md",
+      "bytes": 20092,
+      "sha256": "32fec43faf4772ff0163a588f1b8330feed3ec2da42e7edde7d19e3999c1e12d"
     }
   }
 }
