@@ -1,5 +1,11 @@
 # 共享验收用例
 
+## 动效与加载语义
+
+`pnpm test:motion` 纳入 `pnpm check`。它核对正式 `v7.6.0` 的 motion／feedback／overlays 摘要、Web Token／导出与 Flutter 时长对机器事实源的一致性，检查 [20 项固定用例](motion-semantics-fixtures.json)的唯一 ID、契约引用、两端责任、证据类型及[文档矩阵](../docs/motion.md)双向关联。摘要对选定子树递归按对象键排序后 JSON 序列化再计算 SHA-256，数组保留顺序；这是正式来源的回归基线，不是第二套运行时数值。
+
+用例是消费者验收说明，不是可执行状态机。Web 与 Windows Mobile 在各自真实实现测试和交付清单中关联 ID，提供快速完成、乱序／取消、连续编辑、迟到资源、目标定位、减少动态效果及末段帧 trace。Foundation 只运行静态检查，不声称浏览器／Flutter 编译、设备性能、读屏或负责人视觉验收完成；写入测试仍须使用独立隔离资源。规范／测试引用精确提交，不改变客户端正式 Tag 依赖。后续经批准调整相关机器语义时，应同时复核来源基线、用例与发布依赖，不能只更新摘要消除失败。
+
 ## 字体后台管理员契约
 
 `pnpm test:font-admin` 验证 Backend `2db4ef1254c7738966dc28b1cd1fc10dcb19da47` 的三份[原字节镜像与来源摘要](fixtures/admin-font-management/source.json)，并纳入 `pnpm check`。覆盖所有十组 Cases、26 条列表数据、OpenAPI DTO 绑定、多语言顺序边界、提交／源重放、多行许可、版本复用、发布历史与 job 准确绑定恢复；八项行为关联见[管理员验收](../docs/thread-font-admin.md#兼容与验收)。
