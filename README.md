@@ -16,6 +16,7 @@
 - [字体后台上传与列表管理](docs/thread-font-admin.md)
 - [公开 APP 下载与兼容更新](docs/app-downloads.md)
 - [反馈、无障碍与浮层契约](docs/interaction.md)
+- [全项目动效与加载语义](docs/motion.md)
 - [控件、内容与格式化呈现](docs/presentation.md)
 - [导航与界面语言契约](docs/navigation-language.md)
 - [机器契约](contracts/foundation.v1.json)
