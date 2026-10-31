@@ -25,6 +25,14 @@
 
 UI 与默认正文的系统字体接入须等待正式 v7 Tag，通过独立提交升级依赖：删除旧 Foundation 字体 CSS 导入、字体加载与预加载、字体依赖及手写家族覆盖，从 `TYPOGRAPHY_FAMILIES` 消费各角色的 `family` 和 `fallback`。CSS 的 `system-ui`、`sans-serif` 是通用家族关键字，须保持未加引号；字号、行高、字重和使用场景继续消费现有尺度与语义。验证桌面信息密度、键鼠焦点、中文与中英混排、数字、长标题、品牌文字及阅读/编辑换行，确认没有旧字体网络请求。数学排版与系统等宽字体按既有规则保留。
 
+## 动效与加载接入
+
+- 按[共享动效规范与验收矩阵](../motion.md)清点社区、编辑、账号、媒体和管理后台的公共组件及实际调用点。时长消费 `--motion-fast`、`--motion-standard`、`--motion-slow`，曲线消费 `--ease-standard`／`--ease-exit`；用途消费 `MOTION_USAGE`。不另写近似值，不为页面统一加进入动画。
+- 自定义过渡优先选能解释状态的局部属性；必要高度动画单独测量布局成本，不使用 `transition: all` 把数据重排一并动画化。持续指示保留稳定节点和相位，结果末段的解析、DOM 更新及布局另行测量和拆分；CSS 动画也不能证明主线程没有阻塞。
+- 首次渲染及运行时遵守 [`prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion)；组件 JS 使用同一解析结果处理滚动和显式动画。减少动态效果时 Skeleton 静态，焦点恢复和 busy 清理不依赖动画结束事件。
+- 用 [`visibilitychange`](https://developer.mozilla.org/en-US/docs/Web/API/Document/visibilitychange_event) 处理文档隐藏，并另行处理路由覆盖、Tab 与元素离屏；浏览器对后台调度的节流不代替应用清理。隐藏时暂停无用循环／帧监听，卸载清理 observer、timer 和 listener，恢复时仅续当前有效需求。
+- 当前正式包的 CSS 曲线与时长已经可用；本轮规范引用不要求依赖升级。Web 保留桌面密度、键盘焦点、原生历史与滚动恢复，按共享矩阵提供真实页面末段 trace、读屏及亮暗／窄屏画面。
+
 ## 公开 APP 下载
 
 - `ThemeMenu` 外观弹层仅提供主题切换与“下载 APP”，下载位于主题选项之后，复用桌面、窄屏与登录页组件，匿名可用。点击一次依次查询版本／状态、校验本站固定文件 HEAD，通过后自动交给浏览器原生下载；不再提供独立 `/download` 页面或二维码，行为遵循[共享下载规范](../app-downloads.md)。

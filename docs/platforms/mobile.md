@@ -34,6 +34,14 @@
 
 UI 与默认正文的 v7 接入只在 Windows 完成：等待正式 Tag 后独立升级依赖，移除旧捆绑字体注册、资产声明和家族名常量引用；`WenyouFoundationTypography.mobileFamilies` 只返回 body/display/utility 语义角色，结合 sizes、lineHeights、weights 映射到继承平台默认字体的 TextStyle，不设置自定义 fontFamily/fontFamilyFallback，也不把 `system-ui` 当作 Flutter 字体名。设置与管理标题仍选择 body 600，保留 pageTitle 等角色映射。验证中文与中英混排、数字、长标题换行、编辑与阅读、品牌文字、双倍文字缩放、单列布局、48dp 触控和安全区；本 Foundation 任务不代表已完成消费者升级或 Flutter 真机验收。
 
+## 动效与加载接入
+
+- 按[共享动效规范与验收矩阵](../motion.md)清点公共 Widget、路由及实际业务入口，时长复用 `WenyouFoundationMotion.fast/standard/slow`。正式包没有生成的 Flutter 曲线常量；自定义转场确需契约曲线时，在一个适配层按锁定 Tag 的 `motion.standardEase/exitEase` 映射 `Cubic` 并校验来源，不在页面分散近似值。平台原生路由、返回手势和指示器保持其自身实现。
+- 统一读取目标 SDK 实际支持的系统减少动态效果信号，并在变化时更新自定义与共享 Widget。Flutter 的 [`disableAnimations`](https://api.flutter.dev/flutter/widgets/MediaQueryData/disableAnimations.html) 与平台 reduce-motion 信号可能分开；不得假设一个开关覆盖所有系统。Android 去除动画须在真实设备验收；其他平台未验证时列明，不为本轮擅自升级 SDK。
+- 结合应用生命周期、路由／Tab 可见性及 [`TickerMode`](https://api.flutter.dev/flutter/widgets/TickerMode-class.html) 管理动画。TickerMode 只控制使用 Widget 感知 provider 的 ticker，不取消网络、timer 或解码；对应资源按所属协议独立清理。dispose 释放本组件 controller、订阅及引用，恢复时不重建重复工作。
+- 解析、列表构建、几何定位与动画末段一起测量 UI／raster 帧；适合的纯计算才转 isolate，不在 build 中启动重复请求或字体注册。保留稳定 key，局部资源就绪不触发整页每帧 rebuild，不以增加等待掩盖长帧。
+- 接入与真机验证只在 Windows Mobile 任务完成。继续锁定正式版本，保留单列、48dp 触控、安全区、文字缩放与系统返回；Foundation 静态检查不代表 Dart 编译、原生生命周期或设备视觉验收。
+
 ## Android 下载兼容
 
 - 更新流程遵循[共享下载规范](../app-downloads.md)；`/meta.mobileCompatibility.android.updateUrl` 继续是目标构建的文件 URL，不能替换成 Web 页面。保留 HEAD 预检、GET 下载、元数据、大小、摘要、包名、构建号和签名校验，地址迁移不降低安装门禁。

@@ -1,0 +1,197 @@
+{
+  "kind": "consumer-acceptance",
+  "specification": "../docs/motion.md",
+  "source": {
+    "tag": "v7.6.0",
+    "commit": "1bbd5a5476b50c51d2bba1f2a218f9408a852c4a",
+    "path": "contracts/foundation.v1.json",
+    "hashFormat": "sha256-of-recursively-key-sorted-json",
+    "sections": {
+      "/motion": "6fbb029cec7995aedb25efb71f796d47a87146d5eaffc2fcb6d5a78cd8a23eea",
+      "/experiences/feedback": "9a576506b248e6836d237e66f6fcba269e5823290f6f657df716c881a7ccd15c",
+      "/experiences/overlays": "47ad02bccc2b0d16bbd78422500af22691e5a43263164847b9ff6e8e194e8237"
+    }
+  },
+  "cases": [
+    {
+      "id": "motion-quick-completion",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback/presentation", "/motion"],
+      "given": "数据命中缓存或任务在等待指示器显示前完成；另测指示器已显示的情况。",
+      "when": ["发起任务并立即完成。", "推进所有本轮显示安排、动画及计时器。"],
+      "then": ["结果及时显示，没有最短展示等待、额外空白帧或补播一圈。", "旧安排不再显示指示器，终态与 busy 只清理一次。"],
+      "evidence": ["behavior", "visual"]
+    },
+    {
+      "id": "motion-known-progress",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback", "/motion"],
+      "given": "工作阶段具有可信总量；传输完成后还有独立校验阶段。",
+      "when": ["依次送达完成量 1/3、2/3、重复 2/3、迟到 1/3 和 3/3。", "传输完成后挂起校验，再分别使校验成功或失败。", "另测总量变化、阶段切换和重试。"],
+      "then": ["同任务同阶段的显示单调，插值不超出实际已完成量。", "3/3 只完成传输阶段，校验前不宣告整个任务成功。", "分母变化、切阶段或新尝试具有明确身份，不以取最大百分比掩盖变化。"],
+      "evidence": ["behavior", "accessibility"]
+    },
+    {
+      "id": "motion-unknown-progress",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback/presentation/smallIndeterminateLoading"],
+      "given": "任务无法提供可信总量，且等待时间长短未知。",
+      "when": ["保持等待并推进时钟。", "完成、失败或切换到真实可测阶段。"],
+      "then": ["等待期间 UI 和读屏均没有计时器生成的百分比。", "局部指示不遮挡仍可用内容，终态不等待循环结束。"],
+      "evidence": ["behavior", "accessibility", "visual"]
+    },
+    {
+      "id": "motion-terminal-handoff",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback/mutationStates", "/experiences/feedback/invariants"],
+      "given": "同一私帖连续编辑两次，每次成功响应携带当前业务契约规定的保存结果。",
+      "when": ["完成保存并返回正文；分别延迟附属字体、图片和非必要重取。", "再次进入编辑并保存下一版。"],
+      "then": ["当前正文、编辑回填和定位身份采用本次有效结果，无需用户刷新才能读到新正文。", "业务成功不由动画完成事件触发，正文不等待无关资源。", "已有可信结果足够时不为动效重复请求正文或定位。"],
+      "evidence": ["behavior", "visual"]
+    },
+    {
+      "id": "motion-failure-cancel",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback/invariants/retryOnlyWhenSafe", "/experiences/feedback/invariants/blockingFailureStaysInContext"],
+      "given": "任务正在等待或末段处理，错误、取消和完成可能相邻到达。",
+      "when": ["分别注入失败、取消及随后迟到的完成回调。", "对可安全重复的动作重试；对结果未知的写入按业务协议确认。"],
+      "then": ["只接受当前任务的有效终态，清除忙碌及临时工作。", "错误与恢复保留原上下文，不伪装成功或无限转圈。", "取消等待不宣称服务端写入回滚，重试不扩大可重复条件。"],
+      "evidence": ["behavior", "lifecycle"]
+    },
+    {
+      "id": "motion-overlap-retry",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback/invariants", "/motion/usage"],
+      "given": "任务 A 被新任务 B 替代；分别覆盖重试、换资源、切号、离页与权限撤回。",
+      "when": ["B 开始后再送达 A 的进度、成功、错误及动画结束。", "B 完成后继续送达 A 的所有未决回调。"],
+      "then": ["A 不覆盖 B 的状态、内容、位置、焦点或播报。", "原账号或失去权限的内容不能借保留旧内容继续显示。", "各任务只释放自身引用，其他使用者的共享工作仍有效。"],
+      "evidence": ["behavior", "lifecycle"]
+    },
+    {
+      "id": "motion-late-resources",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback/presentation/initialContentLoading", "/experiences/images"],
+      "given": "长正文必需数据已就绪，但部分字体、图片和页面外资源仍等待或失败。",
+      "when": ["保持附属资源未决并呈现正文。", "之后陆续完成或拒绝资源，同时保持阅读或编辑。"],
+      "then": ["正文以可读回退展示，不等待所有资源或无限几何稳定。", "图片保留局部占位，字体只替换适用文字，不丢失锚点、焦点、选区或输入法状态。", "权限与完整性校验不被降级绕过。"],
+      "evidence": ["behavior", "visual"]
+    },
+    {
+      "id": "motion-stable-target",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/motion/usage", "/experiences/feedback"],
+      "given": "发布或返回需定位到稳定内容 ID；上方字体／图片可能改变布局。",
+      "when": ["在目标挂载前后改变相关布局。", "分别触发用户滚动、目标替换、离页、预算耗尽及目标缺失。"],
+      "then": ["根据本次目标身份定位并有界校正，不能定位到相邻任意项或反复请求。", "用户滚动和失效条件结束自动校正，正文不因等待稳定而被无限隐藏。", "目标不可用时给出真实结果与可用恢复，不假称定位成功。"],
+      "evidence": ["behavior", "visual", "performance"]
+    },
+    {
+      "id": "motion-continuous-tail",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/motion", "/experiences/feedback/presentation"],
+      "given": "可见等待指示持续运行，结果末段触发正文解析、批量列表布局或资源解码。",
+      "when": ["重复发送进度及同资源刷新，在末段交付代表性大结果。", "在同设备、构建、缓存和输入条件下对比修改前后。"],
+      "then": ["指示相位不因更新重置，最终结果及时衔接，无强制最短展示。", "记录全过程及结果到达前后末段的长帧、最大耗时与分位值，单独解释网络、主线程或 UI／raster 开销。", "不以空载动画、平均 FPS 或回调时刻冒充实际完整页面绘制验收。"],
+      "evidence": ["visual", "performance"]
+    },
+    {
+      "id": "motion-refresh-pagination",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback/invariants/refreshPreservesContent", "/experiences/feedback/invariants/paginationPreservesContent"],
+      "given": "列表已有可读内容及滚动位置，刷新、分页或筛选改变可能交错。",
+      "when": ["分别执行刷新与加载更多，注入失败及乱序响应。", "等待中切换筛选，再送达旧结果。"],
+      "then": ["有效内容、稳定 key 和阅读位置保留，刷新与分页局部标记 busy。", "失败不清空列表，不逐行重播入场；旧筛选结果不混入新列表。"],
+      "evidence": ["behavior", "visual"]
+    },
+    {
+      "id": "motion-button-state",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/feedback/presentation/buttonPending", "/experiences/icons/controls/pendingVisual"],
+      "given": "普通提交按钮与已选中的点赞／收藏／订阅等 toggle。",
+      "when": ["用触控、鼠标或键盘连续激活；分别返回成功和失败。"],
+      "then": ["立即提供状态反馈并防重，按钮标签宽度稳定，toggle 保持提交前 tone。", "只在真实结果后更新业务态；焦点、名称和状态不依赖动效可见。"],
+      "evidence": ["behavior", "visual", "accessibility"]
+    },
+    {
+      "id": "motion-overlay-interruption",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/overlays/invariants", "/motion/usage"],
+      "given": "Dialog、Sheet、Popover 或菜单处于打开／关闭过程，触发器可能卸载。",
+      "when": ["连续开关，菜单切换确认浮层，中途禁用动画。", "用键盘关闭或系统返回，另测触发器消失。"],
+      "then": ["不叠加失效浮层或保留透明拦截层，当前模态阻断背景。", "关闭后恢复到有效入口，取消动画或无结束回调仍清理焦点约束与状态。"],
+      "evidence": ["behavior", "visual", "accessibility"]
+    },
+    {
+      "id": "motion-expand-reversal",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/motion/usage", "/accessibility"],
+      "given": "折叠内容具有可聚焦控件和可变高度文本。",
+      "when": ["动画半途连续反向切换，并增大文字或改变内容高度。"],
+      "then": ["从当前呈现值继续，不跳到起点、不积压队列。", "关闭内容退出交互与读屏顺序，大字号和触控区不被裁切。", "几何测量有界并记录布局成本。"],
+      "evidence": ["behavior", "visual", "performance", "accessibility"]
+    },
+    {
+      "id": "motion-route-interruption",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/motion/usage", "/experiences/feedback"],
+      "given": "旧页面可见，新导航仍未提交；另测已经提交或被覆盖的路由。",
+      "when": ["取消导航，快速切换目标或执行平台返回。"],
+      "then": ["未提交的导航意图不重启仍可见旧内容；实际隐藏时按生命周期暂停。", "路由状态、焦点和滚动恢复匹配当前目标，旧完成回调不再次跳转。", "Web 保持桌面关系，Flutter 保留系统返回及原生手势，不额外叠加整页过渡。"],
+      "evidence": ["behavior", "visual"]
+    },
+    {
+      "id": "motion-reduced-motion",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/motion/usage/reducedMotion", "/accessibility"],
+      "given": "系统减少动态效果分别在初次渲染前和任务进行中开启。",
+      "when": ["加载、展开、导航、开关浮层，再切换系统设置并完成任务。"],
+      "then": ["移除非必要位移、缩放和脉冲；Skeleton 静态，等待仍有完整可访问状态。", "不依赖动画结束事件结算、恢复焦点或清除 busy。", "设置变化涵盖自定义与平台组件，关闭设置也不补播旧任务。"],
+      "evidence": ["behavior", "visual", "accessibility"]
+    },
+    {
+      "id": "motion-accessibility",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/accessibility", "/experiences/feedback/web/asyncLiveRegion", "/experiences/feedback/mobile/asyncLiveRegion"],
+      "given": "使用键盘和读屏完成已知／未知进度、失败恢复及模态操作。",
+      "when": ["快速更新进度，分别成功、失败、取消或卸载控件。"],
+      "then": ["区域忙碌状态正确清除，控件有稳定名称，未知进度没有伪造值。", "必要状态礼貌播报且不被 busy 区域吞掉，不按动画帧重复朗读。", "焦点始终落在当前有效且可操作的元素，装饰指示器不重复朗读。"],
+      "evidence": ["behavior", "accessibility"]
+    },
+    {
+      "id": "motion-hidden-lifecycle",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/motion/usage"],
+      "given": "页面、Tab、覆盖路由或组件中有可见循环指示与共享资源使用者。",
+      "when": ["分别隐藏、后台、离屏、恢复和卸载；保留另一资源使用者。"],
+      "then": ["不可见动画和无用帧监听暂停，资源传输仍按所属协议决定是否取消。", "恢复使用最新状态，不重复请求或新增订阅；卸载清理自身 timer、observer、controller 与引用。", "停止 ticker 不被当作已取消所有任务，共享资源仍有使用者时不误取消。"],
+      "evidence": ["behavior", "lifecycle"]
+    },
+    {
+      "id": "motion-font-reuse",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/motion/usage", "/experiences/feedback"],
+      "given": "同会话已验证并加载正文所需字体，多个页面或文本使用同一资源。",
+      "when": ["连续编辑、往返阅读、重建组件；分别发生撤回、失效或迟到响应。"],
+      "then": ["按原字体协议复用在途及已注册资源，不因页面动画或重建重复下载／注册。", "撤回和完整性限制仍生效，旧响应不恢复失效资源；系统回退保证可读。", "记录请求、注册身份及实际保留量，不能以集合计数冒充原生内存释放。"],
+      "evidence": ["behavior", "lifecycle", "performance"]
+    },
+    {
+      "id": "motion-image-ready",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/experiences/images", "/experiences/feedback"],
+      "given": "图片分别处于冷加载、可信缓存命中、服务端处理中或解码失败。",
+      "when": ["呈现首个可绘制帧，普通重建，然后替换展示版本或资源身份。"],
+      "then": ["可绘制时及时移除局部等待，不因缓存未重发预期回调或最短等待继续转圈。", "处理完成以生产者可用状态及实际可绘制结果为准，失败保留上下文，不伪装成功。", "稳定身份不重播加载，版本变化只重置受影响图片；比例和媒体播放规则保留。"],
+      "evidence": ["behavior", "visual", "lifecycle"]
+    },
+    {
+      "id": "motion-repeat-lifecycle",
+      "owners": ["web", "mobile"],
+      "contractRefs": ["/motion/usage", "/experiences/feedback/invariants"],
+      "given": "具有代表性长内容和多资源的真实页面，固定源码及设备环境。",
+      "when": ["反复进入、编辑、退出、重试和切后台，记录每轮稳定后的资源与帧数据。"],
+      "then": ["活动订阅、controller、帧回调及未决任务不随访问次数持续累积。", "内存按所属缓存／注册预算解释，区分应用引用与引擎保留，不声称全部立即释放。", "末段动画及交互没有逐次恶化；提供趋势和未覆盖项，不能仅报告单次正常。"],
+      "evidence": ["lifecycle", "performance", "visual"]
+    }
+  ]
+}
